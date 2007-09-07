@@ -3,19 +3,19 @@
 %h3= 'Last 10 games'[]
 
 - if @games.length > 0
-  %table.list
+  %table#games.list
     %tr
       %th= 'Played at'[]
-      %th= 'Team one'[]
-      %th= 'Score'[]
-      %th= 'Team two'[]
+      %th.team_one= 'Team one'[]
+      %th.score= 'Score'[]
+      %th.team_two= 'Team two'[]
       %th= '&nbsp;'
     - @games.reverse.each do |game|
       %tr.game{:class => cycle('odd', 'even')}
         %td= game.played_at
-        %td= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
-        %td= game.teams.collect(&:score).join(' - ')
-        %td= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
+        %td.team_one= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
+        %td.score= game.teams.collect(&:score).join(' - ')
+        %td.team_two= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
         %td= link_to 'Remove'[], game_path(game), :method => :delete, :confirm => 'Are you sure?'[]
 
 - form_for @game do |f|

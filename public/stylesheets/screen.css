@@ -58,6 +58,10 @@ h2#page_title {
       text-align: left; }
     #content table.list tr.even td {
       background-color: #EEEEEE; }
+  #content table#games td.team_one, #content table#games th.team_one {
+    text-align: right; }
+  #content table#games td.score, #content table#games th.score {
+    text-align: center; }
 
 #footer {
   padding: 10px;
