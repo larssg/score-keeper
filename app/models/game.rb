@@ -1,4 +1,15 @@
 # == Schema Information
+# Schema version: 8
+#
+# Table name: games
+#
+#  id         :integer(11)   not null, primary key
+#  played_at  :datetime      
+#  created_at :datetime      
+#  updated_at :datetime      
+#
+
+# == Schema Information
 # Schema version: 5
 #
 # Table name: games

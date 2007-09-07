@@ -2,16 +2,18 @@
 
 %table.list
   %tr
+    %th= '&nbsp;'
     %th= 'Name'[]
     %th= 'Display name'[]
     %th= '&nbsp;'
   - @people.each do |person|
     %tr[person]
+      %td= image_tag person.mugshot.public_filename(:thumb), :alt => person.full_name if person.mugshot
       %td= link_to person.full_name, edit_person_path(person)
       %td= person.display_name
       %td= link_to 'Remove'[], person_path(person), :method => :delete
 
-- form_for @person do |f|
+- form_for @person, :html => { :multipart => true } do |f|
   %h3= 'Add person'[]
 
   = render :partial => 'form', :locals => { :f => f }

@@ -1,4 +1,16 @@
 # == Schema Information
+# Schema version: 8
+#
+# Table name: teams
+#
+#  id         :integer(11)   not null, primary key
+#  game_id    :integer(11)   
+#  score      :integer(11)   
+#  created_at :datetime      
+#  updated_at :datetime      
+#
+
+# == Schema Information
 # Schema version: 5
 #
 # Table name: teams

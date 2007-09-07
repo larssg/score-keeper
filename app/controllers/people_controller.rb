@@ -6,6 +6,11 @@ class PeopleController < ApplicationController
       @person = current_model.new
     end
     
+    before :create, :update do
+      mugshot = Mugshot.create(params[:mugshot])
+      current_object.mugshot = mugshot unless mugshot.nil?
+    end
+    
     response_for :create, :update do
       redirect_to people_url
     end

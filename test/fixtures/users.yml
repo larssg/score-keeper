@@ -1,4 +1,22 @@
 # == Schema Information
+# Schema version: 8
+#
+# Table name: users
+#
+#  id                        :integer(11)   not null, primary key
+#  login                     :string(255)   
+#  email                     :string(255)   
+#  crypted_password          :string(40)    
+#  salt                      :string(40)    
+#  created_at                :datetime      
+#  updated_at                :datetime      
+#  remember_token            :string(255)   
+#  remember_token_expires_at :datetime      
+#  activation_code           :string(40)    
+#  activated_at              :datetime      
+#
+
+# == Schema Information
 # Schema version: 5
 #
 # Table name: users

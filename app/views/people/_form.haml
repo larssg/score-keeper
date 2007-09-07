@@ -9,3 +9,9 @@
 %label
   = 'Display name'[]
   = f.text_field :display_name
+
+- fields_for :mugshot do |fi|
+  %label
+    = 'Picture'[]
+    = fi.file_field :uploaded_data
+  
