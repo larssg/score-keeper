@@ -12,7 +12,7 @@
 class Game < ActiveRecord::Base
   has_many :teams
   
-  after_save :update_winners
+  after_create :update_winners
   before_destroy :update_after_destroy
 
   def self.find_recent(how_many = 10)
