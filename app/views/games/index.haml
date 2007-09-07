@@ -11,12 +11,8 @@
     - @games.each do |game|
       %tr.game{:class => cycle('odd', 'even')}
         %td= game.played_at
-        %td
-          - game.teams.first.memberships.each do |membership|
-            = membership.person.initials
-        %td
-          - game.teams.last.memberships.each do |membership|
-            = membership.person.initials
+        %td= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
+        %td= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
         %td= game.teams.collect(&:score).join(' - ')
         %td= link_to 'Remove'[], game_path(game), :method => :delete, :confirm => 'Are you sure?'[]
 
