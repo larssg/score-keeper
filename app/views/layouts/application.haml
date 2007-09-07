@@ -15,8 +15,8 @@
     #header
       #languages
         = 'Language'[] + ':'
-        = link_to 'English', :language => 'en'
-        = link_to 'Dansk', :language => 'da'
+        = link_to_unless(language == 'en', 'English', :language => 'en')
+        = link_to_unless(language == 'da', 'Dansk', :language => 'da')
     
       %h1= link_to 'Table Soccer'[], home_url
       

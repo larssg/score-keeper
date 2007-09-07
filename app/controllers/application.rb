@@ -6,6 +6,11 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
 
+  def language
+    session[:language]
+  end
+  helper_method :language
+
   private
   def set_language
     session[:language] = params[:language] || session[:language]
