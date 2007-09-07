@@ -28,4 +28,13 @@ class Person < ActiveRecord::Base
     return 0.0 if memberships_count == 0
     ((games_won.to_f / memberships_count.to_f) * 1000).to_i / 10.to_f
   end
+  
+  def difference
+    goals_for - goals_against
+  end
+  
+  def difference_average
+    return 0.0 if memberships_count == 0
+    ((10 * difference) / memberships_count) / 10.0
+  end
 end

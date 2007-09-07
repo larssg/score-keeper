@@ -19,5 +19,5 @@
       %td= person.winning_percentage.to_s + '%'
       %td= person.goals_for
       %td= person.goals_against
-      %td= person.goals_for - person.goals_against
-      %td= (10 * (person.goals_for - person.goals_against) / person.memberships_count) / 10.0 if person.memberships_count > 0
+      %td= person.difference
+      %td= person.difference_average
