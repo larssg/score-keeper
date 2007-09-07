@@ -1,0 +1,14 @@
+﻿table_soccer: 'Bordfodbold'
+games: Spil
+people: Personer
+played_at: Spiltidspunkt
+team_one: Hold 1
+team_two: Hold 2
+add_game: Tiføj spil
+save: Gem
+score: Point
+player_one: Spiller 1
+player_two: Spiller 2
+remove: Fjern
+name: Navn
+add_person: Tilføj person
