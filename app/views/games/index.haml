@@ -2,7 +2,7 @@
 
 - if @games.length > 0
   #games
-    %h3= 'Last {number} games'[:last_x_games, 10]
+    %h3= 'Last {number} games'[:last_x_games, 5]
   
     - @games.each do |game|
       %div[game]
@@ -14,8 +14,6 @@
         .played_at= game.played_at.to_s :short
         
 - form_for @game do |f|
-  %h3= 'Add game'[]
-
   - fields_for :teams do |fi|
     %table
       %tr

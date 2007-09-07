@@ -15,7 +15,7 @@ class Game < ActiveRecord::Base
   after_create :update_winners
   before_destroy :update_after_destroy
 
-  def self.find_recent(how_many = 10)
+  def self.find_recent(how_many = 5)
     find(:all, :order => 'played_at DESC', :limit => how_many)
   end
   
