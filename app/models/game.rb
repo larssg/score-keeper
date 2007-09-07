@@ -28,7 +28,7 @@ class Game < ActiveRecord::Base
     self.teams.each do |team|
       team.memberships.each do |membership|
         person = membership.person
-        
+
         person.increment(:games_won) if team == self.winner
         person.goals_for += team.score
         person.goals_against += team.other.score
