@@ -1,0 +1,33 @@
+!!! Strict
+%html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
+  %head
+    %title
+      = 'Table Soccer'[]
+      - unless @page_title.blank?
+        = ' - '
+        = @page_title
+    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.0/build/reset/reset-min.css', :type => 'text/css' }
+    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.0/build/base/base-min.css', :type => 'text/css' }
+    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.0/build/fonts/fonts-min.css', :type => 'text/css' }
+    = stylesheet_link_tag :all
+
+  %body
+    #header
+      %h1= 'Table Soccer'[]
+      
+      %ul#menu
+        %li{:class => controller.controller_name == 'dashboard' ? 'current' : ''}= link_to 'Dashboard'[], dashboard_path
+        %li{:class => controller.controller_name == 'games' ? 'current' : ''}= link_to 'Games'[], games_path
+        %li{:class => controller.controller_name == 'people' ? 'current' : ''}= link_to 'People'[], people_path
+        
+      .clear
+        %hr
+  
+    - unless @page_title.blank?
+      %h2#page_title= @page_title
+     
+    #content
+      = yield
+      
+    #footer
+      Copyright 2007 by Lars Sehested

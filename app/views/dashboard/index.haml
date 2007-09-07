@@ -1,0 +1,17 @@
+%table.list
+  %tr
+    %th= 'Person'[]
+    %th= 'Games won'[]
+    %th= 'Games played'[]
+    %th= 'Winning percentage'[]
+    %th= 'Goals for'[]
+    %th= 'Goals against'[]
+  
+  - @people.each do |person|
+    %tr
+      %td= person.full_name
+      %td= person.games_won
+      %td= person.memberships_count
+      %td= person.winning_percentage.to_s + '%'
+      %td= person.goals_for
+      %td= person.goals_against

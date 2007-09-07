@@ -1,0 +1,46 @@
+- title 'Games'[]
+
+- if @games.length > 0
+  %table.list
+    %tr
+      %th= 'Played at'[]
+      %th= 'Team one'[]
+      %th= 'Team two'[]
+      %th= 'Score'[]
+      %th= '&nbsp;'
+    - @games.each do |game|
+      %tr.game{:class => cycle('odd', 'even')}
+        %td= game.played_at
+        %td
+          - game.teams.first.memberships.each do |membership|
+            = membership.person.initials
+        %td
+          - game.teams.last.memberships.each do |membership|
+            = membership.person.initials
+        %td= game.teams.collect(&:score).join(' - ')
+        %td= link_to 'Remove'[], game_path(game), :method => :delete, :confirm => 'Are you sure?'[]
+
+- form_for @game do |f|
+  %h3= 'Add game'[]
+
+  - fields_for :teams do |fi|
+    %table
+      %tr
+        %th= '&nbsp';
+        %th= 'Score'[]
+        %th= 'Attacker'[]
+        %th= 'Defender'[]
+      
+      %tr
+        %th= 'Team one'[]
+        %td= fi.text_field 'score1'
+        %td= fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true
+        %td= fi.collection_select 'person12', @people, :id, :full_name, :include_blank => true
+      
+      %tr
+        %th= 'Team two'[]
+        %td= fi.text_field 'score2'
+        %td= fi.collection_select 'person21', @people, :id, :full_name, :include_blank => true
+        %td= fi.collection_select 'person22', @people, :id, :full_name, :include_blank => true
+      
+  = submit_tag 'Save'[]

@@ -1,0 +1,20 @@
+- title 'People'[]
+
+%table.list
+  %tr
+    %th= 'First name'[]
+    %th= 'Last name'[]
+    %th= 'Display  name'[]
+    %th= '&nbsp;'
+  - @people.each do |person|
+    %tr[person]
+      %td= link_to person.first_name, edit_person_path(person)
+      %td= person.last_name
+      %td= person.display_name
+      %td= link_to 'Remove'[], person_path(person), :method => :delete
+
+- form_for @person do |f|
+  %h3= 'Add person'[]
+
+  = render :partial => 'form', :locals => { :f => f }
+  = submit_tag 'Save'[]
