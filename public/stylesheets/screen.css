@@ -56,7 +56,8 @@ h2#page_title {
 #footer {
   padding: 10px;
   background-color: #EEEEEE;
-  border-top: 1px solid #000000; }
+  border-top: 1px solid #000000;
+  text-align: center; }
 
 .clear {
   clear: both; }
