@@ -8,6 +8,8 @@
     %th= 'Winning percentage'[]
     %th= 'Goals for'[]
     %th= 'Goals against'[]
+    %th= '+/-'
+    %th= '+/- ' + 'Average'[]
   
   - @people.each do |person|
     %tr
@@ -17,3 +19,5 @@
       %td= person.winning_percentage.to_s + '%'
       %td= person.goals_for
       %td= person.goals_against
+      %td= person.goals_for - person.goals_against
+      %td= (10 * (person.goals_for - person.goals_against) / person.memberships_count) / 10.0
