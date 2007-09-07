@@ -4,17 +4,18 @@ people: Personer
 played_at: Spiltidspunkt
 team_one: Hold 1
 team_two: Hold 2
-add_game: Tiføj spil
+add_game: Tilføj spil
 save: Gem
 score: Point
 player_one: Spiller 1
 player_two: Spiller 2
 remove: Fjern
+name: Navn
 first_name: Fornavn
 last_name: Efternavn
 display_name: Vist navn
 add_person: Tilføj person
-last_10_games: Sidste 10 spil
+last_x_games: Sidste {number} spil
 attacker: Angriber
 defender: Forsvarer
 games_won: Vundne spil

@@ -1,23 +1,18 @@
 - title 'Games'[]
 
-%h3= 'Last 10 games'[]
-
 - if @games.length > 0
-  %table#games.list
-    %tr
-      %th= 'Played at'[]
-      %th.team_one= 'Team one'[]
-      %th.score= 'Score'[]
-      %th.team_two= 'Team two'[]
-      %th= '&nbsp;'
+  #games
+    %h3= 'Last {number} games'[:last_x_games, 10]
+  
     - @games.each do |game|
-      %tr.game{:class => cycle('odd', 'even')}
-        %td= game.played_at
-        %td.team_one= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
-        %td.score= game.teams.collect(&:score).join(' - ')
-        %td.team_two= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
-        %td= link_to 'Remove'[], game_path(game), :method => :delete, :confirm => 'Are you sure?'[]
-
+      %div[game]
+        .team_one= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
+        .score= game.teams.collect(&:score).join(' - ')
+        .team_two= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
+        .clear
+          %hr
+        .played_at= game.played_at.to_s :short
+        
 - form_for @game do |f|
   %h3= 'Add game'[]
 

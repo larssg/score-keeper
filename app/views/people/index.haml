@@ -2,14 +2,12 @@
 
 %table.list
   %tr
-    %th= 'First name'[]
-    %th= 'Last name'[]
+    %th= 'Name'[]
     %th= 'Display name'[]
     %th= '&nbsp;'
   - @people.each do |person|
     %tr[person]
-      %td= link_to person.first_name, edit_person_path(person)
-      %td= person.last_name
+      %td= link_to person.full_name, edit_person_path(person)
       %td= person.display_name
       %td= link_to 'Remove'[], person_path(person), :method => :delete
 

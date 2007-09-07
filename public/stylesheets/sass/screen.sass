@@ -1,9 +1,15 @@
+th
+  :text-align left
+  
+table
+  :margin 0
+
 #header
   :background-color #DDDDDD
   
   h1
     :margin 0
-    :padding 10px
+    :padding 20px
     
     a
       :text-decoration none
@@ -11,13 +17,13 @@
     
   #languages
     :float right
-    :padding 10px
+    :padding 20px
     
   ul#menu
     :margin 0
     :border-bottom 1px solid #000000
     :list-style-type none
-    :padding 3px 10px 3px 10px
+    :padding 3px 20px 3px 20px
     
     li
       :display inline
@@ -44,11 +50,12 @@
         :padding-top 4px
       
 h2#page_title
+  :display none
   :margin 0
   :padding 10px
-    
+
 #content
-  :padding 10px
+  :padding 20px
 
   label
     :display block
@@ -58,35 +65,69 @@ h2#page_title
       
   table.list
     :width 100%
-  
+
     th
       :border 0
       :border-bottom 1px solid #000000
       :background-color #DDDDDD
       :padding 3px
-      :text-align left
-      
+
     td
       :border 0
       :padding 3px
       :text-align left
-      
+
     tr.even
       td
         :background-color #EEEEEE
 
-  table#games
-    td.team_one, th.team_one
-      :text-align right
-      
-    td.score, th.score
-      :text-align center
+  #games
+    :float right
+    :width 250px
 
+    h3
+      :font-size 13px
+      :margin 0
+      :padding 0
+      :margin-bottom 5px
+
+    .game
+      :background-color #EEEEEE
+      :margin-bottom 2px
+
+      .team_one
+        :float left
+        :width 100px
+        :text-align right
+        :font-size 11px
+        :padding-top 7px
+
+      .score
+        :float left
+        :width 50px
+        :font-weight bold
+        :text-align center
+        :padding-top 5px
+
+      .team_two
+        :float left
+        :width 100px
+        :font-size 11px
+        :padding-top 7px
+
+      .played_at
+        :width 250px
+        :text-align center
+        :font-size 11px
+        :color #999999
+        :padding-bottom 5px
+      
 #footer
   :padding 10px
   :background-color #EEEEEE
   :border-top 1px solid #000000
   :text-align center
+  :clear both
   
 .clear
   :clear both

@@ -1,19 +1,25 @@
+th {
+  text-align: left; }
+
+table {
+  margin: 0; }
+
 #header {
   background-color: #DDDDDD; }
   #header h1 {
     margin: 0;
-    padding: 10px; }
+    padding: 20px; }
     #header h1 a {
       text-decoration: none;
       color: #000000; }
   #header #languages {
     float: right;
-    padding: 10px; }
+    padding: 20px; }
   #header ul#menu {
     margin: 0;
     border-bottom: 1px solid #000000;
     list-style-type: none;
-    padding: 3px 10px 3px 10px; }
+    padding: 3px 20px 3px 20px; }
     #header ul#menu li {
       display: inline; }
       #header ul#menu li a {
@@ -35,11 +41,12 @@
         padding-top: 4px; }
 
 h2#page_title {
+  display: none;
   margin: 0;
   padding: 10px; }
 
 #content {
-  padding: 10px; }
+  padding: 20px; }
   #content label {
     display: block; }
     #content label input {
@@ -50,24 +57,54 @@ h2#page_title {
       border: 0;
       border-bottom: 1px solid #000000;
       background-color: #DDDDDD;
-      padding: 3px;
-      text-align: left; }
+      padding: 3px; }
     #content table.list td {
       border: 0;
       padding: 3px;
       text-align: left; }
     #content table.list tr.even td {
       background-color: #EEEEEE; }
-  #content table#games td.team_one, #content table#games th.team_one {
-    text-align: right; }
-  #content table#games td.score, #content table#games th.score {
-    text-align: center; }
+  #content #games {
+    float: right;
+    width: 250px; }
+    #content #games h3 {
+      font-size: 13px;
+      margin: 0;
+      padding: 0;
+      margin-bottom: 5px; }
+    #content #games .game {
+      background-color: #EEEEEE;
+      margin-bottom: 2px; }
+      #content #games .game .team_one {
+        float: left;
+        width: 100px;
+        text-align: right;
+        font-size: 11px;
+        padding-top: 7px; }
+      #content #games .game .score {
+        float: left;
+        width: 50px;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 5px; }
+      #content #games .game .team_two {
+        float: left;
+        width: 100px;
+        font-size: 11px;
+        padding-top: 7px; }
+      #content #games .game .played_at {
+        width: 250px;
+        text-align: center;
+        font-size: 11px;
+        color: #999999;
+        padding-bottom: 5px; }
 
 #footer {
   padding: 10px;
   background-color: #EEEEEE;
   border-top: 1px solid #000000;
-  text-align: center; }
+  text-align: center;
+  clear: both; }
 
 .clear {
   clear: both; }
