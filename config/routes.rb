@@ -6,5 +6,5 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :games
   map.resources :people
   
-  map.connect '', :controller => 'dashboard', :action => 'index'
+  map.home '', :controller => 'dashboard', :action => 'index'
 end

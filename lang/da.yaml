@@ -1,4 +1,4 @@
-﻿table_soccer: 'Bordfodbold'
+﻿table_soccer: Bordfodbold
 games: Spil
 people: Personer
 played_at: Spiltidspunkt
@@ -10,5 +10,20 @@ score: Point
 player_one: Spiller 1
 player_two: Spiller 2
 remove: Fjern
-name: Navn
+first_name: Fornavn
+last_name: Efternavn
+display_name: Vist navn
 add_person: Tilføj person
+last_10_games: Sidste 10 spil
+attacker: Angriber
+defender: Forsvarer
+games_won: Vundne spil
+games_played: Spillede i alt
+winning_percentage: Procent vundet
+goals_for: Mål for
+goals_against: Mål imod
+are_you_sure?: Er du sikker?
+project_home: Projektets hjemmeside
+report_issue: Rapportér problem
+language: Sprog
+dashboard: Oversigt
