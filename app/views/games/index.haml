@@ -10,7 +10,7 @@
       %th.score= 'Score'[]
       %th.team_two= 'Team two'[]
       %th= '&nbsp;'
-    - @games.reverse.each do |game|
+    - @games.each do |game|
       %tr.game{:class => cycle('odd', 'even')}
         %td= game.played_at
         %td.team_one= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
