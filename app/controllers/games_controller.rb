@@ -1,11 +1,6 @@
 class GamesController < ApplicationController
   make_resourceful do
-    build :all
-    
-    before :index do
-      @game = current_model.new
-      @people = Person.find_all
-    end
+    build :edit, :create, :update
 
     before :create do
       current_object.played_at ||= 5.minutes.ago
@@ -22,5 +17,11 @@ class GamesController < ApplicationController
     response_for :create do
       redirect_to games_url
     end
+  end
+  
+  def index
+    @games = Game.find_recent
+    @game = current_model.new
+    @people = Person.find_all
   end
 end
