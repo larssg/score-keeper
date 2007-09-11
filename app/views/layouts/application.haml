@@ -13,10 +13,16 @@
 
   %body
     #header
-      #languages
-        = 'Language'[] + ':'
-        = link_to_unless(language == 'en', 'English', :language => 'en')
-        = link_to_unless(language == 'da', 'Dansk', :language => 'da')
+      #links
+        - if logged_in?
+          #user
+            = current_user.login
+            = link_to 'Logout', logout_path
+          
+        #languages
+          = 'Language'[] + ':'
+          = link_to_unless(language == 'en', 'English', :language => 'en')
+          = link_to_unless(language == 'da', 'Dansk', :language => 'da')
     
       %h1= link_to 'Table Soccer'[], home_url
       

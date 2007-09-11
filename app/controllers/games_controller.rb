@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  before_filter :login_required
+
   make_resourceful do
     build :edit, :create, :update
 

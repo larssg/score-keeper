@@ -1,4 +1,6 @@
 class PeopleController < ApplicationController
+  before_filter :login_required
+  
   make_resourceful do
     build :all
     

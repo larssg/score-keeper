@@ -12,9 +12,14 @@ table {
     #header h1 a {
       text-decoration: none;
       color: #000000; }
-  #header #languages {
+  #header #links {
     float: right;
     padding: 20px; }
+    #header #links #user {
+      display: inline;
+      padding-right: 10px; }
+    #header #links #languages {
+      display: inline; }
   #header ul#menu {
     margin: 0;
     border-bottom: 1px solid #000000;
