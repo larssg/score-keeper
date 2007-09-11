@@ -105,12 +105,16 @@ h2#page_title {
         width: 100px;
         font-size: 11px;
         padding-top: 7px; }
-      #content #games .game .played_at {
+      #content #games .game .meta {
         width: 250px;
         text-align: center;
         font-size: 11px;
         color: #999999;
         padding-bottom: 5px; }
+        #content #games .game .meta .played_at {
+          display: inline; }
+        #content #games .game .meta .creator {
+          display: inline; }
 
 #footer {
   padding: 10px;

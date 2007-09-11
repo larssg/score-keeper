@@ -22,6 +22,7 @@
 
 class Game < ActiveRecord::Base
   has_many :teams
+  belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
   after_create :update_winners
   before_destroy :update_after_destroy

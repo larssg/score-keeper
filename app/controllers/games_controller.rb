@@ -5,6 +5,7 @@ class GamesController < ApplicationController
     build :edit, :create, :update
 
     before :create do
+      current_object.creator = current_user
       current_object.played_at ||= 5.minutes.ago
     
       team_one = current_object.teams.create(:score => params[:teams][:score1])

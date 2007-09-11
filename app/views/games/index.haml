@@ -11,7 +11,9 @@
         .team_two= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
         .clear
           %hr
-        .played_at= game.played_at.to_s :short
+        .meta
+          .played_at= game.played_at.to_s :short
+          .creator= 'by {user}'[:by_user, game.creator.login] if game.creator
         
 - form_for @game do |f|
   - fields_for :teams do |fi|
