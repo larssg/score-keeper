@@ -17,6 +17,7 @@ class GamesController < ApplicationController
     end
     
     response_for :create do
+      flash[:notice] = 'Game created.'[]
       redirect_to games_url
     end
   end

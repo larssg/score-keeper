@@ -52,6 +52,11 @@ h2#page_title {
 
 #content {
   padding: 20px; }
+  #content #messages {
+    border: 1px solid #999999;
+    background-color: #EEEEEE;
+    padding: 10px;
+    margin-bottom: 10px; }
   #content label {
     display: block; }
     #content label input {

@@ -38,6 +38,11 @@
       %h2#page_title= @page_title
      
     #content
+      - if flash.keys.length > 0
+        #messages
+          - flash.keys.each do |key|
+            %div{ :class => 'key' }= flash[key]
+    
       = yield
 
       .clear
