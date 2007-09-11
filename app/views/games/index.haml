@@ -15,25 +15,28 @@
           .played_at= game.played_at.to_s :short
           .creator= 'by {user}'[:by_user, game.creator.login] if game.creator
         
-- form_for @game do |f|
-  - fields_for :teams do |fi|
-    %table
-      %tr
-        %th= '&nbsp';
-        %th= 'Score'[]
-        %th= 'Attacker'[]
-        %th= 'Defender'[]
+- if logged_in?
+  - form_for @game do |f|
+    - fields_for :teams do |fi|
+      %table
+        %tr
+          %th= '&nbsp';
+          %th= 'Score'[]
+          %th= 'Attacker'[]
+          %th= 'Defender'[]
       
-      %tr
-        %th= 'Team one'[]
-        %td= fi.text_field 'score1'
-        %td= fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true
-        %td= fi.collection_select 'person12', @people, :id, :full_name, :include_blank => true
+        %tr
+          %th= 'Team one'[]
+          %td= fi.text_field 'score1'
+          %td= fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true
+          %td= fi.collection_select 'person12', @people, :id, :full_name, :include_blank => true
       
-      %tr
-        %th= 'Team two'[]
-        %td= fi.text_field 'score2'
-        %td= fi.collection_select 'person21', @people, :id, :full_name, :include_blank => true
-        %td= fi.collection_select 'person22', @people, :id, :full_name, :include_blank => true
+        %tr
+          %th= 'Team two'[]
+          %td= fi.text_field 'score2'
+          %td= fi.collection_select 'person21', @people, :id, :full_name, :include_blank => true
+          %td= fi.collection_select 'person22', @people, :id, :full_name, :include_blank => true
       
-  = submit_tag 'Save'[]
+    = submit_tag 'Save'[]
+- else
+  = 'Login to add a game.'[]

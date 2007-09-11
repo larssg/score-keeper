@@ -1,39 +1,3 @@
-# == Schema Information
-# Schema version: 8
-#
-# Table name: users
-#
-#  id                        :integer(11)   not null, primary key
-#  login                     :string(255)   
-#  email                     :string(255)   
-#  crypted_password          :string(40)    
-#  salt                      :string(40)    
-#  created_at                :datetime      
-#  updated_at                :datetime      
-#  remember_token            :string(255)   
-#  remember_token_expires_at :datetime      
-#  activation_code           :string(40)    
-#  activated_at              :datetime      
-#
-
-# == Schema Information
-# Schema version: 5
-#
-# Table name: users
-#
-#  id                        :integer       not null, primary key
-#  login                     :string(255)   
-#  email                     :string(255)   
-#  crypted_password          :string(40)    
-#  salt                      :string(40)    
-#  created_at                :datetime      
-#  updated_at                :datetime      
-#  remember_token            :string(255)   
-#  remember_token_expires_at :datetime      
-#  activation_code           :string(40)    
-#  activated_at              :datetime      
-#
-
 require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
@@ -48,26 +12,14 @@ class User < ActiveRecord::Base
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
   before_save :encrypt_password
-   before_create :make_activation_code 
   
-  # Activates the user in the database.
-  def activate
-    @activated = true
-    self.attributes = {:activated_at => Time.now.utc, :activation_code => nil}
-    save(false)
-  end
-
-  def activated?
-    activation_code.nil?
-  end
-
-  # Returns true if the user has just been activated.
-  def recently_activated?
-    @activated
-  end 
+  # prevents a user from submitting a crafted form that bypasses activation
+  # anything else you want your user to change should be added here.
+  attr_accessible :login, :email, :password, :password_confirmation
+  
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
-    u = find :first, :conditions => ['login = ? and activated_at IS NOT NULL', login] # need to get the salt
+    u = find_by_login(login) # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
 
@@ -121,9 +73,5 @@ class User < ActiveRecord::Base
     def password_required?
       crypted_password.blank? || !password.blank?
     end
-
     
-    def make_activation_code
-      self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-    end 
 end

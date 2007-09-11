@@ -8,6 +8,10 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures'
+  
+  require File.expand_path(RAILS_ROOT + '/spec/factory')
+  require File.expand_path(RAILS_ROOT + '/lib/authenticated_test_helper')
+  include AuthenticatedTestHelper
 
   # You can declare fixtures for each behaviour like this:
   #   describe "...." do
@@ -21,5 +25,3 @@ Spec::Runner.configure do |config|
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
 end
-
-require File.expand_path(RAILS_ROOT + '/spec/factory')

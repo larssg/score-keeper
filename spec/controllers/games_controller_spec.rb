@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe GamesController, "index page" do
   before(:each) do
+    login_as Factory.create_user
     @game = mock_model(Game)
     Game.stub!(:find_recent).and_return([@game])
   end

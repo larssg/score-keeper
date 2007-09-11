@@ -1,5 +1,5 @@
 class PeopleController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :except => :index
   
   make_resourceful do
     build :all
