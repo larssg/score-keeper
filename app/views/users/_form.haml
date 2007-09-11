@@ -1,25 +1,20 @@
-%p
-  %label{ :for => "login" }= 'Login'[]
-  %br
+%label
+  = 'Login'[]
   = f.text_field :login
-  
-%p
-  %label{ :for => "email" }= 'Email'[]
-  %br
+
+%label  
+  = 'Email'[]
   = f.text_field :email
-  
-%p
-  %label{ :for => "password" }= 'Password'[]
-  %br
+
+%label
+  = 'Password'[]
   = f.password_field :password
   
-%p
-  %label{ :for => "password_confirmation" }= 'Confirm Password'[]
-  %br
+%label
+  = 'Confirm Password'[]
   = f.password_field :password_confirmation
   
 - if admin?
-  %p
-    %label{ :for => 'is_admin' }= 'Administrator'[]
-    %br
+  %label
+    = 'Administrator'[]
     = f.check_box :is_admin

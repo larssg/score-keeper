@@ -63,7 +63,8 @@ h2#page_title {
   #content label {
     display: block; }
     #content label input {
-      display: block; }
+      display: block;
+      margin-bottom: 10px; }
   #content table.list {
     width: 100%; }
     #content table.list th {
