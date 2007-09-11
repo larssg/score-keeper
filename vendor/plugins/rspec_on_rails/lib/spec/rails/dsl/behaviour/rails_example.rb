@@ -12,8 +12,6 @@ module Spec
         )
         
         class << self
-          extend Forwardable
-
           def configure
             self.fixture_table_names = []
             self.fixture_class_names = {}
@@ -32,11 +30,9 @@ module Spec
           end          
         end
 
-        extend Forwardable
-
         include Spec::Rails::Matchers
 
-        def initialize(behaviour, example) #:nodoc:
+        def initialize(example) #:nodoc:
           super
           def self.method_missing(method_name, *args, &block)
             return ::Spec::Matchers::Be.new(method_name, *args) if method_name.starts_with?("be_")
@@ -90,7 +86,7 @@ module Spec
           stubs.each {|k,v| m.stub!(k).and_return(v)}
           m
         end
-        Spec::DSL::BehaviourFactory.add_behaviour_class(:default, self)
+        Spec::DSL::ExampleFactory.add_example_class(:default, self)
       end
     end
   end

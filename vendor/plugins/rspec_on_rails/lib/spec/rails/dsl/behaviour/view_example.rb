@@ -32,7 +32,7 @@ module Spec
           end          
         end
 
-        def initialize(behaviour, example) #:nodoc:
+        def initialize(example) #:nodoc:
           super
           @controller_class_name = "Spec::Rails::DSL::ViewExampleController"
         end
@@ -154,7 +154,7 @@ module Spec
           @controller.template
         end
 
-        Spec::DSL::BehaviourFactory.add_behaviour_class(:view, self)
+        Spec::DSL::ExampleFactory.add_example_class(:view, self)
       end
 
       class ViewExampleController < ApplicationController #:nodoc:

@@ -2,6 +2,7 @@ class PeopleController < ApplicationController
   before_filter :login_required, :except => :index
   
   make_resourceful do
+    publish :xml, :json, :attributes => [ :first_name, :last_name, :display_name ]
     build :all
     
     before :index do

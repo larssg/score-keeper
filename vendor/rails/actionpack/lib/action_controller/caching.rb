@@ -12,7 +12,10 @@ module ActionController #:nodoc:
   module Caching
     def self.included(base) #:nodoc:
       base.send(:include, Pages, Actions, Fragments)
-      base.send(:include, Sweeping, SqlCache) if defined?(ActiveRecord)
+      if defined?(ActiveRecord)
+        require 'active_record/query_cache'
+        base.send(:include, Sweeping, SqlCache)
+      end
 
       base.class_eval do
         @@perform_caching = true
@@ -418,12 +421,6 @@ module ActionController #:nodoc:
         end
       end
 
-      # Deprecated -- just call expire_fragment with a regular expression
-      def expire_matched_fragments(matcher = /.*/, options = nil) #:nodoc:
-        expire_fragment(matcher, options)
-      end
-      deprecate :expire_matched_fragments => :expire_fragment
-
 
       class UnthreadedMemoryStore #:nodoc:
         def initialize #:nodoc:
@@ -656,20 +653,19 @@ module ActionController #:nodoc:
           end
       end
     end
-    
-    if defined?(ActiveRecord)     
-      module SqlCache
-        def self.included(base) #:nodoc:
+
+    module SqlCache
+      def self.included(base) #:nodoc:
+        if defined?(ActiveRecord) && ActiveRecord::Base.respond_to?(:cache)
           base.alias_method_chain :perform_action, :caching
         end
-        
-        def perform_action_with_caching
-          ActiveRecord::Base.cache do
-            perform_action_without_caching
-          end
+      end
+
+      def perform_action_with_caching
+        ActiveRecord::Base.cache do
+          perform_action_without_caching
         end
       end
     end
-    
   end
 end

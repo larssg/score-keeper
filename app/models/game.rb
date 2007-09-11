@@ -1,31 +1,9 @@
-# == Schema Information
-# Schema version: 8
-#
-# Table name: games
-#
-#  id         :integer(11)   not null, primary key
-#  played_at  :datetime      
-#  created_at :datetime      
-#  updated_at :datetime      
-#
-
-# == Schema Information
-# Schema version: 5
-#
-# Table name: games
-#
-#  id         :integer       not null, primary key
-#  played_at  :datetime      
-#  created_at :datetime      
-#  updated_at :datetime      
-#
-
 class Game < ActiveRecord::Base
   has_many :teams
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
   after_create :update_winners
-  before_destroy :update_after_destroy
+  after_destroy :update_after_destroy
 
   def self.find_recent(options = {})
     default_options = { :order => 'played_at DESC', :limit => 5 }
@@ -34,6 +12,15 @@ class Game < ActiveRecord::Base
   
   def winner
     @winner ||= self.teams.first.score > self.teams.last.score ? self.teams.first : self.teams.last 
+  end
+  
+  def teams_from_params(teams)
+    teams.each do |team_info|
+      team = self.teams.create(:score => team_info[:score])
+      team_info[:members].each do |member_id|
+        team.memberships.create(:person_id => member_id)
+      end
+    end
   end
   
   protected
@@ -56,7 +43,7 @@ class Game < ActiveRecord::Base
       team.memberships.each do |membership|
         person = membership.person
         
-        person.decrement(:games_won) if team = self.winner
+        person.decrement(:games_won) if team == self.winner
         person.goals_for -= team.score
         person.goals_against -= team.other.score
         

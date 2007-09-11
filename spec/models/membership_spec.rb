@@ -5,7 +5,5 @@ describe Membership do
     @membership = Membership.new
   end
 
-  it "should be valid" do
-    @membership.should be_valid
-  end
+  it "should update memberships_count on users"
 end

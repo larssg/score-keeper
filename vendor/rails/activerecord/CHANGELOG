@@ -1,5 +1,13 @@
 *SVN*
 
+* Moved acts_as_tree into a plugin of the same name on the official Rails svn #9514 [lifofifo]
+
+* Moved acts_as_nested_set into a plugin of the same name on the official Rails svn #9516 [josh]
+
+* Moved acts_as_list into a plugin of the same name on the official Rails svn [josh]
+
+* Explicitly require active_record/query_cache before using it.  [Jeremy Kemper]
+
 * Fix bug where unserializing an attribute attempts to modify a frozen @attributes hash for a deleted record.  [Rick, marclove]
 
 * Performance: absorb instantiate and initialize_with_callbacks into the Base methods. [Jeremy Kemper]

@@ -32,19 +32,20 @@ module Factory
     User.create! default_attributes.merge(attributes)
   end
   
-  def self.create_default_game
-    people = Factory.create_people(4)
+  def self.create_default_game(options = {})
+    people = options[:people] || Factory.create_people(4)
+    game = options[:game] || Game.new
+    team_scores = options[:team_scores] || [10, 4]
     
-    game = Factory.create_game
+    team_one = game.teams.create!(:score => team_scores[0])
+    team_one.memberships.create!(:person => people[0])
+    team_one.memberships.create!(:person => people[1])
     
-    team_one = game.teams.create(:score => 10)
-    team_one.memberships.create(:person_id => people[0])
-    team_one.memberships.create(:person_id => people[1])
+    team_two = game.teams.create!(:score => team_scores[1])
+    team_two.memberships.create!(:person => people[2])
+    team_two.memberships.create!(:person => people[3])
     
-    team_two = game.teams.create(:score => 8)
-    team_two.memberships.create(:person_id => people[2])
-    team_two.memberships.create(:person_id => people[3])
-    
+    game.save!
     game
   end
 end

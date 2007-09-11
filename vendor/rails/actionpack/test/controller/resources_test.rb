@@ -19,13 +19,27 @@ module Backoffice
   class ProductsController < ResourcesController; end
   class TagsController < ResourcesController; end
   class ManufacturersController < ResourcesController; end
+  class ImagesController < ResourcesController; end
 
   module Admin
     class ProductsController < ResourcesController; end
+    class ImagesController < ResourcesController; end
   end
 end
 
 class ResourcesTest < Test::Unit::TestCase
+  
+  
+  # The assertions in these tests are incompatible with the hash method
+  # optimisation.  This could indicate user level problems
+  def setup
+    ActionController::Routing.optimise_named_routes = false
+  end
+  
+  def tear_down
+    ActionController::Routing.optimise_named_routes = true
+  end
+  
   def test_should_arrange_actions
     resource = ActionController::Resources::Resource.new(:messages,
       :collection => { :rss => :get, :reorder => :post, :csv => :post },
@@ -562,6 +576,36 @@ class ResourcesTest < Test::Unit::TestCase
       end
 
       assert_simply_restful_for :products, :controller => "backoffice/products"
+    end
+  end
+  
+  def test_nested_resources_using_namespace
+    with_routing do |set|
+      set.draw do |map|
+        map.namespace :backoffice do |backoffice|
+          backoffice.resources :products do |products|
+            products.resources :images
+          end
+        end
+      end
+
+      assert_simply_restful_for :images, :controller => "backoffice/images", :name_prefix => 'backoffice_product_', :path_prefix => 'backoffice/products/1/', :options => {:product_id => '1'}
+    end
+  end
+
+  def test_nested_resources_in_nested_namespace
+    with_routing do |set|
+      set.draw do |map|
+        map.namespace :backoffice do |backoffice|
+          backoffice.namespace :admin do |admin|
+            admin.resources :products do |products|
+              products.resources :images
+            end
+          end
+        end
+      end
+
+      assert_simply_restful_for :images, :controller => "backoffice/admin/images", :name_prefix => 'backoffice_admin_product_', :path_prefix => 'backoffice/admin/products/1/', :options => {:product_id => '1'}
     end
   end
 

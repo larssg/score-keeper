@@ -53,7 +53,7 @@ module Resourceful
       # For instance, if you wanted to limit to 5 entries.
       #
       #   def current_objects
-      #     @current_objects ||=current_model.find(current_params, :limit => 5)
+      #     @current_objects ||= current_model.find(current_params, :limit => 5)
       #   end
       #
       # Notice its recommended to cache the results
@@ -64,7 +64,7 @@ module Resourceful
         @current_object ||= if plural?
           current_model.find(current_param)
         else
-          t = parent_objects[-1].send(instance_variable_name)
+          parent_objects[-1].send(instance_variable_name)
         end
       end
 
@@ -78,7 +78,7 @@ module Resourceful
       #   @user #=> current_object
       #
       def load_object
-        v = instance_variable_set("@#{instance_variable_name.singularize}", current_object)
+        instance_variable_set("@#{instance_variable_name.singularize}", current_object)
       end
 
       def build_object
@@ -98,7 +98,7 @@ module Resourceful
       end
 
       def instance_variable_name
-        controller_name.underscore.gsub /_controller$/, ""
+        controller_name
       end
 
       def current_model
@@ -170,6 +170,14 @@ module Resourceful
 
       def save_failed!
         @save_succeeded = false
+      end
+
+      def plural_action?
+        PLURAL_ACTIONS.include?(params[:action].to_sym)
+      end
+
+      def singular_action?
+        !plural_action?
       end
 
       def plural?

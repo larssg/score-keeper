@@ -98,7 +98,7 @@ module Spec
 
         attr_reader :response, :request, :controller
 
-        def initialize(behaviour, example)
+        def initialize(example)
           super
           if rspec_behaviour.controller_class_name
             @controller_class_name = rspec_behaviour.controller_class_name.to_s
@@ -244,7 +244,7 @@ module Spec
           end
         end
 
-        Spec::DSL::BehaviourFactory.add_behaviour_class(:controller, self)
+        Spec::DSL::ExampleFactory.add_example_class(:controller, self)
       end
     end
   end

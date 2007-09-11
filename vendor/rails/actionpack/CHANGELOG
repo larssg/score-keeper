@@ -1,6 +1,36 @@
 *SVN*
 
-* Add fieldset_tag for generating fieldsets, closes #9477. [djanowski]
+* Fixed that resource namespaces wouldn't stick to all nested resources #9399 [pixeltrix]
+
+* Moved ActionController::Macros::AutoComplete into the auto_complete plugin on the official Rails svn #9512 [lifofifo]
+
+* Moved ActionController::Macros::InPlaceEditing into the in_place_editor plugin on the official Rails svn #9513 [lifofifo]
+
+* Removed deprecated form of calling xml_http_request/xhr without the first argument being the http verb [DHH]
+
+* Removed deprecated methods [DHH]:
+
+  - ActionController::Base#keep_flash (use flash.keep instead)
+  - ActionController::Base#expire_matched_fragments (just call expire_fragment with a regular expression)
+  - ActionController::Base.template_root/= methods (use ActionController#Base.view_paths/= instead)
+  - ActionController::Base.cookie (use ActionController#Base.cookies[]= instead)
+
+* Removed the deprecated behavior of appending ".png" to image_tag/image_path calls without an existing extension [DHH]
+
+* Removed ActionController::Base.scaffold -- it went through the whole idea of scaffolding (card board walls you remove and tweak one by one). Use the scaffold generator instead (it does resources too now!) [DHH]
+
+* Optimise named route generation when using positional arguments.  [Koz]
+
+  This change delivers significant performance benefits for the most
+  common usage scenarios for modern rails applications by avoiding the
+  costly trip through url_for.  Initial benchmarks indicate this is
+  between 6 and 20 times as fast.
+
+* Explicitly require active_record/query_cache before using it.  [Jeremy Kemper]
+
+* Fix layout overriding response status.  #9476 [lotswholetime]
+
+* Add field_set_tag for generating field_sets, closes #9477. [djanowski]
 
 * Allow additional parameters to be passed to named route helpers when using positional arguments.  Closes #8930 [ian.w.white@gmail.com]
 

@@ -74,6 +74,10 @@ module ActionController
 
         unless defined? @named_routes_configured
           # install the named routes in this session instance.
+          # But we have to disable the optimisation code so that we can
+          # generate routes without @request being initialized
+          Routing.optimise_named_routes=false
+          Routing::Routes.reload!
           klass = class<<self; self; end
           Routing::Routes.install_helpers(klass)
 
@@ -148,27 +152,27 @@ module ActionController
       #
       # You can also perform POST, PUT, DELETE, and HEAD requests with #post,
       # #put, #delete, and #head.
-      def get(path, parameters=nil, headers=nil)
+      def get(path, parameters = nil, headers = nil)
         process :get, path, parameters, headers
       end
 
       # Performs a POST request with the given parameters. See get() for more details.
-      def post(path, parameters=nil, headers=nil)
+      def post(path, parameters = nil, headers = nil)
         process :post, path, parameters, headers
       end
 
       # Performs a PUT request with the given parameters. See get() for more details.
-      def put(path, parameters=nil, headers=nil)
+      def put(path, parameters = nil, headers = nil)
         process :put, path, parameters, headers
       end
 
       # Performs a DELETE request with the given parameters. See get() for more details.
-      def delete(path, parameters=nil, headers=nil)
+      def delete(path, parameters = nil, headers = nil)
         process :delete, path, parameters, headers
       end
 
       # Performs a HEAD request with the given parameters. See get() for more details.
-      def head(path, parameters=nil, headers=nil)
+      def head(path, parameters = nil, headers = nil)
         process :head, path, parameters, headers
       end
 
@@ -179,16 +183,7 @@ module ActionController
       # parameters are +nil+, a hash, or a url-encoded or multipart string;
       # the headers are a hash.  Keys are automatically upcased and prefixed
       # with 'HTTP_' if not already.
-      #
-      # This method used to omit the request_method parameter, assuming it
-      # was :post. This was deprecated in Rails 1.2.4. Always pass the request
-      # method as the first argument.
       def xml_http_request(request_method, path, parameters = nil, headers = nil)
-        unless request_method.is_a?(Symbol)
-          ActiveSupport::Deprecation.warn 'xml_http_request now takes the request_method (:get, :post, etc.) as the first argument. It used to assume :post, so add the :post argument to your existing method calls to silence this warning.'
-          request_method, path, parameters, headers = :post, request_method, path, parameters
-        end
-
         headers ||= {}
         headers['X-Requested-With'] = 'XMLHttpRequest'
         headers['Accept'] = 'text/javascript, text/html, application/xml, text/xml, */*'
@@ -225,7 +220,7 @@ module ActionController
         end
 
         # Performs the actual request.
-        def process(method, path, parameters=nil, headers=nil)
+        def process(method, path, parameters = nil, headers = nil)
           data = requestify(parameters)
           path = interpret_uri(path) if path =~ %r{://}
           path = "/#{path}" unless path[0] == ?/
@@ -338,7 +333,6 @@ module ActionController
             "#{CGI.escape(prefix)}=#{CGI.escape(parameters.to_s)}"
           end
         end
-
     end
 
     # A module used to extend ActionController::Base, so that integration tests
