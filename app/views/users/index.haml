@@ -1,0 +1,15 @@
+- title 'Users'[]
+
+%table.list
+  %tr
+    %th= 'Name'[]
+    %th= 'Email'[]
+    %th= 'Administrator'[]
+    %th= 'Created at'[]
+
+  - @users.each do |user|
+    %tr
+      %td= link_to user.login, edit_user_path(user)
+      %td= mail_to user.email
+      %td= user.is_admin? ? 'Yes'[] : 'No'[]
+      %td= user.created_at.to_s :long

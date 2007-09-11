@@ -23,6 +23,21 @@ class Game < ActiveRecord::Base
     end
   end
   
+  def validate
+    person_ids = []
+    
+    if self.teams.length == 2
+      self.teams.each do |team|
+        team.memberships.each do |membership|
+          unless person_ids.index(membership.person_id).nil?
+            errors.add(:people, 'cannot contain the same person twice'[])
+          end
+          person_ids << membership.person_id
+        end
+      end
+    end
+  end
+  
   protected
   def update_winners
     self.teams.each do |team|

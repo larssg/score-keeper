@@ -26,12 +26,15 @@ class GamesController < ApplicationController
       flash[:notice] = 'Game created.'[]
       redirect_to games_url
     end
+    
+    response_for :create_fails do
+      load_data_for_index
+      render :action => 'index'
+    end
   end
   
   def index
-    @games = Game.find_recent(:include => { :teams => { :memberships => :person } })
-    @game = current_model.new
-    @people = Person.find_all
+    load_data_for_index
     
     respond_to do |format|
       format.html # index.haml
@@ -39,5 +42,12 @@ class GamesController < ApplicationController
         render :xml => @games.to_xml
       end
     end
+  end
+  
+  protected
+  def load_data_for_index
+    @games = Game.find_recent(:include => { :teams => { :memberships => :person } })
+    @game = current_model.new
+    @people = Person.find_all
   end
 end
