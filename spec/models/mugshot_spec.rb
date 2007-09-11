@@ -4,6 +4,4 @@ describe Mugshot do
   before(:each) do
     @mugshot = Mugshot.new
   end
-
-  it "should be valid"
 end
