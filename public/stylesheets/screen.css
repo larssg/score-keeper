@@ -57,6 +57,9 @@ h2#page_title {
     background-color: #EEEEEE;
     padding: 10px;
     margin-bottom: 10px; }
+  #content #game_count {
+    padding-top: 20px;
+    padding-left: 2px; }
   #content label {
     display: block; }
     #content label input {
