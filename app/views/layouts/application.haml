@@ -2,7 +2,7 @@
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
     %title
-      = 'Table Soccer'[]
+      = 'Score Keeper'[]
       - unless @page_title.blank?
         = ' - '
         = @page_title
@@ -24,7 +24,7 @@
           = link_to_unless(language == 'en', 'English', :language => 'en')
           = link_to_unless(language == 'da', 'Dansk', :language => 'da')
     
-      %h1= link_to 'Table Soccer'[], home_url
+      %h1= link_to 'Score Keeper'[], home_url
       
       %ul#menu
         %li{:class => controller.controller_name == 'dashboard' ? 'current' : ''}= link_to 'Dashboard'[], dashboard_path
