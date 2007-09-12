@@ -15,8 +15,8 @@ class Team < ActiveRecord::Base
     lead = members.first.ranking > members.last.ranking ? members.first : members.last
     trail = lead == members.first ? members.last : members.first
 
-    award_to_lead = (amount.abs * (lead.ranking.to_f / self.ranking_total.to_f)).to_i
-    award_to_trail = (amount.abs * (trail.ranking.to_f / self.ranking_total.to_f)).to_i
+    award_to_lead = (amount.abs * (trail.ranking.to_f / self.ranking_total.to_f)).to_i
+    award_to_trail = (amount.abs * (lead.ranking.to_f / self.ranking_total.to_f)).to_i
     
     # Fix rounding errors
     if award_to_lead + award_to_trail < amount.abs
