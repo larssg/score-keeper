@@ -25,8 +25,6 @@ class Team < ActiveRecord::Base
       award_to_lead -= 1
     end
     
-    puts "#{award_to_lead} + #{award_to_trail}"
-    
     if amount < 0
       # Deduct most points from lead
       lead.ranking -= award_to_lead
