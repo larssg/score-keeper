@@ -2,7 +2,9 @@
 
 %table.list
   %tr
+    %th= '&nbsp;'
     %th= 'Person'[]
+    %th= 'Ranking'[]
     %th= 'Games won'[]
     %th= 'Games played'[]
     %th= 'Winning percentage'[]
@@ -11,9 +13,11 @@
     %th= '+/-'
     %th= '+/- ' + 'Average'[]
   
-  - @people.each do |person|
+  - @people.each_with_index do |person, index|
     %tr
+      %td= index + 1
       %td= person.full_name
+      %td= person.ranking
       %td= person.games_won
       %td= person.memberships_count
       %td= person.winning_percentage.to_s + '%'
