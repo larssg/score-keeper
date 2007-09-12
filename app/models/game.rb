@@ -3,7 +3,7 @@ class Game < ActiveRecord::Base
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
   after_create :update_winners
-  after_destroy :update_after_destroy
+  before_destroy :update_after_destroy
 
   def self.find_recent(options = {})
     default_options = { :order => 'played_at DESC', :limit => 5 }

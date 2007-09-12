@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   
   make_resourceful do
     publish :xml, :attributes => [ { :teams => [ :score ] } ]
-    build :edit, :create, :update
+    build :edit, :create, :update, :destroy
 
     before :create do
       current_object.creator = current_user
