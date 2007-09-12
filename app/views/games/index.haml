@@ -14,7 +14,7 @@
         .meta
           .played_at= game.played_at.to_s :short
           .creator= ' by {user}'[:by_user, game.creator.login] if game.creator
-          .delete= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[]
+          .delete= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
         
 - if logged_in?
   - form_for @game do |f|
