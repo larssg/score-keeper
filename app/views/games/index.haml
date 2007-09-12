@@ -6,9 +6,17 @@
   
     - @games.each do |game|
       %div[game]
-        .team_one= game.teams.first.memberships.collect { |m| m.person.display_name }.join(' - ')
+        .team_one
+          - game.teams.first.memberships.each_with_index do |membership, index|
+            = ' - ' if index == 1
+            %span{ :title => membership.points_awarded }
+              = membership.person.display_name
         .score= game.teams.collect(&:score).join(' - ')
-        .team_two= game.teams.last.memberships.collect { |m| m.person.display_name }.join(' - ')
+        .team_two
+          - game.teams.last.memberships.each_with_index do |membership, index|
+            = ' - ' if index == 1
+            %span{ :title => membership.points_awarded }
+              = membership.person.display_name
         .clear
           %hr
         .meta

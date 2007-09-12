@@ -24,16 +24,23 @@ class Team < ActiveRecord::Base
     elsif award_to_lead + award_to_trail > amount.abs
       award_to_lead -= 1
     end
-    
+
+    # If game was lost, deduct most points from lead
     if amount < 0
-      # Deduct most points from lead
-      lead.ranking -= award_to_lead
-      trail.ranking -= award_to_trail
-    else
-      # Award most points to trail
-      lead.ranking += award_to_trail
-      trail.ranking += award_to_lead
+      temp = award_to_lead
+      award_to_lead = award_to_trail
+      award_to_trail = temp
+      
+      award_to_lead *= -1
+      award_to_trail *= -1
     end
+    
+    # Award most points to trail
+    lead.ranking += award_to_trail
+    trail.ranking += award_to_lead
+    
+    self.memberships.select{ |m| m.person == lead }.first.update_attribute :points_awarded, award_to_lead
+    self.memberships.select{ |m| m.person == trail }.first.update_attribute :points_awarded, award_to_trail
     
     lead.save
     trail.save
