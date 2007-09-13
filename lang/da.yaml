@@ -30,3 +30,16 @@ language: Sprog
 dashboard: Oversigt
 editing_person: Redigerer person
 average: gennemsnit
+teams: Hold
+members: Medlemmer
+total_ranking: Ranking i alt
+game_count: Antal spil
+full_name: Fulde navn
+password: Kodeord
+add_openid_to_account: Tilføj OpenID til kontoen
+logout: Log ud
+destroy_account: Slet konto
+confirm_password: Bekræft kodeord
+saving: Gemmer
+add: Tilføj
+back: Tilbage

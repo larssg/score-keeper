@@ -56,7 +56,13 @@ h2#page_title {
     border: 1px solid #999999;
     background-color: #EEEEEE;
     padding: 10px;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    background-color: #CFC;
+    border: solid 1px #6C6;
+    background-color: #DD9A24;
+    border: solid 1px #DD9A24;
+    background-color: #FCC;
+    border: solid 1px #C66; }
   #content #game_count {
     padding-top: 20px;
     padding-left: 2px; }

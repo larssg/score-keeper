@@ -19,7 +19,7 @@
       = link_to('-', user_user_openid_path(@user, o), :confirm => 'Are you sure?'[], :method => :delete)
       = link_to(o.denormalized_url, o.openid_url)
       %br
-    = link_to("Add OpenID to account"[], new_user_user_openid_url(@user))
+    = link_to('Add OpenID to account'[], new_user_user_openid_url(@user))
 
 %label
   = 'Password'[]
