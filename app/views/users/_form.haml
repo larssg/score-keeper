@@ -43,7 +43,7 @@
       = 'OpenID'[] + ':'
       = text_field_tag 'openid_url'
 
-- else
+- elsif @user_openids.nil?
   %label
     = 'OpenID'[]
     %br
