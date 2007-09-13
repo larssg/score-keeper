@@ -34,7 +34,7 @@
     = 'Administrator'[]
     = f.check_box :is_admin
     
-- if @user.nil? || @user.identity_url.blank?
+- if @user_openids.nil? && (@user.nil? || @user.identity_url.blank?)
   %p
     ='...' + 'or use'[] + ':'
 
