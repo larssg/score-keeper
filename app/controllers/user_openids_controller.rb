@@ -41,7 +41,7 @@ class UserOpenidsController < ApplicationController
 
     respond_to do |format|
       if @user_openid.save
-        flash[:notice] = 'OpenID add to your account'
+        flash[:notice] = 'OpenID added to your account'[]
         format.html { redirect_to(edit_user_url(@user)) }
         format.xml  { render :xml => @user_openid, :status => :created, :location => @user_openid }
       else
@@ -56,9 +56,9 @@ class UserOpenidsController < ApplicationController
   def destroy
     @user_openid = @user.user_openids.find(params[:id])
     if @user_openid.destroy
-      flash[:notice] = 'OpenID removed from your account'
+      flash[:notice] = 'OpenID removed from your account'[]
     else
-      flash[:error] = 'OpenID could not be removed from your account'
+      flash[:error] = 'OpenID could not be removed from your account'[]
     end
     respond_to do |format|
       format.html { redirect_to(edit_user_url(@user)) }
