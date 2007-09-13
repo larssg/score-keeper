@@ -9,7 +9,7 @@
   - @teams.each do |team|
     %tr
       %td= team[:players].collect(&:full_name).join(' - ')
-      %td= team[:players].sum(&:ranking)
+      %td= team[:total_ranking]
       %td= team[:games_played]
       %td= team[:games_won]
       %td= team[:percentage].to_s + '%'

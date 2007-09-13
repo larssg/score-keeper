@@ -19,7 +19,11 @@ class TeamsController < ApplicationController
       @teams[team_key][:percentage] = ((@teams[team_key][:games_won].to_f / @teams[team_key][:games_played].to_f) * 1000).to_i / 10.to_f
     end
     
+    @teams.keys.each do |team_key|
+      @teams[team_key][:total_ranking] = @teams[team_key][:players].sum(&:ranking)
+    end
+    
     @teams = @teams.keys.collect { |k| @teams[k] }
-    @teams = @teams.sort_by { |t| t[:percentage] }.reverse
+    @teams = @teams.sort_by { |t| t[:total_ranking] }.reverse
   end
 end
