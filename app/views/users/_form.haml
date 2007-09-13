@@ -33,18 +33,19 @@
   %label
     = 'Administrator'[]
     = f.check_box :is_admin
-    
-- if @user_openids.nil? && (@user.nil? || @user.identity_url.blank?)
-  %p
-    ='...' + 'or use'[] + ':'
 
-  %p
+- if @user_openids.nil?
+  - @user.nil? || @user.identity_url.blank?
+    %p
+      ='...' + 'or use'[] + ':'
+
+    %p
+      %label
+        = 'OpenID'[] + ':'
+        = text_field_tag 'openid_url'
+
+  - else
     %label
-      = 'OpenID'[] + ':'
-      = text_field_tag 'openid_url'
-
-- else
-  %label
-    = 'OpenID'[]
-    %br
-    = f.text_field :identity_url, :readonly => true
+      = 'OpenID'[]
+      %br
+      = f.text_field :identity_url, :readonly => true
