@@ -4,4 +4,5 @@
   = render :partial => 'form', :locals => { :f => f }
     
   %p
-    = submit_tag 'Sign up'[]
+    = submit_tag 'Sign in'[], :disable_with => 'Signing in'[] + '&hellip;'
+    = link_to 'Login'[], login_url

@@ -1,4 +1,4 @@
-- form_tag session_path do
+- form_tag sessions_path do
   %label
     = 'Login'[]
     = text_field_tag 'login'
@@ -12,4 +12,13 @@
     = check_box_tag 'remember_me'
     
   %p
-    = submit_tag 'Log in'[]
+    ='...' + 'or use'[] + ':'
+    
+  %p
+    %label
+      = 'OpenID'[] + ':'
+      = text_field_tag 'openid_url'
+    
+  %p
+    = submit_tag 'Sign in'[], :disabled_with => 'Signing in'[] + '&hellip;'
+    = link_to 'Register'[], signup_url

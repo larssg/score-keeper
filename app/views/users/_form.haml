@@ -2,9 +2,24 @@
   = 'Login'[]
   = f.text_field :login
 
-%label  
+%label
+  = 'Full name'[]
+  = f.text_field :name
+
+%label
   = 'Email'[]
   = f.text_field :email
+
+- if @user_openids
+  %p
+    = 'OpenIDs'[]
+    = image_tag('openid.gif', :width => 16, :height => 16, :alt => 'OpenID'[])
+    %br
+    - @user_openids.each do |o|
+      = link_to('-', user_user_openid_path(@user, o), :confirm => 'Are you sure?'[], :method => :delete)
+      = link_to(o.denormalized_url, o.openid_url)
+      %br
+    = link_to("Add OpenID to account"[], new_user_user_openid_url(@user))
 
 %label
   = 'Password'[]
@@ -13,8 +28,23 @@
 %label
   = 'Confirm Password'[]
   = f.password_field :password_confirmation
-  
+
 - if admin?
   %label
     = 'Administrator'[]
     = f.check_box :is_admin
+    
+- if @user.nil? || @user.identity_url.blank?
+  %p
+    ='...' + 'or use'[] + ':'
+
+  %p
+    %label
+      = 'OpenID'[] + ':'
+      = text_field_tag 'openid_url'
+
+- else
+  %label
+    = 'OpenID'[]
+    %br
+    = f.text_field :identity_url, :readonly => true

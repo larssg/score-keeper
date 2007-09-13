@@ -16,7 +16,7 @@
       #links
         - if logged_in?
           #user
-            = current_user.login
+            = link_to current_user.login, edit_user_path(current_user)
             = link_to 'Logout', logout_path
         - else
           #user
