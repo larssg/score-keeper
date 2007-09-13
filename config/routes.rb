@@ -6,6 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :games
   map.resources :people
+  map.resources :teams
   
   map.signup 'signup', :controller => 'users', :action => 'new'
   map.login 'login', :controller => 'sessions', :action => 'new'

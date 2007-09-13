@@ -1,0 +1,9 @@
+%table.list
+  %tr
+    %th= 'Members'[]
+    %th= 'Games'[]
+
+  - @teams.each do |team|
+    %tr
+      %td= Person.find(:all, :conditions => { :id => team[0].split(',') }).collect(&:full_name).join(' - ')
+      %td= team[1]
