@@ -1,5 +1,25 @@
 class TeamsController < ApplicationController
   def index
-    @teams = Team.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
+    @teams = {}
+    @team_counts = Team.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
+    @team_wins = Team.count(:group => :team_ids, :conditions => { :won => true })
+
+    @team_counts.each do |count|
+      @teams[count[0]] = {}
+      @teams[count[0]][:games_played] = count[1]
+      @teams[count[0]][:games_won] = 0
+      @teams[count[0]][:players] = Person.find(:all, :conditions => { :id => count[0].split(',') })
+    end
+    
+    @team_wins.each do |win|
+      @teams[win[0]][:games_won] = win[1]
+    end
+    
+    @teams.keys.each do |team_key|
+      @teams[team_key][:percentage] = @teams[team_key][:games_won] / @teams[team_key][:games_played]
+    end
+    
+    @teams = @teams.keys.collect { |k| @teams[k] }
+    @teams = @teams.sort_by { |t| t[:percentage] }.reverse
   end
 end

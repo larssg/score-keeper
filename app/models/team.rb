@@ -1,6 +1,7 @@
 class Team < ActiveRecord::Base
   has_many :memberships
   belongs_to :game
+  before_save :update_cache_values
   
   def other
     self.game.teams.select { |team| team.id != self.id }.first
@@ -44,5 +45,11 @@ class Team < ActiveRecord::Base
     
     lead.save
     trail.save
+  end
+  
+  def update_cache_values(save_after_update = false)
+    self.team_ids = self.memberships.collect{ |m| m.person_id }.sort.join(',')
+    self.won = self.game.winner == self
+    self.save if save_after_update
   end
 end

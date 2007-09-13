@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 14) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "team_ids"
+    t.boolean  "won",        :default => false
   end
 
   add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
