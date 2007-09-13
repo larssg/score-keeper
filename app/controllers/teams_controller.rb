@@ -16,7 +16,7 @@ class TeamsController < ApplicationController
     end
     
     @teams.keys.each do |team_key|
-      @teams[team_key][:percentage] = @teams[team_key][:games_won] / @teams[team_key][:games_played]
+      @teams[team_key][:percentage] = ((@teams[team_key][:games_won].to_f / @teams[team_key][:games_played].to_f) * 1000).to_i / 10.to_f
     end
     
     @teams = @teams.keys.collect { |k| @teams[k] }
