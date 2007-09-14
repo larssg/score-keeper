@@ -1,3 +1,5 @@
+- sidebar = yield :sidebar
+
 !!! Strict
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
@@ -12,51 +14,56 @@
     = stylesheet_link_tag :all
 
   %body
-    #header
-      #links
-        - if logged_in?
-          #user
-            = link_to current_user.login, edit_user_path(current_user)
-            = link_to 'Logout', logout_path
-        - else
-          #user
-            = link_to 'Login', login_path
+    #layout
+      #header
+        #links
+          - if logged_in?
+            #user
+              = link_to current_user.login, edit_user_path(current_user)
+              = link_to 'Logout', logout_path
+          - else
+            #user
+              = link_to 'Login', login_path
           
-        #languages
-          = 'Language'[] + ':'
-          = link_to_unless(language == 'en', 'English', :language => 'en')
-          = link_to_unless(language == 'da', 'Dansk', :language => 'da')
+          #languages
+            = 'Language'[] + ':'
+            = link_to_unless(language == 'en', 'English', :language => 'en')
+            = link_to_unless(language == 'da', 'Dansk', :language => 'da')
     
-      %h1= link_to 'Score Keeper'[], home_url
-      
-      %ul#menu
-        %li{:class => controller.controller_name == 'dashboard' ? 'current' : ''}= link_to 'Dashboard'[], dashboard_path
-        %li{:class => controller.controller_name == 'games' ? 'current' : ''}= link_to 'Games'[], games_path
-        %li{:class => controller.controller_name == 'teams' ? 'current' : ''}= link_to 'Teams'[], teams_path
-        %li{:class => controller.controller_name == 'people' ? 'current' : ''}= link_to 'People'[], people_path
-        - if admin?
-          %li{:class => controller.controller_name == 'users' ? 'current' : ''}= link_to 'Users'[], users_path
+        %h1= link_to 'Score Keeper'[], home_url
         
-      .clear
-        %hr
-  
-    - unless @page_title.blank?
-      %h2#page_title= @page_title
-     
-    #content
-      - if flash.keys.length > 0
-        #messages
-          - flash.keys.each do |key|
-            %div{ :class => 'key' }= flash[key]
+        %ul#menu
+          %li{:class => controller.controller_name == 'dashboard' ? 'current' : ''}= link_to 'Dashboard'[], dashboard_path
+          %li{:class => controller.controller_name == 'games' ? 'current' : ''}= link_to 'Games'[], games_path
+          %li{:class => controller.controller_name == 'teams' ? 'current' : ''}= link_to 'Teams'[], teams_path
+          %li{:class => controller.controller_name == 'people' ? 'current' : ''}= link_to 'People'[], people_path
+          - if admin?
+            %li{:class => controller.controller_name == 'users' ? 'current' : ''}= link_to 'Users'[], users_path
+          
+        .clear
+          %hr
     
-      = yield
-
-      .clear
-        %hr
-
-    #footer
-      Copyright 2007 by Lars Sehested
-      = '&middot;'
-      = link_to 'Project home'[], 'http://code.google.com/p/scorekeeper/', :target => '_blank'
-      = '&middot;'
-      = link_to 'Report issue'[], 'http://code.google.com/p/scorekeeper/issues/entry', :target => '_blank'
+      - unless @page_title.blank?
+        %h2#page_title= @page_title
+       
+      #main
+        #content{ :class => sidebar.blank? ? 'content_without_sidebar' : 'content_with_sidebar' }
+          - if flash.keys.length > 0
+            #messages
+              - flash.keys.each do |key|
+                %div{ :class => 'key' }= flash[key]
+      
+          = yield
+  
+        - unless sidebar.blank?
+          #sidebar= sidebar
+  
+        .clear
+          %hr
+  
+      #footer
+        Copyright 2007 by Lars Sehested
+        = '&middot;'
+        = link_to 'Project home'[], 'http://code.google.com/p/scorekeeper/', :target => '_blank'
+        = '&middot;'
+        = link_to 'Report issue'[], 'http://code.google.com/p/scorekeeper/issues/entry', :target => '_blank'

@@ -2,50 +2,68 @@
 
 - if @games.length > 0
   #games
-    %h3= 'Last {number} games'[:last_x_games, 5]
+    %h3= 'Last {number} games'[:last_x_games, 20]
   
-    - @games.each do |game|
-      %div[game]
-        .team_one
-          - game.teams.first.memberships.each_with_index do |membership, index|
-            = ' - ' if index == 1
-            %span{ :title => membership.points_awarded }
-              = membership.person.display_name
-        .score= game.teams.collect(&:score).join(' - ')
-        .team_two
-          - game.teams.last.memberships.each_with_index do |membership, index|
-            = ' - ' if index == 1
-            %span{ :title => membership.points_awarded }
-              = membership.person.display_name
-        .clear
-          %hr
-        .meta
-          .played_at= game.played_at.to_s :short
-          .creator= ' by {user}'[:by_user, game.creator.login] if game.creator
-          .delete= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
+    %table.list
+      %tr
+        %th= 'Team one'[]
+        %th= 'Score'[]
+        %th= 'Team two'[]
+        %th= 'Created'[]
+        %th= '&nbsp';
+       
+      - @games.each do |game|
+        %tr
+          %td
+            - game.teams.first.memberships.each_with_index do |membership, index|
+              = ' - ' if index == 1
+              %span{ :title => membership.points_awarded }
+                = membership.person.display_name
+          
+          %td.score= game.teams.collect(&:score).join(' - ')
+
+          %td
+            - game.teams.last.memberships.each_with_index do |membership, index|
+              = ' - ' if index == 1
+              %span{ :title => membership.points_awarded }
+                = membership.person.display_name
+
+          %td
+            = game.played_at.to_s :short
+            = ' by {user}'[:by_user, game.creator.login] if game.creator
+
+          %td= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
         
-- if logged_in?
-  - form_for @game do |f|
-    - fields_for :teams do |fi|
-      %table
-        %tr
-          %th= '&nbsp';
-          %th= 'Score'[]
-          %th= 'Attacker'[]
-          %th= 'Defender'[]
+- content_for :sidebar do
+  - if logged_in?
+    - form_for @game do |f|
+      - fields_for :teams do |fi|
+        %h3= 'Team one'
+        %label
+          %span= 'Attacker'[]
+          = fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true, :class => 'person'
+
+        %label
+          %span= 'Defender'[]
+          = fi.collection_select 'person12', @people, :id, :full_name, :include_blank => true, :class => 'person'
+
+        %label
+          %span= 'Score'[]
+          = fi.text_field 'score1', :class => 'score'
+
+        %h3= 'Team two'[]
+        %label
+          %span= 'Score'[]
+          = fi.text_field 'score2', :class => 'score'
+
+        %label
+          %span= 'Attacker'[]
+          = fi.collection_select 'person21', @people, :id, :full_name, :include_blank => true, :class => 'person'
+
+        %label
+          %span= 'Defender'[]
+          = fi.collection_select 'person22', @people, :id, :full_name, :include_blank => true, :class => 'person'
       
-        %tr
-          %th= 'Team one'[]
-          %td= fi.text_field 'score1'
-          %td= fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true
-          %td= fi.collection_select 'person12', @people, :id, :full_name, :include_blank => true
-      
-        %tr
-          %th= 'Team two'[]
-          %td= fi.text_field 'score2'
-          %td= fi.collection_select 'person21', @people, :id, :full_name, :include_blank => true
-          %td= fi.collection_select 'person22', @people, :id, :full_name, :include_blank => true
-      
-    = submit_tag 'Save'[]
-- else
-  = 'Login to add a game.'[]
+      = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
+  - else
+    = 'Login to add a game.'[]
