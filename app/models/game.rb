@@ -65,6 +65,7 @@ class Game < ActiveRecord::Base
         person.increment(:games_won) if team == self.winner
         person.goals_for += team.score
         person.goals_against += team.other.score
+        person.memberships_count = Membership.count(:conditions => { :person_id => person.id })
         
         person.save
       end
