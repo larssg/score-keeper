@@ -111,6 +111,8 @@ h2#page_title {
   #main .content_with_sidebar {
     width: 690px;
     float: left; }
+    #main .content_with_sidebar table.list {
+      width: 690px; }
   #main #sidebar {
     float: right;
     width: 250px; }
