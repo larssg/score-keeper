@@ -38,7 +38,6 @@
   - if logged_in?
     - form_for @game do |f|
       - fields_for :teams do |fi|
-        %h3= 'Team one'
         %label
           %span= 'Attacker'[]
           = fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true, :class => 'person'
@@ -51,7 +50,8 @@
           %span= 'Score'[]
           = fi.text_field 'score1', :class => 'score'
 
-        %h3= 'Team two'[]
+        %h3= 'vs'[]
+
         %label
           %span= 'Score'[]
           = fi.text_field 'score2', :class => 'score'
