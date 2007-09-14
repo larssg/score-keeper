@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   before_filter :login_required, :except => :index
   
   make_resourceful do
-    publish :xml, :attributes => [ { :teams => [ :score ] } ]
+    publish :xml, :json, :csv, :attributes => [ { :teams => [ :score ] } ]
     build :edit, :create, :update, :destroy
 
     before :create do
