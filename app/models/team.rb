@@ -47,9 +47,7 @@ class Team < ActiveRecord::Base
     trail.save
   end
   
-  def update_cache_values(save_after_update = false)
+  def update_cache_values
     self.team_ids = self.memberships.collect{ |m| m.person_id }.sort.join(',')
-    self.won = self.game.winner == self
-    self.save if save_after_update
   end
 end

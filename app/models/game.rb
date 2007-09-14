@@ -68,6 +68,8 @@ class Game < ActiveRecord::Base
         
         person.save
       end
+      
+      team.update_attribute :won, team == self.winner
     end
   end
   
