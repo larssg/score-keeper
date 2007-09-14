@@ -2,8 +2,6 @@
 
 - if @games.length > 0
   #games
-    %h3= 'Last {number} games'[:last_x_games, 20]
-  
     %table.list
       %tr
         %th= 'Team one'[]
@@ -33,6 +31,8 @@
             = ' by {user}'[:by_user, game.creator.login] if game.creator
 
           %td= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
+
+  .pagination= will_paginate @games
         
 - content_for :sidebar do
   - if logged_in?

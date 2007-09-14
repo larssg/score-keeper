@@ -7,8 +7,12 @@ class Game < ActiveRecord::Base
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
 
+  def self.per_page
+    2
+  end
+  
   def self.find_recent(options = {})
-    default_options = { :order => 'played_at DESC', :limit => 20 }
+    default_options = { :order => 'played_at DESC' }
     find(:all, default_options.merge(options))
   end
   

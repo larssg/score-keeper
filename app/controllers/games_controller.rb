@@ -46,7 +46,7 @@ class GamesController < ApplicationController
   
   protected
   def load_data_for_index
-    @games = Game.find_recent(:include => { :teams => { :memberships => :person } })
+    @games = Game.paginate_recent(:include => { :teams => { :memberships => :person } }, :page => params[:page])
     @game = current_model.new
     @people = Person.find_all
   end
