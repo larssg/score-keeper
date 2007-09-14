@@ -4,12 +4,10 @@ th {
 table {
   margin: 0; }
 
-#layout {
+#header {
   width: 960px;
   margin-left: auto;
-  margin-right: auto; }
-
-#header {
+  margin-right: auto;
   background-color: #DDDDDD; }
   #header h1 {
     margin: 0;
@@ -56,8 +54,12 @@ h2#page_title {
   padding: 10px; }
 
 #main {
-  padding: 20px;
-  width: 100%; }
+  width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+  padding-top: 20px;
+  padding-bottom: 20px; }
   #main #messages {
     border: 1px solid #999999;
     background-color: #EEEEEE;
@@ -112,20 +114,24 @@ h2#page_title {
     #main #new_game label select {
       width: 210px; }
   #main .content_with_sidebar {
-    width: 690px;
+    width: 700px;
     float: left; }
     #main .content_with_sidebar table.list {
-      width: 690px; }
+      width: 680px; }
   #main #sidebar {
     float: right;
-    width: 250px; }
+    width: 220px; }
 
 #footer {
-  padding: 10px;
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
   background-color: #EEEEEE;
   border-top: 1px solid #000000;
   text-align: center;
   clear: both; }
+  #footer .content {
+    padding: 10px; }
 
 input#openid_url {
   background: white url(/images/openid.gif) no-repeat scroll 0pt 50%;
