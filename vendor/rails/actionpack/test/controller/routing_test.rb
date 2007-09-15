@@ -218,7 +218,16 @@ class LegacyRouteSetTests < Test::Unit::TestCase
       map.normal ':controller/:action/:id'
     end
   end
-
+     
+  def test_named_route_root
+    rs.draw do |map|
+      map.root :controller => "hello"
+    end                     
+    x = setup_for_named_route       
+    assert_equal("http://named.route.test", x.send(:root_url))
+    assert_equal("/", x.send(:root_path))
+  end
+  
   def test_named_route_with_regexps
     rs.draw do |map|
       map.article 'page/:year/:month/:day/:title', :controller => 'page', :action => 'show',
@@ -262,6 +271,14 @@ class LegacyRouteSetTests < Test::Unit::TestCase
     results = rs.recognize_path "/file"
     assert results, "Recognition should have succeeded"
     assert_equal [], results[:path]
+  end
+  
+  def test_paths_slashes_unescaped_with_ordered_parameters
+    rs.add_named_route :path, '/file/*path', :controller => 'content' 
+
+    # No / to %2F in URI, only for query params. 
+    x = setup_for_named_route 
+    assert_equal("/file/hello/world", x.send(:path_path, 'hello/world'))
   end
   
   def test_non_controllers_cannot_be_matched

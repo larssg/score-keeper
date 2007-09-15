@@ -280,15 +280,13 @@ module ActiveRecord #:nodoc:
     # Accepts a logger conforming to the interface of Log4r or the default Ruby 1.8+ Logger class, which is then passed
     # on to any new database connections made and which can be retrieved on both a class and instance level by calling +logger+.
     cattr_accessor :logger, :instance_writer => false
-    
-    include Reloadable::Deprecated
-    
+
     def self.inherited(child) #:nodoc:
       @@subclasses[self] ||= []
       @@subclasses[self] << child
       super
     end
-    
+
     def self.reset_subclasses #:nodoc:
       nonreloadables = []
       subclasses.each do |klass|
@@ -1156,22 +1154,27 @@ module ActiveRecord #:nodoc:
             sql << " ORDER BY #{scoped_order}" if scoped_order
           end
         end
-        
-        def add_group!(sql, group, scope = :auto)
-          scope = scope(:find) if :auto == scope
-          scoped_group = scope[:group] if scope
 
+        def add_group!(sql, group, scope = :auto)
           if group
             sql << " GROUP BY #{group}"
-          elsif scoped_group
-            sql << " GROUP BY #{scoped_group}"
-          end          
+          else
+            scope = scope(:find) if :auto == scope
+            if scope && (scoped_group = scope[:group])
+              sql << " GROUP BY #{scoped_group}"
+            end
+          end
         end
 
         # The optional scope argument is for the current :find scope.
         def add_limit!(sql, options, scope = :auto)
           scope = scope(:find) if :auto == scope
-          options = options.reverse_merge(:limit => scope[:limit], :offset => scope[:offset]) if scope
+
+          if scope
+            options[:limit] ||= scope[:limit]
+            options[:offset] ||= scope[:offset]
+          end
+
           connection.add_limit_offset!(sql, options)
         end
 
@@ -1631,8 +1634,8 @@ module ActiveRecord #:nodoc:
           # Inherit :readonly from finder scope if set.  Otherwise,
           # if :joins is not blank then :readonly defaults to true.
           unless options.has_key?(:readonly)
-            if scoped?(:find, :readonly)
-              options[:readonly] = scope(:find, :readonly)
+            if scoped_readonly = scope(:find, :readonly)
+              options[:readonly] = scoped_readonly
             elsif !options[:joins].blank? && !options[:select]
               options[:readonly] = true
             end
@@ -1994,9 +1997,9 @@ module ActiveRecord #:nodoc:
 
       def convert_number_column_value(value)
         case value
-          when FalseClass: 0
-          when TrueClass:  1
-          when '':         nil
+          when FalseClass; 0
+          when TrueClass;  1
+          when '';         nil
           else value
         end
       end
