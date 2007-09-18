@@ -247,6 +247,15 @@ module ActiveRecord
 
       # DATABASE STATEMENTS ======================================
 
+      def select_rows(sql, name = nil)
+        @connection.query_with_result = true
+        result = execute(sql, name)
+        rows = []
+        result.each { |row| rows << row }
+        result.free
+        rows
+      end
+
       def execute(sql, name = nil) #:nodoc:
         log(sql, name) { @connection.query(sql) }
       rescue ActiveRecord::StatementInvalid => exception
@@ -257,13 +266,13 @@ module ActiveRecord
         end
       end
 
-      def insert(sql, name = nil, pk = nil, id_value = nil, sequence_name = nil) #:nodoc:
-        execute(sql, name = nil)
+      def insert_sql(sql, name = nil, pk = nil, id_value = nil, sequence_name = nil) #:nodoc:
+        super sql, name
         id_value || @connection.insert_id
       end
 
-      def update(sql, name = nil) #:nodoc:
-        execute(sql, name)
+      def update_sql(sql, name = nil) #:nodoc:
+        super
         @connection.affected_rows
       end
 

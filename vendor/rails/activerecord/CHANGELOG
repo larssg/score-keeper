@@ -1,5 +1,22 @@
 *SVN*
 
+* Define dynamic finders as real methods after first usage. [bscofield]
+
+* Deprecation: remove deprecated threaded_connections methods. Use allow_concurrency instead.  [Jeremy Kemper]
+
+* Associations macros accept extension blocks alongside modules.  #9346 [Josh
+Peek]
+
+* Speed up and simplify query caching.  [Jeremy Kemper]
+
+* connection.select_rows 'sql' returns an array (rows) of arrays (field values).  #2329 [Michael Schuerig]
+
+* Eager loading respects explicit :joins.  #9496 [dasil003]
+
+* Extract Firebird, FrontBase, and OpenBase adapters into gems.  #9508, #9509, #9510 [Jeremy Kemper]
+
+* RubyGem database adapters: expects a gem named activerecord-<database>-adapter with active_record/connection_adapters/<database>_adapter.rb in its load path.  [Jeremy Kemper]
+
 * Added block-acceptance to JavaScriptHelper#javascript_tag #7527 [BobSilva/tarmo/rmm5t]
 
 * Fixed that altering join tables in migrations would fail w/ sqlite3 #7453 [TimoMihaljov/brandon]

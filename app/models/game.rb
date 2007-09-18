@@ -100,4 +100,14 @@ class Game < ActiveRecord::Base
   def reset_rankings_after_destroy
     Game.reset_rankings
   end
+  
+  def title
+    title = ''
+    
+    title << self.teams.first.memberships.collect { |m| m.person.display_name }.join(' & ')
+    title << " <#{self.teams.first.score} vs #{self.teams.last.score}> "
+    title << self.teams.last.memberships.collect { |m| m.person.display_name }.join(' & ')
+    
+    title
+  end
 end

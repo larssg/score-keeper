@@ -48,9 +48,23 @@ begin
           end
         end
 
-        def insert(sql, name = nil, pk = nil, id_value = nil, sequence_name = nil)
-          execute(sql, name = nil)
-          id_value || last_insert_id
+        def select_rows(sql, name = nil)
+          stmt = nil
+          log(sql, name) do
+            stmt = DB2::Statement.new(@connection)
+            stmt.exec_direct("#{sql.gsub(/=\s*null/i, 'IS NULL')} with ur")
+          end
+
+          rows = []
+          while row = stmt.fetch
+            rows << row
+          end
+          stmt.free
+          rows
+        end
+
+        def insert_sql(sql, name = nil, pk = nil, id_value = nil, sequence_name = nil)
+          super || last_insert_id
         end
 
         def execute(sql, name = nil)
