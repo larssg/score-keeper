@@ -37,8 +37,8 @@ class Team < ActiveRecord::Base
     end
     
     # Award most points to trail
-    lead.ranking += award_to_trail
-    trail.ranking += award_to_lead
+    lead.ranking += award_to_lead
+    trail.ranking += award_to_trail
     
     self.memberships.select{ |m| m.person == lead }.first.update_attribute :points_awarded, award_to_lead
     self.memberships.select{ |m| m.person == trail }.first.update_attribute :points_awarded, award_to_trail
