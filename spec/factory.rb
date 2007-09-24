@@ -37,13 +37,13 @@ module Factory
     game = options[:game] || Game.new
     team_scores = options[:team_scores] || [10, 4]
     
-    team_one = game.teams.create!(:score => team_scores[0])
-    team_one.memberships.create!(:person => people[0])
-    team_one.memberships.create!(:person => people[1])
+    team_one = game.teams.build(:score => team_scores[0])
+    team_one.memberships.build(:person => people[0])
+    team_one.memberships.build(:person => people[1])
     
-    team_two = game.teams.create!(:score => team_scores[1])
-    team_two.memberships.create!(:person => people[2])
-    team_two.memberships.create!(:person => people[3])
+    team_two = game.teams.build(:score => team_scores[1])
+    team_two.memberships.build(:person => people[2])
+    team_two.memberships.build(:person => people[3])
     
     game.save!
     game

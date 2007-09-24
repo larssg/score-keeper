@@ -17,14 +17,7 @@
     #layout
       #header
         #links
-          - if logged_in?
-            #user
-              = link_to current_user.login, edit_user_path(current_user)
-              = link_to 'Logout', logout_path
-          - else
-            #user
-              = link_to 'Login', login_path
-          
+          = render :partial => 'shared/login'
           #languages
             = 'Language'[] + ':'
             = link_to_unless(language == 'en', 'English', :language => 'en')

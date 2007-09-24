@@ -26,9 +26,9 @@ class Game < ActiveRecord::Base
   
   def teams_from_params(teams)
     teams.each do |team_info|
-      team = self.teams.create(:score => team_info[:score])
+      team = self.teams.build(:score => team_info[:score])
       team_info[:members].each do |member_id|
-        team.memberships.create(:person_id => member_id)
+        team.memberships.build(:person_id => member_id)
       end
     end
   end
@@ -56,6 +56,7 @@ class Game < ActiveRecord::Base
   end
 
   def update_rankings
+    return if self.teams.count < 2
     transfer = (0.01 * self.loser.ranking_total).round
     self.loser.award_points(-1 * transfer)
     self.winner.award_points(transfer)

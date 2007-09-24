@@ -38,7 +38,7 @@ class GamesController < ApplicationController
     
     respond_to do |format|
       format.html # index.haml
-      format.rss # index.builder.rss
+      format.atom # index.atom.builder
       format.xml do
         render :xml => @games.to_xml
       end
