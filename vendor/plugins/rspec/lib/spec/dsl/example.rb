@@ -4,13 +4,11 @@ module Spec
       remove_method :default_test if respond_to?(:default_test)
       class << self
         include Behaviour
-        attr_accessor :rspec_options
-
         def inherited(klass)
           super
           unless klass.name.to_s == ""
             klass.describe(klass.name)
-            register_behaviour(klass)
+            klass.register
           end
         end
 
@@ -19,6 +17,17 @@ module Spec
           suite = ExampleSuite.new(description, self)
           ordered_example_definitions(reverse).each do |example_definition|
             suite << new(example_definition)
+          end
+          instance_methods.each do |method_name|
+            if method_name =~ /^test./ && (
+              instance_method(method_name).arity == 0 ||
+              instance_method(method_name).arity == -1
+            )
+              example_definition = ExampleDefinition.new(method_name) do
+                __send__ method_name
+              end
+              suite << new(example_definition)
+            end
           end
           suite
         end
@@ -32,8 +41,8 @@ module Spec
           number
         end
 
-        def shared?
-          false
+        def register
+          rspec_options.add_behaviour self
         end
 
         def before_each_proc(behaviour_type, &error_handler)
@@ -71,7 +80,7 @@ module Spec
           parts.push(*Example.after_each_parts(nil))
           CompositeProcBuilder.new(parts).proc
         end
-        
+
         protected
 
         def reverse

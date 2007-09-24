@@ -3,10 +3,14 @@ require File.dirname(__FILE__) + '/../../spec_helper.rb'
 module Spec
   module Runner
     describe Options do
-      before do
+      before(:each) do
         @err = StringIO.new('')
         @out = StringIO.new('')
         @options = Options.new(@err, @out)
+      end
+      
+      after(:each) do
+        Spec::Expectations.differ = nil
       end
 
       it "instantiates empty arrays" do
@@ -112,33 +116,11 @@ module Spec
       end
     end
 
-    describe Options, "receiving create_behaviour_runner" do
+    describe Options, "#differ_class and #differ_class=" do
       before do
         @err = StringIO.new
         @out = StringIO.new
         @options = Options.new(@err, @out)
-      end
-
-      it "should fail when custom runner not found" do
-        @options.runner_arg = "Whatever"
-        lambda { @options.create_behaviour_runner }.should raise_error(NameError)
-        @err.string.should match(/Couldn't find behaviour runner class/)
-      end
-
-      it "should fail when custom runner not valid class name" do
-        @options.runner_arg = "whatever"
-        lambda { @options.create_behaviour_runner }.should raise_error('"whatever" is not a valid class name')
-        @err.string.should match(/"whatever" is not a valid class name/)
-      end
-
-      it "returns nil when generate is true" do
-        @options.generate = true
-        @options.create_behaviour_runner.should == nil
-      end
-
-      it "returns a BehaviourRunner by default" do
-        runner = @options.create_behaviour_runner
-        runner.class.should == BehaviourRunner
       end
 
       it "does not set Expectations differ when differ_class is not set" do
@@ -152,11 +134,89 @@ module Spec
         end
         @options.differ_class = Spec::Expectations::Differs::Default
       end
+    end
 
-      it "has a Reporter" do
+    describe Options, "#reporter" do
+      before do
+        @err = StringIO.new
+        @out = StringIO.new
+        @options = Options.new(@err, @out)
+      end
+
+      it "returns a Reporter" do
         @options.reporter.should be_instance_of(Reporter)
         @options.reporter.options.should === @options
       end
     end
+
+    describe Options, "#add_behaviour affecting passed in behaviour" do
+      it_should_behave_like "Test::Unit io sink"
+      before do
+        @err = StringIO.new('')
+        @out = StringIO.new('')
+        @options = Options.new(@err, @out)
+      end
+
+      it "runs all examples when options.examples is nil" do
+        example_1_has_run = false
+        example_2_has_run = false
+        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+          it "runs 1" do
+            example_1_has_run = true
+          end
+          it "runs 2" do
+            example_2_has_run = true
+          end
+        end
+
+        @options.examples = nil
+
+        @options.add_behaviour @behaviour
+        @options.run_examples
+        example_1_has_run.should be_true
+        example_2_has_run.should be_true
+      end
+
+      it "keeps all example_definitions when options.examples is empty" do
+        example_1_has_run = false
+        example_2_has_run = false
+        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+          it "runs 1" do
+            example_1_has_run = true
+          end
+          it "runs 2" do
+            example_2_has_run = true
+          end
+        end
+
+        @options.examples = []
+
+        @options.add_behaviour @behaviour
+        @options.run_examples
+        example_1_has_run.should be_true
+        example_2_has_run.should be_true
+      end
+    end
+
+    describe Options, "#add_behaviour affecting behaviours" do
+      it_should_behave_like "Test::Unit io sink"
+      before do
+        @err = StringIO.new('')
+        @out = StringIO.new('')
+        @options = Options.new(@err,@out)
+      end
+
+      it "adds behaviour when behaviour has example_definitions and is not shared" do
+        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+          it "uses this behaviour" do
+          end
+        end
+
+        @options.number_of_examples.should == 0
+        @options.add_behaviour @behaviour
+        @options.number_of_examples.should == 1
+        @options.behaviours.length.should == 1
+      end
+    end    
   end
 end

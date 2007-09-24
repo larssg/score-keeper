@@ -1,20 +1,20 @@
 class Test::Unit::UI::TestRunnerMediator
   class << self
-    def behaviour_runners
-      @behaviour_runners ||= []
+    def rspec_options_list
+      @rspec_options_list ||= []
     end
 
-    def behaviour_runner
-      behaviour_runners.last || super
+    def rspec_options
+      rspec_options_list.last || super
     end
 
-    def current_behaviour_runner(runner)
-      behaviour_runners << runner
+    def current_rspec_options(options)
+      rspec_options_list << options
       return_value = nil
       begin
         return_value = yield
       ensure
-        behaviour_runners.pop
+        rspec_options_list.pop
       end
       return_value
     end
@@ -24,6 +24,7 @@ class Test::Unit::UI::TestRunnerMediator
   begin
     def initialize(suite)
       @suite = suite
+      add_listener(STARTED, &method(:rspec_prepare))
       add_listener(FINISHED, &method(:rspec_finished))
     end
   ensure
@@ -31,7 +32,11 @@ class Test::Unit::UI::TestRunnerMediator
   end
 
   protected
+  def rspec_prepare(time)
+    self.class.rspec_options.prepare
+  end
+
   def rspec_finished(time)
-    self.class.behaviour_runner.finish
+    self.class.rspec_options.finish
   end
 end

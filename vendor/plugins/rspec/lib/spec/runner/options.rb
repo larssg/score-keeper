@@ -36,11 +36,9 @@ module Spec
         :reverse,
         :timeout,
         :verbose,
-        :runner_arg,
-        :behaviour_runner,
-        :output_file_path
+        :runner_arg
       )
-      attr_reader :colour, :differ_class, :files
+      attr_reader :colour, :differ_class, :files, :behaviours
 
       def initialize(error_stream, output_stream)
         @error_stream = error_stream
@@ -54,7 +52,36 @@ module Spec
         @context_lines = 3
         @diff_format  = :unified
         @files = []
+        @behaviours = []
       end
+
+      def add_behaviour(behaviour)
+        @behaviours << behaviour
+      end
+
+      def prepare
+        reporter.start(number_of_examples)
+        @behaviours.reverse! if reverse
+        set_sequence_numbers
+      end
+
+      def run_examples
+        suite = ::Test::Unit::TestSuite.new("RSpec suite")
+        behaviours.each do |behaviour|
+          suite << behaviour.suite
+        end
+        runner = ::Test::Unit::AutoRunner.new(true)
+        runner.collector = proc {suite}
+        success = false
+        ::Test::Unit::UI::TestRunnerMediator.current_rspec_options(self) do
+          return runner.run
+        end        
+      end
+
+      def finish
+        reporter.end
+        reporter.dump
+      end      
       
       def colour=(colour)
         @colour = colour
@@ -65,15 +92,11 @@ module Spec
         end
       end
 
-      def create_behaviour_runner
-        return nil if @generate
-        if @runner_arg
-          klass_name, arg = split_at_colon(@runner_arg)
-          runner_type = load_class(klass_name, 'behaviour runner', '--runner')
-          @behaviour_runner = runner_type.new(self, arg)
-        else
-          @behaviour_runner = BehaviourRunner.new(self)
-        end
+      def custom_runner
+        return nil unless @runner_arg
+        klass_name, arg = split_at_colon(@runner_arg)
+        runner_type = load_class(klass_name, 'behaviour runner', '--runner')
+        return runner_type.new(self, arg)
       end
 
       def differ_class=(klass)
@@ -160,6 +183,12 @@ module Spec
         end
       end
 
+      def load_paths
+        paths.each do |path|
+          load path
+        end
+      end
+
       def paths
         result = []
         sorted_files.each do |file|
@@ -174,7 +203,18 @@ module Spec
         result
       end
 
+      def number_of_examples
+        @behaviours.inject(0) {|sum, behaviour| sum + behaviour.number_of_examples}
+      end      
       protected
+      # Sets the #number on each ExampleDefinition
+      def set_sequence_numbers
+        number = 0
+        @behaviours.each do |behaviour|
+          number = behaviour.set_sequence_numbers(number, reverse)
+        end
+      end
+
       def sorted_files
         return sorter ? files.sort(&sorter) : files
       end

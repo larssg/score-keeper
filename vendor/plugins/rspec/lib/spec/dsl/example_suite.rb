@@ -12,7 +12,6 @@ module Spec
       end
 
       def run(result, &progress_block)
-        behaviour_runner.prepare
         retain_specified_examples
         return if examples.empty?
 
@@ -87,7 +86,6 @@ module Spec
         end
       end
 
-      def_delegator :behaviour, :rspec_options
       def_delegator :behaviour, :create_example_definition
       def_delegator :behaviour, :description
       def_delegator :behaviour, :behaviour_type

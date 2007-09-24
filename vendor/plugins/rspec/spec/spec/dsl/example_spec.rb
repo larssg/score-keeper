@@ -10,8 +10,13 @@ module Spec
     end
 
     describe Example, :shared => true do
+      before :all do
+        @original_rspec_options = $rspec_options
+      end
+
       before :each do
         @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
+        $rspec_options = @options
         @options.formatters << mock("formatter", :null_object => true)
         @options.backtrace_tweaker = mock("backtrace_tweaker", :null_object => true)
         @reporter = FakeReporter.new(@options)
@@ -19,13 +24,14 @@ module Spec
         @behaviour = Class.new(Example).describe("example") do
           it "does nothing"
         end
-        @behaviour.rspec_options = @options
         class << @behaviour
           public :include
         end
+        @result = ::Test::Unit::TestResult.new
       end
 
       after :each do
+        $rspec_options = @original_rspec_options
         Example.clear_before_and_after!
       end
     end
@@ -68,7 +74,50 @@ module Spec
         Example.suite.tests.should be_empty
       end
 
-      it "should return an ExampleSuite with Examples"
+      it "should return an ExampleSuite with Examples" do
+        behaviour = Class.new(Example).describe('example') do
+          it "should pass" do
+            1.should == 1
+          end
+        end
+        suite = behaviour.suite
+        suite.tests.length.should == 1
+        suite.tests.first.rspec_definition.description.should == "should pass"
+      end
+
+      it "should include methods that begin with test and has an arity of 0 in suite" do
+        behaviour = Class.new(Example).describe('example') do
+          def testCamelCase
+            true.should be_true
+          end
+          def test_any_args(*args)
+            true.should be_true
+          end
+          def test_something
+            1.should == 1
+          end
+          def test
+            raise "This is not a real test"
+          end
+        end
+        suite = behaviour.suite
+        suite.tests.length.should == 3
+        descriptions = suite.tests.collect {|test| test.rspec_definition.description}.sort
+        descriptions.should == ["testCamelCase", "test_any_args", "test_something"]
+      end
+
+      it "should not include methods that begin with test_ and has an arity > 0 in suite" do
+        behaviour = Class.new(Example).describe('example') do
+          def test_invalid(foo)
+            1.should == 1
+          end
+          def testInvalidCamelCase(foo)
+            1.should == 1
+          end
+        end
+        suite = behaviour.suite
+        suite.tests.length.should == 0
+      end
     end
 
     describe "Example", ".description" do
@@ -159,6 +208,39 @@ module Spec
       end
     end
 
+    class ExampleModuleScopingSpec < Example
+      describe Example, " via a class definition"
+
+      module Foo
+        module Bar
+          def self.loaded?
+            true
+          end
+        end
+      end
+      include Foo
+
+      it "should understand module scoping" do
+        Bar.should be_loaded
+      end
+
+      @@foo = 1
+
+      it "should allow class variables to be defined" do
+        @@foo.should == 1
+      end      
+    end
+
+    class ExampleClassVariablePollutionSpec < Example
+      describe Example, " via a class definition without a class variable"
+
+      it "should not retain class variables from other Example classes" do
+        proc do
+          @@foo
+        end.should raise_error
+      end
+    end
+
     describe "Example", ".class_eval" do
       it_should_behave_like "Spec::DSL::Example"
 
@@ -169,49 +251,9 @@ module Spec
             FOO.should == 1
           end
         end
-        behaviour.rspec_options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
         suite = behaviour.suite
         suite.run(@result) {}
         Object.const_defined?(:FOO).should == false
-      end
-
-      it "should understand module scoping" do
-        pending "Example.new needs to create a class that is evaled"
-        module Foo
-          module Bar
-            def self.loaded?
-              true
-            end
-          end
-        end
-
-        Example.new('example') do
-          include Foo
-          it "should allow module scoping" do
-            Bar.should be_loaded
-          end
-        end.run
-        @reporter.instance_variable_get(:@failures).should == []
-        @reporter.dump.should == 0
-      end
-
-      it "should allow class variables to be defined" do
-        pending "class_eval cannot be used. Only the class definition can be used. This may not be possible."
-        Example.new('example') do
-          @@foo = 1
-          it "should reference @@foo" do
-            @@foo.should == 1
-          end
-        end.run
-
-        Example.new('example2') do
-          it "should not have access to other class variables" do
-            proc do
-              @@foo
-            end.should raise_error
-          end
-        end.run
-        @reporter.dump.should == 0
       end
     end
 
@@ -290,10 +332,19 @@ module Spec
     end
     
     describe Example, "#run" do
+      before do
+        @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
+        @original_rspec_options = $rspec_options
+        $rspec_options = @options
+      end
+
+      after do
+        $rspec_options = @original_rspec_options
+      end
+
       it "should not run when there are no example_definitions" do
         behaviour = Class.new(Example).describe("Foobar") {}
         behaviour.example_definitions.should be_empty
-        behaviour.rspec_options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
 
         reporter = mock("Reporter")
         reporter.should_not_receive(:add_behaviour)
@@ -302,9 +353,6 @@ module Spec
       end
     end
     
-    describe Example, "#xit" do
-    end
-
     class ExampleSubclass < Example
     end
 

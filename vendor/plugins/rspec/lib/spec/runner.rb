@@ -1,5 +1,4 @@
 require 'spec/runner/formatter'
-require 'spec/runner/behaviour_runner'
 require 'spec/runner/options'
 require 'spec/runner/option_parser'
 require 'spec/runner/command_line'
@@ -7,7 +6,6 @@ require 'spec/runner/drb_command_line'
 require 'spec/runner/backtrace_tweaker'
 require 'spec/runner/reporter'
 require 'spec/runner/extensions/object'
-require 'spec/runner/extensions/kernel'
 require 'spec/runner/spec_parser'
 
 module Spec

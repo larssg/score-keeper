@@ -1,5 +1,7 @@
 module Spec
   module DSL
+    # TODO: What is the responsibility of this class? It looks like it runs examples,
+    # so maybe we should call it ExampleRunner? We need RDoc here anyway (Aslak) 
     class ExampleRunProxy
       attr_reader :options, :example, :example_definition, :errors
 
@@ -59,9 +61,12 @@ module Spec
       end
 
       def run_example
-        example.instance_eval(&example_block) if example_block
-        return true
-#      rescue ExamplePendingError => e
+        if example_block
+          example.instance_eval(&example_block)
+          return true
+        else
+          raise ExamplePendingError
+        end
       rescue Exception => e
         errors << e
         return false
