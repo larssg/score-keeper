@@ -1,5 +1,20 @@
 *SVN*
 
+* Correctly quote id list for limited eager loading.  #7482 [tmacedo]
+
+* Fixed that using version-targetted migrates would fail on loggers other than the default one #7430 [valeksenko]
+
+* Fixed rename_column for SQLite when using symbols for the column names #8616 [drodriguez]
+
+* Added the possibility of using symbols in addition to concrete classes with ActiveRecord::Observer#observe #3998 [robbyrussell/tarmo]
+
+* Added ActiveRecord::Base#to_json/from_json (currently does not support :include like to_xml) [DHH]
+
+* Added ActiveRecord::Base#from_xml [DHH]. Example:
+
+    xml = "<person><name>David</name></person>"
+    Person.new.from_xml(xml).name # => "David"
+
 * Define dynamic finders as real methods after first usage. [bscofield]
 
 * Deprecation: remove deprecated threaded_connections methods. Use allow_concurrency instead.  [Jeremy Kemper]

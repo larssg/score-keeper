@@ -1,5 +1,61 @@
 *SVN*
 
+* Merge csrf_killer plugin into rails.  Adds RequestForgeryProtection model that verifies session-specific _tokens for non-GET requests.  [Rick]
+
+* Secure #sanitize, #strip_tags, and #strip_links helpers against xss attacks.  Closes #8877. [Rick, lifofifo, Jacques Distler]
+
+  This merges and renames the popular white_list helper (along with some css sanitizing from Jacques Distler version of the same plugin).
+  Also applied updated versions of #strip_tags and #strip_links from #8877.
+
+* Remove use of & logic operator. Closes #8114. [watson]
+
+* Fixed JavaScriptHelper#escape_javascript to also escape closing tags #8023 [rubyruy]
+
+* Fixed TextHelper#word_wrap for multiline strings with extra carrier returns #8663 [seth]
+
+* Fixed that setting the :host option in url_for would automatically turn off :only_path (since :host would otherwise not be shown) #9586 [Bounga]
+
+* Added FormHelper#label #8641 [jcoglan]
+
+* Added AtomFeedHelper (slightly improved from the atom_feed_helper plugin) [DHH]
+
+* Prevent errors when generating routes for uncountable resources, (i.e. sheep where plural == singluar).   map.resources :sheep now creates sheep_index_url for the collection and sheep_url for the specific item.  [Koz]
+
+* Added support for HTTP Only cookies (works in IE6+ and FF 2.0.5+) as an improvement for XSS attacks #8895 [lifo/Spakman]
+
+* Don't warn when a path segment precedes a required segment. Closes #9615. [Nicholas Seckar]
+
+* Fixed CaptureHelper#content_for to work with the optional content parameter instead of just the block #9434 [sandofsky/wildchild].
+
+* Added Mime::Type.register_alias for dealing with different formats using the same mime type [DHH]. Example:
+
+    class PostsController < ApplicationController
+      before_filter :adjust_format_for_iphone
+
+      def index
+        @posts = Post.find(:all)
+        
+        respond_to do |format|
+          format.html   # => renders index.html.erb and uses "text/html" as the content type
+          format.iphone # => renders index.iphone.erb and uses "text/html" as the content type
+        end
+      end
+
+
+      private
+        def adjust_format_for_iphone
+          if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/iPhone/]
+            request.format = :iphone
+          end
+        end
+    end
+
+* Added that render :json will automatically call .to_json unless it's being passed a string [DHH].
+
+* Autolink behaves well with emails embedded in URLs.  #7313 [Jeremy McAnally, tarmo]
+
+* Fixed that default layouts did not take the format into account #9564 [lifofifo]
+
 * Fixed optimized route segment escaping.  #9562 [wildchild, Jeremy Kemper]
 
 * root_path returns '/' not ''.  #9563 [lifofifo]

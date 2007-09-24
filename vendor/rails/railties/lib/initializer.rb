@@ -60,27 +60,26 @@ module Rails
     # Sequentially step through all of the available initialization routines,
     # in order:
     #
+    # * #check_ruby_version
     # * #set_load_path
     # * #require_frameworks
+    # * #set_autoload_paths
     # * #load_environment
+    # * #initialize_encoding
     # * #initialize_database
     # * #initialize_logger
     # * #initialize_framework_logging
     # * #initialize_framework_views
     # * #initialize_dependency_mechanism
     # * #initialize_whiny_nils
+    # * #initialize_temporary_directories
     # * #initialize_framework_settings
-    # * #load_environment
+    # * #add_support_load_paths
     # * #load_plugins
     # * #load_observers
     # * #initialize_routing
     # * #after_initialize
     # * #load_application_initializers
-    #
-    # (Note that #load_environment is invoked twice, once at the start and
-    # once at the end, to support the legacy configuration style where the
-    # environment could overwrite the defaults directly, instead of via the
-    # Configuration instance.
     def process
       check_ruby_version
       set_load_path
@@ -98,11 +97,6 @@ module Rails
       initialize_whiny_nils
       initialize_temporary_directories
       initialize_framework_settings
-
-      # Support for legacy configuration style where the environment
-      # could overwrite anything set from the defaults/global through
-      # the individual base class configurations.
-      load_environment
 
       add_support_load_paths
 
@@ -177,6 +171,9 @@ module Rails
     # If an array of plugin names is specified in config.plugins, only those plugins will be loaded
     # and they plugins will be loaded in that order. Otherwise, plugins are loaded in alphabetical
     # order.
+    #
+    # if config.plugins ends contains :all then the named plugins will be loaded in the given order and all other
+    # plugins will be loaded in alphabetical order
     def load_plugins
       configuration.plugin_locators.each do |locator|
         locator.new(self).each do |plugin|
@@ -188,7 +185,7 @@ module Rails
     end
 
     # Loads the environment specified by Configuration#environment_path, which
-    # is typically one of development, testing, or production.
+    # is typically one of development, test, or production.
     def load_environment
       silence_warnings do
         return if @environment_loaded
@@ -268,7 +265,7 @@ module Rails
       end
     end
 
-    # Sets +ActionController::BaseEview_paths+ and +ActionMailer::Base#template_root+
+    # Sets +ActionController::Base#view_paths+ and +ActionMailer::Base#template_root+
     # (but only for those frameworks that are to be loaded). If the framework's
     # paths have already been set, it is not changed, otherwise it is
     # set to use Configuration#view_path.
@@ -339,8 +336,8 @@ module Rails
     private
       def ensure_all_registered_plugins_are_loaded!
         unless configuration.plugins.nil?
-          unless loaded_plugins == configuration.plugins
-            missing_plugins = configuration.plugins - loaded_plugins
+          if configuration.plugins.detect {|plugin| plugin != :all && !loaded_plugins.include?( plugin)}
+            missing_plugins = configuration.plugins - (loaded_plugins + [:all])
             raise LoadError, "Could not locate the following plugins: #{missing_plugins.to_sentence}"
           end
         end
@@ -426,7 +423,10 @@ module Rails
     # The list of plugins to load. If this is set to <tt>nil</tt>, all plugins will
     # be loaded. If this is set to <tt>[]</tt>, no plugins will be loaded. Otherwise,
     # plugins will be loaded in the order specified.
-    attr_accessor :plugins
+    attr_reader :plugins
+    def plugins=(plugins)
+      @plugins = plugins.nil? ? nil : plugins.map { |p| p.to_sym }
+    end
 
     # The path to the root of the plugins directory. By default, it is in
     # <tt>vendor/plugins</tt>.

@@ -12,7 +12,7 @@ module Spec
       end
 
       def run(result, &progress_block)
-        behaviour_runner.prepare(nil)
+        behaviour_runner.prepare
         retain_specified_examples
         return if examples.empty?
 
@@ -29,7 +29,9 @@ module Spec
               afters = after_each_proc(behaviour_type)
             end
             run_proxy = ExampleRunProxy.new(rspec_options, example)
-            run_proxy.run(befores, afters, &progress_block)
+            unless run_proxy.run(befores, afters, &progress_block)
+              result.add_example_failure run_proxy
+            end
           end
           @before_and_after_all_example.copy_instance_variables_from(example)
         end
@@ -50,9 +52,9 @@ module Spec
         return unless specified_examples
         return if specified_examples.empty?
         return if specified_examples.index(description.to_s)
-        matcher = ExampleMatcher.new(description.to_s)
         examples.reject! do |example|
-          !example.rspec_definition.matches?(matcher, specified_examples)
+          matcher = ExampleMatcher.new(description.to_s, example.rspec_definition.description)
+          !matcher.matches?(specified_examples)
         end
       end
 

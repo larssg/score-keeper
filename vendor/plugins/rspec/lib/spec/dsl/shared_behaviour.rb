@@ -28,7 +28,7 @@ module Spec
           $shared_behaviours ||= []
         end
       end
-      include ExampleApi
+      include Behaviour
       public :include
 
       def initialize(*args, &behaviour_block)
@@ -45,7 +45,7 @@ module Spec
         after_each_parts.each    { |p| mod.after_each_parts << p }
         before_all_parts.each    { |p| mod.before_all_parts << p }
         after_all_parts.each     { |p| mod.after_all_parts << p }
-        included_modules.each    { |m| mod.include m }
+        included_modules.each    { |m| mod.__send__(:include, m) }
       end
     end
   end

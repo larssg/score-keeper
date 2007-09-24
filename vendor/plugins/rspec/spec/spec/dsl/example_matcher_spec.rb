@@ -25,7 +25,7 @@ module Spec
       end
     end
 
-    describe ExampleMatcher do
+    describe ExampleMatcher, "#matches?" do
       include ExampleMatcherSpecHelper
       
       it "should match correct behaviour and example" do
@@ -64,7 +64,7 @@ module Spec
       end      
     end
 
-    describe ExampleMatcher, "normal case" do
+    describe ExampleMatcher, "#matches? normal case" do
       it "matches when passed in example matches" do
         matcher = ExampleMatcher.new("Foo", "bar")
         matcher.matches?(["no match", "Foo bar"]).should == true
@@ -76,7 +76,7 @@ module Spec
       end
     end
 
-    describe ExampleMatcher, "where description has '::' in it" do
+    describe ExampleMatcher, "#matches? where description has '::' in it" do
       it "matches when passed in example matches" do
         matcher = ExampleMatcher.new("Foo::Bar", "baz")
         matcher.matches?(["no match", "Foo::Bar baz"]).should == true

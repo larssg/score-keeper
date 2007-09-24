@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../../../spec_helper'
 require 'hpricot' # Needed to compare generated with wanted HTML
 
 describe "HtmlFormatter" do
+  it_should_behave_like "Test::Unit io sink"
   ['--diff', '--dry-run'].each do |opt|
     it "should produce HTML identical to the one we designed manually with #{opt}" do
       root = File.expand_path(File.dirname(__FILE__) + '/../../../..')
@@ -18,8 +19,7 @@ describe "HtmlFormatter" do
         Spec::Runner::CommandLine.run(
           args,
           err,
-          out,
-          false
+          out
         )
 
         seconds = /\d+\.\d+ seconds/

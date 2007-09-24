@@ -1,5 +1,28 @@
 *SVN*
 
+* Print Rails version when starting console #7440 [eyematz]
+
+* Fixed the placement of fixture files for nested models when generating through script/generate model #7547 [jkit]
+
+* Added TEMPLATE option to rake doc:app to set a custom output template #7737 [Jakob S]
+
+* Added VERBOSE option to rake db:migrate to turn off output #8204 [jbarnette]
+
+* Fixed that rake doc:app should use UTF-8 #8906 [farzy]
+
+* Fixes rake annotations to search erb and builder files as well #9150 [m.langenberg]
+
+* Removed web_service generator [Koz]
+
+* Added the :all option to config.plugins that'll include the rest of the plugins not already explicitly named #9613 [fcheung]. Example:
+
+    # Loads :classic_pagination before all the other plugins
+    config.plugins = [ :classic_pagination, :all ]
+
+* Added symbols as a legal way of specifying plugins in config.plugins #9629 [tom]
+
+* Removed deprecated task names, like clear_logs, in favor of the new namespaced style [DHH]
+
 * Support multiple config.after_initialize blocks so plugins and apps can more easily cooperate.  #9582 [zdennis]
 
 * Added db:drop:all to drop all databases declared in config/database.yml [DHH]
@@ -410,7 +433,7 @@ References #6031. [Nicholas Seckar]
 * Added pid file usage to script/process/spawner and script/process/reaper along with a directive in default config/lighttpd.conf file to record the pid. They will all save their pid file in tmp/pids [DHH]
 
 
-*1.1.2* (April 9th, 2005)
+*1.1.2* (April 9th, 2006)
 
 * Mention in docs that config.frameworks doesn't work when getting Rails via Gems. Closes #4857. [Alisdair McDiarmid]
 

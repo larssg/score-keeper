@@ -21,6 +21,7 @@ class JavaScriptHelperTest < Test::Unit::TestCase
     assert_equal '', escape_javascript(nil)
     assert_equal %(This \\"thing\\" is really\\n netos\\'), escape_javascript(%(This "thing" is really\n netos'))
     assert_equal %(backslash\\\\test), escape_javascript( %(backslash\\test) )
+    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
   end
 
   def test_link_to_function
@@ -49,6 +50,11 @@ class JavaScriptHelperTest < Test::Unit::TestCase
 
   def test_link_to_function_with_href
     assert_dom_equal %(<a href="http://example.com/" onclick="alert('Hello world!'); return false;">Greeting</a>),
+      link_to_function("Greeting", "alert('Hello world!')", :href => 'http://example.com/')
+  end
+
+  def test_link_to_function_with_href
+    assert_dom_equal %(<a href="http://example.com/" onclick="alert('Hello world!'); return false;">Greeting</a>), 
       link_to_function("Greeting", "alert('Hello world!')", :href => 'http://example.com/')
   end
 

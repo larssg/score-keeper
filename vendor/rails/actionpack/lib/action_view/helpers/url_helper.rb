@@ -20,7 +20,7 @@ module ActionView
       #
       # ==== Options
       # * <tt>:anchor</tt> -- specifies the anchor name to be appended to the path.
-      # * <tt>:only_path</tt> --  if true, returns the relative URL (omitting the protocol, host name, and port) (<tt>true</tt> by default)
+      # * <tt>:only_path</tt> --  if true, returns the relative URL (omitting the protocol, host name, and port) (<tt>true</tt> by default unless <tt>:host</tt> is specified)
       # * <tt>:trailing_slash</tt> --  if true, adds a trailing slash, as in "/archive/2005/". Note that this
       #   is currently not recommended since it breaks caching.
       # * <tt>:host</tt> -- overrides the default (current) host if provided
@@ -65,7 +65,8 @@ module ActionView
       def url_for(options = {})
         case options
         when Hash
-          options = { :only_path => true }.update(options.symbolize_keys)
+          show_path =  options[:host].nil? ? true : false
+          options = { :only_path => show_path }.update(options.symbolize_keys)
           escape  = options.key?(:escape) ? options.delete(:escape) : true
           url     = @controller.send(:url_for, options)
         when String
@@ -103,15 +104,15 @@ module ActionView
       #   while spidering your site). Supported verbs are :post, :delete and :put.
       #   Note that if the user has JavaScript disabled, the request will fall back
       #   to using GET. If you are relying on the POST behavior, your should check
-      #   for it in your controllers action by using the request objects methods
+      #   for it in your controller's action by using the request object's methods
       #   for post?, delete? or put?.
       # * The +html_options+ will accept a hash of html attributes for the link tag.
       #
       # Note that if the user has JavaScript disabled, the request will fall back
       # to using GET. If :href=>'#' is used and the user has JavaScript disabled
       # clicking the link will have no effect. If you are relying on the POST 
-      # behavior, your should check for it in your controllers action by using the 
-      # request objects methods for post?, delete? or put?. 
+      # behavior, your should check for it in your controller's action by using the 
+      # request object's methods for post?, delete? or put?. 
       #
       # You can mix and match the +html_options+ with the exception of
       # :popup and :method which will raise an ActionView::ActionViewError
@@ -471,6 +472,10 @@ module ActionView
             submit_function << "m.setAttribute('name', '_method'); m.setAttribute('value', '#{method}'); f.appendChild(m);"
           end
 
+          if request_forgery_protection_token
+            submit_function << "var s = document.createElement('input'); s.setAttribute('type', 'hidden'); "
+            submit_function << "s.setAttribute('name', '_token'); s.setAttribute('value', '#{escape_javascript form_token}'); f.appendChild(s);"
+          end
           submit_function << "f.submit();"
         end
 

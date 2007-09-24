@@ -14,7 +14,7 @@ module Kernel
   # different matcher methods available from within the <tt>describe</tt>
   # block.
   #
-  # See Spec::DSL::ExampleFactory#add_example_class for details about 
+  # See Spec::DSL::BehaviourFactory#add_example_class for details about
   # how to register special Spec::DSL::Example implementations.
   #
   def describe(*args, &block)
@@ -22,7 +22,7 @@ module Kernel
     raise ArgumentError unless block
     args << {} unless Hash === args.last
     args.last[:spec_path] = caller(0)[1]
-    register_behaviour(Spec::DSL::ExampleFactory.create(*args, &block))
+    register_behaviour(Spec::DSL::BehaviourFactory.create(*args, &block))
   end
   alias :context :describe
 
@@ -41,10 +41,10 @@ private
   end
 
   def behaviour_runner
-    # TODO: Figure out a better way to get this considered "covered" and keep this statement on multiple lines 
-    unless $behaviour_runner; \
-      options = ::Spec::Runner::OptionParser.parse(ARGV.dup, STDERR, STDOUT, false); \
-      $behaviour_runner = options.create_behaviour_runner;
+    unless $behaviour_runner
+      parser = ::Spec::Runner::OptionParser.new(STDERR, STDOUT)
+      parser.parse(ARGV)
+      $behaviour_runner = parser.options.create_behaviour_runner
     end
     $behaviour_runner
   end

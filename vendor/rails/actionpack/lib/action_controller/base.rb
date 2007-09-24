@@ -326,6 +326,10 @@ module ActionController #:nodoc:
     # Controls the resource action separator
     @@resource_action_separator = "/"
     cattr_accessor :resource_action_separator
+    
+    # Sets the token parameter name for RequestForgery.  Calling #verify_token sets it to :_token by default
+    @@request_forgery_protection_token = nil
+    cattr_accessor :request_forgery_protection_token
 
     # Holds the request object that's primarily used to get environment variables through access like
     # <tt>request.env["REQUEST_URI"]</tt>.
@@ -826,6 +830,7 @@ module ActionController #:nodoc:
             render_for_text(xml.respond_to?(:to_xml) ? xml.to_xml : xml, options[:status])
 
           elsif json = options[:json]
+            json = json.to_json unless json.is_a?(String)
             json = "#{options[:callback]}(#{json})" unless options[:callback].blank?
             response.content_type = Mime::JSON
             render_for_text(json, options[:status])

@@ -1,6 +1,10 @@
 module Spec
   module Runner
     class Options
+      FILE_SORTERS = {
+        'mtime' => lambda {|file_a, file_b| File.mtime(file_b) <=> File.mtime(file_a)}
+      }
+      
       BUILT_IN_FORMATTERS = {
         'specdoc'  => Formatter::SpecdocFormatter,
         's'        => Formatter::SpecdocFormatter,
@@ -33,9 +37,10 @@ module Spec
         :timeout,
         :verbose,
         :runner_arg,
-        :behaviour_runner
+        :behaviour_runner,
+        :output_file_path
       )
-      attr_reader :colour, :differ_class
+      attr_reader :colour, :differ_class, :files
 
       def initialize(error_stream, output_stream)
         @error_stream = error_stream
@@ -48,6 +53,7 @@ module Spec
         @reporter = Reporter.new(self)
         @context_lines = 3
         @diff_format  = :unified
+        @files = []
       end
       
       def colour=(colour)
@@ -101,7 +107,7 @@ module Spec
       def parse_format(format_arg)
         format, where = split_at_colon(format_arg)
         # This funky regexp checks whether we have a FILE_NAME or not
-        if where.nil?
+        unless where
           raise "When using several --format options only one of them can be without a file" if @out_used
           where = @output_stream
           @out_used = true
@@ -125,19 +131,6 @@ module Spec
         heckle_require = [/mswin/, /java/].detect{|p| p =~ RUBY_PLATFORM} ? 'spec/runner/heckle_runner_unsupported' : 'spec/runner/heckle_runner'
         require heckle_require
         @heckle_runner = HeckleRunner.new(heckle)
-      end
-
-      def parse_generate_options(options_file, args_copy, out_stream)
-        # Remove the --generate-options option and the argument before writing to file
-        index = args_copy.index("-G") || args_copy.index("--generate-options")
-        args_copy.delete_at(index)
-        args_copy.delete_at(index)
-        File.open(options_file, 'w') do |io|
-          io.puts args_copy.join("\n")
-        end
-        out_stream.puts "\nOptions written to #{options_file}. You can now use these options with:"
-        out_stream.puts "spec --options #{options_file}"
-        @generate = true
       end
 
       def split_at_colon(s)
@@ -167,7 +160,29 @@ module Spec
         end
       end
 
+      def paths
+        result = []
+        sorted_files.each do |file|
+          if test ?d, file
+            result += Dir[File.expand_path("#{file}/**/*.rb")]
+          elsif test ?f, file
+            result << file
+          else
+            raise "File or directory not found: #{file}"
+          end
+        end
+        result
+      end
+
       protected
+      def sorted_files
+        return sorter ? files.sort(&sorter) : files
+      end
+      
+      def sorter
+        FILE_SORTERS[loadby]
+      end
+      
       def default_differ
         require 'spec/expectations/differs/default'
         self.differ_class = Spec::Expectations::Differs::Default
