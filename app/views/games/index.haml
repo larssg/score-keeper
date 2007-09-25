@@ -9,7 +9,7 @@
         %th= 'Team two'[]
         %th= 'Created'[]
         %th= '&nbsp';
-       
+
       - @games.each do |game|
         %tr
           %td
@@ -17,7 +17,7 @@
               = ' - ' if index == 1
               %span{ :title => membership.points_awarded }
                 = membership.person.display_name
-          
+
           %td.score= game.teams.collect(&:score).join(' - ')
 
           %td

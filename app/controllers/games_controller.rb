@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_filter :login_required, :except => :index
+  cache_sweeper :game_sweeper
   
   make_resourceful do
     publish :xml, :json, :csv, :attributes => [ { :teams => [ :score ] } ]

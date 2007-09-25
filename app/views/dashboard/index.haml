@@ -1,31 +1,32 @@
 - title 'Dashboard'[]
 
-%table.list
-  %tr
-    %th= '&nbsp;'
-    %th= 'Person'[]
-    %th= 'Ranking'[]
-    %th= 'Games won'[]
-    %th= 'Games played'[]
-    %th= 'Winning percentage'[]
-    %th= 'Goals for'[]
-    %th= 'Goals against'[]
-    %th= '+/-'
-    %th= '+/- ' + 'Average'[]
-  
-  - @people.each_with_index do |person, index|
+- cache(dashboard_path) do
+  %table.list
     %tr
-      %td= index + 1
-      %td= person.full_name
-      %td= person.ranking
-      %td= person.games_won
-      %td= person.memberships_count
-      %td= person.winning_percentage.to_s + '%'
-      %td= person.goals_for
-      %td= person.goals_against
-      %td= person.difference
-      %td= person.difference_average
- 
-#game_count
-  = 'Game count'[] + ':'
-  = @game_count
+      %th= '&nbsp;'
+      %th= 'Person'[]
+      %th= 'Ranking'[]
+      %th= 'Games won'[]
+      %th= 'Games played'[]
+      %th= 'Winning percentage'[]
+      %th= 'Goals for'[]
+      %th= 'Goals against'[]
+      %th= '+/-'
+      %th= '+/- ' + 'Average'[]
+
+    - @people.each_with_index do |person, index|
+      %tr
+        %td= index + 1
+        %td= person.full_name
+        %td= person.ranking
+        %td= person.games_won
+        %td= person.memberships_count
+        %td= person.winning_percentage.to_s + '%'
+        %td= person.goals_for
+        %td= person.goals_against
+        %td= person.difference
+        %td= person.difference_average
+
+  #game_count
+    = 'Game count'[] + ':'
+    = @game_count
