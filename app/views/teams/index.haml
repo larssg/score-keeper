@@ -1,15 +1,18 @@
-%table.list
-  %tr
-    %th= 'Members'[]
-    %th= 'Total ranking'[]
-    %th= 'Games played'[]
-    %th= 'Games won'[]
-    %th= 'Winning percentage'[]
+- title 'Teams'[]
 
-  - @teams.each do |team|
+- cache(teams_path) do
+  %table.list
     %tr
-      %td= team[:players].collect(&:full_name).join(' - ')
-      %td= team[:total_ranking]
-      %td= team[:games_played]
-      %td= team[:games_won]
-      %td= team[:percentage].to_s + '%'
+      %th= 'Members'[]
+      %th= 'Total ranking'[]
+      %th= 'Games played'[]
+      %th= 'Games won'[]
+      %th= 'Winning percentage'[]
+
+    - @teams.each do |team|
+      %tr
+        %td= team[:players].collect(&:full_name).join(' - ')
+        %td= team[:total_ranking]
+        %td= team[:games_played]
+        %td= team[:games_won]
+        %td= team[:percentage].to_s + '%'
