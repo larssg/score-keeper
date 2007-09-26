@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(:version => 19) do
   add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
 
   create_table "user_openids", :force => true do |t|
-    t.string   "openid_url", :default => "", :null => false
-    t.integer  "user_id",                    :null => false
+    t.string   "openid_url", :null => false
+    t.integer  "user_id",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
