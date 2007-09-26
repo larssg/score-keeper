@@ -1,4 +1,0 @@
-aws_access_key: '<YOUR ACCESS KEY HERE>'
-aws_secret_access_key: '<YOUR _SECRET_ ACCESS KEY HERE>'
-options:
-  use_ssl: true #set it to true or false
