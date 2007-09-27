@@ -8,7 +8,7 @@ class Game < ActiveRecord::Base
   after_destroy :reset_rankings_after_destroy
 
   def self.per_page
-    15
+    20
   end
   
   def self.find_recent(options = {})
