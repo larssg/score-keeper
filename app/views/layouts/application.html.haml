@@ -8,14 +8,13 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.0/build/reset/reset-min.css', :type => 'text/css' }
-    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.0/build/base/base-min.css', :type => 'text/css' }
-    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.0/build/fonts/fonts-min.css', :type => 'text/css' }
+    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.1/build/reset-fonts-grids/reset-fonts-grids.css', :type => 'text/css' }
+    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.1/build/base/base-min.css', :type => 'text/css' }
     = stylesheet_link_tag :all
 
   %body
-    #layout
-      #header
+    #doc3{ :class => sidebar.blank? ? 'yui-t7' : 'yui-t5' }
+      #hd
         #links
           = render :partial => 'shared/login'
           #languages
@@ -32,29 +31,25 @@
           %li{:class => controller.controller_name == 'people' ? 'current' : ''}= link_to 'People'[], people_path
           - if admin?
             %li{:class => controller.controller_name == 'users' ? 'current' : ''}= link_to 'Users'[], users_path
-          
-        .clear
-          %hr
     
       - unless @page_title.blank?
         %h2#page_title= @page_title
        
-      #main
-        #content{ :class => sidebar.blank? ? 'content_without_sidebar' : 'content_with_sidebar' }
-          - if flash.keys.length > 0
-            #messages
-              - flash.keys.each do |key|
-                %div{ :class => 'key' }= flash[key]
-      
-          = yield
+      #bd
+        #yui-main
+          %div{ :class => sidebar.blank? ? nil : 'yui-b' }
+            #content.yui-g
+              - if flash.keys.length > 0
+                #messages
+                  - flash.keys.each do |key|
+                    %div{ :class => 'key' }= flash[key]
+
+              = yield
   
         - unless sidebar.blank?
-          #sidebar= sidebar
-  
-        .clear
-          %hr
-  
-      #footer
+          #sidebar.yui-b= sidebar
+    
+      #ft
         .content
           Copyright 2007 by Lars Sehested
           = '&middot;'

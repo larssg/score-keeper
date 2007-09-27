@@ -4,45 +4,42 @@ th {
 table {
   margin: 0; }
 
-#header {
-  width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+#hd {
   background-color: #DDDDDD; }
-  #header h1 {
+  #hd h1 {
     margin: 0;
     padding: 20px; }
-    #header h1 a {
+    #hd h1 a {
       text-decoration: none;
       color: #000000; }
-  #header #links {
+  #hd #links {
     float: right;
     padding: 20px; }
-    #header #links #user {
+    #hd #links #user {
       display: inline;
       padding-right: 10px; }
-    #header #links #languages {
+    #hd #links #languages {
       display: inline; }
-  #header ul#menu {
+  #hd ul#menu {
     margin: 0;
     border-bottom: 1px solid #000000;
     list-style-type: none;
     padding: 3px 20px 3px 20px; }
-    #header ul#menu li {
+    #hd ul#menu li {
       display: inline; }
-      #header ul#menu li a {
+      #hd ul#menu li a {
         padding: 3px 4px;
         border: 1px solid #000000;
         background-color: #EEEEEE;
         border-bottom: none;
         text-decoration: none;
         color: #000000; }
-        #header ul#menu li a:hover {
+        #hd ul#menu li a:hover {
           background-color: #FFFFFF; }
-    #header ul#menu li.current {
+    #hd ul#menu li.current {
       border-bottom: 1px solid #FFFFFF;
       background-color: #FFFFFF; }
-      #header ul#menu li.current a {
+      #hd ul#menu li.current a {
         background-color: #FFFFFF;
         position: relative;
         top: 1px;
@@ -53,14 +50,10 @@ h2#page_title {
   margin: 0;
   padding: 10px; }
 
-#main {
-  width: 920px;
-  margin-left: auto;
-  margin-right: auto;
-  clear: both;
+#bd {
   padding-top: 20px;
   padding-bottom: 20px; }
-  #main #messages {
+  #bd #messages {
     border: 1px solid #999999;
     background-color: #EEEEEE;
     padding: 10px;
@@ -71,66 +64,57 @@ h2#page_title {
     border: solid 1px #DD9A24;
     background-color: #FCC;
     border: solid 1px #C66; }
-  #main #game_count {
+  #bd #game_count {
     padding-top: 20px;
     padding-left: 2px; }
-  #main label {
+  #bd label {
     display: block; }
-    #main label input {
+    #bd label input {
       display: block;
       margin-bottom: 10px; }
-  #main table.list {
-    width: 920px; }
-    #main table.list th {
+  #bd table.list {
+    width: 100%; }
+    #bd table.list th {
       border: 0;
       border-bottom: 1px solid #000000;
       background-color: #DDDDDD;
       padding: 3px; }
-    #main table.list td {
+    #bd table.list td {
       border: 0;
       padding: 3px;
       text-align: left; }
-    #main table.list tr.even td {
+    #bd table.list tr.even td {
       background-color: #EEEEEE; }
-  #main #games h3 {
+  #bd #games h3 {
     font-size: 13px;
     margin: 0;
     padding: 0;
     margin-bottom: 5px; }
-  #main .pagination {
+  #bd .pagination {
     padding-top: 10px; }
-  #main #new_game h3 {
+  #bd #new_game h3 {
     display: block;
     margin: 0;
     margin-bottom: 5px; }
-  #main #new_game label {
+  #bd #new_game label {
     display: block;
     padding-bottom: 5px; }
-    #main #new_game label span {
+    #bd #new_game label span {
       display: block; }
-    #main #new_game label .score {
+    #bd #new_game label .score {
       margin: 0;
       width: 2em; }
-    #main #new_game label select {
+    #bd #new_game label select {
       width: 210px; }
-  #main .content_with_sidebar {
-    width: 700px;
-    float: left; }
-    #main .content_with_sidebar table.list {
-      width: 680px; }
-  #main #sidebar {
+  #bd #sidebar {
     float: right;
     width: 220px; }
 
-#footer {
-  width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+#ft {
   background-color: #EEEEEE;
   border-top: 1px solid #000000;
-  text-align: center;
-  clear: both; }
-  #footer .content {
+  text-align: center; }
+  #ft .content {
     padding: 10px; }
 
 input#openid_url {
