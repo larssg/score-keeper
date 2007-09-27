@@ -11,7 +11,7 @@
         %th= '&nbsp';
 
       - @games.each do |game|
-        %tr
+        %tr{ :class => cycle('odd', 'even') }
           %td
             - game.teams.first.memberships.each_with_index do |membership, index|
               = ' - ' if index == 1

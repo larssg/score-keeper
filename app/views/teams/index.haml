@@ -10,7 +10,7 @@
       %th= 'Winning percentage'[]
 
     - @teams.each do |team|
-      %tr
+      %tr{ :class => cycle('odd', 'even') }
         %td= team[:players].collect(&:full_name).join(' - ')
         %td= team[:total_ranking]
         %td= team[:games_played]
