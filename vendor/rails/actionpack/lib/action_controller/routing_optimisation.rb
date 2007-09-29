@@ -44,7 +44,7 @@ module ActionController
         # Temporarily disabled :url optimisation pending proper solution to 
         # Issues around request.host etc.
         def applicable?
-          kind != :url
+          true
         end
       end
 
@@ -60,9 +60,9 @@ module ActionController
           # if they're using foo_url(:id=>2) it's one 
           # argument, but we don't want to generate /foos/id2
           if number_of_arguments == 1
-            "args.size == 1 && !args.first.is_a?(Hash)"
+            "defined?(request) && request && args.size == 1 && !args.first.is_a?(Hash)"
           else
-            "args.size == #{number_of_arguments}"
+            "defined?(request) && request && args.size == #{number_of_arguments}"
           end
         end
 
@@ -75,7 +75,7 @@ module ActionController
             elements << '#{request.host_with_port}'
           end
 
-          elements << '#{request.relative_url_root if request && request.relative_url_root}'
+          elements << '#{request.relative_url_root if request.relative_url_root}'
 
           # The last entry in route.segments appears to # *always* be a
           # 'divider segment' for '/' but we have assertions to ensure that
@@ -97,7 +97,7 @@ module ActionController
       # argument
       class PositionalArgumentsWithAdditionalParams < PositionalArguments
         def guard_condition
-          "args.size == #{route.segment_keys.size + 1}"
+          "defined?(request) && request && args.size == #{route.segment_keys.size + 1}"
         end
 
         # This case uses almost the Use the same code as positional arguments, 

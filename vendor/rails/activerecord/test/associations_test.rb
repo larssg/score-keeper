@@ -1158,6 +1158,24 @@ class BelongsToAssociationsTest < Test::Unit::TestCase
     assert_equal 0, Topic.find(t2.id).replies.size
   end
 
+  def test_belongs_to_counter_after_save
+    topic = Topic.create!(:title => "monday night")
+    topic.replies.create!(:title => "re: monday night", :content => "football")
+    assert_equal 1, Topic.find(topic.id)[:replies_count]
+
+    topic.save!
+    assert_equal 1, Topic.find(topic.id)[:replies_count]
+  end
+
+  def test_belongs_to_counter_after_update_attributes
+    topic = Topic.create!(:title => "37s")
+    topic.replies.create!(:title => "re: 37s", :content => "rails")
+    assert_equal 1, Topic.find(topic.id)[:replies_count]
+
+    topic.update_attributes(:title => "37signals")
+    assert_equal 1, Topic.find(topic.id)[:replies_count]
+  end
+
   def test_assignment_before_parent_saved
     client = Client.find(:first)
     apple = Firm.new("name" => "Apple")
@@ -1474,7 +1492,7 @@ class HasAndBelongsToManyAssociationsTest < Test::Unit::TestCase
     assert_equal 1, project.access_level.to_i
   end
 
-  def test_hatbm_attribute_access_and_respond_to
+  def test_habtm_attribute_access_and_respond_to
     project = developers(:jamis).projects[0]
     assert project.has_attribute?("name")
     assert project.has_attribute?("joined_on")

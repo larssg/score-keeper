@@ -49,15 +49,18 @@ class FixturesTest < Test::Unit::TestCase
 
   def test_inserts
     topics = create_fixtures("topics")
-    firstRow = ActiveRecord::Base.connection.select_one("SELECT * FROM topics WHERE author_name = 'David'")
-    assert_equal("The First Topic", firstRow["title"])
+    first_row = ActiveRecord::Base.connection.select_one("SELECT * FROM topics WHERE author_name = 'David'")
+    assert_equal("The First Topic", first_row["title"])
 
-    secondRow = ActiveRecord::Base.connection.select_one("SELECT * FROM topics WHERE author_name = 'Mary'")
-    assert_nil(secondRow["author_email_address"])
+    second_row = ActiveRecord::Base.connection.select_one("SELECT * FROM topics WHERE author_name = 'Mary'")
+    assert_nil(second_row["author_email_address"])
   end
 
   if ActiveRecord::Base.connection.supports_migrations?
     def test_inserts_with_pre_and_suffix
+      # Reset cache to make finds on the new table work
+      Fixtures.reset_cache
+
       ActiveRecord::Base.connection.create_table :prefix_topics_suffix do |t|
         t.column :title, :string
         t.column :author_name, :string
@@ -82,15 +85,15 @@ class FixturesTest < Test::Unit::TestCase
 
       topics = create_fixtures("topics")
 
-      firstRow = ActiveRecord::Base.connection.select_one("SELECT * FROM prefix_topics_suffix WHERE author_name = 'David'")
-      assert_equal("The First Topic", firstRow["title"])
+      first_row = ActiveRecord::Base.connection.select_one("SELECT * FROM prefix_topics_suffix WHERE author_name = 'David'")
+      assert_equal("The First Topic", first_row["title"])
 
-      secondRow = ActiveRecord::Base.connection.select_one("SELECT * FROM prefix_topics_suffix WHERE author_name = 'Mary'")
-      assert_nil(secondRow["author_email_address"])        
+      second_row = ActiveRecord::Base.connection.select_one("SELECT * FROM prefix_topics_suffix WHERE author_name = 'Mary'")
+      assert_nil(second_row["author_email_address"])
     ensure
       # Restore prefix/suffix to its previous values
-      ActiveRecord::Base.table_name_prefix = old_prefix 
-      ActiveRecord::Base.table_name_suffix = old_suffix 
+      ActiveRecord::Base.table_name_prefix = old_prefix
+      ActiveRecord::Base.table_name_suffix = old_suffix
 
       ActiveRecord::Base.connection.drop_table :prefix_topics_suffix rescue nil
     end
@@ -199,6 +202,7 @@ if Account.connection.respond_to?(:reset_pk_sequence!)
 
     def setup
       @instances = [Account.new(:credit_limit => 50), Company.new(:name => 'RoR Consulting')]
+      Fixtures.reset_cache # make sure tables get reinitialized
     end
 
     def test_resets_to_min_pk_with_specified_pk_and_sequence
@@ -223,7 +227,7 @@ if Account.connection.respond_to?(:reset_pk_sequence!)
       end
     end
 
-    def test_create_fixtures_resets_sequences
+    def test_create_fixtures_resets_sequences_when_not_cached
       @instances.each do |instance|
         max_id = create_fixtures(instance.class.table_name).inject(0) do |max_id, (name, fixture)|
           fixture_id = fixture['id'].to_i
@@ -237,7 +241,6 @@ if Account.connection.respond_to?(:reset_pk_sequence!)
     end
   end
 end
-
 
 class FixturesWithoutInstantiationTest < Test::Unit::TestCase
   self.use_instantiated_fixtures = false
@@ -274,7 +277,6 @@ class FixturesWithoutInstantiationTest < Test::Unit::TestCase
   end
 end
 
-
 class FixturesWithoutInstanceInstantiationTest < Test::Unit::TestCase
   self.use_instantiated_fixtures = true
   self.use_instantiated_fixtures = :no_instances
@@ -288,7 +290,6 @@ class FixturesWithoutInstanceInstantiationTest < Test::Unit::TestCase
     assert_not_nil @accounts
   end
 end
-
 
 class TransactionalFixturesTest < Test::Unit::TestCase
   self.use_instantiated_fixtures = true
@@ -306,7 +307,6 @@ class TransactionalFixturesTest < Test::Unit::TestCase
   end
 end
 
-
 class MultipleFixturesTest < Test::Unit::TestCase
   fixtures :topics
   fixtures :developers, :accounts
@@ -316,7 +316,6 @@ class MultipleFixturesTest < Test::Unit::TestCase
   end
 end
 
-
 class OverlappingFixturesTest < Test::Unit::TestCase
   fixtures :topics, :developers
   fixtures :developers, :accounts
@@ -325,7 +324,6 @@ class OverlappingFixturesTest < Test::Unit::TestCase
     assert_equal %w(topics developers accounts), fixture_table_names
   end
 end
-
 
 class ForeignKeyFixturesTest < Test::Unit::TestCase
   fixtures :fk_test_has_pk, :fk_test_has_fk
@@ -346,7 +344,7 @@ end
 class SetTableNameFixturesTest < Test::Unit::TestCase
   set_fixture_class :funny_jokes => 'Joke'
   fixtures :funny_jokes
-  
+
   def test_table_method
     assert_kind_of Joke, funny_jokes(:a_joke)
   end
@@ -355,7 +353,7 @@ end
 class CustomConnectionFixturesTest < Test::Unit::TestCase
   set_fixture_class :courses => Course
   fixtures :courses
-  
+
   def test_connection
     assert_kind_of Course, courses(:ruby)
     assert_equal Course.connection, courses(:ruby).connection
@@ -381,16 +379,14 @@ class CheckEscapedYamlFixturesTest < Test::Unit::TestCase
   end
 end
 
-class DevelopersProject; end;
-
+class DevelopersProject; end
 class ManyToManyFixturesWithClassDefined < Test::Unit::TestCase
   fixtures :developers_projects
-  
+
   def test_this_should_run_cleanly
     assert true
   end
 end
-
 
 class FixturesBrokenRollbackTest < Test::Unit::TestCase
   def blank_setup; end
@@ -423,5 +419,30 @@ class LoadAllFixturesTest < Test::Unit::TestCase
 
   def test_all_there
     assert_equal %w(developers people tasks), fixture_table_names.sort
+  end
+end
+
+class FasterFixturesTest < Test::Unit::TestCase
+  fixtures :categories, :authors
+
+  def load_extra_fixture(name)
+    fixture = create_fixtures(name)
+    assert fixture.is_a?(Fixtures)
+    @loaded_fixtures[fixture.table_name] = fixture
+  end
+
+  def test_cache
+    assert Fixtures.fixture_is_cached?(ActiveRecord::Base.connection, 'categories')
+    assert Fixtures.fixture_is_cached?(ActiveRecord::Base.connection, 'authors')
+
+    assert_no_queries do
+      create_fixtures('categories')
+      create_fixtures('authors')
+    end
+
+    load_extra_fixture('posts')
+    assert Fixtures.fixture_is_cached?(ActiveRecord::Base.connection, 'posts')
+    self.class.setup_fixture_accessors('posts')
+    assert_equal 'Welcome to the weblog', posts(:welcome).title
   end
 end

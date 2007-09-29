@@ -102,7 +102,7 @@ module ActionController #:nodoc:
       #     end
       #   end
       # 
-      # Finally, all the above styles can be mixed together, and the +helper+ method can be invokved with a mix of
+      # Finally, all the above styles can be mixed together, and the +helper+ method can be invoked with a mix of
       # +symbols+, +strings+, +modules+ and blocks.
       #   helper(:three, BlindHelper) { def mice() 'mice' end }
       #
@@ -173,7 +173,7 @@ module ActionController #:nodoc:
           module_path = module_name.split('::').map { |m| m.underscore }.join('/')
           require_dependency module_path
           helper module_name.constantize
-        rescue LoadError => e
+        rescue MissingSourceFile => e
           raise unless e.is_missing? module_path
           logger.debug("#{name}: missing default helper path #{module_path}") if logger
         rescue NameError => e

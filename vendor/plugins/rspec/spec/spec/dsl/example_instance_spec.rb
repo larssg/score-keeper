@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper.rb'
 
 module Spec
   module DSL
-    describe ExampleRunProxy, "#run", :shared => true do
+    describe ExampleRunner, "#run", :shared => true do
       before(:each) do
         @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
         @reporter = ::Spec::Runner::Reporter.new(@options)
@@ -12,15 +12,15 @@ module Spec
 
       def create_proxy(example_definition)
         example = @behaviour.new(example_definition)
-        proxy = ExampleRunProxy.new(@options, example)
+        proxy = ExampleRunner.new(@options, example)
         proxy.stub!(:verify_mocks)
         proxy.stub!(:teardown_mocks)
         proxy
       end
     end
 
-    describe ExampleRunProxy, "#run with blank passing example" do
-      it_should_behave_like "Spec::DSL::ExampleRunProxy#run"
+    describe ExampleRunner, "#run with blank passing example" do
+      it_should_behave_like "Spec::DSL::ExampleRunner#run"
 
       before do
         @example_definition = @behaviour.create_example_definition("example") {}
@@ -29,24 +29,24 @@ module Spec
       
       it "should send reporter example_started" do
         @reporter.should_receive(:example_started).with(equal(@example_definition))
-        @proxy.run(nil, nil)
+        @proxy.run
       end
 
       it "should report its name for dry run" do
         @options.dry_run = true
         @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, "NO NAME (Because of --dry-run)")
-        @proxy.run(nil, nil)
+        @proxy.run
       end
 
       it "should report success" do
         @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, nil, false)
-        @proxy.run(nil, nil)
+        @proxy.run
       end
     end
 
-    describe ExampleRunProxy, "#run with a failing example" do
+    describe ExampleRunner, "#run with a failing example" do
       predicate_matchers[:is_a] = [:is_a?]
-      it_should_behave_like "Spec::DSL::ExampleRunProxy#run"
+      it_should_behave_like "Spec::DSL::ExampleRunner#run"
 
       before do
         @example_definition = @behaviour.create_example_definition("example") do
@@ -62,12 +62,12 @@ module Spec
           "example",
           false
         )
-        @proxy.run(nil, nil)
+        @proxy.run
       end
     end
 
-    describe ExampleRunProxy, "#run with a erroring example" do
-      it_should_behave_like "Spec::DSL::ExampleRunProxy#run"
+    describe ExampleRunner, "#run with a erroring example" do
+      it_should_behave_like "Spec::DSL::ExampleRunner#run"
 
       before do
         @error = error = NonStandardError.new("in body")
@@ -84,11 +84,11 @@ module Spec
           "example",
           false
         )
-        @proxy.run(nil, nil)
+        @proxy.run
       end
 
       it "should run after_each block" do
-        after_each = lambda do
+        @behaviour.after(:each) do
           raise("in after_each")
         end
         @reporter.should_receive(:example_finished) do |example_definition, error, location|
@@ -96,12 +96,12 @@ module Spec
           location.should eql("example")
           error.message.should eql("in body")
         end
-        @proxy.run(nil, after_each)
+        @proxy.run
       end      
     end
 
-    describe ExampleRunProxy, "#run where before_each fails" do
-      it_should_behave_like "Spec::DSL::ExampleRunProxy#run"
+    describe ExampleRunner, "#run where before_each fails" do
+      it_should_behave_like "Spec::DSL::ExampleRunner#run"
 
       before do
         @example_ran = example_ran = false
@@ -109,18 +109,18 @@ module Spec
           example_ran = true
         end
         @proxy = create_proxy(@example_definition)
-        @before_each = lambda {raise NonStandardError, "in before_each"}
+        @behaviour.before(:each) {raise NonStandardError, "in before_each"}
       end
 
       it "should not run example block if before_each fails" do
-        @proxy.run(@before_each, nil)
+        @proxy.run
         @example_ran.should == false
       end
 
       it "should run after_each block" do
         after_each_ran = false
-        after_each = lambda {after_each_ran = true}
-        @proxy.run(@before_each, after_each)
+        @behaviour.after(:each) {after_each_ran = true}
+        @proxy.run
         after_each_ran.should == true
       end
 
@@ -130,12 +130,12 @@ module Spec
           error.message.should eql("in before_each")
           location.should eql("before(:each)")
         end
-        @proxy.run(@before_each, nil)
+        @proxy.run
       end
     end
 
-    describe ExampleRunProxy, "#run where after_each fails" do
-      it_should_behave_like "Spec::DSL::ExampleRunProxy#run"
+    describe ExampleRunner, "#run where after_each fails" do
+      it_should_behave_like "Spec::DSL::ExampleRunner#run"
 
       before do
         @example_ran = example_ran = false
@@ -143,7 +143,7 @@ module Spec
           example_ran = true
         end
         @proxy = create_proxy(@example_definition)
-        @after_each = lambda { raise(NonStandardError.new("in after_each")) }
+        @behaviour.after(:each) { raise(NonStandardError.new("in after_each")) }
       end
 
       it "should report failure location when in after_each" do
@@ -152,13 +152,13 @@ module Spec
           error.message.should eql("in after_each")
           location.should eql("after(:each)")
         end
-        @proxy.run(nil, @after_each)
+        @proxy.run
       end
     end
 
-    describe ExampleRunProxy, "#run with use cases" do
+    describe ExampleRunner, "#run with use cases" do
       predicate_matchers[:is_a] = [:is_a?]
-      it_should_behave_like "Spec::DSL::ExampleRunProxy#run"
+      it_should_behave_like "Spec::DSL::ExampleRunner#run"
 
       it "should run example block in scope of example" do
         scope_object = nil
@@ -170,7 +170,7 @@ module Spec
         @example = @proxy.example
 
         @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, nil, false)
-        @proxy.run(nil, nil)
+        @proxy.run
         
         scope_object.should == @example
         scope_object.should be_instance_of(@behaviour)
@@ -193,7 +193,7 @@ module Spec
           example_definition.description.should == "NO NAME (Because of --dry-run)"
           location.should == "NO NAME (Because of --dry-run)"
          end
-        proxy.run(nil, nil)
+        proxy.run
       end
 
       it "should report NO NAME when told to use generated description with no expectations" do
@@ -202,7 +202,7 @@ module Spec
         @reporter.should_receive(:example_finished) do |example, error, location|
           example.description.should == "NO NAME (Because there were no expectations)"
         end
-        proxy.run(nil, nil)
+        proxy.run
       end
 
       it "should report NO NAME when told to use generated description and matcher fails" do
@@ -215,7 +215,7 @@ module Spec
           example_definition.description.should == "NO NAME (Because of Error raised in matcher)"
           location.should == "NO NAME (Because of Error raised in matcher)"
         end
-        proxy.run(nil, nil)
+        proxy.run
       end
 
       it "should report generated description when told to and it is available" do
@@ -227,7 +227,7 @@ module Spec
         @reporter.should_receive(:example_finished) do |example_definition, error, location|
           example_definition.description.should == "should == 5"
         end
-        proxy.run(nil, nil)
+        proxy.run
       end
 
       it "should unregister description_generated callback (lest a memory leak should build up)" do
@@ -235,7 +235,7 @@ module Spec
         proxy = create_proxy(example_definition)
 
         Spec::Matchers.should_receive(:clear_generated_description)
-        proxy.run(nil, nil)
+        proxy.run
       end
     end
   end

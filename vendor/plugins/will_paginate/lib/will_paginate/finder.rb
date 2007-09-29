@@ -1,6 +1,6 @@
 module WillPaginate
-  # A mixin for ActiveRecord::Base. Provides `per_page` class method
-  # and makes `paginate` finders possible with some method_missing magic.
+  # A mixin for ActiveRecord::Base. Provides +per_page+ class method
+  # and makes +paginate+ finders possible with some method_missing magic.
   #
   # Find out more in WillPaginate::Finder::ClassMethods
   #
@@ -55,13 +55,16 @@ module WillPaginate
       # 
       def paginate_by_sql(sql, options)
         options, page, per_page = wp_parse_options!(options)
-        sanitized_query = sanitize_sql(sql)
-        total_entries = options[:total_entries] || count_by_sql("SELECT COUNT(*) FROM (#{sanitized_query}) AS count_table")
 
-        returning WillPaginate::Collection.new(page, per_page, total_entries) do |pager|
+        WillPaginate::Collection.create(page, per_page) do |pager|
+          query = sanitize_sql(sql)
+          count_query = "SELECT COUNT(*) FROM (#{query}) AS count_table" unless options[:total_entries]
           options.update :offset => pager.offset, :limit => pager.per_page
-          add_limit! sanitized_query, options
-          pager.replace find_by_sql(sanitized_query)
+          
+          add_limit! query, options
+          pager.replace find_by_sql(query)
+          
+          pager.total_entries = options[:total_entries] || count_by_sql(count_query) unless pager.total_entries
         end
       end
 
@@ -82,72 +85,76 @@ module WillPaginate
           return method_missing_without_paginate(method, *args, &block) 
         end
 
-        options, page, per_page = wp_parse_options!(args.pop)
+        options, page, per_page, total_entries = wp_parse_options!(args.pop)
+        # an array of IDs may have been given:
+        total_entries ||= (Array === args.first and args.first.size)
+        
         # paginate finders are really just find_* with limit and offset
         finder = method.to_s.sub /^paginate/, 'find'
-        # magic counting for user convenience
-        total_entries = wp_count!(options, args, finder)
 
-        # :all is implicit
+        # :all is implicit, naturally
         if finder == 'find'
           args.unshift(:all) if args.empty?
         elsif finder.index('find_by_') == 0
           finder.sub! /^find/, 'find_all'
         end
 
-        ::Object.returning WillPaginate::Collection.new(page, per_page, total_entries) do |pager|
-          args << options.update(:offset => pager.offset, :limit => pager.per_page)
+        WillPaginate::Collection.create(page, per_page, total_entries) do |pager|
+          args << options.except(:count).merge(:offset => pager.offset, :limit => pager.per_page)
           pager.replace send(finder, *args)
+          
+          # magic counting for user convenience:
+          pager.total_entries = wp_count!(options, args, finder) unless pager.total_entries
         end
       end
 
       def wp_count!(options, args, finder)
-        # :total_entries and :count are mutually exclusive!
-        unless options[:total_entries]
-          unless args.first.is_a? Array
-            # count expects (almost) the same options as find
-            count_options = options.except :count, :order, :select, :limit, :offset
-            
-            # merge the hash found in :count
-            # this allows you to specify :select, :order, or anything else just for the count query
-            count_options.update(options.delete(:count)) if options.key? :count
-            # extract the conditions from calls like "paginate_by_foo_and_bar"
-            conditions = wp_extract_finder_conditions(finder, args, count_options)
+        # count expects (almost) the same options as find
+        count_options = options.except :count, :order, :select, :limit, :offset
 
-            # scope_out adds a 'with_finder' method which acts like with_scope, if it's present
-            # then execute the count with the scoping provided by the with_finder  
-            count = nil
-            counter = Proc.new { count = count(count_options) }
-            
-            if respond_to?(scoper = finder.sub(/^find/, 'with'))
-              send(scoper, &counter)
-            else
-              with_scope(:find => { :conditions => conditions }, &counter)
-            end
+        # merge the hash found in :count
+        # this allows you to specify :select, :order, or anything else just for the count query
+        count_options.update(options.delete(:count) || {}) if options.key? :count
 
-            count.respond_to?(:length) ? count.length : count
-          else
-            # array of IDs was passed, so its size is the total number
-            args.first.size
-          end
-        else
-          options.delete(:total_entries)
-        end
+        # we may have to scope ...
+        counter = Proc.new { count(count_options) }
+
+        # we may be in a model or an association proxy!
+        klass = (@owner and @reflection) ? @reflection.klass : self
+
+        count = if klass.respond_to?(scoper = finder.sub(/^find/, 'with'))
+                  # scope_out adds a 'with_finder' method which acts like with_scope, if it's present
+                  # then execute the count with the scoping provided by the with_finder  
+                  send(scoper, &counter)
+                elsif conditions = wp_extract_finder_conditions(finder, args)
+                  # extracted the conditions from calls like "paginate_by_foo_and_bar"
+                  with_scope(:find => { :conditions => conditions }, &counter)
+                else
+                  counter.call
+                end
+
+        count.respond_to?(:length) ? count.length : count
       end
 
       def wp_parse_options!(options)
         raise ArgumentError, 'hash parameters expected' unless options.respond_to? :symbolize_keys!
         options.symbolize_keys!
         raise ArgumentError, ':page parameter required' unless options.key? :page
-        page = options.delete(:page) || 1
+        
+        if options[:count] and options[:total_entries]
+          raise ArgumentError, ':count and :total_entries are mutually exclusive parameters'
+        end
+
+        page     = options.delete(:page) || 1
         per_page = options.delete(:per_page) || self.per_page
-        [options, page, per_page]
+        total    = options.delete(:total_entries)
+        [options, page, per_page, total]
       end
 
     private
 
       # thanks to active record for making us duplicate this code
-      def wp_extract_finder_conditions(finder, arguments, count_options)
+      def wp_extract_finder_conditions(finder, arguments)
         return unless match = /^find_(all_by|by)_([_a-zA-Z]\w*)$/.match(finder.to_s)
 
         attribute_names = extract_attribute_names_from_match(match)

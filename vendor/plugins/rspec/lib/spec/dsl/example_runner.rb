@@ -1,8 +1,7 @@
 module Spec
   module DSL
-    # TODO: What is the responsibility of this class? It looks like it runs examples,
-    # so maybe we should call it ExampleRunner? We need RDoc here anyway (Aslak) 
-    class ExampleRunProxy
+    # TODO: We need RDoc here anyway (Aslak) 
+    class ExampleRunner
       attr_reader :options, :example, :example_definition, :errors
 
       def initialize(options, example)
@@ -10,9 +9,11 @@ module Spec
         @example = example
         @example_definition = example.rspec_definition
         @errors = []
+        @behaviour = example.rspec_behaviour
+        @behaviour_type = @behaviour.behaviour_type
       end
 
-      def run(before_each_block, after_each_block)
+      def run
         reporter.example_started(example_definition)
         if dry_run
           example_definition.description = "NO NAME (Because of --dry-run)"
@@ -21,9 +22,9 @@ module Spec
 
         location = nil
         Timeout.timeout(timeout) do
-          before_each_ok = before_example(&before_each_block)
+          before_each_ok = before_example
           example_ok = run_example if before_each_ok
-          after_each_ok = after_example(&after_each_block)
+          after_each_ok = after_example
           example_definition.description = description
           location = failure_location(before_each_ok, example_ok, after_each_ok)
           Spec::Matchers.clear_generated_description
@@ -50,10 +51,9 @@ module Spec
       end
 
       protected
-      def before_example(&behaviour_before_block)
+      def before_example
         setup_mocks
-
-        example.instance_eval(&behaviour_before_block) if behaviour_before_block
+        example.before_each
         return ok?
       rescue Exception => e
         errors << e
@@ -62,7 +62,7 @@ module Spec
 
       def run_example
         if example_block
-          example.instance_eval(&example_block)
+          example.run_example
           return true
         else
           raise ExamplePendingError
@@ -73,7 +73,7 @@ module Spec
       end
 
       def after_example(&behaviour_after_each)
-        example.instance_eval(&behaviour_after_each) if behaviour_after_each
+        example.after_each
 
         begin
           verify_mocks
