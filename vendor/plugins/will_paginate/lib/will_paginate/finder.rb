@@ -1,3 +1,5 @@
+require 'will_paginate/core_ext'
+
 module WillPaginate
   # A mixin for ActiveRecord::Base. Provides +per_page+ class method
   # and makes +paginate+ finders possible with some method_missing magic.
@@ -40,7 +42,7 @@ module WillPaginate
     # Options for paginating finders are:
     # 
     #   page           REQUIRED, but defaults to 1 if false or nil
-    #   per_page       (default is read from the model, which is 30 if not overriden)
+    #   per_page       (default is read from the model, which is 30 if not overridden)
     #   total entries  not needed unless you want to count the records yourself somehow
     #   count          hash of options that are used only for the call to count
     # 
@@ -96,7 +98,7 @@ module WillPaginate
         if finder == 'find'
           args.unshift(:all) if args.empty?
         elsif finder.index('find_by_') == 0
-          finder.sub! /^find/, 'find_all'
+          finder.sub! 'find', 'find_all'
         end
 
         WillPaginate::Collection.create(page, per_page, total_entries) do |pager|
@@ -109,8 +111,12 @@ module WillPaginate
       end
 
       def wp_count!(options, args, finder)
+        excludees = [:count, :order, :limit, :offset]
+        unless options[:select] and options[:select] =~ /^\s*DISTINCT/i
+          excludees << :select # only exclude the select param if it doesn't begin with DISTINCT
+        end
         # count expects (almost) the same options as find
-        count_options = options.except :count, :order, :select, :limit, :offset
+        count_options = options.except *excludees
 
         # merge the hash found in :count
         # this allows you to specify :select, :order, or anything else just for the count query
@@ -158,7 +164,9 @@ module WillPaginate
         return unless match = /^find_(all_by|by)_([_a-zA-Z]\w*)$/.match(finder.to_s)
 
         attribute_names = extract_attribute_names_from_match(match)
-        raise "I can't make sense of #{finder}" unless all_attributes_exists?(attribute_names)
+        unless all_attributes_exists?(attribute_names)
+          raise "I can't make sense of `#{finder}`. Try doing the count manually"
+        end
         construct_attributes_from_arguments(attribute_names, arguments)
       end
     end

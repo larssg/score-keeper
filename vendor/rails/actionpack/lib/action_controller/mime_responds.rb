@@ -1,7 +1,9 @@
 module ActionController #:nodoc:
   module MimeResponds #:nodoc:
     def self.included(base)
-      base.send(:include, ActionController::MimeResponds::InstanceMethods)
+      base.module_eval do
+        include ActionController::MimeResponds::InstanceMethods
+      end
     end
 
     module InstanceMethods
@@ -161,7 +163,7 @@ module ActionController #:nodoc:
             @responses[@order.first].call
             return
           else
-            if priority === @order
+            if @responses[priority]
               @responses[priority].call
               return # mime type match found, be happy and return
             end

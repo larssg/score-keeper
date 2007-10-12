@@ -11,11 +11,11 @@ require 'stringio'
 class XmlSimple
   include REXML
 
-  @@VERSION = '1.0.9'
+  @@VERSION = '1.0.11'
 
   # A simple cache for XML documents that were already transformed
   # by xml_in.
-  class Cache #:nodoc:
+  class Cache
     # Creates and initializes a new Cache object.
     def initialize
       @mem_share_cache = {}
@@ -121,7 +121,7 @@ class XmlSimple
   # Create a "global" cache.
   @@cache = Cache.new
 
-  # Creates and initializes a new XmlSimple object.
+  # Creates and intializes a new XmlSimple object.
   # 
   # defaults::
   #   Default values for options.
@@ -129,7 +129,7 @@ class XmlSimple
     unless defaults.nil? || defaults.instance_of?(Hash)
       raise ArgumentError, "Options have to be a Hash."
     end
-    @default_options = normalize_option_names(defaults, KNOWN_OPTIONS['in'] & KNOWN_OPTIONS['out'])
+    @default_options = normalize_option_names(defaults, (KNOWN_OPTIONS['in'] + KNOWN_OPTIONS['out']).uniq)
     @options = Hash.new
     @_var_values = nil
   end

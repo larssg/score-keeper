@@ -550,6 +550,11 @@ module ActiveResource
       attributes[self.class.primary_key] = id
     end
 
+    # Allows ActiveResource objects to be used as parameters in ActionPack URL generation.
+    def to_param
+      id && id.to_s
+    end
+
     # Test for equality.  Resource are equal if and only if +other+ is the same object or 
     # is an instance of the same class, is not +new?+, and has the same +id+.
     #
@@ -604,7 +609,7 @@ module ActiveResource
     #   next_invoice.customer
     #   # => That Company
     def dup
-      returning new do |resource|
+      returning self.class.new do |resource|
         resource.attributes     = @attributes
         resource.prefix_options = @prefix_options
       end
@@ -848,7 +853,7 @@ module ActiveResource
       end
 
       def split_options(options = {})
-        self.class.send(:split_options, options)
+        self.class.send!(:split_options, options)
       end
 
       def method_missing(method_symbol, *arguments) #:nodoc:

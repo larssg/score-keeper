@@ -1,3 +1,7 @@
+require 'active_record'
+require 'active_record/version'
+require 'active_record/fixtures'
+
 class ActiveRecordTestConnector
   cattr_accessor :able_to_connect
   cattr_accessor :connected
@@ -10,7 +14,8 @@ class ActiveRecordTestConnector
     unless self.connected || !self.able_to_connect
       setup_connection
       load_schema
-      require_fixture_models
+      # require_fixture_models
+      Dependencies.load_paths.unshift(File.dirname(__FILE__) + "/../fixtures")
       self.connected = true
     end
   rescue Exception => e  # errors from ActiveRecord setup
@@ -47,18 +52,16 @@ class ActiveRecordTestConnector
     end
   end
 
-    # Load actionpack sqlite tables
   def self.load_schema
     ActiveRecord::Base.silence do
-      File.read(File.dirname(__FILE__) + "/../fixtures/schema.sql").split(';').each do |sql|
-        ActiveRecord::Base.connection.execute(sql) unless sql.blank?
-      end
+      ActiveRecord::Migration.verbose = false
+      load File.dirname(__FILE__) + "/../fixtures/schema.rb"
     end
   end
 
   def self.require_fixture_models
     models = Dir.glob(File.dirname(__FILE__) + "/../fixtures/*.rb")
     models = (models.grep(/user.rb/) + models).uniq
-    models.each {|f| require f}
+    models.each { |f| require f }
   end
 end

@@ -1,5 +1,9 @@
 class ControllerSpecController < ActionController::Base
-  set_view_path File.join(File.dirname(__FILE__), "..", "views")
+  if ['edge','2.0.0'].include?(ENV['RSPEC_RAILS_VERSION'])
+    set_view_path [File.join(File.dirname(__FILE__), "..", "views")]
+  else
+    set_view_path File.join(File.dirname(__FILE__), "..", "views")
+  end
   
   def some_action
     render :template => "template/that/does/not/actually/exist"

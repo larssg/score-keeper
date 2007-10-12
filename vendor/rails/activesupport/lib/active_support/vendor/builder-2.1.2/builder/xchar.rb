@@ -10,7 +10,7 @@
 
 module Builder
   def self.check_for_name_collision(klass, method_name, defined_constant=nil)
-    if klass.instance_methods.include?(method_name)
+    if klass.instance_methods.include?(method_name.to_s)
       fail RuntimeError,
 	"Name Collision: Method '#{method_name}' is already defined in #{klass}"
     end
@@ -27,7 +27,7 @@ module Builder
 
   ####################################################################
   # XML Character converter, from Sam Ruby:
-  # (see http://intertwingly.net/stories/2005/09/28/xchar.rb). 
+  # (see http://intertwingly.net/stories/2005/09/28/xchar.rb).
   #
   module XChar # :nodoc:
 
@@ -73,8 +73,8 @@ module Builder
 
     # See http://www.w3.org/TR/REC-xml/#charsets for details.
     VALID = [
-      [0x9, 0xA, 0xD],
-      (0x20..0xD7FF), 
+      0x9, 0xA, 0xD,
+      (0x20..0xD7FF),
       (0xE000..0xFFFD),
       (0x10000..0x10FFFF)
     ]
@@ -86,14 +86,17 @@ end
 ######################################################################
 # Enhance the Fixnum class with a XML escaped character conversion.
 #
-class Fixnum #:nodoc:
+class Fixnum
   XChar = Builder::XChar if ! defined?(XChar)
 
   # XML escaped version of chr
   def xchr
     n = XChar::CP1252[self] || self
-    n = 42 unless XChar::VALID.find {|range| range.include? n}
-    XChar::PREDEFINED[n] or (n<128 ? n.chr : "&##{n};")
+    case n when *XChar::VALID
+      XChar::PREDEFINED[n] or (n<128 ? n.chr : "&##{n};")
+    else
+      '*'
+    end
   end
 end
 
@@ -102,7 +105,7 @@ end
 # Enhance the String class with a XML escaped character version of
 # to_s.
 #
-class String #:nodoc:
+class String
   # XML escaped version of to_s
   def to_xs
     unpack('U*').map {|n| n.xchr}.join # ASCII, UTF-8

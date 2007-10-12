@@ -45,7 +45,7 @@ module Builder
   #     +text+ call, so the client cannot assume that a single
   #     callback contains all the text data.
   #
-  class XmlEvents < XmlMarkup #:nodoc:
+  class XmlEvents < XmlMarkup
     def text!(text)
       @target.text(text)
     end

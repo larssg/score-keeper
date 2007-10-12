@@ -71,10 +71,10 @@ module ActionController #:nodoc:
       #       exception.record.new_record? ? ...
       #     end
       # end
-      def rescue_from(*klasses)
+      def rescue_from(*klasses, &block)
         options = klasses.extract_options!
-        unless options.has_key?(:with) # allow nil
-          raise ArgumentError, "Need a handler. Supply an options hash that has a :with key as the last argument."
+        unless options.has_key?(:with)
+          block_given? ? options[:with] = block : raise(ArgumentError, "Need a handler. Supply an options hash that has a :with key as the last argument.")
         end
 
         klasses.each do |klass|
@@ -150,7 +150,7 @@ module ActionController #:nodoc:
         add_variables_to_assigns
         @template.instance_variable_set("@exception", exception)
         @template.instance_variable_set("@rescues_path", File.dirname(rescues_path("stub")))
-        @template.send(:assign_variables_from_controller)
+        @template.send!(:assign_variables_from_controller)
 
         @template.instance_variable_set("@contents", @template.render_file(template_path_for_local_rescue(exception), false))
 
@@ -192,8 +192,11 @@ module ActionController #:nodoc:
       end
 
       def handler_for_rescue(exception)
-        if handler = rescue_handlers[exception.class.name]
+        case handler = rescue_handlers[exception.class.name]
+        when Symbol
           method(handler)
+        when Proc
+          handler.bind(self)
         end
       end
 

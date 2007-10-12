@@ -1,28 +1,35 @@
 require File.dirname(__FILE__) + '/helper'
-require File.dirname(__FILE__) + '/../init'
+require 'action_controller'
+require 'action_controller/test_process'
 
-class PaginationTest < ActiveRecordTestCase
-  fixtures :users
+ActionController::Routing::Routes.reload rescue nil
+ActionController::Routing::Routes.draw do |map|
+  map.connect ':controller/:action/:id'
+end
+
+ActionController::Base.perform_caching = false
+
+require 'will_paginate'
+WillPaginate.enable_actionpack
+
+class PaginationTest < Test::Unit::TestCase
+  class Developer
+    # dummy
+  end
   
   class PaginationController < ActionController::Base
     def list_developers
-      @developers = Developer.paginate :page => params[params[:param_name] || :page],
-                                       :per_page => (params[:per_page] || 4).to_i
-
-      @options = params.except(:count, :order)
-      WillPaginate::ViewHelpers.pagination_options.keys.each { |key| params.delete key }
+      @options = params.delete(:options) || {}
+      page = params[@options[:param_name] || :page] || 1
+      
+      @developers = (1..11).to_a.paginate(page, params[:per_page] || 4)
 
       render :inline => '<%= will_paginate @developers, @options %>'
     end
 
-    def no_pagination
-      @developers = Developer.paginate :page => params[:page], :per_page => 15
-      render :inline => '<%= will_paginate @developers %>'
-    end
-
-  protected
-    def rescue_errors(e) raise e end
-    def rescue_action(e) raise e end
+    protected
+      def rescue_errors(e) raise e end
+      def rescue_action(e) raise e end
   end
   
   def setup
@@ -51,7 +58,9 @@ class PaginationTest < ActiveRecordTestCase
   end
 
   def test_will_paginate_with_options
-    get :list_developers, :page => 2, :class => 'will_paginate', :prev_label => 'Prev', :next_label => 'Next'
+    get :list_developers, :page => 2, :options => {
+      :class => 'will_paginate', :prev_label => 'Prev', :next_label => 'Next'
+    }
     assert_response :success
     
     entries = assigns :developers
@@ -77,7 +86,7 @@ class PaginationTest < ActiveRecordTestCase
         elements.each do |el|
           assert_match /foo%5Bbar%5D=baz/, el['href'], "THIS IS A BUG in Rails 1.2 which " +
             "has been fixed in Rails 2.0."
-          # there is no need to worry *unless* you too are using hashes is parameters which
+          # there is no need to worry *unless* you too are using hashes in parameters which
           # need to be preserved over pages
         end
       end
@@ -85,7 +94,7 @@ class PaginationTest < ActiveRecordTestCase
   end
   
   def test_will_paginate_with_custom_page_param
-    get :list_developers, :developers_page => 2, :param_name => :developers_page
+    get :list_developers, :developers_page => 2, :options => { :param_name => :developers_page }
     assert_response :success
     
     entries = assigns :developers
@@ -101,7 +110,7 @@ class PaginationTest < ActiveRecordTestCase
   end
 
   def test_will_paginate_windows
-    get :list_developers, :page => 6, :per_page => 1, :inner_window => 2
+    get :list_developers, :page => 6, :per_page => 1, :options => { :inner_window => 2 }
     assert_response :success
     
     entries = assigns :developers
@@ -119,12 +128,11 @@ class PaginationTest < ActiveRecordTestCase
   end
 
   def test_no_pagination
-    get :no_pagination
+    get :list_developers, :per_page => 12
     entries = assigns :developers
     assert_equal 1, entries.page_count
-    assert_equal Developer.count, entries.size
+    assert_equal 11, entries.size
 
-    assert_select 'div', false
     assert_equal '', @response.body
   end
   

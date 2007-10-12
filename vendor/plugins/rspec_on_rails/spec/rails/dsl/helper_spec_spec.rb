@@ -55,7 +55,6 @@ describe "HelperExample included modules", :behaviour_type => :helper do
     ActionView::Helpers::FormOptionsHelper,
     ActionView::Helpers::FormTagHelper,
     ActionView::Helpers::JavaScriptHelper,
-    ActionView::Helpers::JavaScriptMacrosHelper,
     ActionView::Helpers::NumberHelper,
     ActionView::Helpers::PrototypeHelper,
     ActionView::Helpers::ScriptaculousHelper,
@@ -63,7 +62,12 @@ describe "HelperExample included modules", :behaviour_type => :helper do
     ActionView::Helpers::TextHelper,
     ActionView::Helpers::UrlHelper
   ]
-  helpers << ActionView::Helpers::PaginationHelper unless ENV['RSPEC_RAILS_VERSION'] == 'edge'
+  unless ['edge','2.0.0'].include?(ENV['RSPEC_RAILS_VERSION'])
+    helpers += [
+      ActionView::Helpers::PaginationHelper,
+      ActionView::Helpers::JavaScriptMacrosHelper
+    ]
+  end
   helpers.each do |helper_module|
     it "should include #{helper_module}" do
       self.class.ancestors.should include(helper_module)

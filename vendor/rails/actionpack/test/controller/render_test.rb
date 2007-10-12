@@ -157,9 +157,9 @@ class TestController < ActionController::Base
   private
     def determine_layout
       case action_name
-        when "layout_test":         "layouts/standard"
-        when "builder_layout_test": "layouts/builder"
-        when "render_symbol_json":  "layouts/standard"  # to make sure layouts don't interfere
+        when "layout_test";         "layouts/standard"
+        when "builder_layout_test"; "layouts/builder"
+        when "render_symbol_json";  "layouts/standard"  # to make sure layouts don't interfere
       end
     end
 end
@@ -209,19 +209,19 @@ class RenderTest < Test::Unit::TestCase
 
   def test_do_with_render_json
     get :render_json_hello_world
-    assert_equal '{hello: "world"}', @response.body
+    assert_equal '{"hello": "world"}', @response.body
     assert_equal 'application/json', @response.content_type
   end
 
   def test_do_with_render_json_with_callback
     get :render_json_hello_world_with_callback
-    assert_equal 'alert({hello: "world"})', @response.body
+    assert_equal 'alert({"hello": "world"})', @response.body
     assert_equal 'application/json', @response.content_type
   end
 
   def test_do_with_render_symbol_json
     get :render_symbol_json
-    assert_equal '{hello: "world"}', @response.body
+    assert_equal '{"hello": "world"}', @response.body
     assert_equal 'application/json', @response.content_type
   end
 

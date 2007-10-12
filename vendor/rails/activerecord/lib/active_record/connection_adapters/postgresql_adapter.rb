@@ -160,45 +160,45 @@ module ActiveRecord
         def self.extract_value_from_default(default)
           case default
             # Numeric types
-            when /^-?\d+(\.\d*)?$/
+            when /\A-?\d+(\.\d*)?\z/
               default
             # Character types
-            when /^'(.*)'::(?:character varying|bpchar|text)$/
+            when /\A'(.*)'::(?:character varying|bpchar|text)\z/m
               $1
             # Binary data types
-            when /^'(.*)'::bytea$/
+            when /\A'(.*)'::bytea\z/m
               $1
             # Date/time types
-            when /^'(.+)'::(?:time(?:stamp)? with(?:out)? time zone|date)$/
+            when /\A'(.+)'::(?:time(?:stamp)? with(?:out)? time zone|date)\z/
               $1
-            when /^'(.*)'::interval$/
+            when /\A'(.*)'::interval\z/
               $1
             # Boolean type
-            when /^true$/
+            when 'true'
               true
-            when /^false$/
+            when 'false'
               false
             # Geometric types
-            when /^'(.*)'::(?:point|line|lseg|box|"?path"?|polygon|circle)$/
+            when /\A'(.*)'::(?:point|line|lseg|box|"?path"?|polygon|circle)\z/
               $1
             # Network address types
-            when /^'(.*)'::(?:cidr|inet|macaddr)$/
+            when /\A'(.*)'::(?:cidr|inet|macaddr)\z/
               $1
             # Bit string types
-            when /^B'(.*)'::"?bit(?: varying)?"?$/
+            when /\AB'(.*)'::"?bit(?: varying)?"?\z/
               $1
             # XML type
-            when /^'(.*)'::xml$/
+            when /\A'(.*)'::xml\z/m
               $1
             # Arrays
-            when /^'(.*)'::"?\D+"?\[\]$/
+            when /\A'(.*)'::"?\D+"?\[\]\z/
               $1
             # Object identifier types
-            when /^-?\d+$/
+            when /\A-?\d+\z/
               $1
             else
               # Anything else is blank, some user type, or some function
-              # and we can't know the value of that, so return nil.            
+              # and we can't know the value of that, so return nil.
               nil
           end
         end
@@ -579,22 +579,11 @@ module ActiveRecord
         default = options[:default]
         notnull = options[:null] == false
 
-        quoted_column_name = quote_column_name(column_name)
-
         # Add the column.
-        execute("ALTER TABLE #{table_name} ADD COLUMN #{quoted_column_name} #{type_to_sql(type, options[:limit])}")
+        execute("ALTER TABLE #{table_name} ADD COLUMN #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit])}")
 
-        # Set optional default. If not null, update nulls to the new default.
-        if options_include_default?(options)
-          change_column_default(table_name, column_name, default)
-          if notnull
-            execute("UPDATE #{table_name} SET #{quoted_column_name}=#{quote(default, options[:column])} WHERE #{quoted_column_name} IS NULL")
-          end
-        end
-
-        if notnull
-          execute("ALTER TABLE #{table_name} ALTER #{quoted_column_name} SET NOT NULL")
-        end
+        change_column_default(table_name, column_name, default) if options_include_default?(options)
+        change_column_null(table_name, column_name, false, default) if notnull
       end
 
       # Changes the column of a table.
@@ -612,14 +601,20 @@ module ActiveRecord
           commit_db_transaction
         end
 
-        if options_include_default?(options)
-          change_column_default(table_name, column_name, options[:default])
-        end
+        change_column_default(table_name, column_name, options[:default]) if options_include_default?(options)
+        change_column_null(table_name, column_name, options[:null], options[:default]) if options.key?(:null)
       end
 
       # Changes the default value of a table column.
       def change_column_default(table_name, column_name, default)
         execute "ALTER TABLE #{table_name} ALTER COLUMN #{quote_column_name(column_name)} SET DEFAULT #{quote(default)}"
+      end
+
+      def change_column_null(table_name, column_name, null, default = nil)
+        unless null || default.nil?
+          execute("UPDATE #{table_name} SET #{quote_column_name(column_name)}=#{quote(default)} WHERE #{quote_column_name(column_name)} IS NULL")
+        end
+        execute("ALTER TABLE #{table_name} ALTER #{quote_column_name(column_name)} #{null ? 'DROP' : 'SET'} NOT NULL")
       end
 
       # Renames a column in a table.

@@ -5,12 +5,11 @@ require 'builder/blankslate'
 module Builder
 
   # Generic error for builder
-  class IllegalBlockError < RuntimeError #:nodoc:
-  end
+  class IllegalBlockError < RuntimeError; end
 
   # XmlBase is a base class for building XML builders.  See
   # Builder::XmlMarkup and Builder::XmlEvents for examples.
-  class XmlBase < BlankSlate #:nodoc:
+  class XmlBase < BlankSlate
 
     # Create an XML markup builder.
     #
@@ -24,12 +23,12 @@ module Builder
       @indent = indent
       @level  = initial
     end
-    
+
     # Create a tag named +sym+.  Other than the first argument which
     # is the tag name, the arguments are the same as the tags
     # implemented via <tt>method_missing</tt>.
     def tag!(sym, *args, &block)
-      self.__send__(sym, *args, &block)
+      method_missing(sym.to_sym, *args, &block)
     end
 
     # Create XML markup based on the name of the method.  This method
@@ -40,51 +39,50 @@ module Builder
       attrs = nil
       sym = "#{sym}:#{args.shift}" if args.first.kind_of?(Symbol)
       args.each do |arg|
-	case arg
-	when Hash
-	  attrs ||= {}
-	  attrs.merge!(arg)
-	else
-	  text ||= ''
-	  text << arg.to_s
-	end
+        case arg
+        when Hash
+          attrs ||= {}
+          attrs.merge!(arg)
+        else
+          text ||= ''
+          text << arg.to_s
+        end
       end
       if block
-	unless text.nil?
-	  raise ArgumentError, "XmlMarkup cannot mix a text argument with a block"
-	end
-	_capture_outer_self(block) unless defined?(@self) && !@self.nil?
-	_indent
-	_start_tag(sym, attrs)
-	_newline
-	_nested_structures(block)
-	_indent
-	_end_tag(sym)
-	_newline
+        unless text.nil?
+          raise ArgumentError, "XmlMarkup cannot mix a text argument with a block"
+        end
+        _indent
+        _start_tag(sym, attrs)
+        _newline
+        _nested_structures(block)
+        _indent
+        _end_tag(sym)
+        _newline
       elsif text.nil?
-	_indent
-	_start_tag(sym, attrs, true)
-	_newline
+        _indent
+        _start_tag(sym, attrs, true)
+        _newline
       else
-	_indent
-	_start_tag(sym, attrs)
-	text! text
-	_end_tag(sym)
-	_newline
+        _indent
+        _start_tag(sym, attrs)
+        text! text
+        _end_tag(sym)
+        _newline
       end
       @target
     end
 
     # Append text to the output target.  Escape any markup.  May be
-    # used within the markup brakets as:
+    # used within the markup brackets as:
     #
     #   builder.p { |b| b.br; b.text! "HI" }   #=>  <p><br/>HI</p>
     def text!(text)
       _text(_escape(text))
     end
-    
+
     # Append text to the output target without escaping any markup.
-    # May be used within the markup brakets as:
+    # May be used within the markup brackets as:
     #
     #   builder.p { |x| x << "<br/>HI" }   #=>  <p><br/>HI</p>
     #
@@ -99,7 +97,7 @@ module Builder
     def <<(text)
       _text(text)
     end
-    
+
     # For some reason, nil? is sent to the XmlMarkup object.  If nil?
     # is not defined and method_missing is invoked, some strange kind
     # of recursion happens.  Since nil? won't ever be an XML tag, it
@@ -111,7 +109,7 @@ module Builder
     end
 
     private
-    
+
     require 'builder/xchar'
     def _escape(text)
       text.to_xs
@@ -119,10 +117,6 @@ module Builder
 
     def _escape_quote(text)
       _escape(text).gsub(%r{"}, '&quot;')  # " WART
-    end
-
-    def _capture_outer_self(block)
-      @self = eval('self', block.instance_eval { binding })
     end
 
     def _newline
