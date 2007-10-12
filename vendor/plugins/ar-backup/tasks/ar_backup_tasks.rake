@@ -1,0 +1,64 @@
+namespace :backup do
+
+  namespace :db do
+
+    # Get the build number by parsing the svn info data.
+    # This function is inside the rake task so we can use it with sake
+    def get_build_number
+      begin
+        @svn_info = ` svn info --revision HEAD`
+        @svn_info.scan(/\nRevision:.(\d*)\n/)[0][0]
+      rescue
+        '?'
+      end
+    end
+    
+    # SVN  Build number
+    BUILD_NUMBER = get_build_number
+    
+    desc 'Create YAML fixtures from your DB content'
+    task :extract_content => :environment do
+      sql  = "SELECT * FROM %s"
+      ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[RAILS_ENV])
+      ActiveRecord::Base.connection.tables.each do |table_name|
+        i = "000"
+        FileUtils.mkdir_p("#{RAILS_ROOT}/backup/#{RAILS_ENV}/build_#{BUILD_NUMBER}/fixtures/") 
+
+        File.open("#{RAILS_ROOT}/backup/#{RAILS_ENV}/build_#{BUILD_NUMBER}/fixtures/#{table_name}.yml", 'w') do |file|
+          data = ActiveRecord::Base.connection.select_all(sql % table_name)
+          file.write data.inject({}) { |hash, record|
+            hash["#{table_name}_#{i.succ!}"] = record
+            hash 
+            }.to_yaml
+          end
+        end
+      end
+
+      desc 'Dump the db schema'
+      task :extract_schema => :environment do
+        require 'active_record/schema_dumper'
+        ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[RAILS_ENV])
+        FileUtils.mkdir_p("#{RAILS_ROOT}/backup/#{RAILS_ENV}/build_#{BUILD_NUMBER}/schema/") 
+        File.open("#{RAILS_ROOT}/backup/#{RAILS_ENV}/build_#{BUILD_NUMBER}/schema/schema.rb", "w") do |file|
+          ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
+        end
+      end
+      
+      desc 'create a backup folder containing your db schema and content data (see backup/{env}/build_{build number})'
+      task :dump => ['backup:db:extract_content', 'backup:db:extract_schema']
+      
+      desc 'load your backed up data from a previous build. rake backup:db:load BUILD=1182 or rake backup:db:load BUILD=1182 DUMP_ENV=production'
+      task :load => :environment do
+        @build     = ENV['BUILD'] || BUILD_NUMBER
+        @env       = ENV['DUMP_ENV'] || RAILS_ENV
+        load("#{RAILS_ROOT}/backup/#{@env}/build_#{@build}/schema/schema.rb")
+
+        require 'active_record/fixtures'
+        Dir.glob(File.join(RAILS_ROOT, "backup/#{@env}/build_#{@build}/", 'fixtures', '*.yml')).each do |fixture_file|
+          Fixtures.create_fixtures("#{RAILS_ROOT}/backup/#{@env}/build_#{@build}/fixtures", File.basename(fixture_file, '.yml'))
+        end
+      end
+
+  end
+
+end
