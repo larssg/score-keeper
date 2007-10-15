@@ -87,6 +87,7 @@ class Game < ActiveRecord::Base
         person.decrement(:games_won) if team == self.winner
         person.goals_for -= team.score
         person.goals_against -= team.other.score
+        person.decrement(:memberships_count)
         
         person.save
       end

@@ -29,6 +29,8 @@
 class Person < ActiveRecord::Base
   has_many :memberships
   belongs_to :mugshot
+  
+  before_destroy :remove_games
 
   def initials
     self.full_name.split(' ').collect{ |n| n.first }.join
@@ -54,5 +56,15 @@ class Person < ActiveRecord::Base
   def difference_average
     return 0.0 if memberships_count == 0
     ((10 * difference) / memberships_count) / 10.0
+  end
+  
+  protected
+  def remove_games
+    self.memberships.each do |membership|
+      membership.team.game.destroy
+    end
+    
+    # Fix stats
+    Game.reset_rankings
   end
 end
