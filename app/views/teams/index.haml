@@ -13,6 +13,6 @@
       %tr{ :class => cycle('odd', 'even') }
         %td= link_to team[:players].collect(&:full_name).join(' - '), games_path(:filter => team[:team_ids])
         %td= team[:total_ranking]
-        %td= team[:games_played]
         %td= team[:games_won]
+        %td= team[:games_played]
         %td= team[:percentage].to_s + '%'
