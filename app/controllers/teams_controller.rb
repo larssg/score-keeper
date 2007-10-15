@@ -7,6 +7,7 @@ class TeamsController < ApplicationController
 
       @team_counts.each do |count|
         @teams[count[0]] = {}
+        @teams[count[0]][:team_ids] = count[0]
         @teams[count[0]][:games_played] = count[1]
         @teams[count[0]][:games_won] = 0
         @teams[count[0]][:players] = Person.find(:all, :conditions => { :id => count[0].split(',') })

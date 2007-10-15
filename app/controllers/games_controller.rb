@@ -46,7 +46,12 @@ class GamesController < ApplicationController
   
   protected
   def load_data_for_index
-    @games = Game.paginate_recent(:include => { :teams => { :memberships => :person } }, :page => params[:page])
+    conditions = nil
+    if params[:filter]
+      @filter = Person.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, last_name, first_name')
+      conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
+    end
+    @games = Game.paginate_recent(:include => { :teams => { :memberships => :person } }, :conditions => conditions, :page => params[:page])
     @game = current_model.new
     @people = Person.find_all
   end

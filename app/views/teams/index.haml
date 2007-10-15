@@ -5,13 +5,13 @@
     %tr
       %th= 'Members'[]
       %th= 'Total ranking'[]
-      %th= 'Games played'[]
       %th= 'Games won'[]
+      %th= 'Games played'[]
       %th= 'Winning percentage'[]
 
     - @teams.each do |team|
       %tr{ :class => cycle('odd', 'even') }
-        %td= team[:players].collect(&:full_name).join(' - ')
+        %td= link_to team[:players].collect(&:full_name).join(' - '), games_path(:filter => team[:team_ids])
         %td= team[:total_ranking]
         %td= team[:games_played]
         %td= team[:games_won]
