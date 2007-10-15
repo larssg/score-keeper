@@ -1,4 +1,6 @@
 class Game < ActiveRecord::Base
+  attr_accessor :postpone_ranking_update
+  
   has_many :teams
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
@@ -100,7 +102,7 @@ class Game < ActiveRecord::Base
   end
   
   def reset_rankings_after_destroy
-    Game.reset_rankings
+    Game.reset_rankings unless @postpone_ranking_update
   end
   
   def title

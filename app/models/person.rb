@@ -61,7 +61,9 @@ class Person < ActiveRecord::Base
   protected
   def remove_games
     self.memberships.each do |membership|
-      membership.team.game.destroy
+      game = membership.team.game
+      game.postpone_ranking_update = true
+      game.destroy
     end
     
     # Fix stats
