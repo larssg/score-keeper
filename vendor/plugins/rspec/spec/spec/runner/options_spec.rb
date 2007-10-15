@@ -89,6 +89,23 @@ module Spec
       end
     end
 
+    describe Options, "#examples_run?" do
+      before do
+        @err = StringIO.new('')
+        @out = StringIO.new('')
+        @options = Options.new(@err, @out)
+      end
+      
+      it "when run_examples called; returns true" do
+        @options.run_examples
+        @options.examples_run?.should be_true
+      end
+
+      it "when run_examples not called; returns false" do
+        @options.examples_run?.should be_false
+      end
+    end
+
     describe Options, "#custom_runner?" do
       before do
         @err = StringIO.new('')
@@ -168,7 +185,6 @@ module Spec
     end
 
     describe Options, "#add_behaviour affecting passed in behaviour" do
-      it_should_behave_like "Test::Unit io sink"
       before do
         @err = StringIO.new('')
         @out = StringIO.new('')
@@ -217,7 +233,6 @@ module Spec
     end
 
     describe Options, "#add_behaviour affecting behaviours" do
-      it_should_behave_like "Test::Unit io sink"
       before do
         @err = StringIO.new('')
         @out = StringIO.new('')

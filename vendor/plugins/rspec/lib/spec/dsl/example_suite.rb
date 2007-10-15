@@ -1,18 +1,17 @@
 module Spec
   module DSL
-    class ExampleSuite < ::Test::Unit::TestSuite
+    class ExampleSuite
       extend Forwardable
-      attr_reader :examples, :behaviour
+      attr_reader :examples, :behaviour, :name
       alias_method :tests, :examples
 
       def initialize(name, behaviour)
-        super name
+        @name = name
         @behaviour = behaviour
         @examples = []
       end
 
-      def run(result, &progress_block)
-        return true if result.is_a?(::Test::Unit::TestResult)
+      def run
         retain_specified_examples
         return true if examples.empty?
 
@@ -23,8 +22,8 @@ module Spec
           examples.each do |example|
             example.copy_instance_variables_from(@before_and_after_all_example)
 
-            run_proxy = ExampleRunner.new(rspec_options, example)
-            unless run_proxy.run(&progress_block)
+            runner = ExampleRunner.new(rspec_options, example)
+            unless runner.run
               success = false
             end
           end
@@ -42,7 +41,15 @@ module Spec
       end
 
       def size
-        @behaviour.number_of_examples
+        examples.length
+      end
+
+      def empty?
+        size == 0
+      end
+
+      def delete(example)
+        @examples.delete example
       end
 
       protected

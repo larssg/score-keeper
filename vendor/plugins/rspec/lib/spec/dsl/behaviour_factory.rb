@@ -11,11 +11,15 @@ module Spec
         #
         #   Spec::DSL::BehaviourFactory.add_example_class(:farm, Spec::Farm::DSL::FarmBehaviour)
         #
-        # This will cause Kernel#describe from a file living in 
+        # This will cause Main#describe from a file living in 
         # <tt>spec/farm</tt> to create behaviour instances of type
         # Spec::Farm::DSL::FarmBehaviour.
         def add_example_class(type, klass)
           BEHAVIOURS[type] = klass
+        end
+        def add_behaviour_class(type, klass)
+          warn "add_behaviour_class is deprecated. Use add_example_class instead."
+          add_example_class(type, klass)
         end
         
         def remove_example_class(type)

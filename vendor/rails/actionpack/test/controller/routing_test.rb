@@ -874,6 +874,28 @@ class DynamicSegmentTest < Test::Unit::TestCase
     assert_kind_of String, segment.regexp_chunk
   end
   
+  def test_build_pattern_non_optional_with_no_captures
+    # Non optioanl
+    a_segment = ROUTING::DynamicSegment.new
+    a_segment.regexp = /\d+/ #number_of_captures is 0
+    assert_equal "(\\d+)stuff", a_segment.build_pattern('stuff')
+  end
+
+  def test_build_pattern_non_optional_with_captures
+    # Non optioanl
+    a_segment = ROUTING::DynamicSegment.new
+    a_segment.regexp = /(\d+)(.*?)/ #number_of_captures is 2
+    assert_equal "((\\d+)(.*?))stuff", a_segment.build_pattern('stuff')
+  end
+
+  def test_optionality_implied
+    a_segment = ROUTING::DynamicSegment.new
+    a_segment.key = :id
+    assert a_segment.optionality_implied?
+
+    a_segment.key = :action
+    assert a_segment.optionality_implied?
+  end
 end
 
 class ControllerSegmentTest < Test::Unit::TestCase
@@ -2030,4 +2052,64 @@ class RoutingTest < Test::Unit::TestCase
     assert c.ancestors.include?(h)
   end
   
+end
+
+uses_mocha 'route loading' do
+  class RouteLoadingTest < Test::Unit::TestCase
+
+    def setup
+      routes.instance_variable_set '@routes_last_modified', nil
+      silence_warnings { Object.const_set :RAILS_ROOT, '.' }
+
+      @stat = stub_everything
+    end
+
+    def teardown
+      Object.send :remove_const, :RAILS_ROOT
+    end
+
+    def test_load
+      File.expects(:stat).returns(@stat)
+      routes.expects(:load).with(regexp_matches(/routes\.rb$/))
+
+      routes.reload
+    end
+
+    def test_no_reload_when_not_modified
+      @stat.expects(:mtime).times(2).returns(1)
+      File.expects(:stat).times(2).returns(@stat)
+      routes.expects(:load).with(regexp_matches(/routes\.rb$/)).at_most_once
+
+      2.times { routes.reload }
+    end
+
+    def test_reload_when_modified
+      @stat.expects(:mtime).at_least(2).returns(1, 2)
+      File.expects(:stat).at_least(2).returns(@stat)
+      routes.expects(:load).with(regexp_matches(/routes\.rb$/)).times(2)
+
+      2.times { routes.reload }
+    end
+
+    def test_bang_forces_reload
+      @stat.expects(:mtime).at_least(2).returns(1)
+      File.expects(:stat).at_least(2).returns(@stat)
+      routes.expects(:load).with(regexp_matches(/routes\.rb$/)).times(2)
+
+      2.times { routes.reload! }
+    end
+
+    def test_adding_inflections_forces_reload
+      Inflector::Inflections.instance.expects(:uncountable).with('equipment')
+      routes.expects(:reload!)
+
+      Inflector.inflections { |inflect| inflect.uncountable('equipment') }
+    end
+
+    private
+    def routes
+      ActionController::Routing::Routes
+    end
+
+  end
 end

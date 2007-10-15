@@ -282,10 +282,10 @@ class AssociationsJoinModelTest < Test::Unit::TestCase
     assert_equal categories(:general), authors(:david).categories.find(:first, :conditions => "categories.name = 'General'")
     assert_equal nil, authors(:david).categories.find(:first, :conditions => "categories.name = 'Technology'")
   end
-  
+
   def test_has_many_class_methods_called_by_method_missing
     assert_equal categories(:general), authors(:david).categories.find_all_by_name('General').first
-#    assert_equal nil, authors(:david).categories.find_by_name('Technology')
+    assert_equal nil, authors(:david).categories.find_by_name('Technology')
   end
 
   def test_has_many_going_through_join_model_with_custom_foreign_key
@@ -417,6 +417,7 @@ class AssociationsJoinModelTest < Test::Unit::TestCase
     assert_raise(ActiveRecord::HasManyThroughCantAssociateNewRecords) { posts(:thinking).tags << tags(:general).clone }
     assert_raise(ActiveRecord::HasManyThroughCantAssociateNewRecords) { posts(:thinking).clone.tags << tags(:general) }
     assert_raise(ActiveRecord::HasManyThroughCantAssociateNewRecords) { posts(:thinking).tags.build }
+    assert_raise(ActiveRecord::HasManyThroughCantAssociateNewRecords) { posts(:thinking).tags.new }
   end
 
   def test_create_associate_when_adding_to_has_many_through

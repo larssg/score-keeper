@@ -31,14 +31,18 @@ module Spec
       alias :context :describe
       
     private
-
+    
       def rspec_options
-        unless $rspec_options
-          parser = ::Spec::Runner::OptionParser.new(STDERR, STDOUT)
-          parser.parse(ARGV)
-          $rspec_options = parser.options
+        $rspec_options ||= begin; \
+          parser = ::Spec::Runner::OptionParser.new(STDERR, STDOUT); \
+          parser.order!(ARGV); \
+          $rspec_options = parser.options; \
         end
         $rspec_options
+      end
+      
+      def init_rspec_options(options)
+        $rspec_options = options if $rspec_options.nil?
       end
     end
   end

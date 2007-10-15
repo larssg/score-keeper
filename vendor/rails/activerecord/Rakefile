@@ -22,10 +22,11 @@ PKG_FILES = FileList[
 ].exclude(/\bCVS\b|~$/)
 
 
-desc "Default Task"
-task :default => [ :test_mysql, :test_sqlite, :test_sqlite3, :test_postgresql ]
+desc 'Run mysql, sqlite, and postgresql tests by default'
+task :default => :test
 
-# Run the unit tests
+desc 'Run mysql, sqlite, and postgresql tests'
+task :test => %w(test_mysql test_sqlite test_sqlite3 test_postgresql)
 
 for adapter in %w( mysql postgresql sqlite sqlite3 firebird sqlserver sqlserver_odbc db2 oracle sybase openbase frontbase )
   Rake::TestTask.new("test_#{adapter}") { |t|
@@ -65,7 +66,7 @@ end
 
 task :build_mysql_databases => 'mysql:build_databases'
 task :drop_mysql_databases => 'mysql:drop_databases'
-task :rebuild_mysql_databases => [:drop_mysql_databases, :build_mysql_databases]
+task :rebuild_mysql_databases => 'mysql:rebuild_databases'
 
 
 namespace :postgresql do
@@ -89,7 +90,7 @@ end
 
 task :build_postgresql_databases => 'postgresql:build_databases'
 task :drop_postgresql_databases => 'postgresql:drop_databases'
-task :rebuild_postgresql_databases => [:drop_postgresql_databases, :build_postgresql_databases]
+task :rebuild_postgresql_databases => 'postgresql:rebuild_databases'
 
 
 namespace :frontbase do
@@ -173,7 +174,7 @@ spec = Gem::Specification.new do |s|
     s.files = s.files + Dir.glob( "#{dir}/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   end
 
-  s.add_dependency('activesupport', '= 1.4.3' + PKG_BUILD)
+  s.add_dependency('activesupport', '= 1.4.4' + PKG_BUILD)
 
   s.files.delete "test/fixtures/fixture_database.sqlite"
   s.files.delete "test/fixtures/fixture_database_2.sqlite"

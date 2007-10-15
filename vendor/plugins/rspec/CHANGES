@@ -1,4 +1,4 @@
-== Version 1.0.9 (in SVN)
+== Version 1.1.0 (in SVN)
 
 Textmate Bundle users - this release adds a new RSpec bundle that highlights describe, it, before and after and
 provides navigation to descriptions and examples (rather than classes and methods). When you first install this,
@@ -13,6 +13,16 @@ CMD-R runs all the specs in one file
 CMD-SHIFT-R runs an individual spec
 CMD-OPT-R runs any files or directories selected in the TextMate drawer
 
+* Removed Patch [#10577] Rails with Oracle breaks 0.9.2 - was no longer necessary since we moved describe to the Main object (instead of Object)
+* Fixed [#14527] specs run twice on rails 1.2.4 and rspec/rspec_on_rails trunk
+* Applied [#14043] Change output ordering to show pending before errors (Patch from Mike Mangino)
+* Applied [#14095] Don't have ./script/generate rspec create previous_failures.txt (Patch from Bryan Helmkamp)
+* Applied [#14254] Improved error handling for Object#should and Object#should_not (Patch from Antti Tarvainen)
+* Applied [#14186] Remove dead code from message_expecation.rb (Patch from Antti Tarvainen)
+* Applied [#14183] Tiny improvement on mock_spec.rb (Patch from Antti Tarvainen)
+* Applied [#14208] Fix to Mock#method_missing raising NameErrors instead of MockExpectationErrors (Patch from Antti Tarvainen)
+* Applied [#14255] Fixed examples in mock_spec.rb and shared_behaviour_spec.rb (Patch from Antti Tarvainen)
+* Applied [#14362] partially mocking objects that define == can blow up (Patch from Pat Maddox)
 * test_ methods with an arity of 0 defined in a describe block or Example object will be run as an Example, providing a seamless transition from Test::Unit
 * Removed BehaviourRunner
 * Fixed [#13969] Spec Failures on Trunk w/ Autotest

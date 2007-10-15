@@ -4,7 +4,7 @@ module Spec
       FILE_SORTERS = {
         'mtime' => lambda {|file_a, file_b| File.mtime(file_b) <=> File.mtime(file_a)}
       }
-      
+
       BUILT_IN_FORMATTERS = {
         'specdoc'  => Formatter::SpecdocFormatter,
         's'        => Formatter::SpecdocFormatter,
@@ -19,7 +19,7 @@ module Spec
         'failing_behaviours' => Formatter::FailingBehavioursFormatter,
         'b'        => Formatter::FailingBehavioursFormatter
       }
-      
+
       attr_accessor(
         :backtrace_tweaker,
         :context_lines,
@@ -36,7 +36,12 @@ module Spec
         :reverse,
         :timeout,
         :verbose,
-        :runner_arg
+        # TODO: BT - Rename to something better
+        :runner_arg,
+        :error_stream,
+        :output_stream,
+        # TODO: BT - Figure out a better name
+        :current_argv
       )
       attr_reader :colour, :differ_class, :files, :behaviours
 
@@ -53,6 +58,8 @@ module Spec
         @diff_format  = :unified
         @files = []
         @behaviours = []
+        @runner_arg = nil
+        @examples_run = false
       end
 
       def add_behaviour(behaviour)
@@ -61,7 +68,13 @@ module Spec
 
       def run_examples
         runner = custom_runner || BehaviourRunner.new(self)
-        runner.run
+        success = runner.run
+        @examples_run = true
+        success
+      end
+
+      def examples_run?
+        @examples_run
       end
 
       def colour=(colour)
@@ -149,7 +162,7 @@ module Spec
           raise "Couldn't parse #{s.inspect}"
         end
       end
-      
+
       def load_class(name, kind, option)
         if name =~ /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/
           arg = $2 == "" ? nil : $2
@@ -191,20 +204,20 @@ module Spec
       def number_of_examples
         @behaviours.inject(0) {|sum, behaviour| sum + behaviour.number_of_examples}
       end
-      
+
       protected
       def sorted_files
         return sorter ? files.sort(&sorter) : files
       end
-      
+
       def sorter
         FILE_SORTERS[loadby]
       end
-      
+
       def default_differ
         require 'spec/expectations/differs/default'
         self.differ_class = Spec::Expectations::Differs::Default
-      end      
+      end
     end
   end
 end

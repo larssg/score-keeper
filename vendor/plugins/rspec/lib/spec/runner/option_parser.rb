@@ -14,21 +14,6 @@ module Spec
 
       attr_reader :options
 
-      BUILT_IN_FORMATTERS = {
-        'specdoc'  => Formatter::SpecdocFormatter,
-        's'        => Formatter::SpecdocFormatter,
-        'html'     => Formatter::HtmlFormatter,
-        'h'        => Formatter::HtmlFormatter,
-        'rdoc'     => Formatter::RdocFormatter,
-        'r'        => Formatter::RdocFormatter,
-        'progress' => Formatter::ProgressBarFormatter,
-        'p'        => Formatter::ProgressBarFormatter,
-        'failing_examples' => Formatter::FailingExamplesFormatter,
-        'e'        => Formatter::FailingExamplesFormatter,
-        'failing_behaviours' => Formatter::FailingBehavioursFormatter,
-        'b'        => Formatter::FailingBehavioursFormatter
-      }
-
       OPTIONS = {
         :diff =>    ["-D", "--diff [FORMAT]", "Show diff of objects that are expected to be equal when they are not",
                                              "Builtin formats: unified|u|context|c",
@@ -126,6 +111,7 @@ module Spec
 
       def order!(argv=default_argv, &blk)
         @argv = argv
+        @options.current_argv = @argv
         return if parse_generate_options
         return if parse_drb
         
@@ -182,7 +168,12 @@ module Spec
         is_drb = false
         is_drb ||= @argv.delete(OPTIONS[:drb][0])
         is_drb ||= @argv.delete(OPTIONS[:drb][1])
-        return is_drb ? DrbCommandLine.run(@argv, @error_stream, @out_stream) : nil
+        return nil unless is_drb
+        @options.generate = true
+        DrbCommandLine.run(
+          self.class.parse(@argv, @error_stream, @out_stream)
+        )
+        true
       end
 
       def parse_version
