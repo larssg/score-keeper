@@ -14,6 +14,8 @@ require 'fixtures/author'
 require 'fixtures/comment'
 require 'fixtures/tag'
 require 'fixtures/tagging'
+require 'fixtures/person'
+require 'fixtures/reader'
 
 class AssociationsTest < Test::Unit::TestCase
   fixtures :accounts, :companies, :developers, :projects, :developers_projects,
@@ -23,6 +25,14 @@ class AssociationsTest < Test::Unit::TestCase
     assert_raise(ArgumentError, 'ActiveRecord should have barked on bad collection keys') do
       Class.new(ActiveRecord::Base).has_many(:wheels, :name => 'wheels')
     end
+  end
+  
+  def test_should_construct_new_finder_sql_after_create
+    person = Person.new
+    assert_equal [], person.readers.find(:all)
+    person.save!
+    reader = Reader.create! :person => person, :post => Post.new(:title => "foo", :body => "bar")
+    assert_equal [reader], person.readers.find(:all)
   end
 
   def test_force_reload
@@ -595,6 +605,13 @@ class HasManyAssociationsTest < Test::Unit::TestCase
     end
   end
   
+  def test_create_with_bang_on_has_many_raises_when_record_not_saved
+    assert_raises(ActiveRecord::RecordInvalid) do
+      firm = Firm.find(:first)
+      firm.plain_clients.create!
+    end
+  end
+
   def test_create_with_bang_on_habtm_when_parent_is_new_raises
     assert_raises(ActiveRecord::RecordNotSaved) do 
       Developer.new("name" => "Aredridel").projects.create!    
