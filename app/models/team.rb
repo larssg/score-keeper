@@ -4,6 +4,10 @@ class Team < ActiveRecord::Base
   before_save :update_cache_values
   before_save :update_team_cache_on_game
   
+  def winner?
+    self.game.winner == self
+  end
+  
   def other
     self.game.teams.select { |team| team.id != self.id }.first
   end

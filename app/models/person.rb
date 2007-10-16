@@ -1,31 +1,3 @@
-# == Schema Information
-# Schema version: 8
-#
-# Table name: people
-#
-#  id                :integer(11)   not null, primary key
-#  created_at        :datetime      
-#  updated_at        :datetime      
-#  first_name        :string(255)   
-#  last_name         :string(255)   
-#  display_name      :string(255)   
-#  memberships_count :integer(11)   default(0)
-#  games_won         :integer(11)   default(0)
-#  goals_for         :integer(11)   default(0)
-#  goals_against     :integer(11)   default(0)
-#
-
-# == Schema Information
-# Schema version: 5
-#
-# Table name: people
-#
-#  id         :integer       not null, primary key
-#  name       :string(255)   
-#  created_at :datetime      
-#  updated_at :datetime      
-#
-
 class Person < ActiveRecord::Base
   has_many :memberships
   belongs_to :mugshot
