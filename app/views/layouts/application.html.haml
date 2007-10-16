@@ -12,6 +12,7 @@
     %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.1/build/base/base-min.css', :type => 'text/css' }
     = stylesheet_link_tag 'screen'
     = stylesheet_link_tag 'print', :media => 'print'
+    = javascript_include_tag :defaults, :cache => true
 
   %body
     #doc3{ :class => sidebar.blank? ? 'yui-t7' : 'yui-t5' }
@@ -43,7 +44,8 @@
               - if flash.keys.length > 0
                 #messages
                   - flash.keys.each do |key|
-                    %div{ :class => 'key' }= flash[key]
+                    %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
+                = javascript_tag(visual_effect(:fade, "messages", :delay => 8))
 
               = yield
   
