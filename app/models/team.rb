@@ -63,4 +63,8 @@ class Team < ActiveRecord::Base
       self.game.save
     end
   end
+  
+  def display_names
+    self.memberships.collect { |m| m.person.display_name }
+  end
 end

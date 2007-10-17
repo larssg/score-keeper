@@ -1,0 +1,7 @@
+%ul#menu
+  %li{:class => controller.controller_name == 'dashboard' ? 'current' : ''}= link_to 'Dashboard'[], dashboard_path
+  %li{:class => controller.controller_name == 'games' ? 'current' : ''}= link_to 'Games'[], games_path
+  %li{:class => controller.controller_name == 'teams' ? 'current' : ''}= link_to 'Teams'[], teams_path
+  %li{:class => controller.controller_name == 'people' ? 'current' : ''}= link_to 'People'[], people_path
+  - if admin?
+    %li{:class => controller.controller_name == 'users' ? 'current' : ''}= link_to 'Users'[], users_path

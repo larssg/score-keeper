@@ -27,6 +27,8 @@
         %td= person.difference
         %td= person.difference_average
 
-  #game_count
-    = 'Game count'[] + ':'
-    = @game_count
+- content_for :sidebar do
+  - cache(dashboard_path + '_sidebar') do
+    #game_count
+      = 'Games played'[] + ':'
+      = @game_count

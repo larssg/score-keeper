@@ -64,9 +64,6 @@ h2#page_title {
     border: solid 1px #DD9A24;
     background-color: #FCC;
     border: solid 1px #C66; }
-  #bd #game_count {
-    padding-top: 20px;
-    padding-left: 2px; }
   #bd label {
     display: block; }
     #bd label input {
