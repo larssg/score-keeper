@@ -109,7 +109,7 @@ class Game < ActiveRecord::Base
     title = ''
     
     title << self.teams.first.display_names.join(' + ')
-    title << " #{self.teams.first.score} - #{self.teams.last.score} "
+    title << " (#{self.teams.first.score} - #{self.teams.last.score}) "
     title << self.teams.last.display_names.join(' + ')
     
     title
