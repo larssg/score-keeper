@@ -5,7 +5,7 @@ atom_feed(:url => formatted_games_url(:atom)) do |feed|
   @games.each do |game|
     feed.entry(game) do |entry|
       entry.title(game.title)
-      entry.content(game.played_at.to_s :short, :type => 'html')
+      entry.content(game.played_at.to_s(:short), :type => 'html')
 
       entry.author do |author|
         author.name(game.creator.name)
