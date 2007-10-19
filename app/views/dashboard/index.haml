@@ -6,12 +6,12 @@
       %th= '&nbsp;'
       %th= 'Person'[]
       %th= 'Ranking'[]
-      %th= 'Games won'[]
-      %th= 'Games played'[]
-      %th= 'Winning percentage'[]
-      %th= 'Goals for'[]
-      %th= 'Goals against'[]
-      %th= '+/-'
+      %th= 'Won'[]
+      %th= 'Played'[]
+      %th= 'Win %'[]
+      %th{ :title => 'Goals for'[] }= 'GF'[]
+      %th{ :title => 'Goals against'[] }= 'GA'[]
+      %th{ :title => 'Goals for - goals against'[] }= '+/-'
       %th= '+/- ' + 'Average'[]
 
     - @people.each_with_index do |person, index|
