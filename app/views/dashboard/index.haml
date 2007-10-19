@@ -1,6 +1,8 @@
 - title 'Dashboard'[]
 
 - cache(dashboard_path) do
+  %h3= 'Rankings'[]
+
   %table.list
     %tr
       %th= '&nbsp;'
@@ -26,6 +28,17 @@
         %td= person.goals_against
         %td= person.difference
         %td= person.difference_average
+
+  .columns
+    .left-column
+      #recent_games
+        %h3= 'Recent games'[]
+        = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
+
+    .right-column
+      #recent_games
+        %h3= 'Recent games'[]
+        = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
 
 - content_for :sidebar do
   - cache(dashboard_path + '_sidebar') do

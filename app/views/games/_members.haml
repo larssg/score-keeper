@@ -1,0 +1,4 @@
+- team.memberships.each_with_index do |membership, index|
+  = ' - ' if index == 1
+  %span{ :title => membership.points_awarded }
+    = membership.person.display_name

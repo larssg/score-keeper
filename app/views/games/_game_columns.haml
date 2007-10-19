@@ -1,0 +1,7 @@
+%td.members
+  = link_to render(:partial => 'games/members', :locals => { :team => game.teams.first }), games_path(:filter => game.teams.first.team_ids)
+
+%td.score= game.teams.collect(&:score).join(' - ')
+
+%td.members
+  = link_to render(:partial => 'games/members', :locals => { :team => game.teams.last }), games_path(:filter => game.teams.last.team_ids)

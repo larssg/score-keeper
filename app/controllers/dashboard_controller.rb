@@ -5,6 +5,7 @@ class DashboardController < ApplicationController
     end
     unless read_fragment(dashboard_path + '_sidebar')
       @game_count = Game.count
+      @recent_games = Game.find_recent(:limit => 5)
     end
   end
 end

@@ -1,0 +1,9 @@
+%table.list
+  %tr
+    %th.name= 'Team one'[]
+    %th.score= 'Score'[]
+    %th.name= 'Team two'[]
+
+  - recent_games.each do |game|
+    %tr
+      = render :partial => 'games/game_columns', :locals => { :game => game }
