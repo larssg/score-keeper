@@ -44,6 +44,10 @@ class GamesController < ApplicationController
     end
   end
   
+  def show
+    @game = Game.find(params[:id])
+  end
+  
   protected
   def load_data_for_index
     conditions = nil
