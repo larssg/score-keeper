@@ -71,3 +71,6 @@
       = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
   - else
     = 'Login to add a game.'[]
+
+- content_for :head do
+  = auto_discovery_link_tag :atom, formatted_games_url(:atom)
