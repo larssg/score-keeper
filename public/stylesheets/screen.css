@@ -89,6 +89,8 @@ h2#page_title {
     margin-bottom: 5px; }
   #bd .pagination {
     padding-top: 10px; }
+  #bd .game label {
+    font-weight: bold; }
   #bd #new_game h3 {
     display: block;
     margin: 0;
