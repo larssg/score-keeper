@@ -4,8 +4,12 @@ module Spec
       def initialize
         @steps = Hash.new do |hsh,type|
           hsh[type] = Hash.new do |hsh,name|
-            SimpleStep.new(name) do
-              raise Spec::DSL::ExamplePendingError.new("Unimplemented step: #{name}")
+            if $rspec_story_step_matchers and matcher = $rspec_story_step_matchers.find(type, name)
+              matcher
+            else
+              SimpleStep.new(name) do
+                raise Spec::DSL::ExamplePendingError.new("Unimplemented step: #{name}")
+              end
             end
           end
         end
