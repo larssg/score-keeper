@@ -42,6 +42,10 @@
 
 - content_for :sidebar do
   - cache(dashboard_path + '_sidebar') do
-    #game_count
-      = 'Games played'[] + ':'
-      = @game_count
+    #counts
+      %p
+        %label= 'Games played'[] + ':'
+        = @game_count
+      %p
+        %label= 'Goals scored'[] + ':'
+        = @goals_scored
