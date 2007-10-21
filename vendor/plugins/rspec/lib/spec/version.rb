@@ -6,8 +6,8 @@
       TINY   = 0
       RELEASE_CANDIDATE = nil
 
-      # RANDOM_TOKEN: 0.441308270183385
-      REV = "$LastChangedRevision: 2745 $".match(/LastChangedRevision: (\d+)/)[1]
+      # RANDOM_TOKEN: 0.216597562947636
+      REV = "$LastChangedRevision: 2762 $".match(/LastChangedRevision: (\d+)/)[1]
 
       STRING = [MAJOR, MINOR, TINY].join('.')
       TAG = "REL_#{[MAJOR, MINOR, TINY, RELEASE_CANDIDATE].compact.join('_')}".upcase.gsub(/\.|-/, '_')

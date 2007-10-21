@@ -15,6 +15,7 @@ module Spec
 
         def suite
           description = description ? description.description : "Rspec Description Suite"
+          include_example_modules
           suite = ExampleSuite.new(description, self)
           ordered_example_definitions.each do |example_definition|
             suite << new(example_definition)
@@ -62,7 +63,7 @@ module Spec
           end
         end
 
-        def include_example_modules(behaviour_type)
+        def include_example_modules
           Spec::Runner.configuration.modules_for(behaviour_type).each do |mod|
             include mod
           end
@@ -93,7 +94,6 @@ module Spec
         predicate_matchers = @rspec_behaviour.predicate_matchers
         (class << self; self; end).class_eval do
           plugin_mock_framework
-          include_example_modules behaviour_type
           define_predicate_matchers predicate_matchers
           define_predicate_matchers(Spec::Runner.configuration.predicate_matchers)
         end
@@ -108,38 +108,38 @@ module Spec
       end
 
       def before_each
-        run_before_parts Example.before_each_parts(nil)
+        run_before_parts Example.before_each_parts
         if behaviour_type
-          run_before_parts Example.before_each_parts(behaviour_type)
+          run_before_parts BehaviourFactory.get!(behaviour_type).before_each_parts
         end
-        run_before_parts rspec_behaviour.before_each_parts(nil)
+        run_before_parts rspec_behaviour.before_each_parts
       end
 
       def before_all
-        run_before_parts Example.before_all_parts(nil)
+        run_before_parts Example.before_all_parts
         if behaviour_type
-          run_before_parts Example.before_all_parts(behaviour_type)
+          run_before_parts BehaviourFactory.get!(behaviour_type).before_all_parts
         end
-        run_before_parts rspec_behaviour.before_all_parts(nil)
+        run_before_parts rspec_behaviour.before_all_parts
       end
 
       def after_all
         exception = nil
-        exception = run_after_parts(exception, rspec_behaviour.after_all_parts(nil))
+        exception = run_after_parts(exception, rspec_behaviour.after_all_parts)
         if behaviour_type
-          exception = run_after_parts(exception, Example.after_all_parts(behaviour_type))
+          exception = run_after_parts(exception, BehaviourFactory.get!(behaviour_type).after_all_parts)
         end
-        exception = run_after_parts(exception, Example.after_all_parts(nil))
+        exception = run_after_parts(exception, Example.after_all_parts)
         raise exception if exception
       end
 
       def after_each
         exception = nil
-        exception = run_after_parts(exception, rspec_behaviour.after_each_parts(nil))
+        exception = run_after_parts(exception, rspec_behaviour.after_each_parts)
         if behaviour_type
-          exception = run_after_parts(exception, Example.after_each_parts(behaviour_type))
+          exception = run_after_parts(exception, BehaviourFactory.get!(behaviour_type).after_each_parts)
         end
-        exception = run_after_parts(exception, Example.after_each_parts(nil))
+        exception = run_after_parts(exception, Example.after_each_parts)
         raise exception if exception
       end
 

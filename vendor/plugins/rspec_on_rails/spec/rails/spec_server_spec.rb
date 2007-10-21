@@ -30,7 +30,9 @@ describe "script/spec_server file" do
 
   it "should run a spec" do
     # TODO: Please fix this if it does not work on your machine. Otherwise there will be NO coverage of spec_server.
-   pending("this doesn't seem to work consistently")
+    if RUBY_PLATFORM =~ /darwin/
+      pending("this doesn't seem to work consistently on the Mac platform")
+    end
     dir = File.dirname(__FILE__)
     output = ""
     Timeout.timeout(10) do
