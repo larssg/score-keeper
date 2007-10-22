@@ -48,7 +48,7 @@
     #leader
       %p
         %h3= 'Leader'[]
-        = image_tag @leader.mugshot.public_filename(:thumb), :alt => @leader.full_name if @leader.mugshot
+        .mugshot= image_tag @leader.mugshot.public_filename(:thumb), :alt => @leader.full_name if @leader.mugshot
         = @leader.full_name
 
     #counts
