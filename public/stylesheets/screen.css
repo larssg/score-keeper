@@ -125,6 +125,8 @@ h3 {
   #bd #recent_games .score {
     width: 20%;
     text-align: center; }
+  #bd #games_per_day .games_played {
+    text-align: right; }
   #bd img.team {
     position: relative;
     top: 2px; }

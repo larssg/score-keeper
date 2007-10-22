@@ -4,6 +4,7 @@ class Game < ActiveRecord::Base
   has_many :teams
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
+  before_save :set_played_on
   after_create :update_winners
   after_create :update_rankings
   before_destroy :update_after_destroy
@@ -55,6 +56,10 @@ class Game < ActiveRecord::Base
     Game.find(:all).each do |game|
       game.update_rankings
     end
+  end
+  
+  def set_played_on
+    self.played_on = self.played_at.to_date
   end
 
   def update_rankings

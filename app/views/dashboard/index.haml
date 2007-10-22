@@ -39,9 +39,9 @@
         = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
 
     .right-column
-      #recent_games
-        %h3= 'Recent games'[]
-        = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
+      #games_per_day
+        %h3= 'Games played per day'[]
+        = render :partial => 'games_per_day', :locals => { :games_per_day => @games_per_day }
 
 - content_for :sidebar do
   - cache(dashboard_path + '_sidebar') do
