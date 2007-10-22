@@ -12,7 +12,7 @@
     - @teams.each do |team|
       %tr{ :class => cycle('odd', 'even') }
         %td
-          = link_to image_tag('icons/group.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => team[:team_ids])
+          = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => team[:team_ids])
           = team[:players].collect(&:full_name).join(' - ')
         %td= team[:total_ranking]
         %td= team[:games_won]
