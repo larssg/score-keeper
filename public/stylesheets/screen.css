@@ -135,6 +135,8 @@ h3 {
     #bd #sidebar #leader {
       padding-bottom: 20px;
       text-align: center; }
+      #bd #sidebar #leader img {
+        display: block; }
     #bd #sidebar #counts label {
       font-weight: bold; }
 
