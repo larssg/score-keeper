@@ -133,8 +133,14 @@ h3 {
   #bd #sidebar {
     width: 220px; }
     #bd #sidebar #leader {
-      padding-bottom: 20px;
-      text-align: center; }
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      background-color: #EEEEEE;
+      border: 1px solid #999999; }
+      #bd #sidebar #leader h3 {
+        padding: 0;
+        margin: 0; }
     #bd #sidebar #counts label {
       font-weight: bold; }
 
