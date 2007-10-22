@@ -132,6 +132,9 @@ h3 {
     top: 2px; }
   #bd #sidebar {
     width: 220px; }
+    #bd #sidebar #leader {
+      padding-bottom: 20px;
+      text-align: center; }
     #bd #sidebar #counts label {
       font-weight: bold; }
 
