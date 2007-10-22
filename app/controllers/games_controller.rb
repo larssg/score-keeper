@@ -53,7 +53,11 @@ class GamesController < ApplicationController
     conditions = nil
     if params[:filter]
       @filter = Person.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, last_name, first_name')
-      conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
+      if params[:filter].index(',')
+        conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
+      else
+        conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
+      end
     end
     @games = Game.paginate_recent(:include => { :teams => { :memberships => :person } }, :conditions => conditions, :page => params[:page])
     @game = current_model.new

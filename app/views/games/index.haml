@@ -3,7 +3,10 @@
 - if @games.length > 0
   - if @filter
     %p
-      = 'Filter by <b>{first}</b> and <b>{second}</b>'[:filter, @filter[0].display_name, @filter[1].display_name]
+      - if @filter.length > 1
+        = 'Filter by <b>{first}</b> and <b>{second}</b>'[:filter_by_two, @filter[0].display_name, @filter[1].display_name]
+      - else
+        = 'Filter by <b>{first}</b></b>'[:filter_by_one, @filter[0].display_name]
 
   #games
     %table.list

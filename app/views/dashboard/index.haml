@@ -19,7 +19,9 @@
     - @people.each_with_index do |person, index|
       %tr{ :class => cycle('odd', 'even') }
         %td= index + 1
-        %td= person.full_name
+        %td
+          = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this person's games"[]), games_path(:filter => person.id)
+          = person.full_name
         %td= person.ranking
         %td= person.games_won
         %td= person.memberships_count
