@@ -127,6 +127,8 @@ h3 {
     text-align: center; }
   #bd #sidebar {
     width: 220px; }
+    #bd #sidebar #counts label {
+      font-weight: bold; }
 
 #ft {
   background-color: #EEEEEE;
