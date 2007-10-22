@@ -125,6 +125,9 @@ h3 {
   #bd #recent_games .score {
     width: 20%;
     text-align: center; }
+  #bd .members img.team {
+    position: relative;
+    top: 2px; }
   #bd #sidebar {
     width: 220px; }
     #bd #sidebar #counts label {

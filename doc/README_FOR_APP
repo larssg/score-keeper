@@ -1,2 +1,7 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models and controllers.
+== Score Keeper
+
+Keep track of scores.
+
+== Attributions
+
+Thanks to Mark James for his Silk icon set (http://www.famfamfam.com/lab/icons/silk/)
