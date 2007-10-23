@@ -91,6 +91,8 @@ h3 {
     margin: 0;
     padding: 0;
     margin-bottom: 5px; }
+  #bd .filter a.clear {
+    font-size: 85%; }
   #bd .pagination {
     padding-top: 10px; }
   #bd .game label {
