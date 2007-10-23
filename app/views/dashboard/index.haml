@@ -8,8 +8,9 @@
       %th= '&nbsp;'
       %th= 'Person'[]
       %th= 'Ranking'[]
-      %th= 'Won'[]
       %th= 'Played'[]
+      %th= 'Won'[]
+      %th= 'Lost'[]
       %th= 'Win %'[]
       %th{ :title => 'Goals for'[] }= 'GF'[]
       %th{ :title => 'Goals against'[] }= 'GA'[]
@@ -23,8 +24,9 @@
           = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this person's games"[]), games_path(:filter => person.id)
           = person.full_name
         %td= person.ranking
-        %td= person.games_won
         %td= person.memberships_count
+        %td= person.games_won
+        %td= person.memberships_count - person.games_won
         %td= person.winning_percentage.to_s + '%'
         %td= person.goals_for
         %td= person.goals_against
