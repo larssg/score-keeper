@@ -8,8 +8,7 @@
       - else
         = 'Filter by <b>{first}</b>'[:filter_by_one, @filter[0].display_name]
 
-      - if @filter.length > 1
-        = link_to 'Clear filter', games_path, :class => 'clear'
+      = link_to 'Clear filter', games_path, :class => 'clear'
 
   #games
     %table.list
