@@ -14,7 +14,9 @@ ActionController::Routing::Routes.draw do |map|
   
   map.dashboard 'd/:action', :controller => 'dashboard'
   map.resources :games
-  map.resources :people
+  map.resources :people do |person|
+    person.resources :games
+  end
   map.resources :teams
   
   map.connect ':controller/:action/:id.:format'
