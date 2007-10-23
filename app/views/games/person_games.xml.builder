@@ -4,17 +4,19 @@ xml.person do
     xml.match do
       game = membership.team.game
       xml.time game.played_at.to_s :db
-      xml.team1 do
-        game.teams[0].memberships.each do |game_membership|
-          xml.player game_membership.person.full_name
+      xml.teams do
+        game.teams.each do |team|
+          xml.team do
+            team.memberships.each do |game_membership|
+              person = game_membership.person
+              xml.player do
+                xml.id person.id
+                xml.full_name person.full_name
+              end 
+            end
+            xml.score team.score
+          end
         end
-        xml.score game.teams[0].score
-      end
-      xml.team2 do
-        game.teams[1].memberships.each do |game_membership|
-          xml.player game_membership.person.full_name
-        end
-        xml.score game.teams[1].score
       end
       xml.ranking membership.current_ranking
     end
