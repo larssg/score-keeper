@@ -91,6 +91,8 @@ h3 {
     margin: 0;
     padding: 0;
     margin-bottom: 5px; }
+  #bd #games .score {
+    text-align: center; }
   #bd .filter a.clear {
     font-size: 85%; }
   #bd .pagination {
@@ -130,6 +132,9 @@ h3 {
   #bd #games_per_day .games_played {
     text-align: right; }
   #bd img.team {
+    position: relative;
+    top: 2px; }
+  #bd img.winner {
     position: relative;
     top: 2px; }
   #bd #sidebar {
