@@ -40,6 +40,7 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.html # index.haml
       format.atom { render :layout => false } # index.atom.builder
+      format.rss { render :layout => false } # index.rss.builder
       format.xml do
         if params[:person_id]
           render :action => 'person_games'

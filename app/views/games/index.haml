@@ -30,6 +30,8 @@
           %td= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
 
   .pagination= will_paginate @games
+
+  = link_to 'RSS feed'[] + ' ' + image_tag('rss.gif'), formatted_games_url(:rss), :class => 'rss'
         
 - content_for :sidebar do
   - if logged_in?
@@ -67,3 +69,4 @@
 
 - content_for :head do
   = auto_discovery_link_tag :atom, formatted_games_url(:atom)
+  = auto_discovery_link_tag :rss, formatted_games_url(:rss)

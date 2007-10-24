@@ -96,7 +96,8 @@ h3 {
   #bd .filter a.clear {
     font-size: 85%; }
   #bd .pagination {
-    padding-top: 10px; }
+    padding-top: 10px;
+    padding-bottom: 10px; }
   #bd .game label {
     font-weight: bold; }
   #bd #new_game h3 {
@@ -150,6 +151,11 @@ h3 {
         margin: 0; }
     #bd #sidebar #counts label {
       font-weight: bold; }
+  #bd a.rss {
+    text-decoration: none; }
+    #bd a.rss img {
+      position: relative;
+      top: 2px; }
 
 #ft {
   background-color: #EEEEEE;
