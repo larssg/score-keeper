@@ -1,29 +1,33 @@
 $:.push File.join(File.dirname(__FILE__), *%w[.. .. lib])
 require 'spec'
 
-matchers = Spec::Story::StepMatchers.new do |add|
-  add.given("an addend of $addend") do |addend|
-    @adder ||= Adder.new
-    @adder << addend.to_i
+class AdditionMatchers < Spec::Story::StepGroup
+  steps do |add|
+    add.given("an addend of $addend") do |addend|
+      @adder ||= Adder.new
+      @adder << addend.to_i
+    end
   end
-  
-  add.when("they are added") do
-    @sum = @adder.sum
-  end
-  
+end
+
+steps = AdditionMatchers.new do |add|  
   add.then("the sum should be $sum") do |sum|
     @sum.should == sum.to_i
   end
 end
 
-# This Story uses step_matchers (see above) instead of blocks
+steps.when("they are added") do
+  @sum = @adder.sum
+end
+
+# This Story uses steps (see above) instead of blocks
 # passed to Given, When and Then
 
 Story "addition", %{
   As an accountant
   I want to add numbers
   So that I can count some beans
-}, :matchers => matchers do
+}, :steps => steps do
   Scenario "2 + 3" do
     Given "an addend of 2"
     And "an addend of 3"

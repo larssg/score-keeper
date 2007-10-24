@@ -1,6 +1,3 @@
-# This is the beginning of an experimental StoryParser based on conversations
-# on the rspec list: http://rubyforge.org/pipermail/rspec-users/2007-October/003704.html
-
 module Spec
   module Story
     module Runner
@@ -12,8 +9,8 @@ module Spec
       end
 
       class StoryParser
-        def initialize(story_part_factory)
-          @story_part_factory = story_part_factory
+        def initialize(story_mediator)
+          @story_mediator = story_mediator
           @current_story_lines = []
           transition_to(:starting_state)
         end
@@ -56,25 +53,25 @@ module Spec
         
         def create_story()
           unless @current_story_lines.empty?
-            @story_part_factory.create_story(@current_story_lines[0].gsub("Story: ",""), @current_story_lines[1..-1].join("\n"))
+            @story_mediator.create_story(@current_story_lines[0].gsub("Story: ",""), @current_story_lines[1..-1].join("\n"))
             @current_story_lines.clear
           end
         end
         
         def create_scenario(title)
-          @story_part_factory.create_scenario(title.gsub("Scenario: ",""))
+          @story_mediator.create_scenario(title.gsub("Scenario: ",""))
         end
         
         def create_given(name)
-          @story_part_factory.create_given(name)
+          @story_mediator.create_given(name)
         end
         
         def create_when(name)
-          @story_part_factory.create_when(name)
+          @story_mediator.create_when(name)
         end
         
         def create_then(name)
-          @story_part_factory.create_then(name)
+          @story_mediator.create_then(name)
         end
 
         def transition_to(key)
@@ -106,7 +103,22 @@ module Spec
             @parser.create_scenario(line)
             @parser.transition_to(:scenario_state)
           end
+
+          def given(line)
+            @parser.create_given(line.gsub("Given ",""))
+            @parser.transition_to(:given_state)
+          end
           
+          def event(line)
+            @parser.create_when(line.gsub("When ",""))
+            @parser.transition_to(:when_state)
+          end
+          
+          def outcome(line)
+            @parser.create_then(line.gsub("Then ",""))
+            @parser.transition_to(:then_state)
+          end
+
           def eof
           end
           
@@ -122,6 +134,10 @@ module Spec
         end
         
         class StoryState < State
+          def one_more_of_the_same(line)
+            raise IllegalStepError.new("Story","And")
+          end
+
           def story(line)
             @parser.create_story
             @parser.add_story_line(line)
@@ -152,13 +168,15 @@ module Spec
           def eof
             @parser.create_story
           end
-          
         end
 
         class ScenarioState < State
-          def given(line)
-            @parser.create_given(line.gsub("Given ",""))
-            @parser.transition_to(:given_state)
+          def one_more_of_the_same(line)
+            raise IllegalStepError.new("Scenario","And")
+          end
+
+          def scenario(line)
+            @parser.create_scenario(line)
           end
         end
         
@@ -167,9 +185,8 @@ module Spec
             @parser.create_given(line.gsub("And ",""))
           end
           
-          def event(line)
-            @parser.create_when(line.gsub("When ",""))
-            @parser.transition_to(:when_state)
+          def given(line)
+            @parser.create_given(line.gsub("Given ",""))
           end
         end
         
@@ -178,9 +195,8 @@ module Spec
             @parser.create_when(line.gsub("And ",""))
           end
 
-          def outcome(line)
-            @parser.create_then(line.gsub("Then ",""))
-            @parser.transition_to(:then_state)
+          def event(line)
+            @parser.create_when(line.gsub("When ",""))
           end
         end
 
@@ -188,10 +204,13 @@ module Spec
           def one_more_of_the_same(line)
             @parser.create_then(line.gsub("And ",""))
           end
+
+          def outcome(line)
+            @parser.create_then(line.gsub("Then ",""))
+          end
         end
 
       end
-
     end
   end
 end

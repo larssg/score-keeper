@@ -2,10 +2,12 @@ module Spec
   module Story
     module Runner
 
-      class StoryPartFactory
-        def initialize(matchers)
-          @matchers = matchers
+      class StoryMediator
+        def initialize(step_group, runner, options={})
+          @step_group = step_group
           @story_parts = []
+          @runner = runner
+          @options = options
         end
         
         def stories
@@ -13,7 +15,7 @@ module Spec
         end
         
         def create_story(title, narrative)
-          @story_parts << StoryPart.new(title, narrative, @matchers)
+          @story_parts << StoryPart.new(title, narrative, @step_group, @options)
         end
         
         def create_scenario(title)
@@ -21,15 +23,19 @@ module Spec
         end
         
         def create_given(name)
-          current_scenario_part.add_step StepPart.new(:given, name, @matchers)
+          current_scenario_part.add_step StepPart.new(:given, name, @step_group)
         end
         
         def create_when(name)
-          current_scenario_part.add_step StepPart.new(:when, name, @matchers)
+          current_scenario_part.add_step StepPart.new(:when, name, @step_group)
         end
         
         def create_then(name)
-          current_scenario_part.add_step StepPart.new(:then, name, @matchers)
+          current_scenario_part.add_step StepPart.new(:then, name, @step_group)
+        end
+        
+        def run_stories
+          stories.each { |story| @runner.instance_eval(&story) }
         end
         
         private
@@ -42,20 +48,22 @@ module Spec
         end
         
         class StoryPart
-          def initialize(title, narrative, matchers)
+          def initialize(title, narrative, step_group, options)
             @title = title
             @narrative = narrative
             @scenarios = []
-            @matchers = matchers
+            @step_group = step_group
+            @options = options
           end
           
           def to_proc
             title = @title
             narrative = @narrative
             scenarios = @scenarios.collect { |scenario| scenario.to_proc }
-            matchers = @matchers
+            step_group = @step_group
+            options = @options.merge(:steps => step_group)
             lambda do
-              Story title, narrative, :matchers => matchers do
+              Story title, narrative, options do
                 scenarios.each { |scenario| instance_eval(&scenario) }
               end
             end
@@ -92,10 +100,10 @@ module Spec
         end
         
         class StepPart
-          def initialize(type, name, matchers)
+          def initialize(type, name, step_group)
             @type = type
             @name = name
-            @matchers = matchers
+            @step_group = step_group
           end
           
           def to_proc
