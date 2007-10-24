@@ -31,7 +31,10 @@
 
   .pagination= will_paginate @games
 
-  = link_to 'RSS feed'[] + ' ' + image_tag('rss.gif'), formatted_games_url(:rss, :filter => params[:filter]), :class => 'rss'
+  - if params[:filter].blank?
+    = link_to 'RSS feed'[] + ' ' + image_tag('rss.gif'), formatted_games_url(:rss), :class => 'rss'
+  - else
+    = link_to 'RSS feed'[] + ' ' + image_tag('rss.gif'), formatted_games_url(:rss, :filter => params[:filter]), :class => 'rss'
         
 - content_for :sidebar do
   - if logged_in?
