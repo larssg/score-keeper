@@ -2,8 +2,8 @@ class DashboardController < ApplicationController
   def index
     unless read_fragment(dashboard_path) && read_fragment(dashboard_path + '_sidebar')
       @people = Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name')
-      @recent_games = Game.find_recent(:limit => 5)
-      @games_per_day = Game.count(:group => :played_on, :limit => 5, :order => 'played_on DESC')
+      @recent_games = Game.find_recent(:limit => 8)
+      @games_per_day = Game.count(:group => :played_on, :limit => 10, :order => 'played_on DESC')
 
       # Sidebar
       @leader = @people[0]
