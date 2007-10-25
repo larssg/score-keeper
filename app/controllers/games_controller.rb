@@ -59,6 +59,7 @@ class GamesController < ApplicationController
   def load_data_for_index
     if params[:person_id]
       @person = Person.find(params[:person_id])
+      @memberships = @person.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
     else
       conditions = nil
       if params[:filter]

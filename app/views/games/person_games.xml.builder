@@ -1,6 +1,6 @@
 xml.person do
   xml.name @person.full_name
-  @person.memberships.find(:all, :order => 'id DESC').each do |membership|
+  @memberships.each do |membership|
     xml.match do
       game = membership.team.game
       xml.time game.played_at.to_s :db
