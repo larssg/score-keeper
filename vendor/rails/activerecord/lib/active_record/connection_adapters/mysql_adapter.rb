@@ -440,6 +440,15 @@ module ActiveRecord
         variables.first['Value'] unless variables.empty?
       end
 
+      # Returns a table's primary key and belonging sequence.
+      def pk_and_sequence_for(table) #:nodoc:
+        keys = []
+        execute("describe #{quote_table_name(table)}").each_hash do |h|
+          keys << h["Field"]if h["Key"] == "PRI"
+        end
+        keys.length == 1 ? [keys.first, nil] : nil
+      end
+
       private
         def connect
           encoding = @config[:encoding]

@@ -29,11 +29,6 @@ module Spec
         behaviour
       end
       alias :context :describe
-      
-      def run_story(*args,&block)
-        runner = Spec::Story::Runner::PlainTextStoryRunner.new(*args,&block)
-        runner.run
-      end
 
     private
     

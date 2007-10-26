@@ -23,11 +23,11 @@ module Spec
       #
       # To run in this mode, include the +integrate_views+ declaration
       # in your controller context:
-      # 
+      #
       #   describe ThingController do
       #     integrate_views
       #     ...
-      # 
+      #
       # In this mode, controller specs are run in the same way that
       # rails functional tests run - one set of tests for both the
       # controllers and the views. The benefit of this approach is that
@@ -63,12 +63,6 @@ module Spec
       #   end
       class ControllerExample < FunctionalExample
         class << self
-          def before_eval # :nodoc:
-            prepend_before {controller_setup}
-            append_after {teardown}
-            configure
-          end
-
           # Use this to instruct RSpec to render views in your controller examples (Integration Mode).
           #
           #   describe ThingController do
@@ -83,7 +77,7 @@ module Spec
           def integrate_views? # :nodoc:
             @integrate_views
           end
-          
+
           # You MUST provide a controller_name within the context of
           # your controller specs:
           #
@@ -93,24 +87,10 @@ module Spec
           def controller_name(name)
             @controller_class_name = "#{name}_controller".camelize
           end
-          attr_accessor :controller_class_name # :nodoc:          
+          attr_accessor :controller_class_name # :nodoc:
         end
 
-        attr_reader :response, :request, :controller
-
-        def initialize(example)
-          super
-          if rspec_behaviour.controller_class_name
-            @controller_class_name = rspec_behaviour.controller_class_name.to_s
-          else
-            @controller_class_name = rspec_behaviour.described_type.to_s
-          end
-          @integrate_views = rspec_behaviour.integrate_views?
-        end
-
-        def controller_setup #:nodoc:
-          functional_setup
-
+        before(:each) do
           # Some Rails apps explicitly disable ActionMailer in environment.rb
           if defined?(ActionMailer)
             @deliveries = []
@@ -133,6 +113,19 @@ module Spec
           end
           @controller.integrate_views! if @integrate_views
           @controller.session = session
+        end
+
+        attr_reader :response, :request, :controller
+
+        def initialize(example)
+          super
+          controller_class_name = self.class.controller_class_name
+          if controller_class_name
+            @controller_class_name = controller_class_name.to_s
+          else
+            @controller_class_name = self.class.described_type.to_s
+          end
+          @integrate_views = self.class.integrate_views?
         end
 
         # Uses ActionController::Routing::Routes to generate

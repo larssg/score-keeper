@@ -41,10 +41,11 @@ module Spec::Matchers
 end
 
 module ControllerMocks
-  def mock_kontroller(to_extend = Module.new)
+  def mock_kontroller(*to_extend)
+    options = to_extend.last.is_a?(Hash) ? to_extend.slice!(-1) : {}
     @kontroller = Class.new
     @kontroller.extend Resourceful::Maker
-    @kontroller.extend to_extend
+    to_extend.each(&@kontroller.method(:extend))
 
     @hidden_actions = Resourceful::ACTIONS.dup
     @kontroller.stubs(:hidden_actions).returns(@hidden_actions)
@@ -54,10 +55,10 @@ module ControllerMocks
     @kontroller.stubs(:helper_method)
   end
 
-  def mock_controller(to_extend = Module.new)
+  def mock_controller(*to_extend)
     mock_kontroller
     @controller = @kontroller.new
-    @controller.extend to_extend
+    to_extend.each(&@controller.method(:extend))
   end
 
   def mock_builder
@@ -67,6 +68,13 @@ module ControllerMocks
     @builder.stubs(:instance_eval).yields(@buildercc )
     Resourceful::Base.stubs(:made_resourceful).returns([])
     Resourceful::Builder.stubs(:new).returns(@builder)
+  end
+
+  def create_builder
+    @builder = Resourceful::Builder.new(@kontroller)
+    class << @builder
+      alias_method :made_resourceful, :instance_eval
+    end    
   end
 
   def responses
@@ -79,5 +87,12 @@ module ControllerMocks
 
   def parents
     @kontroller.read_inheritable_attribute(:parents)
+  end
+
+  # Evaluates the made_resourceful block of mod (a module)
+  # in the context of @builder.
+  # @builder should be initialized via create_builder.
+  def made_resourceful(mod)
+    mod.included(@builder)
   end
 end
