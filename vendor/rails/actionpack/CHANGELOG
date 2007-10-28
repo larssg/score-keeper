@@ -1,5 +1,25 @@
 *SVN*
 
+* Simplfy #view_paths implementation.  ActionView templates get the exact object, not a dup.  [Rick]
+
+* Update tests for ActiveSupport's JSON escaping change.  [rick]
+
+* FormHelper's auto_index should use #to_param instead of #id_before_type_cast.  Closes #9994 [mattly]
+
+* Doc typo fixes for ActiveRecordHelper. Closes #9973 [mikong]
+
+* Make example parameters in restful routing docs idiomatic. Closes #9993 [danger]
+
+* Make documentation comment for mime responders match documentation example.  Closes #9357 [yon]
+
+* Introduce a new test case class for functional tests.  ActionController::TestCase. [Koz]
+
+* Fix incorrect path in helper rdoc. Closes #9926 [viktor tron]
+
+* Partials also set 'object' to the default partial variable.  #8823 [Nick Retallack, Jeremy Kemper]
+
+* Request profiler.  [Jeremy Kemper]
+
 * Disabled checkboxes don't submit a form value.  #9301 [vladr, robinjfisher]
 
 * Added tests for options to ActiveRecordHelper#form. Closes #7213 [richcollins, mikong, mislav]
