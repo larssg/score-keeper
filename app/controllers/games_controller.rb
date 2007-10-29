@@ -9,17 +9,6 @@ class GamesController < ApplicationController
     before :create do
       current_object.creator = current_user
       current_object.played_at ||= 5.minutes.ago
-
-      team_params = [
-        {
-          :score => params[:teams][:score1],
-          :members => [ params[:teams][:person11], params[:teams][:person12] ]
-        },
-        {
-          :score => params[:teams][:score2],
-          :members => [ params[:teams][:person21], params[:teams][:person22] ]
-        }
-      ]
       current_object.teams_from_params(team_params)
     end
     
@@ -74,5 +63,18 @@ class GamesController < ApplicationController
       @game = current_model.new
       @people = Person.find_all
     end
+  end
+
+  def team_params
+    [
+      {
+        :score => params[:teams][:score1],
+        :members => [ params[:teams][:person11], params[:teams][:person12] ]
+      },
+      {
+        :score => params[:teams][:score2],
+        :members => [ params[:teams][:person21], params[:teams][:person22] ]
+      }
+    ]
   end
 end
