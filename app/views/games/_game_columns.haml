@@ -2,7 +2,7 @@
   = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => game.teams.first.team_ids)
   = render :partial => 'games/members', :locals => { :team => game.teams.first }
 
-%td.score
+%td.score{ :nowrap => 'nowrap' }
   - if game.teams.first.score > game.teams.last.score
     = image_tag('icons/medal_gold_2.png', :class => 'winner')
   - else
