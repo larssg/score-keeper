@@ -62,6 +62,15 @@ module Resourceful
       #
       def current_object
         @current_object ||= if plural?
+          if defined?(current_param)
+            STDERR.puts "DEPRECATION WARNING: " + <<END.gsub("\n", ' ')
+The make_resourceful #current_param accessor
+is deprecated and will be removed in 0.3.0.
+Override #current_object instead.
+END
+            return current_model.find(current_param)
+          end
+
           current_model.find(params[:id])
         else
           parent_objects[-1].send(instance_variable_name)
@@ -94,7 +103,7 @@ module Resourceful
       end
 
       def namespaces
-        @namespaces ||= self.class.name.split('::').slice(0..-2).map(&:underscore).map(&:to_sym)
+        @namespaces ||= self.class.name.split('::').slice(0...-1).map(&:underscore).map(&:to_sym)
       end
 
       def instance_variable_name
@@ -125,12 +134,12 @@ module Resourceful
         parents.map { |p| p.camelize }
       end
 
-      def parent_models
-        parent_model_names.map { |p| p.constantize }
-      end
-
       def parent_params
         parents.map { |p| params["#{p}_id"] }
+      end
+
+      def parent_models
+        parent_model_names.map { |p| p.constantize }
       end
 
       # Returns an array of all of the parent objects
@@ -141,9 +150,10 @@ module Resourceful
 
         first = parent_models[0].find(parent_params[0])
         @parent_objects = [first]
-        parent_params.zip(parents)[1..-1].inject(first) do |memo, arr|
+        parent_params.zip(parents)[1..-1].inject(first) do |object, arr|
           id, name = arr
-          @parent_objects << memo.send(name.pluralize).find(id)
+          @parent_objects << object.send(name.pluralize).find(id)
+          @parent_objects[-1]
         end
         @parent_objects
       end
@@ -172,12 +182,12 @@ module Resourceful
         !plural_action?
       end
 
-      def plural?
-        !singular?
-      end
-
       def singular?
         instance_variable_name.singularize == instance_variable_name
+      end
+
+      def plural?
+        !singular?
       end
     end
   end
