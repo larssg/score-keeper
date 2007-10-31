@@ -12,6 +12,7 @@ class DashboardController < ApplicationController
       
       # Add game
       if logged_in?
+        @person_list = Person.find_all
         @game = Game.new
       end
     end

@@ -61,7 +61,7 @@ class GamesController < ApplicationController
       end
       @games = Game.paginate_recent(:include => { :teams => { :memberships => :person } }, :conditions => conditions, :page => params[:page])
       @game = current_model.new
-      @people = Person.find_all
+      @person_list = Person.find_all
     end
   end
 
