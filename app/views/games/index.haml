@@ -37,35 +37,8 @@
         
 - content_for :sidebar do
   - if logged_in?
-    - form_for @game do |f|
-      - fields_for :teams do |fi|
-        %label
-          %span= 'Attacker'[]
-          = fi.collection_select 'person11', @people, :id, :full_name, :include_blank => true, :class => 'person'
+    = render :partial => 'games/form'
 
-        %label
-          %span= 'Defender'[]
-          = fi.collection_select 'person12', @people, :id, :full_name, :include_blank => true, :class => 'person'
-
-        %label
-          %span= 'Score'[]
-          = fi.text_field 'score1', :class => 'score', :autocomplete => 'off'
-
-        %h3= 'vs'[]
-
-        %label
-          %span= 'Score'[]
-          = fi.text_field 'score2', :class => 'score', :autocomplete => 'off'
-
-        %label
-          %span= 'Attacker'[]
-          = fi.collection_select 'person21', @people, :id, :full_name, :include_blank => true, :class => 'person'
-
-        %label
-          %span= 'Defender'[]
-          = fi.collection_select 'person22', @people, :id, :full_name, :include_blank => true, :class => 'person'
-      
-      = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
   - else
     = 'Login to add a game.'[]
 
