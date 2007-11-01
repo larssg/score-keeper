@@ -41,7 +41,8 @@ table {
     padding-top: 13px;
     padding-bottom: 0;
     list-style-type: none;
-    line-height: normal; }
+    line-height: normal;
+    height: 25px; }
     #hd ul#menu li {
       display: inline;
       float: left;
