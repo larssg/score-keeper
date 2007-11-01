@@ -18,10 +18,11 @@ table {
     #hd #links a {
       color: #FFFFFF; }
     #hd #links #user {
-      display: inline;
-      padding-right: 10px; }
-    #hd #links #languages {
       display: inline; }
+    #hd #links #languages {
+      padding-left: 10px;
+      display: inline;
+      display: none; }
   #hd ul#menu {
     display: block;
     background-color: #77BBDD;
