@@ -41,7 +41,8 @@ table {
         background-color: #3399CC;
         border-bottom: none;
         text-decoration: none;
-        color: #FFFFFF; }
+        color: #FFFFFF;
+        font-weight: bold; }
         #hd ul#menu li a:hover {
           background-color: #FFFFFF;
           color: #7C7C7C; }
