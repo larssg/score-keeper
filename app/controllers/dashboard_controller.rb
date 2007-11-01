@@ -2,7 +2,7 @@ class DashboardController < ApplicationController
   def index
     unless cached?
       @rankings = Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count >= 20')
-      @newbies = Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count < 20')
+      @newbies = Person.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count < 20')
       @recent_games = Game.find_recent(:limit => 8)
       @games_per_day = Game.count(:group => :played_on, :limit => 10, :order => 'played_on DESC')
 
