@@ -199,3 +199,6 @@ input#openid_url {
   clear: both; }
   .clear hr {
     display: none; }
+
+.yui-t5 #yui-main .yui-b {
+  margin-right: 240px; }
