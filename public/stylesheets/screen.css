@@ -21,6 +21,8 @@ table {
   #hd #links {
     float: right;
     padding: 21px;
+    padding-bottom: 0;
+    padding-left: 0;
     color: #FFFFFF; }
     #hd #links a {
       color: #FFFFFF; }
@@ -79,14 +81,14 @@ h3 {
 
 #bd {
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 0;
   padding-left: 20px;
   padding-right: 20px;
   border: 1px solid #77BBDD;
   border-top: 0px;
   clear: both; }
-  #bd h3.noobs {
-    padding-top: 20px; }
+  #bd .bottom_space {
+    padding-bottom: 20px; }
   #bd #messages {
     border: 1px solid #999999;
     background-color: #EEEEEE;
@@ -104,7 +106,8 @@ h3 {
       display: block;
       margin-bottom: 10px; }
   #bd table.list {
-    width: 100%; }
+    width: 100%;
+    margin-bottom: 20px; }
     #bd table.list th {
       border: 0;
       border-bottom: 1px solid #3399CC;
@@ -146,8 +149,7 @@ h3 {
     #bd #new_game label select {
       width: 220px; }
   #bd .columns {
-    clear: both;
-    padding-top: 20px; }
+    clear: both; }
     #bd .columns .left-column {
       float: left;
       width: 49%;
