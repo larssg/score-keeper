@@ -5,12 +5,19 @@ table {
   margin: 0; }
 
 #hd {
-  background-color: #3399CC; }
+  margin-top: 10px;
+  background-color: #3399CC;
+  background-image: url('../images/header_right.gif');
+  background-repeat: no-repeat;
+  background-position: right top; }
   #hd h1 {
     margin: 0;
     padding: 21px;
     padding-top: 14px;
-    padding-bottom: 12px; }
+    padding-bottom: 12px;
+    background-image: url('../images/header_left.gif');
+    background-repeat: no-repeat;
+    background-position: left top; }
   #hd #links {
     float: right;
     padding: 21px;
@@ -32,29 +39,33 @@ table {
     padding-top: 13px;
     padding-bottom: 3px;
     border-bottom: 1px solid #77BBDD;
-    list-style-type: none; }
+    list-style-type: none;
+    line-height: normal;
+    height: 21px; }
     #hd ul#menu li {
-      display: inline; }
+      display: inline;
+      float: left;
+      background: url('../images/tab_right.gif') no-repeat right top;
+      margin-right: 4px; }
+      #hd ul#menu li:hover {
+        background-image: url('../images/tab_active_right.gif'); }
       #hd ul#menu li a {
-        padding: 3px 4px;
-        padding-left: 10px;
-        padding-right: 10px;
         background-color: #3399CC;
         border-bottom: none;
         text-decoration: none;
         color: #FFFFFF;
-        font-weight: bold; }
+        font-weight: bold;
+        display: block;
+        float: left;
+        background: url('../images/tab_left.gif') no-repeat left top;
+        padding: 5px 15px; }
         #hd ul#menu li a:hover {
-          background-color: #FFFFFF;
+          background-image: url('../images/tab_active_left.gif');
           color: #7C7C7C; }
     #hd ul#menu li.current {
-      border-bottom: 1px solid #FFFFFF;
-      background-color: #FFFFFF; }
+      background-image: url('../images/tab_active_right.gif'); }
       #hd ul#menu li.current a {
-        background-color: #FFFFFF;
-        position: relative;
-        top: 1px;
-        padding-top: 4px;
+        background-image: url('../images/tab_active_left.gif');
         color: #7C7C7C; }
 
 h2#page_title {
@@ -72,7 +83,8 @@ h3 {
   padding-left: 20px;
   padding-right: 20px;
   border: 1px solid #77BBDD;
-  border-top: 0px; }
+  border-top: 0px;
+  clear: both; }
   #bd h3.noobs {
     padding-top: 20px; }
   #bd #messages {

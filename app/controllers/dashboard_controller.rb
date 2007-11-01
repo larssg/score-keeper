@@ -9,7 +9,7 @@ class DashboardController < ApplicationController
       # Sidebar
       @leader = @rankings.size > 0 ? @rankings[0] : @newbies[0]
       @game_count = Game.count
-      @goals_scored = (Person.sum(:goals_for) + Person.sum(:goals_against)) / 4
+      @goals_scored = Person.sum(:goals_for) / 2
     end
 
     # Add game
