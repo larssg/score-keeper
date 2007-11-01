@@ -5,3 +5,6 @@
   %li{:class => controller.controller_name == 'people' ? 'current' : ''}= link_to 'People'[], people_path
   - if admin?
     %li{:class => controller.controller_name == 'users' ? 'current' : ''}= link_to 'Users'[], users_path
+
+  .clear
+    %hr    
