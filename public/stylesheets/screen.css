@@ -17,7 +17,8 @@ table {
     padding-bottom: 12px;
     background-image: url('../images/header_left.gif');
     background-repeat: no-repeat;
-    background-position: left top; }
+    background-position: left top;
+    border-bottom: 1px solid #FFFFFF; }
   #hd #links {
     float: right;
     padding: 21px;
@@ -36,7 +37,6 @@ table {
     display: block;
     background-color: #77BBDD;
     margin: 0;
-    border-top: 1px solid #FFFFFF;
     padding: 21px;
     padding-top: 13px;
     padding-bottom: 3px;
