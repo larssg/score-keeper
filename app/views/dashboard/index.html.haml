@@ -1,38 +1,13 @@
 - title 'Dashboard'[]
 
 - cache(dashboard_path) do
-  %h3= 'Rankings'[]
+  - if @rankings.size > 0
+    %h3= 'Rankings'[]
+    = render :partial => 'leaderboard', :locals => { :people => @rankings, :start_at => 1 }
 
-  %table.list
-    %tr
-      %th= '&nbsp;'
-      %th= 'Person'[]
-      %th= 'Ranking'[]
-      %th= 'Played'[]
-      %th= 'Won'[]
-      %th= 'Lost'[]
-      %th= 'Win %'[]
-      %th{ :title => 'Goals for'[] }= 'GF'[]
-      %th{ :title => 'Goals against'[] }= 'GA'[]
-      %th{ :title => 'Goals for - goals against'[] }= '+/-'
-      %th= '+/- ' + 'Average'[]
-
-    - @people.each_with_index do |person, index|
-      %tr{ :class => cycle('odd', 'even') }
-        %td= index + 1
-        %td
-          = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this person's games"[]), games_path(:filter => person.id)
-          = person.full_name
-        %td= person.ranking
-        %td= person.memberships_count
-        %td= person.games_won
-        %td= person.memberships_count - person.games_won
-        %td= person.winning_percentage.to_s + '%'
-        %td= person.goals_for
-        %td= person.goals_against
-        %td= person.difference
-        %td= person.difference_average
-    - reset_cycle
+  - if @newbies.size > 0
+    %h3.noobs= 'Noobs'[]
+    = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1 }
 
   .columns
     .left-column
