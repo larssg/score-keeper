@@ -9,17 +9,17 @@ class DashboardController < ApplicationController
       @leader = @people[0]
       @game_count = Game.count
       @goals_scored = (Person.sum(:goals_for) + Person.sum(:goals_against)) / 4
-      
-      # Add game
-      if logged_in?
-        @person_list = Person.find_all
-        @game = Game.new
-      end
+    end
+
+    # Add game
+    if logged_in?
+      @person_list = Person.find_all
+      @game = Game.new
     end
   end
   
   protected
   def cached?
-    read_fragment(dashboard_path) && read_fragment(dashboard_path + '_sidebar') && read_fragment(dashboard_path + '_new_game')
+    read_fragment(dashboard_path) && read_fragment(dashboard_path + '_sidebar')
   end
 end

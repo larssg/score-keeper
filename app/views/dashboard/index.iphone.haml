@@ -1,0 +1,14 @@
+%h3= 'Rankings'[]
+
+%table.list
+  %tr
+    %th= '&nbsp;'
+    %th= 'Person'[]
+    %th= 'Ranking'[]
+
+  - @people.each_with_index do |person, index|
+    %tr{ :class => cycle('odd', 'even') }
+      %td= index + 1
+      %td= person.full_name
+      %td= person.ranking
+  - reset_cycle

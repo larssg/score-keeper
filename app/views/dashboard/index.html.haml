@@ -61,5 +61,4 @@
         = @goals_scored
 
   - if logged_in?
-    - cache(dashboard_path + '_new_game') do
-      = render :partial => 'games/form'
+    = render :partial => 'games/form'
