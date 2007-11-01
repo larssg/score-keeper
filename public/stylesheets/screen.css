@@ -5,37 +5,46 @@ table {
   margin: 0; }
 
 #hd {
-  background-color: #DDDDDD; }
+  background-color: #3399CC; }
   #hd h1 {
     margin: 0;
-    padding: 20px; }
-    #hd h1 a {
-      text-decoration: none;
-      color: #000000; }
+    padding: 21px;
+    padding-top: 14px;
+    padding-bottom: 12px; }
   #hd #links {
     float: right;
-    padding: 20px; }
+    padding: 21px;
+    color: #FFFFFF; }
+    #hd #links a {
+      color: #FFFFFF; }
     #hd #links #user {
       display: inline;
       padding-right: 10px; }
     #hd #links #languages {
       display: inline; }
   #hd ul#menu {
+    display: block;
+    background-color: #77BBDD;
     margin: 0;
-    border-bottom: 1px solid #000000;
-    list-style-type: none;
-    padding: 3px 20px 3px 20px; }
+    border-top: 1px solid #FFFFFF;
+    padding: 21px;
+    padding-top: 13px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #77BBDD;
+    list-style-type: none; }
     #hd ul#menu li {
       display: inline; }
       #hd ul#menu li a {
         padding: 3px 4px;
-        border: 1px solid #000000;
-        background-color: #EEEEEE;
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: #3399CC;
         border-bottom: none;
         text-decoration: none;
-        color: #000000; }
+        color: #FFFFFF; }
         #hd ul#menu li a:hover {
-          background-color: #FFFFFF; }
+          background-color: #FFFFFF;
+          color: #7C7C7C; }
     #hd ul#menu li.current {
       border-bottom: 1px solid #FFFFFF;
       background-color: #FFFFFF; }
@@ -43,7 +52,8 @@ table {
         background-color: #FFFFFF;
         position: relative;
         top: 1px;
-        padding-top: 4px; }
+        padding-top: 4px;
+        color: #7C7C7C; }
 
 h2#page_title {
   display: none;
@@ -56,7 +66,11 @@ h3 {
 
 #bd {
   padding-top: 20px;
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid #77BBDD;
+  border-top: 0px; }
   #bd #messages {
     border: 1px solid #999999;
     background-color: #EEEEEE;
@@ -77,9 +91,10 @@ h3 {
     width: 100%; }
     #bd table.list th {
       border: 0;
-      border-bottom: 1px solid #000000;
-      background-color: #DDDDDD;
-      padding: 3px; }
+      border-bottom: 1px solid #3399CC;
+      background-color: #77BBDD;
+      padding: 3px;
+      color: #FFFFFF; }
     #bd table.list td {
       border: 0;
       padding: 3px;
@@ -146,9 +161,10 @@ h3 {
       font-size: 110%;
       display: block;
       padding: 5px;
-      background-color: #EEEEEE;
-      border-bottom: 1px solid #999999;
-      margin-bottom: 5px; }
+      background-color: #77BBDD;
+      border-bottom: 1px solid #3399CC;
+      margin-bottom: 5px;
+      color: #FFFFFF; }
     #bd #sidebar #leader {
       padding: 20px;
       margin-bottom: 20px;
@@ -167,11 +183,13 @@ h3 {
       top: 3px; }
 
 #ft {
-  background-color: #EEEEEE;
-  border-top: 1px solid #000000;
-  text-align: center; }
+  color: #999999;
+  text-align: center;
+  font-size: 85%; }
+  #ft a {
+    color: #999999; }
   #ft .content {
-    padding: 10px; }
+    padding: 5px; }
 
 input#openid_url {
   background: white url(/images/openid.gif) no-repeat scroll 0pt 50%;

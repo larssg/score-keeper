@@ -25,7 +25,7 @@
             = link_to_unless(language == 'en', 'English', :language => 'en')
             = link_to_unless(language == 'da', 'Dansk', :language => 'da')
     
-        %h1= link_to 'Score Keeper'[], root_url
+        %h1= link_to image_tag('logo.gif'), root_url
 
         = render :partial => 'shared/menu'
     
