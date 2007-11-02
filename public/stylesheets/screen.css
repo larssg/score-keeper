@@ -38,11 +38,11 @@ table {
     background-color: #77BBDD;
     margin: 0;
     padding: 21px;
-    padding-top: 13px;
+    padding-top: 10px;
     padding-bottom: 0;
     list-style-type: none;
     line-height: normal;
-    height: 25px; }
+    height: 26px; }
     #hd ul#menu li {
       display: inline;
       float: left;
@@ -55,6 +55,7 @@ table {
         border-bottom: none;
         text-decoration: none;
         color: #FFFFFF;
+        font-size: 13px;
         font-weight: bold;
         display: block;
         float: left;
