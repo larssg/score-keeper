@@ -172,7 +172,8 @@ h3 {
     position: relative;
     top: 2px; }
   #bd #sidebar {
-    width: 220px; }
+    width: 220px;
+    padding-bottom: 20px; }
     #bd #sidebar h2 {
       margin: 0;
       padding: 0;
