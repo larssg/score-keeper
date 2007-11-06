@@ -1,5 +1,5 @@
 class PeopleController < ApplicationController
-  before_filter :login_required, :except => :index
+  before_filter :login_required, :except => [ :index, :show ]
   
   make_resourceful do
     publish :xml, :json, :csv, :attributes => [ :id, :first_name, :last_name, :display_name, :ranking, :memberships_count, :games_won ]

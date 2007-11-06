@@ -32,9 +32,20 @@ class GamesController < ApplicationController
       format.rss { render :layout => false } # index.rss.builder
       format.xml do
         if params[:person_id]
+          @memberships = @person.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
           render :action => 'person_games'
         else
           render :xml => @games.to_xml
+        end
+      end
+      format.graph do
+        if params[:person_id]
+          chart = FlashChart.new
+          chart.title 'Ranking for {name}'[:ranking_for, @person.full_name]
+          chart.set_data @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking').collect { |m| m.current_ranking }
+          chart.set_y_max @person.memberships.maximum(:current_ranking)
+          chart.set_y_min @person.memberships.minimum(:current_ranking)
+          render :text => chart.render
         end
       end
     end
@@ -48,7 +59,6 @@ class GamesController < ApplicationController
   def load_data_for_index
     if params[:person_id]
       @person = Person.find(params[:person_id])
-      @memberships = @person.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
     else
       conditions = nil
       if params[:filter]

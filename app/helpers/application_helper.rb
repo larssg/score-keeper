@@ -19,4 +19,18 @@ module ApplicationHelper
   def admin?
     logged_in? && current_user.is_admin?
   end
+  
+  def graph(url)
+    out = ''
+    out << '<div id="flashcontent" onmouseout="onrollout();"></div>'
+    out << '<script type="text/javascript">'
+    out << 'var so = new SWFObject("' + url_for('/flash/open-flash-chart.swf') + '", "chart", "720", "350", "9", "#FFFFFF");'
+    out << 'so.addVariable("width", "720");'
+    out << 'so.addVariable("height", "350");'
+    out << 'so.addVariable("data", "' + url + '");'
+    out << 'so.addParam("allowScriptAccess", "sameDomain");'
+    out << 'so.write("flashcontent");'
+    out << '</script>'
+    out
+  end
 end

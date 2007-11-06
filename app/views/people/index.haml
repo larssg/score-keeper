@@ -10,7 +10,7 @@
     %tr.person{ :class => cycle('odd', 'even') }
       %td= image_tag person.mugshot.public_filename(:thumb), :alt => person.full_name if person.mugshot
       %td= link_to_if admin?, person.full_name, edit_person_path(person)
-      %td= person.display_name
+      %td= link_to person.display_name, person_path(person)
       %td= link_to 'Remove'[], person_path(person), :method => :delete, :confirm => 'Are you sure?' if admin?
 
 - if admin?
