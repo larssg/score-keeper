@@ -22,7 +22,7 @@ module ApplicationHelper
   
   def graph(url)
     out = ''
-    out << '<div id="flashcontent" onmouseout="onrollout();"></div>'
+    out << '<div id="flashcontent"></div>'
     out << '<script type="text/javascript">'
     out << 'var so = new SWFObject("' + url_for('/flash/open-flash-chart.swf') + '", "chart", "720", "350", "9", "#FFFFFF");'
     out << 'so.addVariable("width", "720");'
