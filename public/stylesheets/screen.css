@@ -200,6 +200,10 @@ h3 {
     #bd a.rss img {
       position: relative;
       top: 3px; }
+  #bd tr.person .admin {
+    display: inline; }
+  #bd #chart {
+    margin-bottom: 20px; }
 
 #ft {
   color: #999999;

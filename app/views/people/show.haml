@@ -1,1 +1,4 @@
-= graph(formatted_person_games_url(@person.id, :graph))
+- title 'Rating chart for {name}'[:rating_chart_for, @person.full_name]
+
+%h3= 'Rating chart for {name}'[:rating_chart_for, @person.full_name]
+#graph= graph(formatted_person_games_url(@person.id, :graph))

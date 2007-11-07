@@ -45,6 +45,7 @@ class GamesController < ApplicationController
           chart.set_data @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking').collect { |m| m.current_ranking }
           chart.set_y_max @person.memberships.maximum(:current_ranking)
           chart.set_y_min @person.memberships.minimum(:current_ranking)
+          chart.line 3, '#3399CC'
           render :text => chart.render
         end
       end
