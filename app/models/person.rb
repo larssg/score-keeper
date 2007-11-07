@@ -13,7 +13,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.find_all
-    find(:all, :order => 'display_name, last_name, first_name')
+    find(:all, :order => 'first_name, last_name, display_name')
   end
 
   def winning_percentage
