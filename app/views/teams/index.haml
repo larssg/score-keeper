@@ -14,7 +14,7 @@
       %tr{ :class => cycle('odd', 'even') }
         %td
           = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => team[:team_ids])
-          = team[:players].collect(&:full_name).join(' - ')
+          = team[:players].collect { |p| person_link_full(p) }.join(' - ')
         %td= team[:total_ranking]
         %td= team[:games_won]
         %td= team[:games_played]

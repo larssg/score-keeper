@@ -20,6 +20,14 @@ module ApplicationHelper
     logged_in? && current_user.is_admin?
   end
   
+  def person_link(person)
+    link_to person.display_name, person_path(person), :class => 'person'
+  end
+  
+  def person_link_full(person)
+    link_to person.full_name, person_path(person), :class => 'person'
+  end
+  
   def graph(url)
     out = ''
     out << '<div id="flashcontent"></div>'
