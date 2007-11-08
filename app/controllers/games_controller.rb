@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_filter :login_required, :except => :index
+  before_filter :login_required, :except => [ :index, :show ]
   cache_sweeper :game_sweeper
   
   make_resourceful do
