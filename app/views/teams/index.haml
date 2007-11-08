@@ -8,6 +8,7 @@
       %th= 'Games won'[]
       %th= 'Games played'[]
       %th= 'Winning percentage'[]
+      %th{ :colspan => 2 }= '% of games on team'[]
 
     - @teams.each do |team|
       %tr{ :class => cycle('odd', 'even') }
@@ -18,3 +19,7 @@
         %td= team[:games_won]
         %td= team[:games_played]
         %td= team[:percentage].to_s + '%'
+        - team[:players].each do |player|
+          %td
+            = ((team[:games_played].to_f / player.memberships_count.to_f) * 1000).to_i / 10.0
+            = '%'

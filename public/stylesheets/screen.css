@@ -202,6 +202,11 @@ h3 {
       top: 3px; }
   #bd tr.person .admin {
     display: inline; }
+  #bd a.person {
+    color: #000000;
+    text-decoration: none; }
+    #bd a.person:hover {
+      text-decoration: underline; }
   #bd #chart {
     margin-bottom: 20px; }
 

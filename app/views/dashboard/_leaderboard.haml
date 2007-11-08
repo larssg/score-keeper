@@ -17,7 +17,7 @@
       %td= index + start_at
       %td
         = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this person's games"[]), games_path(:filter => person.id)
-        = person.full_name
+        = link_to person.full_name, person_path(person), :class => 'person'
       %td= person.ranking
       %td= person.memberships_count
       %td= person.games_won
