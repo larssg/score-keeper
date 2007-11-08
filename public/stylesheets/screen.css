@@ -132,8 +132,10 @@ h3 {
   #bd .pagination {
     padding-top: 10px;
     padding-bottom: 10px; }
-  #bd .game label {
-    font-weight: bold; }
+  #bd .game {
+    margin-bottom: 20px; }
+    #bd .game label {
+      font-weight: bold; }
   #bd #new_game h3 {
     display: block;
     margin: 0;
@@ -202,10 +204,10 @@ h3 {
       top: 3px; }
   #bd tr.person .admin {
     display: inline; }
-  #bd a.person {
+  #bd a.person, #bd a.game {
     color: #000000;
     text-decoration: none; }
-    #bd a.person:hover {
+    #bd a.person:hover, #bd a.game:hover {
       text-decoration: underline; }
   #bd #chart {
     margin-bottom: 20px; }

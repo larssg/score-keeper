@@ -34,6 +34,16 @@
       %p
         %label= 'Goals scored'[] + ':'
         = @goals_scored
+      %p
+        %label= 'All time high'[] + ':'
+        = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
+        = 'by'[]
+        = person_link_full @all_time_high.person
+      %p
+        %label= 'All time low'[] + ':'
+        = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
+        = 'by'[]
+        = person_link_full @all_time_low.person
 
   - if logged_in?
     = render :partial => 'games/form'
