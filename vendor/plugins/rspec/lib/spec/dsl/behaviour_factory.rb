@@ -1,11 +1,14 @@
 module Spec
   module DSL
     class BehaviourFactory
-      BEHAVIOURS = {
-        :default => Spec::DSL::Example,
-        :shared => Spec::DSL::SharedBehaviour
-      }      
       class << self
+        def reset!
+          @behaviour_types = {
+            :default => Spec::DSL::Example,
+            :shared => Spec::DSL::SharedBehaviour
+          }      
+        end
+
         # Registers a behaviour class +klass+ with the symbol
         # +type+. For example:
         #
@@ -15,28 +18,15 @@ module Spec
         # <tt>spec/farm</tt> to create behaviour instances of type
         # Spec::Farm::DSL::FarmBehaviour.
         def register(id, behaviour)
-          BEHAVIOURS[id] = behaviour
-        end
-
-        def add_example_class(id, behaviour)
-          warn "add_example_class is deprecated. Use register instead."
-          register(id, behaviour)
-        end
-        def add_behaviour_class(id, behaviour)
-          warn "add_behaviour_class is deprecated. Use register instead."
-          register(id, behaviour)
-        end
-        
-        def unregister(id)
-          BEHAVIOURS.delete(id)
+          @behaviour_types[id] = behaviour
         end
 
         def get(id=:default)
           id ||= :default
-          if BEHAVIOURS.values.include?(id)
+          if @behaviour_types.values.include?(id)
             return id
           else
-            behaviour = BEHAVIOURS[id]
+            behaviour = @behaviour_types[id]
             return behaviour
           end
         end
@@ -49,7 +39,7 @@ module Spec
           return behaviour
         end  
 
-        def create(*args, &block)
+        def create_behaviour_class(*args, &block)
           opts = Hash === args.last ? args.last : {}
           if opts[:shared]
             id = :shared
@@ -63,7 +53,7 @@ module Spec
           elsif opts[:behaviour_type]
             id = opts[:behaviour_type]
             
-          elsif opts[:spec_path] =~ /spec(\\|\/)(#{BEHAVIOURS.keys.join('|')})/
+          elsif opts[:spec_path] =~ /spec(\\|\/)(#{@behaviour_types.keys.join('|')})/
             id = $2.to_sym
           else
             id = :default
@@ -75,9 +65,10 @@ module Spec
 
         protected
         def create_shared_module(*args, &block)
-          BEHAVIOURS[:shared].new(*args, &block)
+          @behaviour_types[:shared].new(*args, &block)
         end
       end
+      self.reset!
     end
   end
 end

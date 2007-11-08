@@ -2,90 +2,116 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 module Spec
   module DSL
-    class BehaviourFactorySpec < Spec::DSL::Example
-      describe BehaviourFactory, "#register"
+    describe BehaviourFactory, "with :foobar registered as custom type" do
 
-      class SomeBehaviourClass
-      end
-
-      after do
-        BehaviourFactory::BEHAVIOURS.delete(:some)
-      end
-
-      specify "#register; adds behaviour to BEHAVIOURS repository" do
-        BehaviourFactory.register(:some, SomeBehaviourClass)
-        BehaviourFactory::BEHAVIOURS[:some].should == SomeBehaviourClass
-      end
-
-      specify "#add_behaviour_class; add behaviour to BEHAVIOURS repository" do
-        BehaviourFactory.should_receive(:warn).
-          with("add_behaviour_class is deprecated. Use register instead.")
-        BehaviourFactory.add_behaviour_class(:some, SomeBehaviourClass)
-        BehaviourFactory::BEHAVIOURS[:some].should == SomeBehaviourClass
-      end
-
-      specify "#register; add behaviour to BEHAVIOURS repository" do
-        BehaviourFactory.should_receive(:warn).
-          with("add_example_class is deprecated. Use register instead.")
-        BehaviourFactory.add_example_class(:some, SomeBehaviourClass)
-        BehaviourFactory::BEHAVIOURS[:some].should == SomeBehaviourClass
-      end
-    end
-
-    describe BehaviourFactory, "#get" do
       before do
         @behaviour = Class.new(Example)
         BehaviourFactory.register(:foobar, @behaviour)
       end
 
       after do
-        BehaviourFactory.unregister(:foobar)
+        BehaviourFactory.reset!
       end
 
-      it "when passed nil; returns the default behaviour" do
+      it "should #get the default behaviour type when passed nil" do
         BehaviourFactory.get(nil).should == Example
       end
 
-      it "when passed an id; returns the behaviour for the passed in id" do
+      it "should #get custom type for :foobar" do
         BehaviourFactory.get(:foobar).should == @behaviour
       end
 
-      it "when passed in the actual behaviour; returns the behaviour" do
+      it "should #get the actual type when that is passed in" do
         BehaviourFactory.get(@behaviour).should == @behaviour
       end
 
-      it "when passed unregistered value; returns nil" do
+      it "should #get nil for unregistered non-nil values" do
         BehaviourFactory.get(:does_not_exist).should be_nil
       end
-    end    
 
-    describe BehaviourFactory, "#get!" do
-      before do
-        @behaviour = Class.new(Example)
-        BehaviourFactory.register(:foobar, @behaviour)
-      end
-
-      after do
-        BehaviourFactory.unregister(:foobar)
-      end
-
-      it "when passed nil; returns the default behaviour" do
-        BehaviourFactory.get!(nil).should == Example
-      end
-
-      it "when passed an id; returns the behaviour for the passed in id" do
-        BehaviourFactory.get!(:foobar).should == @behaviour
-      end
-
-      it "when passed in the actual behaviour; returns the behaviour" do
-        BehaviourFactory.get!(@behaviour).should == @behaviour
-      end
-
-      it "when passed unregistered value; raises error" do
+      it "should raise error for #get! with unknown key" do
         proc do
           BehaviourFactory.get!(:does_not_exist)
         end.should raise_error
       end
     end    
+
+    describe BehaviourFactory do
+      it "should create an anonymous Spec::DSL::Example subclass by default" do
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour")
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == Spec::DSL::Example
+      end
+
+      it "should create a Spec::DSL::Example when :type => :default" do
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour", :type => :default)
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == Spec::DSL::Example
+      end
+
+      it "should create a Spec::DSL::Example when :behaviour_type => :default" do
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour", :behaviour_type => :default)
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == Spec::DSL::Example
+      end
+
+      it "should create specified type when :type => :something_other_than_default" do
+        klass = Class.new(Example) do
+          def initialize(*args, &block); end
+        end
+        Spec::DSL::BehaviourFactory.register(:something_other_than_default, klass)
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour", :type => :something_other_than_default)
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == klass
+      end
+
+      it "should create specified type when :behaviour_type => :something_other_than_default" do
+        klass = Class.new(Example) do
+          def initialize(*args, &block); end
+        end
+        Spec::DSL::BehaviourFactory.register(:something_other_than_default, klass)
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour", :behaviour_type => :something_other_than_default)
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == klass
+      end
+      
+      it "should create a type indicated by :spec_path" do
+        klass = Class.new(Example) do
+          def initialize(*args, &block); end
+        end
+        Spec::DSL::BehaviourFactory.register(:something_other_than_default, klass)
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour", :spec_path => "./spec/something_other_than_default/some_spec.rb")
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == klass
+      end
+      
+      it "should create a type indicated by :spec_path (with spec_path generated by caller on windows)" do
+        klass = Class.new(Example) do
+          def initialize(*args, &block); end
+        end
+        Spec::DSL::BehaviourFactory.register(:something_other_than_default, klass)
+        behaviour_class = Spec::DSL::BehaviourFactory.create_behaviour_class("behaviour", :spec_path => "./spec\\something_other_than_default\\some_spec.rb")
+        behaviour_class.name.should be_empty
+        behaviour_class.superclass.should == klass
+      end
+      
+      it "should create a Spec::DSL::Example if :shared => true" do
+        Spec::DSL::BehaviourFactory.create_behaviour_class("name", :spec_path => '/blah/spec/models/blah.rb', :behaviour_type => :controller, :shared => true) {
+        }.should be_an_instance_of(Spec::DSL::SharedBehaviour)
+      end
+
+      it "should favor the :behaviour_type over the :spec_path" do
+        klass = Class.new(Example) do
+          def initialize(*args, &block); end
+        end
+        Spec::DSL::BehaviourFactory.register(:something_other_than_default, klass)
+        behaviour = Spec::DSL::BehaviourFactory.create_behaviour_class("name", :spec_path => '/blah/spec/models/blah.rb', :behaviour_type => :something_other_than_default)
+        behaviour.superclass.should == klass
+      end
+
+      after(:each) do
+        Spec::DSL::BehaviourFactory.reset!
+      end
+    end
   end
 end
