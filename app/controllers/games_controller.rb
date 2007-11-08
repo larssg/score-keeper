@@ -43,10 +43,10 @@ class GamesController < ApplicationController
           chart = FlashChart.new
           chart.title 'Ranking for {name}'[:ranking_for, @person.full_name]
           memberships = @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at')
-          chart.set_data memberships.collect { |m| m.current_ranking }
-          chart.set_x_labels memberships.collect { |m| m.created_at.to_s :db }
-          chart.set_y_max @person.memberships.maximum(:current_ranking)
-          chart.set_y_min @person.memberships.minimum(:current_ranking)
+          chart.set_data [2000] + memberships.collect { |m| m.current_ranking }
+          chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.created_at.to_s :db }
+          chart.set_y_max [@person.memberships.maximum(:current_ranking), 2000].max
+          chart.set_y_min [@person.memberships.minimum(:current_ranking), 2000].min
           chart.line 3, '#3399CC'
 
           steps = (memberships.size / 20).to_i
