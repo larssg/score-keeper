@@ -94,7 +94,7 @@ module Spec
         @err = StringIO.new('')
         @out = StringIO.new('')
         @options = Options.new(@err, @out)
-        @options.add_behaviour Class.new(::Spec::DSL::Example)
+        @options.add_behaviour Class.new(::Spec::DSL::ExampleGroup)
         @options.formatters << Formatter::BaseTextFormatter.new(@options, @out)
       end
 
@@ -138,13 +138,13 @@ module Spec
         @options = Options.new(@err, @out)
       end
       
-      it "returns true when there is a runner_arg" do
-        @options.runner_arg = "Custom::BehaviourRunner"
+      it "returns true when there is a user_input_for_runner" do
+        @options.user_input_for_runner = "Custom::BehaviourRunner"
         @options.custom_runner?.should be_true
       end
 
-      it "returns false when there is no runner_arg" do
-        @options.runner_arg = nil
+      it "returns false when there is no user_input_for_runner" do
+        @options.user_input_for_runner = nil
         @options.custom_runner?.should be_false
       end
     end
@@ -219,7 +219,7 @@ module Spec
       it "runs all examples when options.examples is nil" do
         example_1_has_run = false
         example_2_has_run = false
-        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+        @behaviour = Class.new(::Spec::DSL::ExampleGroup).describe("Some Examples") do
           it "runs 1" do
             example_1_has_run = true
           end
@@ -239,7 +239,7 @@ module Spec
       it "keeps all example_definitions when options.examples is empty" do
         example_1_has_run = false
         example_2_has_run = false
-        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+        @behaviour = Class.new(::Spec::DSL::ExampleGroup).describe("Some Examples") do
           it "runs 1" do
             example_1_has_run = true
           end
@@ -265,7 +265,7 @@ module Spec
       end
 
       it "adds behaviour when behaviour has example_definitions and is not shared" do
-        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+        @behaviour = Class.new(::Spec::DSL::ExampleGroup).describe("Some Examples") do
           it "uses this behaviour" do
           end
         end

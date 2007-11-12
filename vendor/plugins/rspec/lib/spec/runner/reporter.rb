@@ -5,6 +5,7 @@ module Spec
       
       def initialize(options)
         @options = options
+        @options.reporter = self
         clear
       end
       
@@ -17,12 +18,12 @@ module Spec
         formatters.each{|f| f.example_started(example_definition)}
       end
       
-      def example_finished(example_definition, error=nil, failure_location=nil, not_implemented = false)
+      def example_finished(example_definition, error=nil, failure_location=nil, pending=false)
         @example_names << example_definition
         
-        if not_implemented
-          example_pending(@behaviour_names.last, example_definition)
-        elsif error.nil?
+        # if pending
+        #   example_pending(@behaviour_names.last, example_definition)
+        if error.nil?
           example_passed(example_definition)
         elsif Spec::DSL::ExamplePendingError === error
           example_pending(@behaviour_names.last, example_definition, error.message)
@@ -124,7 +125,7 @@ module Spec
         end
         
         def pending_fixed?
-          @exception.is_a?(Spec::DSL::PendingFixedError)
+          @exception.is_a?(Spec::DSL::PendingExampleFixedError)
         end
 
         def expectation_not_met?

@@ -7,9 +7,11 @@ class ImageTest < Test::Unit::TestCase
   CURRENT_DIR = File.dirname(File.expand_path(__FILE__)) + "/"
 
   SIMPLE_IMAGE_PATH = CURRENT_DIR + "simple.gif"
+  TIFF_IMAGE_PATH = CURRENT_DIR + "burner.tiff"
   NOT_AN_IMAGE_PATH = CURRENT_DIR + "not_an_image.php"
   GIF_WITH_JPG_EXT = CURRENT_DIR + "actually_a_gif.jpg"
   EXIF_IMAGE_PATH = CURRENT_DIR + "trogdor.jpg"
+  ANIMATION_PATH = CURRENT_DIR + "animation.gif"
   
   def test_image_from_blob
     File.open(SIMPLE_IMAGE_PATH, "rb") do |f|
@@ -48,6 +50,18 @@ class ImageTest < Test::Unit::TestCase
     assert_equal 150, image[:width]
     assert_equal 55, image[:height]
     assert_match(/^gif$/i, image[:format])
+  end
+
+  def test_tiff
+    image = Image.new(TIFF_IMAGE_PATH)    
+    assert_equal "tiff", image[:format].downcase
+    assert_equal 317, image[:width]
+    assert_equal 275, image[:height]
+  end
+  
+  def test_animation_pages
+    image = Image.from_file(ANIMATION_PATH)
+    image.format "png", 0
   end
   
   def test_gif_with_jpg_format

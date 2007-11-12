@@ -2,14 +2,14 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 module Spec
   module DSL
-    describe Example, ", with :shared => true" do
+    describe ExampleGroup, "with :shared => true" do
       before(:each) do
         @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
         @original_rspec_options = $rspec_options
         $rspec_options = @options
         @formatter = Spec::Mocks::Mock.new("formatter", :null_object => true)
         @options.formatters << @formatter
-        @behaviour = Class.new(Example).describe("behaviour")
+        @behaviour = Class.new(ExampleGroup).describe("behaviour")
         class << @behaviour
           public :include
         end
@@ -18,23 +18,23 @@ module Spec
       after(:each) do
         $rspec_options = @original_rspec_options
         @formatter.rspec_verify
-        @behaviour_class = nil
+        @behaviour = nil
         $shared_behaviours.clear unless $shared_behaviours.nil?
       end
 
       def make_shared_behaviour(name, opts=nil, &block)
-        behaviour = SharedBehaviour.new(name, :shared => true, &block)
-        SharedBehaviour.add_shared_behaviour(behaviour)
+        behaviour = SharedExampleGroup.new(name, :shared => true, &block)
+        SharedExampleGroup.add_shared_behaviour(behaviour)
         behaviour
       end
 
       def non_shared_behaviour()
-        @non_shared_behaviour ||= Class.new(Example).describe("behaviour")
+        @non_shared_behaviour ||= Class.new(ExampleGroup).describe("behaviour")
       end
 
       it "should accept an optional options hash" do
-        lambda { Class.new(Example).describe("context") }.should_not raise_error(Exception)
-        lambda { Class.new(Example).describe("context", :shared => true) }.should_not raise_error(Exception)
+        lambda { Class.new(ExampleGroup).describe("context") }.should_not raise_error(Exception)
+        lambda { Class.new(ExampleGroup).describe("context", :shared => true) }.should_not raise_error(Exception)
       end
 
       it "should return all shared behaviours" do
@@ -44,18 +44,18 @@ module Spec
         b1.should_not be(nil)
         b2.should_not be(nil)
 
-        SharedBehaviour.find_shared_behaviour("b1").should equal(b1)
-        SharedBehaviour.find_shared_behaviour("b2").should equal(b2)
+        SharedExampleGroup.find_shared_behaviour("b1").should equal(b1)
+        SharedExampleGroup.find_shared_behaviour("b2").should equal(b2)
       end
 
       it "should register as shared behaviour" do
         behaviour = make_shared_behaviour("behaviour") {}
-        SharedBehaviour.shared_behaviours.should include(behaviour)
+        SharedExampleGroup.shared_behaviours.should include(behaviour)
       end
 
       it "should not be shared when not configured as shared" do
         behaviour = non_shared_behaviour
-        SharedBehaviour.shared_behaviours.should_not include(behaviour)
+        SharedExampleGroup.shared_behaviours.should_not include(behaviour)
       end
 
       it "should raise if run when shared" do
@@ -82,9 +82,9 @@ module Spec
       end
 
       it "should NOT complain when adding the same shared behaviour instance again" do
-        shared_behaviour = Class.new(Example).describe("shared behaviour", :shared => true)
-        SharedBehaviour.add_shared_behaviour(shared_behaviour)
-        SharedBehaviour.add_shared_behaviour(shared_behaviour)
+        shared_behaviour = Class.new(ExampleGroup).describe("shared behaviour", :shared => true)
+        SharedExampleGroup.add_shared_behaviour(shared_behaviour)
+        SharedExampleGroup.add_shared_behaviour(shared_behaviour)
       end
 
       it "should NOT complain when adding the same shared behaviour again (i.e. file gets reloaded)" do
@@ -97,26 +97,26 @@ module Spec
       end
 
       it "should NOT complain when adding the same shared behaviour in same file with different absolute path" do
-        shared_behaviour_1 = Class.new(Example).describe("shared behaviour", :shared => true)
-        shared_behaviour_2 = Class.new(Example).describe("shared behaviour", :shared => true)
+        shared_behaviour_1 = Class.new(ExampleGroup).describe("shared behaviour", :shared => true)
+        shared_behaviour_2 = Class.new(ExampleGroup).describe("shared behaviour", :shared => true)
 
         shared_behaviour_1.description[:spec_path] = "/my/spec/a/../shared.rb"
         shared_behaviour_2.description[:spec_path] = "/my/spec/b/../shared.rb"
 
-        SharedBehaviour.add_shared_behaviour(shared_behaviour_1)
-        SharedBehaviour.add_shared_behaviour(shared_behaviour_2)
+        SharedExampleGroup.add_shared_behaviour(shared_behaviour_1)
+        SharedExampleGroup.add_shared_behaviour(shared_behaviour_2)
       end
 
       it "should complain when adding a different shared behaviour with the same name in a different file with the same basename" do
-        shared_behaviour_1 = Class.new(Example).describe("shared behaviour", :shared => true)
-        shared_behaviour_2 = Class.new(Example).describe("shared behaviour", :shared => true)
+        shared_behaviour_1 = Class.new(ExampleGroup).describe("shared behaviour", :shared => true)
+        shared_behaviour_2 = Class.new(ExampleGroup).describe("shared behaviour", :shared => true)
 
         shared_behaviour_1.description[:spec_path] = "/my/spec/a/shared.rb"
         shared_behaviour_2.description[:spec_path] = "/my/spec/b/shared.rb"
 
-        SharedBehaviour.add_shared_behaviour(shared_behaviour_1)
+        SharedExampleGroup.add_shared_behaviour(shared_behaviour_1)
         lambda do
-          SharedBehaviour.add_shared_behaviour(shared_behaviour_2)
+          SharedExampleGroup.add_shared_behaviour(shared_behaviour_2)
         end.should raise_error(ArgumentError, /already exists/)
       end
 

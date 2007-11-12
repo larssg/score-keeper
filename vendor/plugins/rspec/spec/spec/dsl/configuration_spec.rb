@@ -50,14 +50,14 @@ module Spec
         @original_configuration = Spec::Runner.configuration
         spec_configuration = @config
         Spec::Runner.instance_eval {@configuration = spec_configuration}
-        @foobar_behaviour = Class.new(Example)
-        BehaviourFactory.register(:foobar, @foobar_behaviour)
+        @foobar_behaviour = Class.new(ExampleGroup)
+        ExampleGroupFactory.register(:foobar, @foobar_behaviour)
       end
 
       after do
         original_configuration = @original_configuration
         Spec::Runner.instance_eval {@configuration = original_configuration}
-        BehaviourFactory.reset!
+        ExampleGroupFactory.reset!
       end
 
       it "should let you define modules to be included for a behaviour_type" do
@@ -71,18 +71,18 @@ module Spec
       describe Configuration, " callbacks", :shared => true do
         before do
           @config = Configuration.new
-          @special_behaviour = Class.new(Example)
+          @special_behaviour = Class.new(ExampleGroup)
           @special_child_behaviour = Class.new(@special_behaviour)
-          @nonspecial_behaviour = Class.new(Example)
-          BehaviourFactory.register(:special, @special_behaviour)
-          BehaviourFactory.register(:special_child, @special_child_behaviour)
-          BehaviourFactory.register(:non_special, @nonspecial_behaviour)
-          @behaviour = @special_child_behaviour.describe "Special Behaviour"
-          @unselected_behaviour = Class.new(@nonspecial_behaviour).describe "NonSpecial Behaviour"
+          @nonspecial_behaviour = Class.new(ExampleGroup)
+          ExampleGroupFactory.register(:special, @special_behaviour)
+          ExampleGroupFactory.register(:special_child, @special_child_behaviour)
+          ExampleGroupFactory.register(:non_special, @nonspecial_behaviour)
+          @behaviour = @special_child_behaviour.describe "Special Example Group"
+          @unselected_behaviour = Class.new(@nonspecial_behaviour).describe "Non Special Example Group"
         end
 
         after do
-          BehaviourFactory.reset!
+          ExampleGroupFactory.reset!
         end
       end
 

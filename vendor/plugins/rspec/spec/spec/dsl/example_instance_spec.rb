@@ -7,7 +7,7 @@ module Spec
         @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
         @reporter = ::Spec::Runner::Reporter.new(@options)
         @options.reporter = @reporter
-        @behaviour = Class.new(Example).describe("My Behaviour") {}
+        @behaviour = Class.new(ExampleGroup).describe("Some Examples") {}
       end
 
       def create_proxy(example_definition)
@@ -39,7 +39,7 @@ module Spec
       end
 
       it "should report success" do
-        @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, nil, false)
+        @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, nil)
         @proxy.run
       end
     end
@@ -59,8 +59,7 @@ module Spec
         @reporter.should_receive(:example_finished).with(
           equal(@example_definition),
           is_a(Spec::Expectations::ExpectationNotMetError),
-          "example",
-          false
+          "example"
         )
         @proxy.run
       end
@@ -81,8 +80,7 @@ module Spec
         @reporter.should_receive(:example_finished).with(
           equal(@example_definition),
           @error,
-          "example",
-          false
+          "example"
         )
         @proxy.run
       end
@@ -169,7 +167,7 @@ module Spec
         @proxy = create_proxy(@example_definition)
         @example = @proxy.example
 
-        @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, nil, false)
+        @reporter.should_receive(:example_finished).with(equal(@example_definition), nil, nil)
         @proxy.run
         
         scope_object.should == @example

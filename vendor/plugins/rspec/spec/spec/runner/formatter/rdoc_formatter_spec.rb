@@ -9,7 +9,7 @@ module Spec
           @options = Options.new(StringIO.new, @io)
           @formatter = @options.create_formatter(RdocFormatter)
           @options.dry_run = true
-          @behaviour = Class.new(::Spec::DSL::Example).describe("My Behaviour")
+          @behaviour = Class.new(::Spec::DSL::ExampleGroup).describe("Some Examples")
         end
 
         it "should produce no summary" do
@@ -23,7 +23,7 @@ module Spec
         end
 
         it "should push out context" do
-          @formatter.add_behaviour(Spec::DSL::BehaviourDescription.new("context"))
+          @formatter.add_behaviour(Spec::DSL::ExampleGroupDescription.new("context"))
           @io.string.should eql("# context\n")
         end
 

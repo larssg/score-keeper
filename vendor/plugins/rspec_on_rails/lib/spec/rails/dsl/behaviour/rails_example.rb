@@ -3,7 +3,7 @@ ActionView::Base.cache_template_extensions = false
 module Spec
   module Rails
     module DSL
-      class RailsExample < ::Spec::DSL::Example
+      class RailsExample < ::Spec::ExampleGroup
         cattr_accessor(
           :fixture_path,
           :use_transactional_fixtures,
@@ -77,7 +77,7 @@ module Spec
           stubs.each {|k,v| m.stub!(k).and_return(v)}
           m
         end
-        Spec::DSL::BehaviourFactory.register(:default, self)
+        Spec::DSL::ExampleGroupFactory.register(:default, self)
       end
     end
   end

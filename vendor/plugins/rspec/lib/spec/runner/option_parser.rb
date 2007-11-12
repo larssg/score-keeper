@@ -103,7 +103,7 @@ module Spec
         on(*OPTIONS[:generate_options]) do |options_file|
         end
         on(*OPTIONS[:runner]) do |runner|
-          @options.runner_arg = runner
+          @options.user_input_for_runner = runner
         end
         on(*OPTIONS[:drb]) {}
         on(*OPTIONS[:version]) {parse_version}
@@ -112,7 +112,7 @@ module Spec
 
       def order!(argv, &blk)
         @argv = argv
-        @options.current_argv = @argv
+        @options.current_argv = @argv.dup
         return if parse_generate_options
         return if parse_drb
         
@@ -162,17 +162,18 @@ module Spec
         end
         @out_stream.puts "\nOptions written to #{options_file}. You can now use these options with:"
         @out_stream.puts "spec --options #{options_file}"
-        @options.generate = true
+        @options.examples_should_be_run = true
       end
 
       def parse_drb
         is_drb = false
-        is_drb ||= @argv.delete(OPTIONS[:drb][0])
-        is_drb ||= @argv.delete(OPTIONS[:drb][1])
+        current_argv = @options.current_argv
+        is_drb ||= current_argv.delete(OPTIONS[:drb][0])
+        is_drb ||= current_argv.delete(OPTIONS[:drb][1])
         return nil unless is_drb
-        @options.generate = true
+        @options.examples_should_be_run = true
         DrbCommandLine.run(
-          self.class.parse(@argv, @error_stream, @out_stream)
+          self.class.parse(current_argv, @error_stream, @out_stream)
         )
         true
       end

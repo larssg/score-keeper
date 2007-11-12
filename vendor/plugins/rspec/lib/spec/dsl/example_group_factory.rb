@@ -1,18 +1,18 @@
 module Spec
   module DSL
-    class BehaviourFactory
+    class ExampleGroupFactory
       class << self
         def reset!
           @behaviour_types = {
-            :default => Spec::DSL::Example,
-            :shared => Spec::DSL::SharedBehaviour
-          }      
+            :default => Spec::DSL::ExampleGroup,
+            :shared => Spec::DSL::SharedExampleGroup
+          }
         end
 
         # Registers a behaviour class +klass+ with the symbol
         # +type+. For example:
         #
-        #   Spec::DSL::BehaviourFactory.register(:farm, Spec::Farm::DSL::FarmBehaviour)
+        #   Spec::DSL::ExampleGroupFactory.register(:farm, Spec::Farm::DSL::FarmBehaviour)
         #
         # This will cause Main#describe from a file living in 
         # <tt>spec/farm</tt> to create behaviour instances of type
@@ -34,12 +34,13 @@ module Spec
         def get!(id=:default)
           behaviour = get(id)
           unless behaviour
-            raise "Behaviour #{id.inspect} is not registered. Use ::Spec::DSL::BehaviourFactory.register"
+            raise "ExampleGroup #{id.inspect} is not registered. Use ::Spec::DSL::ExampleGroupFactory.register"
           end
           return behaviour
         end  
 
-        def create_behaviour_class(*args, &block)
+        # Dynamically creates a class 
+        def create_behaviour(*args, &block)
           opts = Hash === args.last ? args.last : {}
           if opts[:shared]
             id = :shared
@@ -58,12 +59,24 @@ module Spec
           else
             id = :default
           end
-          example_class = Class.new(get(id))
-          example_class.describe(*args, &block)
-          example_class
+          superclass = get(id)
+          behaviour = create_uniquely_named_class(superclass)
+          behaviour.describe(*args, &block)
+          behaviour
         end
 
         protected
+        
+        def create_uniquely_named_class(superclass)
+          behaviour = Class.new(superclass)
+          @class_count ||= 0
+          class_name = "Subclass_#{@class_count}"
+          @class_count += 1
+          superclass.instance_eval do
+            const_set(class_name, behaviour)
+          end
+        end
+        
         def create_shared_module(*args, &block)
           @behaviour_types[:shared].new(*args, &block)
         end

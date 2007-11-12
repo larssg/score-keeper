@@ -8,7 +8,7 @@ module Spec
           @io = StringIO.new
           @options = Options.new(StringIO.new, @io)
           @formatter = @options.create_formatter(SpecdocFormatter)
-          @behaviour = Class.new(::Spec::DSL::Example).describe("My Behaviour")
+          @behaviour = Class.new(::Spec::DSL::ExampleGroup).describe("Some Examples")
         end
 
         it "should produce standard summary without pending when pending has a 0 count" do
@@ -22,13 +22,26 @@ module Spec
         end
 
         it "should push context name" do
-          @formatter.add_behaviour(Spec::DSL::BehaviourDescription.new("context"))
+          @formatter.add_behaviour(Spec::DSL::ExampleGroupDescription.new("context"))
           @io.string.should eql("\ncontext\n")
         end
 
-        it "should push failing spec name and failure number" do
-          @formatter.example_failed(@behaviour.create_example_definition("spec"), 98, Reporter::Failure.new("c s", RuntimeError.new))
+        it "when having an error, should push failing spec name and failure number" do
+          @formatter.example_failed(
+            @behaviour.create_example_definition("spec"),
+            98,
+            Reporter::Failure.new("c s", RuntimeError.new)
+          )
           @io.string.should eql("- spec (ERROR - 98)\n")
+        end
+
+        it "when having an expectation failure, should push failing spec name and failure number" do
+          @formatter.example_failed(
+            @behaviour.create_example_definition("spec"),
+            98,
+            Reporter::Failure.new("c s", Spec::Expectations::ExpectationNotMetError.new)
+          )
+          @io.string.should eql("- spec (FAILED - 98)\n")
         end
 
         it "should push nothing on start" do

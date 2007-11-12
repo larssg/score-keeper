@@ -8,25 +8,45 @@ module Spec
         end
         
         def story_started(title, narrative)
-          @out << "Story: #{title}\n#{narrative}\n"
-        end
-        
-        def story_ended(title, narrative)
-          @out << "\n\n"
+          @out << "Story: #{title}\n\n"
+          narrative.each_line do |line|
+            @out << "  " << line
+          end
         end
         
         def scenario_started(story_title, scenario_name)
-          @out << "\nScenario: #{scenario_name}\n"
+          @out << "\n\nScenario: #{scenario_name}"
+          @scenario_ok = true
+        end
+        
+        def step_succeeded(type, description, *args)
+          found_step(type, description, *args)
+        end
+        
+        def step_pending(type, description, *args)
+          found_step(type, description, *args)
+          @out << " (PENDING)"
+          @scenario_ok = false
+        end
+        
+        def step_failed(type, description, *args)
+          found_step(type, description, *args)
+          @scenario_ok ? (@out << " (FAILED)") : (@out << " (SKIPPED)")
+          @scenario_ok = false
+        end
+
+        def story_ended(title, narrative)
+          @out << "\n\n"
         end
         
         def found_step(type, description, *args)
           args_txt = args.empty? ? "" : " #{args.join ','}"
           if type == @previous_type
-            @out << "  And "
+            @out << "\n  And "
           else
-            @out << "\n" << "  #{type.to_s.capitalize} "
+            @out << "\n\n" << "  #{type.to_s.capitalize} "
           end
-          @out << "#{description}#{args_txt}" << "\n"
+          @out << "#{description}#{args_txt}"
           if type == :'given scenario'
             @previous_type = :given
           else

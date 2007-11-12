@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 module Spec
   module DSL
-    class ExampleClassDefinitionSpec < Example
+    class SampleExampleClassDefinition < ExampleGroup
       class << self
         attr_accessor :examples_ran
       end
@@ -30,7 +30,7 @@ module Spec
         CONSTANT.should == :foobar
       end
 
-      it "should have access to methods defined in the Behaviour" do
+      it "should have access to methods defined in the Example Group" do
         a_method.should == 22
       end
 
@@ -39,9 +39,9 @@ module Spec
       end
     end
 
-    describe ExampleClassDefinitionSpec do
+    describe SampleExampleClassDefinition do
       it "should run" do
-        ExampleClassDefinitionSpec.examples_ran.should be_true
+        SampleExampleClassDefinition.examples_ran.should be_true
       end
     end
   end

@@ -1,6 +1,5 @@
 module Spec
   module DSL
-    # TODO: We need RDoc here anyway (Aslak) 
     class ExampleRunner
       attr_reader :options, :example, :example_definition, :errors
 
@@ -35,8 +34,7 @@ module Spec
         reporter.example_finished(
           example_definition,
           errors.first,
-          location,
-          example_definition.pending?
+          location
         )
         ok?
       end
@@ -52,7 +50,7 @@ module Spec
       protected
       def before_example
         setup_mocks
-        example.before_each
+        example.run_before_each
         return ok?
       rescue Exception => e
         errors << e
@@ -71,8 +69,8 @@ module Spec
         return false
       end
 
-      def after_example(&behaviour_after_each)
-        example.after_each
+      def after_example
+        example.run_after_each
 
         begin
           verify_mocks
