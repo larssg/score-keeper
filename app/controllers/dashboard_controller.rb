@@ -10,8 +10,8 @@ class DashboardController < ApplicationController
       @leader = @rankings.size > 0 ? @rankings[0] : @newbies[0]
       @game_count = Game.count
       @goals_scored = Person.sum(:goals_for) / 2
-      @all_time_high = Membership.find(:first, :order => 'memberships.current_ranking DESC')
-      @all_time_low = Membership.find(:first, :order => 'memberships.current_ranking')
+      @all_time_high = Membership.all_time_high
+      @all_time_low = Membership.all_time_low
     end
 
     # Add game

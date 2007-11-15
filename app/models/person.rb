@@ -29,7 +29,7 @@ class Person < ActiveRecord::Base
     return 0.0 if memberships_count == 0
     ((10 * difference) / memberships_count) / 10.0
   end
-  
+
   protected
   def remove_games
     self.memberships.each do |membership|
