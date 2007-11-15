@@ -1,15 +1,15 @@
 class DashboardController < ApplicationController
   def index
     unless cached?
-      @rankings = Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count >= 20')
-      @newbies = Person.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count < 20')
+      @rankings = Person.find_ranked
+      @newbies = Person.find_newbies
       @recent_games = Game.find_recent(:limit => 8)
       @games_per_day = Game.count(:group => :played_on, :limit => 10, :order => 'games.played_on DESC')
 
       # Sidebar
       @leader = @rankings.size > 0 ? @rankings[0] : @newbies[0]
       @game_count = Game.count
-      @goals_scored = Person.sum(:goals_for) / 2
+      @goals_scored = Game.goals_scored
       @all_time_high = Membership.all_time_high
       @all_time_low = Membership.all_time_low
     end

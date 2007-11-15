@@ -119,4 +119,8 @@ class Game < ActiveRecord::Base
     
     title
   end
+  
+  def self.goals_scored
+    Person.sum(:goals_for) / 2
+  end
 end

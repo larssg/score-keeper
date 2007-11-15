@@ -87,8 +87,9 @@ class GamesController < ApplicationController
     memberships = @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at')
     chart.set_data [2000] + memberships.collect { |m| m.current_ranking }
     chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.created_at.to_s :db }
-    chart.set_y_max [Membership.all_time_high.current_ranking, 2000].max
-    chart.set_y_min [Membership.all_time_low.current_ranking, 2000].min
+    chart.set_y_max y_max
+    chart.set_y_min y_min
+    chart.y_label_steps y_axis_steps(y_min, y_max)
     chart.line 3, '#3399CC'
 
     steps = (memberships.size / 20).to_i
@@ -96,5 +97,19 @@ class GamesController < ApplicationController
     chart.set_x_axis_steps steps
 
     render :text => chart.render
+  end
+  
+  def y_max
+    max = [Membership.all_time_high.current_ranking, 2000].max
+    (max / 100.0).ceil * 100 # Round up to nearest 100
+  end
+  
+  def y_min
+    min = [Membership.all_time_low.current_ranking, 2000].min
+    (min / 100.0).floor * 100 # Round down to nearest 100
+  end
+  
+  def y_axis_steps(min, max)
+    (max - min) / 100
   end
 end

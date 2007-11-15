@@ -15,6 +15,10 @@ class Person < ActiveRecord::Base
   def self.find_all
     find(:all, :order => 'first_name, last_name, display_name')
   end
+  
+  def games_lost
+    memberships_count - games_won
+  end
 
   def winning_percentage
     return 0.0 if memberships_count == 0
@@ -30,6 +34,14 @@ class Person < ActiveRecord::Base
     ((10 * difference) / memberships_count) / 10.0
   end
   
+  def self.find_ranked
+    Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count >= 20')
+  end
+  
+  def self.find_newbies
+    Person.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count < 20')
+  end
+
   protected
   def remove_games
     self.memberships.each do |membership|
