@@ -4,7 +4,8 @@
 #graph= graph(formatted_person_games_url(@person.id, :graph))
 
 - content_for :sidebar do
-  .mugshot= image_tag @person.mugshot.public_filename(:thumb), :alt => @person.full_name if @person.mugshot
+  - if @person.mugshot
+    .mugshot= image_tag @person.mugshot.public_filename(:thumb), :alt => @person.full_name
 
   #counts
     %p
