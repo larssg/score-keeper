@@ -4,26 +4,27 @@
 #graph= graph(formatted_person_games_url(@person.id, :graph))
 
 - content_for :sidebar do
-  - if @person.mugshot
-    .mugshot= image_tag @person.mugshot.public_filename(:thumb), :alt => @person.full_name
+  .person
+    - if @person.mugshot
+      .mugshot= image_tag @person.mugshot.public_filename(:portrait), :alt => @person.full_name
 
-  #counts
-    %p
-      %label= 'Played games'[] + ':'
-      = @person.memberships_count
+    #counts
+      %p
+        %label= 'Played games'[] + ':'
+        = @person.memberships_count
     
-    %p
-      %label= 'Games won'[] + ':'
-      = @person.games_won
+      %p
+        %label= 'Games won'[] + ':'
+        = @person.games_won
 
-    %p
-      %label= 'Games lost'[] + ':'
-      = @person.games_lost
+      %p
+        %label= 'Games lost'[] + ':'
+        = @person.games_lost
 
-    %p
-      %label= 'Goals for'[] + ':'
-      = @person.goals_for
+      %p
+        %label= 'Goals for'[] + ':'
+        = @person.goals_for
 
-    %p
-      %label= 'Goals against'[] + ':'
-      = @person.goals_against
+      %p
+        %label= 'Goals against'[] + ':'
+        = @person.goals_against

@@ -209,8 +209,12 @@ h3 {
     text-decoration: none; }
     #bd a.person:hover, #bd a.game:hover {
       text-decoration: underline; }
-  #bd #chart {
-    margin-bottom: 20px; }
+  #bd #graph {
+    margin-top: 10px; }
+    #bd #graph #chart {
+      margin-bottom: 20px; }
+  #bd .person .mugshot {
+    padding-bottom: 10px; }
 
 #ft {
   color: #999999;
