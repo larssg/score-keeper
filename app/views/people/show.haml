@@ -41,3 +41,6 @@
           %td.against
             %label= 'Worst ranking'[] + ':'
             = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
+            
+      %p
+        = link_to 'Edit'[], edit_person_path(@person)

@@ -24,7 +24,7 @@
   - cache(dashboard_path + '_sidebar') do
     #leader
       %h3= 'Leader'[]
-      .mugshot= image_tag @leader.mugshot.public_filename(:thumb), :alt => @leader.full_name if @leader.mugshot
+      .mugshot= link_to image_tag(@leader.mugshot.public_filename(:thumb), :alt => @leader.full_name), person_path(@leader) if @leader.mugshot
       = person_link_full @leader
 
     #counts
