@@ -6,7 +6,7 @@
 - content_for :sidebar do
   .person
     - if @person.mugshot
-      .mugshot= image_tag @person.mugshot.public_filename(:portrait), :alt => @person.full_name
+      .mugshot= image_tag @person.mugshot.public_filename(:thumb), :alt => @person.full_name
 
     #counts
       %p
