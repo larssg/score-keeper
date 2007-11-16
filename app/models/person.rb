@@ -42,6 +42,18 @@ class Person < ActiveRecord::Base
     Membership.find(:first, :conditions => { :person_id => self.id }, :order => 'memberships.current_ranking')
   end
   
+  def position
+    ranked = Person.find_ranked
+    ranked.each_with_index do |person, index|
+      return index + 1 if person.id == self.id
+    end
+    
+    newbies = Person.find_newbies
+    newbies.each_with_index do |person, index|
+      return index + 1 + ranked.size if person.id == self.id
+    end
+  end
+  
   def self.find_ranked
     Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count >= 20')
   end

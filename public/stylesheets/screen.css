@@ -210,11 +210,35 @@ h3 {
     #bd a.person:hover, #bd a.game:hover {
       text-decoration: underline; }
   #bd #graph {
-    margin-top: 10px; }
+    margin-top: 1em; }
     #bd #graph #chart {
       margin-bottom: 20px; }
   #bd .person .mugshot {
-    padding-bottom: 10px; }
+    padding-bottom: 1em; }
+  #bd .person p.position {
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 4px;
+    margin-bottom: 1em;
+    border-top: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
+    font-size: 250%;
+    font-weight: bold;
+    text-align: center; }
+    #bd .person p.position label {
+      font-size: 13px; }
+  #bd .person table.for_against {
+    width: 100%; }
+    #bd .person table.for_against td {
+      border: 0;
+      padding: 0;
+      margin: 0;
+      padding-right: 2px;
+      padding-bottom: 1em; }
+    #bd .person table.for_against td.against {
+      padding-right: 0;
+      padding-left: 2px;
+      text-align: right; }
 
 #ft {
   color: #999999;

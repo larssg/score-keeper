@@ -83,7 +83,7 @@ class GamesController < ApplicationController
   
   def render_chart
     chart = FlashChart.new
-    chart.title 'Ranking for {name}'[:ranking_for, @person.full_name]
+    chart.title ' '
     memberships = @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at')
     chart.set_data [2000] + memberships.collect { |m| m.current_ranking }
     chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.created_at.to_s :db }
