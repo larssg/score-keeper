@@ -33,6 +33,14 @@ class Person < ActiveRecord::Base
     return 0.0 if memberships_count == 0
     ((10 * difference) / memberships_count) / 10.0
   end
+
+  def all_time_high
+    Membership.find(:first, :conditions => { :person_id => self.id }, :order => 'memberships.current_ranking DESC')
+  end
+  
+  def all_time_low
+    Membership.find(:first, :conditions => { :person_id => self.id }, :order => 'memberships.current_ranking')
+  end
   
   def self.find_ranked
     Person.find(:all, :order => 'ranking DESC, games_won DESC, last_name', :conditions => 'memberships_count >= 20')

@@ -9,6 +9,11 @@ class PeopleController < ApplicationController
       @person = current_model.new
     end
     
+    before :show do
+      @all_time_high = current_object.all_time_high
+      @all_time_low = current_object.all_time_low
+    end
+    
     before :create, :update do
       mugshot = Mugshot.create(params[:mugshot])
       current_object.mugshot = mugshot unless mugshot.nil?

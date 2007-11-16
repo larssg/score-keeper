@@ -28,3 +28,11 @@
       %p
         %label= 'Goals against'[] + ':'
         = @person.goals_against
+
+      %p
+        %label= 'All time high'[] + ':'
+        = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
+
+      %p
+        %label= 'All time low'[] + ':'
+        = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
