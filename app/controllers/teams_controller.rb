@@ -29,4 +29,8 @@ class TeamsController < ApplicationController
       @teams = @teams.sort_by { |t| t[:total_ranking] }.reverse
     end
   end
+  
+  def show
+    @people = Person.find(:all, :conditions => { :id => params[:id].split(',') }, :limit => 2)
+  end
 end
