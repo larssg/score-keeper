@@ -69,6 +69,15 @@ table {
       #hd ul#menu li.current a {
         background-image: url('../images/tab_active_left.gif');
         color: #7C7C7C; }
+  #hd #login_form {
+    display: none;
+    font-size: 85%; }
+    #hd #login_form input {
+      margin-right: 10px;
+      width: 80px; }
+    #hd #login_form .submit {
+      width: 4em;
+      margin-right: 0; }
 
 h2#page_title {
   display: none;
