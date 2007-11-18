@@ -157,16 +157,6 @@ describe "OptionParser" do
     options.formatters[0].class.should equal(Spec::Runner::Formatter::ProgressBarFormatter)
   end
 
-  it "should use rdoc formatter when format is r" do
-    options = parse(["--format", "r"])
-    options.formatters[0].class.should equal(Spec::Runner::Formatter::RdocFormatter)
-  end
-
-  it "should use rdoc formatter when format is rdoc" do
-    options = parse(["--format", "rdoc"])
-    options.formatters[0].class.should equal(Spec::Runner::Formatter::RdocFormatter)
-  end
-
   it "should use specdoc formatter when format is s" do
     options = parse(["--format", "s"])
     options.formatters[0].class.should equal(Spec::Runner::Formatter::SpecdocFormatter)
@@ -317,7 +307,7 @@ describe "OptionParser" do
       "some/spec.rb", "--diff", "--colour"
     ], @err, @out)
     Spec::Runner::DrbCommandLine.should_receive(:run).and_return do |options|
-      options.current_argv.should == ["some/spec.rb", "--diff", "--colour"]
+      options.argv.should == ["some/spec.rb", "--diff", "--colour"]
     end
     parse(["some/spec.rb", "--diff", "--drb", "--colour"])
   end
@@ -328,37 +318,45 @@ describe "OptionParser" do
 
   it "should set an mtime comparator when --loadby mtime" do
     options = parse(["--loadby", 'mtime'])
+    runner = Spec::Runner::BehaviourRunner.new(options)
+    Spec::Runner::BehaviourRunner.should_receive(:new).
+      with(options).
+      and_return(runner)
+    runner.should_receive(:load_files).with(["most_recent_spec.rb", "command_line_spec.rb"])
+
     Dir.chdir(File.dirname(__FILE__)) do
       options.files << 'command_line_spec.rb'
       options.files << 'most_recent_spec.rb'
       FileUtils.touch "most_recent_spec.rb"
-      options.files_to_load.should == ["most_recent_spec.rb", "command_line_spec.rb"]
+      options.run_examples
       FileUtils.rm "most_recent_spec.rb"
     end
   end
 
   it "should use the standard runner by default" do
+    runner = ::Spec::Runner::BehaviourRunner.new(@parser.options)
+    ::Spec::Runner::BehaviourRunner.should_receive(:new).
+      with(@parser.options).
+      and_return(runner)
     options = parse([])
-    options.custom_runner.should be_nil
+    options.run_examples
   end
 
   it "should use a custom runner when given" do
+    runner = Custom::BehaviourRunner.new(@parser.options, nil)
+    Custom::BehaviourRunner.should_receive(:new).
+      with(@parser.options, nil).
+      and_return(runner)
     options = parse(["--runner", "Custom::BehaviourRunner"])
-    options.custom_runner.class.should equal(Custom::BehaviourRunner)
+    options.run_examples
   end
 
   it "should use a custom runner with extra options" do
+    runner = Custom::BehaviourRunner.new(@parser.options, 'something')
+    Custom::BehaviourRunner.should_receive(:new).
+      with(@parser.options, 'something').
+      and_return(runner)
     options = parse(["--runner", "Custom::BehaviourRunner:something"])
-    options.custom_runner.class.should equal(Custom::BehaviourRunner)
+    options.run_examples
   end
-
-  it "should not have a custom runner by default" do
-    options = Spec::Runner::OptionParser.parse([], @err, @out)
-    options.custom_runner.should be_nil
-  end
-
-  it "should return the correct default behaviour runner" do
-   options = Spec::Runner::OptionParser.parse(["--runner", "Custom::BehaviourRunner"], @err, @out)
-    options.custom_runner.class.should equal(Custom::BehaviourRunner)
-  end  
 end

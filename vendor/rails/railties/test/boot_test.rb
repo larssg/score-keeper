@@ -11,10 +11,27 @@ class BootTest < Test::Unit::TestCase
     assert_nil Rails.boot!
   end
 
-  def test_boot_picks_and_runs_if_not_booted
+  def test_boot_preinitializes_then_picks_and_runs_if_not_booted
     Rails.expects(:booted?).returns(false)
+    Rails.expects(:preinitialize)
     Rails.expects(:pick_boot).returns(mock(:run => 'result'))
     assert_equal 'result', Rails.boot!
+  end
+
+  def test_preinitialize_does_not_raise_exception_if_preinitializer_file_does_not_exist
+    Rails.stubs(:preinitializer_path).returns('/there/is/no/such/file')
+
+    assert_nothing_raised { Rails.preinitialize }
+  end
+
+  def test_load_preinitializer_loads_preinitializer_file
+    Rails.stubs(:preinitializer_path).returns("#{File.dirname(__FILE__)}/fixtures/environment_with_constant.rb")
+
+    assert_nil $initialize_test_set_from_env
+    Rails.preinitialize
+    assert_equal "success", $initialize_test_set_from_env
+  ensure
+    $initialize_test_set_from_env = nil
   end
 
   def test_boot_vendor_rails_by_default
@@ -79,7 +96,7 @@ class GemBootTest < Test::Unit::TestCase
     GemBoot.stubs(:gem_version).returns('0.0.1')
 
     boot = GemBoot.new
-    boot.expects(:gem).with('rails', '=0.0.1')
+    boot.expects(:gem).with('rails', '0.0.1')
     boot.load_rails_gem
   end
 
@@ -95,7 +112,7 @@ class GemBootTest < Test::Unit::TestCase
     GemBoot.stubs(:gem_version).returns('0.0.1')
 
     boot = GemBoot.new
-    boot.expects(:gem).with('rails', '=0.0.1').raises(Gem::LoadError, 'missing rails 0.0.1 gem')
+    boot.expects(:gem).with('rails', '0.0.1').raises(Gem::LoadError, 'missing rails 0.0.1 gem')
     STDERR.expects(:puts)
     boot.expects(:exit).with(1)
     boot.load_rails_gem
@@ -136,6 +153,18 @@ class ParseGemVersionTest < Test::Unit::TestCase
     assert_equal "1.2.3", parse("#RAILS_GEM_VERSION = '9.8.7'\nRAILS_GEM_VERSION = '1.2.3'")
     assert_equal "1.2.3", parse("# RAILS_GEM_VERSION = '9.8.7'\nRAILS_GEM_VERSION = '1.2.3'")
     assert_equal "1.2.3", parse("RAILS_GEM_VERSION = '1.2.3'\n# RAILS_GEM_VERSION = '9.8.7'")
+  end
+
+  def test_should_allow_advanced_rubygems_version_specifications
+    # See http://rubygems.org/read/chapter/16
+    assert_equal "=1.2.3", parse("RAILS_GEM_VERSION = '=1.2.3'") # equal sign
+    assert_equal "= 1.2.3", parse("RAILS_GEM_VERSION = '= 1.2.3'") # with space
+    assert_equal "!=1.2.3", parse("RAILS_GEM_VERSION = '!=1.2.3'") # not equal
+    assert_equal ">1.2.3", parse("RAILS_GEM_VERSION = '>1.2.3'") # greater than
+    assert_equal "<1.2.3", parse("RAILS_GEM_VERSION = '<1.2.3'") # less than
+    assert_equal ">=1.2.3", parse("RAILS_GEM_VERSION = '>=1.2.3'") # greater than or equal
+    assert_equal "<=1.2.3", parse("RAILS_GEM_VERSION = '<=1.2.3'") # less than or equal
+    assert_equal "~>1.2.3.0", parse("RAILS_GEM_VERSION = '~>1.2.3.0'") # approximately greater than
   end
 
   private

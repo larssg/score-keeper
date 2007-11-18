@@ -3,11 +3,11 @@ require 'spec/version'
 require 'spec/matchers'
 require 'spec/expectations'
 require 'spec/translator'
-require 'spec/dsl'
+require 'spec/example'
 require 'spec/extensions'
 require 'spec/runner'
 require 'spec/story'
-require 'spec/test'
+require 'spec/extensions/test'
 module Spec
   class << self
     def run?

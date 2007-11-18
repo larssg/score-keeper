@@ -1,0 +1,69 @@
+module Spec
+  module Example
+    module ExampleMethods
+      include ::Spec::Matchers
+      include ::Spec::Example::Pending
+      
+      attr_reader :example
+      
+      def violated(message="")
+        raise Spec::Expectations::ExpectationNotMetError.new(message)
+      end
+      
+      def run
+        instance_eval(&example.example_block)
+      end
+      
+      def description
+        example.description
+      end
+      
+      def description=(description)
+        example.description=(description)
+      end
+            
+      def use_generated_description?
+        example.description == :__generate_docstring
+      end
+
+      def copy_instance_variables_from(obj)
+        super(obj, [:@example, :@_result])
+      end
+
+      def run_before_all
+        self.class.run_before_all(self)
+      end
+
+      def run_before_each
+        self.class.run_before_each(self)
+      end
+
+      def run_after_each
+        self.class.run_after_each(self)
+      end
+
+      def run_after_all
+        self.class.run_after_all(self)
+      end
+
+      def eval_each_fail_fast(procs) #:nodoc:
+        procs.each do |proc|
+          instance_eval(&proc)
+        end
+      end
+
+      def eval_each_fail_slow(procs) #:nodoc:
+        first_exception = nil
+        procs.each do |proc|
+          begin
+            instance_eval(&proc)
+          rescue Exception => e
+            first_exception ||= e
+          end
+        end
+        raise first_exception if first_exception
+      end
+
+    end
+  end
+end

@@ -116,7 +116,7 @@ module Haml
         :suppress_eval => false,
         :attr_wrapper => "'",
         :locals => {},
-        :autoclose => ['meta', 'img', 'link', 'br', 'hr'],
+        :autoclose => ['meta', 'img', 'link', 'br', 'hr', 'input', 'area'],
         :filters => {
           'sass' => Sass::Engine,
           'plain' => Haml::Filters::Plain,
@@ -202,7 +202,7 @@ END
       old_uline = nil
       (@template + "\n-#\n-#").each_with_index do |line, index|
         spaces, tabs = count_soft_tabs(line)
-        uline = line.lstrip[0...-1]
+        uline = line.lstrip.chomp
         line = uline.rstrip
         
         if !line.empty?

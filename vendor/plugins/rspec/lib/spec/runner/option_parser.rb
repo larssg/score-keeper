@@ -42,7 +42,6 @@ module Spec
                                                     "progress|p           : Text progress",
                                                     "profile|o            : Text progress with profiling of 10 slowest examples",
                                                     "specdoc|s            : Example doc as text",
-                                                    "rdoc|r               : Example doc as RDoc",
                                                     "html|h               : A nice HTML report",
                                                     "failing_examples|e   : Write all failing examples - input for --example",
                                                     "failing_behaviours|b : Write all failing behaviours - input for --example",
@@ -92,12 +91,12 @@ module Spec
         on(*OPTIONS[:specification]) {|example| @options.parse_example(example)}
         on(*OPTIONS[:line]) {|line_number| @options.line_number = line_number.to_i}
         on(*OPTIONS[:format]) {|format| @options.parse_format(format)}
-        on(*OPTIONS[:require]) {|req| @options.parse_require(req)}
+        on(*OPTIONS[:require]) {|requires| invoke_requires(requires)}
         on(*OPTIONS[:backtrace]) {@options.backtrace_tweaker = NoisyBacktraceTweaker.new}
         on(*OPTIONS[:loadby]) {|loadby| @options.loadby = loadby}
         on(*OPTIONS[:reverse]) {@options.reverse = true}
         on(*OPTIONS[:timeout]) {|timeout| @options.timeout = timeout.to_f}
-        on(*OPTIONS[:heckle]) {|heckle| @options.parse_heckle(heckle)}
+        on(*OPTIONS[:heckle]) {|heckle| @options.load_heckle_runner(heckle)}
         on(*OPTIONS[:dry_run]) {@options.dry_run = true}
         on(*OPTIONS[:options_file]) {|options_file| parse_options_file(options_file)}
         on(*OPTIONS[:generate_options]) do |options_file|
@@ -112,7 +111,7 @@ module Spec
 
       def order!(argv, &blk)
         @argv = argv
-        @options.current_argv = @argv.dup
+        @options.argv = @argv.dup
         return if parse_generate_options
         return if parse_drb
         
@@ -133,6 +132,12 @@ module Spec
       end
 
       protected
+      def invoke_requires(requires)
+        requires.split(",").each do |file|
+          require file
+        end
+      end
+      
       def parse_options_file(options_file)
         option_file_args = IO.readlines(options_file).map {|l| l.chomp.split " "}.flatten
         @argv.push(*option_file_args)
@@ -162,18 +167,18 @@ module Spec
         end
         @out_stream.puts "\nOptions written to #{options_file}. You can now use these options with:"
         @out_stream.puts "spec --options #{options_file}"
-        @options.examples_should_be_run = true
+        @options.examples_should_not_be_run
       end
 
       def parse_drb
         is_drb = false
-        current_argv = @options.current_argv
-        is_drb ||= current_argv.delete(OPTIONS[:drb][0])
-        is_drb ||= current_argv.delete(OPTIONS[:drb][1])
+        argv = @options.argv
+        is_drb ||= argv.delete(OPTIONS[:drb][0])
+        is_drb ||= argv.delete(OPTIONS[:drb][1])
         return nil unless is_drb
-        @options.examples_should_be_run = true
+        @options.examples_should_not_be_run
         DrbCommandLine.run(
-          self.class.parse(current_argv, @error_stream, @out_stream)
+          self.class.parse(argv, @error_stream, @out_stream)
         )
         true
       end

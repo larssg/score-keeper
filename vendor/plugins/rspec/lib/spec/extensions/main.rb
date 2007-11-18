@@ -1,7 +1,7 @@
 module Spec
   module Extensions
     module Main
-      # Creates and returns a class that includes the ExampleGroupClassMethods
+      # Creates and returns a class that includes the ExampleGroupMethods
       # module. The ExampleGroup sub-class depends on the directory of the file
       # calling this method. For example, Spec::Rails will use different
       # classes for specs living in <tt>spec/models</tt>,
@@ -16,7 +16,7 @@ module Spec
       # The reason for using different behaviour classes is to have different
       # matcher methods available from within the <tt>describe</tt> block.
       #
-      # See Spec::DSL::ExampleFactory#register for details about how to
+      # See Spec::Example::ExampleFactory#register for details about how to
       # register special implementations.
       #
       def describe(*args, &block)
@@ -24,9 +24,9 @@ module Spec
         raise ArgumentError unless block
         args << {} unless Hash === args.last
         args.last[:spec_path] = caller(0)[1]
-        behaviour = Spec::DSL::ExampleGroupFactory.create_behaviour(*args, &block)
-        behaviour.register
-        behaviour
+        example_group = Spec::Example::ExampleGroupFactory.create_example_group(*args, &block)
+        example_group.register
+        example_group
       end
       alias :context :describe
 
