@@ -31,6 +31,12 @@ class TeamsController < ApplicationController
   end
   
   def show
-    @people = Person.find(:all, :conditions => { :id => params[:id].split(',') }, :limit => 2)
+    respond_to do |format|
+      format.html do
+        @people = Person.find(:all, :conditions => { :id => params[:id].split(',') }, :limit => 2)
+      end
+      format.graph do
+      end
+    end
   end
 end
