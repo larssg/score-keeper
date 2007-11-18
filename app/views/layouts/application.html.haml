@@ -43,7 +43,6 @@
                 #messages
                   - flash.keys.each do |key|
                     %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
-                = javascript_tag(visual_effect(:fade, "messages", :delay => 8))
 
               = yield
   
