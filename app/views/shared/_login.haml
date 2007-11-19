@@ -11,4 +11,6 @@
     = text_field_tag 'login', nil, :class => 'login'
     = 'Password'[]
     = password_field_tag 'password', nil, :class => 'password'
+    = 'Remember?'[]
+    = check_box_tag 'remember_me', nil, nil, :class => 'remember'
     = submit_tag 'Go'[], :disable_with => 'Signing in'[] + '&hellip;', :class => 'submit'

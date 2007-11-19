@@ -73,7 +73,8 @@ table {
     display: none;
     font-size: 85%; }
     #hd #login_form input {
-      margin-right: 10px;
+      margin-right: 10px; }
+    #hd #login_form input.login, #hd #login_form input.password {
       width: 80px; }
     #hd #login_form .submit {
       width: 4em;
