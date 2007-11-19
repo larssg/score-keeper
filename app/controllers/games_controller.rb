@@ -90,11 +90,12 @@ class GamesController < ApplicationController
     chart.set_y_max y_max
     chart.set_y_min y_min
     chart.y_label_steps y_axis_steps(y_min, y_max)
-    chart.line 3, '#3399CC'
+    chart.line 2, '#3399CC'
 
     steps = (memberships.size / 20).to_i
     chart.set_x_label_style(10, '', 2, steps)
     chart.set_x_axis_steps steps
+    chart.set_y_legend('Ranking'[], 12, '#000000')
 
     render :text => chart.render
   end
