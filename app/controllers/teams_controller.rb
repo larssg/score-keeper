@@ -62,36 +62,17 @@ class TeamsController < ApplicationController
       dates << data[key][2]
     end
         
-    chart = FlashChart.new
-    chart.title ' '
+    chart = setup_ranking_graph
     chart.set_data [2000] + person_one
     chart.set_data [2000] + person_two
     chart.line 2, '#3399CC', Person.find(@ids[0]).full_name
     chart.line 2, '#77BBDD', Person.find(@ids[1]).full_name
     chart.set_x_labels ['Start'[]] + dates.collect { |d| d.to_s :db }
-    chart.set_y_max y_max
-    chart.set_y_min y_min
-    chart.y_label_steps y_axis_steps(y_min, y_max)
 
     steps = (data.size / 20).to_i
     chart.set_x_label_style(10, '', 2, steps)
     chart.set_x_axis_steps steps
-    chart.set_y_legend('Ranking'[], 12, '#000000')
 
     render :text => chart.render
-  end
-
-  def y_max
-    max = [Membership.all_time_high.current_ranking, 2000].max
-    (max / 100.0).ceil * 100 # Round up to nearest 100
-  end
-
-  def y_min
-    min = [Membership.all_time_low.current_ranking, 2000].min
-    (min / 100.0).floor * 100 # Round down to nearest 100
-  end
-
-  def y_axis_steps(min, max)
-    (max - min) / 100
   end
 end
