@@ -42,13 +42,11 @@ class TeamsController < ApplicationController
   
   protected
   def render_chart
-    chart = FlashChart.new
-    chart.title ' '
-    memberships = Membership.find(:all, :conditions => { :person_id => params[:id].split(',') }, :order => 'memberships.id', :select => 'memberships.person_id, memberships.current_ranking, teams.game_id AS game_id, memberships.created_at', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id')
+    memberships = Membership.find_team(@ids)
     
     data = {}
     memberships.each do |membership|
-      game_id = membership.game_id
+      game_id = membership.game_id.to_i
       data[game_id] = ['null', 'null', nil] unless data.has_key?(game_id)
       data[game_id][@ids.index(membership.person_id)] = membership.current_ranking
       data[game_id][2] = membership.created_at
@@ -57,12 +55,15 @@ class TeamsController < ApplicationController
     person_one = []
     person_two = []
     dates = []
+    
     data.keys.sort.each do |key|
       person_one << data[key][0]
       person_two << data[key][1]
       dates << data[key][2]
     end
         
+    chart = FlashChart.new
+    chart.title ' '
     chart.set_data [2000] + person_one
     chart.line 3, '#3399CC'
     chart.set_data [2000] + person_two
