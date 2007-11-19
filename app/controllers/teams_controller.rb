@@ -31,12 +31,65 @@ class TeamsController < ApplicationController
   end
   
   def show
+    @ids = params[:id].split(',').collect { |id| id.to_i }
     respond_to do |format|
       format.html do
-        @people = Person.find(:all, :conditions => { :id => params[:id].split(',') }, :limit => 2)
+        @people = Person.find(:all, :conditions => { :id => @ids }, :limit => 2)
       end
-      format.graph do
-      end
+      format.graph { render_chart } 
     end
+  end
+  
+  protected
+  def render_chart
+    chart = FlashChart.new
+    chart.title ' '
+    memberships = Membership.find(:all, :conditions => { :person_id => params[:id].split(',') }, :order => 'memberships.id', :select => 'memberships.person_id, memberships.current_ranking, teams.game_id AS game_id, memberships.created_at', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id')
+    
+    data = {}
+    memberships.each do |membership|
+      game_id = membership.game_id
+      data[game_id] = ['null', 'null', nil] unless data.has_key?(game_id)
+      data[game_id][@ids.index(membership.person_id)] = membership.current_ranking
+      data[game_id][2] = membership.created_at
+    end
+    
+    person_one = []
+    person_two = []
+    dates = []
+    data.keys.sort.each do |key|
+      person_one << data[key][0]
+      person_two << data[key][1]
+      dates << data[key][2]
+    end
+        
+    chart.set_data [2000] + person_one
+    chart.line 3, '#3399CC'
+    chart.set_data [2000] + person_two
+    chart.line 3, '#3399CC'
+    chart.set_x_labels ['Start'[]] + dates.collect { |d| d.to_s :db }
+    chart.set_y_max y_max
+    chart.set_y_min y_min
+    chart.y_label_steps y_axis_steps(y_min, y_max)
+
+    steps = (data.size / 20).to_i
+    chart.set_x_label_style(10, '', 2, steps)
+    chart.set_x_axis_steps steps
+
+    render :text => chart.render
+  end
+
+  def y_max
+    max = [Membership.all_time_high.current_ranking, 2000].max
+    (max / 100.0).ceil * 100 # Round up to nearest 100
+  end
+
+  def y_min
+    min = [Membership.all_time_low.current_ranking, 2000].min
+    (min / 100.0).floor * 100 # Round down to nearest 100
+  end
+
+  def y_axis_steps(min, max)
+    (max - min) / 100
   end
 end
