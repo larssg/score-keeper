@@ -66,7 +66,7 @@ class TeamsController < ApplicationController
     chart.set_data [2000] + person_one
     chart.line 3, '#3399CC'
     chart.set_data [2000] + person_two
-    chart.line 3, '#3399CC'
+    chart.line 3, '#CC9933'
     chart.set_x_labels ['Start'[]] + dates.collect { |d| d.to_s :db }
     chart.set_y_max y_max
     chart.set_y_min y_min
