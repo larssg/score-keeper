@@ -77,7 +77,6 @@ table {
     #hd #login_form input.login, #hd #login_form input.password {
       width: 80px; }
     #hd #login_form .submit {
-      width: 4em;
       margin-right: 0; }
 
 h2#page_title {
