@@ -219,10 +219,10 @@ h3 {
     #bd a.person:hover, #bd a.game:hover {
       text-decoration: underline; }
   #bd table.teams td, #bd table.teams th {
-    white-space: nowrap;
     width: 20%; }
   #bd table.teams .person {
-    width: 0%; }
+    width: 0%;
+    white-space: nowrap; }
   #bd table.teams .ranking {
     padding-left: 20px; }
   #bd #graph {

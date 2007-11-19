@@ -3,7 +3,7 @@
 - cache(teams_path) do
   %table.list.teams
     %tr
-      %th{ :colspan => 4 }= 'Members'[]
+      %th{ :colspan => 5 }= 'Members'[]
       %th.ranking= 'Total ranking'[]
       %th= 'Games won'[]
       %th= 'Games played'[]
@@ -12,11 +12,12 @@
 
     - @teams.each do |team|
       %tr{ :class => cycle('odd', 'even') }
-        %td.person{ :nowrap => 'nowrap' }= person_link_full(team[:players].first)
+        %td.person= person_link_full(team[:players].first)
         %td.person -
-        %td.person{ :nowrap => 'nowrap' }= person_link_full(team[:players].last)
-        %td.person{ :nowrap => 'nowrap' }
+        %td.person= person_link_full(team[:players].last)
+        %td.person
           = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => team[:team_ids])
+        %td.person
           = link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team_ids])
         %td.ranking= team[:total_ranking]
         %td= team[:games_won]
@@ -24,5 +25,4 @@
         %td= team[:percentage].to_s + '%'
         - team[:players].each do |player|
           %td
-            = ((team[:games_played].to_f / player.memberships_count.to_f) * 1000).to_i / 10.0
-            = '%'
+            = (((team[:games_played].to_f / player.memberships_count.to_f) * 1000).to_i / 10.0).to_s + '%'
