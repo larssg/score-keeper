@@ -12,6 +12,7 @@
     %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.1/build/base/base-min.css', :type => 'text/css' }
     = stylesheet_link_tag 'screen'
     = stylesheet_link_tag 'print', :media => 'print'
+    = javascript_include_tag :defaults, :cache => true
     = javascript_include_tag 'swfobject'
     = yield :head
 
@@ -31,7 +32,6 @@
     
       - unless @page_title.blank?
         %h2#page_title= @page_title
-       
       #bd
         #yui-main
           %div{ :class => sidebar.blank? ? nil : 'yui-b' }
@@ -53,6 +53,3 @@
           = link_to 'Project home'[], 'http://code.google.com/p/scorekeeper/', :target => '_blank'
           = '&middot;'
           = link_to 'Report issue'[], 'http://code.google.com/p/scorekeeper/issues/entry', :target => '_blank'
-
-    = javascript_include_tag 'jquery'
-    = javascript_include_tag 'application'
