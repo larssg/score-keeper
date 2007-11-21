@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(:version => 24) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "display_name"
-    t.integer  "memberships_count", :default => 0
+    t.integer  "memberships_count"
     t.integer  "games_won",         :default => 0
     t.integer  "goals_for",         :default => 0
     t.integer  "goals_against",     :default => 0
@@ -110,6 +110,8 @@ ActiveRecord::Schema.define(:version => 24) do
     t.datetime "updated_at"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
+    t.string   "activation_code",           :limit => 40
+    t.datetime "activated_at"
     t.boolean  "is_admin",                                :default => false
     t.string   "name"
   end
