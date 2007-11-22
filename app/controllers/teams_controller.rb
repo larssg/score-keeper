@@ -52,19 +52,30 @@ class TeamsController < ApplicationController
       data[game_id][2] = membership.created_at
     end
     
-    person_one = []
-    person_two = []
+    people = {}
+    (0..1).each do |index|
+      people[index] = []
+    end
+    previous = [2000] * 2
     dates = []
     
     data.keys.sort.each do |key|
-      person_one << data[key][0]
-      person_two << data[key][1]
+      (0..1).each do |index|
+        ranking = data[key][index]
+        if ranking.to_i > 0
+          people[index] << ranking
+          previous[index] = ranking
+        else
+          people[index] << previous[index]
+        end
+      end
       dates << data[key][2]
     end
         
     chart = setup_ranking_graph
-    chart.set_data [2000] + person_one
-    chart.set_data [2000] + person_two
+    (0..1).each do |index|
+      chart.set_data [2000] + people[index]
+    end
     chart.line 2, '#3399CC', Person.find(@ids[0]).full_name
     chart.line 2, '#77BBDD', Person.find(@ids[1]).full_name
     chart.set_x_labels ['Start'[]] + dates.collect { |d| d.to_s :db }
