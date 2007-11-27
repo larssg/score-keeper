@@ -42,16 +42,8 @@ module Spec
         examples << example
       end
 
-      def size
-        examples.length
-      end
-
       def empty?
-        size == 0
-      end
-
-      def delete(example)
-        @examples.delete example
+        examples.empty?
       end
 
       protected
@@ -98,7 +90,7 @@ module Spec
       end
 
       def create_example(location)
-        example_group.create_example location
+        Example.new location
       end
 
       def description

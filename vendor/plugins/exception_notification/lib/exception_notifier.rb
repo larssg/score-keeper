@@ -36,13 +36,15 @@ class ExceptionNotifier < ActionMailer::Base
   def self.reloadable?; false; end
 
   def exception_notification(exception, controller, request, data={})
+    content_type "text/plain"
+
     subject    "#{email_prefix}#{controller.controller_name}##{controller.action_name} (#{exception.class}) #{exception.message.inspect}"
 
     recipients exception_recipients
     from       sender_address
 
     body       data.merge({ :controller => controller, :request => request,
-                  :exception => exception, :host => request.env["HTTP_HOST"],
+                  :exception => exception, :host => (request.env["HTTP_X_FORWARDED_HOST"] || request.env["HTTP_HOST"]),
                   :backtrace => sanitize_backtrace(exception.backtrace),
                   :rails_root => rails_root, :data => data,
                   :sections => sections })
@@ -60,8 +62,7 @@ class ExceptionNotifier < ActionMailer::Base
     end
 
     def rails_root
-      return @rails_root if @rails_root
-      @rails_root = Pathname.new(RAILS_ROOT).cleanpath.to_s
+      @rails_root ||= Pathname.new(RAILS_ROOT).cleanpath.to_s
     end
 
 end

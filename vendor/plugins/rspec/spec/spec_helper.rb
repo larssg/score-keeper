@@ -62,7 +62,7 @@ end
 class NonStandardError < Exception; end
 
 module Custom
-  class BehaviourRunner
+  class ExampleGroupRunner
     attr_reader :options, :arg
     def initialize(options, arg)
       @options, @arg = options, arg
@@ -74,4 +74,14 @@ module Custom
     def run
     end
   end  
+end
+
+def exception_from(&block)
+  exception = nil
+  begin
+    yield
+  rescue StandardError => e
+    exception = e
+  end
+  exception
 end

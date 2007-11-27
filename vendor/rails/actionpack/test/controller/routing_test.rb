@@ -1980,6 +1980,40 @@ class RouteSetTest < Test::Unit::TestCase
     assert_equal '/post/show/10', all.last
   end
   
+  def test_named_route_in_nested_resource
+    set.draw do |map|
+      map.resources :projects do |project|
+        project.comments 'comments', :controller => 'comments', :action => 'index'
+      end
+    end
+    
+    request.path = "/projects/1/comments"
+    request.method = :get
+    assert_nothing_raised { set.recognize(request) }
+    assert_equal("comments", request.path_parameters[:controller])
+    assert_equal("index", request.path_parameters[:action])
+  end
+  
+  def test_setting_root_in_namespace_using_symbol
+    assert_nothing_raised do
+      set.draw do |map|
+        map.namespace :admin do |admin|
+          admin.root :controller => 'home'
+        end
+      end
+    end
+  end
+  
+  def test_setting_root_in_namespace_using_string
+    assert_nothing_raised do
+      set.draw do |map|
+        map.namespace 'admin' do |admin|
+          admin.root :controller => 'home'
+        end
+      end
+    end
+  end
+  
 end
 
 class RoutingTest < Test::Unit::TestCase

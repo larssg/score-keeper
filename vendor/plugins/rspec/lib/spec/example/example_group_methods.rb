@@ -28,10 +28,17 @@ module Spec
       #   end
       #
       def describe(*args, &example_group_block)
-        set_description(*args)
-        before_eval
-        module_eval(&example_group_block) if example_group_block
-        self
+        if example_group_block
+          Class.new(self) do
+            describe(*args)
+            register
+            module_eval(&example_group_block)
+          end
+        else
+          set_description(*args)
+          before_eval
+          self
+        end
       end
 
       # Use this to pull in examples from shared behaviours.
@@ -84,7 +91,9 @@ module Spec
       # Creates an instance of Spec::Example::Example and adds
       # it to a collection of examples of the current behaviour.
       def it(description=:__generate_docstring, &block)
-        examples << create_example(description, &block)
+        example = create_example(description, &block)
+        example_objects << example
+        example
       end
       
       alias_method :specify, :it
@@ -94,22 +103,60 @@ module Spec
         Kernel.warn("Example disabled: #{description}")
       end
 
+      def run(examples=examples_to_run)
+        customize_example
+        return true if examples.empty?
+
+        reporter.add_example_group(description)
+        before_and_after_all_example = new(nil)
+        success = run_before_all(before_and_after_all_example)
+        if success
+          example_group_instance = nil
+          examples.each do |example|
+            example_group_instance = new(example)
+            example_group_instance.copy_instance_variables_from(before_and_after_all_example)
+
+            runner = ExampleRunner.new(rspec_options, example_group_instance)
+            unless runner.run
+              success = false
+            end
+          end
+          before_and_after_all_example.copy_instance_variables_from(example_group_instance)
+        end
+
+        unless run_after_all(before_and_after_all_example)
+          success = false
+        end
+        return success
+      end
+
+      def add_example(example)
+        example_objects << example
+      end
+
       def described_type #:nodoc:
         description.described_type
       end
 
       def examples #:nodoc:
-        @examples ||= []
+        examples = example_objects.dup
+        instance_methods.sort.each do |method_name|
+          if (is_test?(method_name) || is_spec?(method_name)) && (
+            instance_method(method_name).arity == 0 ||
+            instance_method(method_name).arity == -1
+          )
+            examples << create_example(method_name) do
+              __send__(method_name)
+            end
+          end
+        end
+        rspec_options.reverse ? examples.reverse : examples
       end
       
       def number_of_examples #:nodoc:
         examples.length
       end
 
-      def create_example(description, &block) #:nodoc:
-        Example.new(description, &block)
-      end
-      
       # Registers a block to be executed before each example.
       # This method prepends +block+ to existing before blocks.
       def prepend_before(*args, &block)
@@ -175,33 +222,19 @@ module Spec
       end
 
       # Only used from RSpec's own examples
-      def reset! # :nodoc:
+      def reset # :nodoc:
         @before_all_parts = nil
         @after_all_parts = nil
         @before_each_parts = nil
         @after_each_parts = nil
       end
       
-      def suite
-        description = description ? description.description : "RSpec Description Suite"
-        customize_example
-        suite = ExampleSuite.new(description, self)
-        add_examples(suite)
-        add_examples_from_methods(suite)
-        suite
-      end
-      
-      # Sets the #number on each Example and returns the next number
-      def set_sequence_numbers(number) #:nodoc:
-        ordered_examples.each do |example|
-          example.number = number
-          number += 1
-        end
-        number
-      end
-
       def register
         rspec_options.add_example_group self
+      end
+
+      def unregister
+        rspec_options.remove_example_group self
       end
 
       def run_before_each(example)
@@ -211,15 +244,29 @@ module Spec
       end
       
       def run_before_all(example)
-        execute_in_class_hierarchy(false) do |behaviour|
-          example.eval_each_fail_fast(behaviour.before_all_parts)
+        return true if dry_run
+        execute_in_class_hierarchy(false) do |example_group|
+          example.eval_each_fail_fast(example_group.before_all_parts)
         end
+        return true
+      rescue Exception => e
+        location = "before(:all)"
+        # The easiest is to report this as an example failure. We don't have an Example
+        # at this point, so we'll just create a placeholder.
+        reporter.example_finished(create_example(location), e, location)
+        return false
       end
 
       def run_after_all(example)
+        return true if dry_run
         execute_in_class_hierarchy(true) do |behaviour|
           example.eval_each_fail_slow(behaviour.after_all_parts)
         end
+        return true
+      rescue Exception => e
+        location = "after(:all)"
+        reporter.example_finished(create_example(location), e, location)
+        return false
       end
       
       def run_after_each(example)
@@ -229,6 +276,36 @@ module Spec
       end
 
     private
+      def create_example(description, &implementation) #:nodoc:
+        Example.new(description, &implementation)
+      end
+
+      def examples_to_run
+        all_examples = examples
+        return all_examples unless specified_examples
+        return all_examples if specified_examples.empty?
+        return all_examples if specified_examples.index(description.to_s)
+        all_examples.reject! do |example|
+          matcher = ExampleMatcher.new(description.to_s, example.description)
+          !matcher.matches?(specified_examples)
+        end
+      end
+
+      def specified_examples
+        rspec_options.examples
+      end
+
+      def reporter
+        rspec_options.reporter
+      end
+
+      def dry_run
+        rspec_options.dry_run
+      end
+      
+      def example_objects
+        @example_objects ||= []
+      end
 
       def customize_example
         plugin_mock_framework
@@ -243,6 +320,7 @@ module Spec
           superclass_first ? classes << current_class : classes.unshift(current_class)
           current_class = current_class.superclass
         end
+        superclass_first ? classes << ExampleMethods : classes.unshift(ExampleMethods)
 
         classes.each do |behaviour|
           yield behaviour
@@ -253,26 +331,6 @@ module Spec
         klass.kind_of?(ExampleGroupMethods)
       end
       
-      def add_examples(suite)
-        ordered_examples.each do |example|
-          suite << new(example)
-        end
-      end
-      
-      def add_examples_from_methods(suite)
-        instance_methods.each do |method_name|
-          if (is_test?(method_name) || is_spec?(method_name)) && (
-            instance_method(method_name).arity == 0 ||
-            instance_method(method_name).arity == -1
-          )
-            example = create_example(method_name) do
-              __send__ method_name
-            end
-            suite << new(example)
-          end
-        end
-      end
-
       def is_test?(method_name)
         method_name =~ /^test_./
       end
@@ -281,10 +339,6 @@ module Spec
         !(method_name =~ /^should(_not)?$/) && method_name =~ /^should/
       end
 
-      def ordered_examples
-        rspec_options.reverse ? examples.reverse : examples
-      end
-      
       def plugin_mock_framework
         case mock_framework = Spec::Runner.configuration.mock_framework
         when Module

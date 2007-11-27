@@ -11,21 +11,18 @@ require 'haml/engine'
 
 class EngineTest < Test::Unit::TestCase
 
-  def render(text, options = {})
-    Haml::Engine.new(text, options).to_html(options.delete(:scope) || Object.new)
+  def render(text, options = {}, &block)
+    scope  = options.delete(:scope)  || Object.new
+    locals = options.delete(:locals) || {}
+    Haml::Engine.new(text, options).to_html(scope, locals, &block)
   end
 
   def test_empty_render_should_remain_empty
     assert_equal('', render(''))
   end
 
-  # This is ugly because Hashes are unordered; we don't always know the order
-  # in which attributes will be returned.
-  # There is probably a better way to do this.
   def test_attributes_should_render_correctly
     assert_equal("<div class='atlantis' style='ugly'>\n</div>", render(".atlantis{:style => 'ugly'}").chomp)
-  rescue
-    assert_equal("<div style='ugly' class='atlantis'>\n</div>", render(".atlantis{:style => 'ugly'}").chomp)
   end
 
   def test_ruby_code_should_work_inside_attributes
@@ -88,6 +85,14 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("<p></p>\n", render("%p= 'Hello' if false"))
   end
 
+  def test_static_attributes_with_empty_attr
+    assert_equal("<img alt='' src='/foo.png' />\n", render("%img{:src => '/foo.png', :alt => ''}"))
+  end
+
+  def test_dynamic_attributes_with_empty_attr
+    assert_equal("<img alt='' src='/foo.png' />\n", render("%img{:width => nil, :src => '/foo.png', :alt => String.new}"))
+  end
+
   # Options tests
 
   def test_stop_eval
@@ -101,7 +106,7 @@ class EngineTest < Test::Unit::TestCase
       assert_equal("", render(":ruby\n  puts 'hello'", :suppress_eval => true))
     rescue Haml::HamlError => err
       caught = true
-      assert_equal('Filter "ruby" is not defined!', err.message)
+      assert_equal('"ruby" filter is not defined!', err.message)
     end
     assert(caught, "Rendering a ruby filter without evaluating didn't throw an error!")
   end
@@ -134,26 +139,16 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("<p>Paragraph!</p>\n", render("%p= text", :locals => { :text => "Paragraph!" }))
   end
 
-  def test_same_templates_with_different_options_should_cache_separately
-    assert_equal("foobar\n", render("- puts 'foobar'"))
-    assert_equal("",         render("- puts 'foobar'", :suppress_eval => true))
-
-    assert_equal("<a href='boo'>Boo!</a>\n",   render("%a{:href => 'boo'} Boo!"))
-    assert_equal("<a href=\"boo\">Boo!</a>\n", render("%a{:href => 'boo'} Boo!", :attr_wrapper => '"'))
-  end
-
-  def test_different_locals_values_shouldnt_recompile
-    scope = Object.new
-    def scope.method_name
-      caller[0].scan(/`([^']*)'/)[0][0]
+  def test_deprecated_locals_option
+    Kernel.module_eval do
+      def warn_with_stub(msg); end
+      alias_method :warn_without_stub, :warn
+      alias_method :warn, :warn_with_stub
     end
-    
-    rendered1 = render("= local\n= method_name", :locals => {:local => 'l1'}, :scope => scope)
-    assert_equal("l1", rendered1.split[0])
-    
-    rendered2 = render("= local\n= method_name", :locals => {:local => 'l2'}, :scope => scope)
-    assert_equal("l2", rendered2.split[0])
-    assert_equal(rendered1.split[1], rendered2.split[1])
+
+    assert_equal("<p>Paragraph!</p>\n", Haml::Engine.new("%p= text", :locals => { :text => "Paragraph!" }).render)
+
+    Kernel.module_eval { alias_method :warn, :warn_without_stub }
   end
 
   def test_dynamic_attrs_shouldnt_register_as_literal_values
@@ -170,20 +165,6 @@ class EngineTest < Test::Unit::TestCase
     assert_equal(hash3, hash1)
   end
 
-  def test_exception_type
-    begin
-      render("%p hi\n= undefined")
-    rescue Exception => e
-      assert(e.is_a?(Haml::Error))
-      assert_equal(2, e.haml_line)
-      assert_equal(nil, e.haml_filename)
-      assert_equal('(haml):2', e.backtrace[0])
-    else
-      # Test failed... should have raised an exception
-      assert(false)
-    end
-  end
-
   def test_syntax_errors
     errs = [ "!!!\n  a", "a\n  b", "a\n:foo\nb", "/ a\n  b",
              "% a", "%p a\n  b", "a\n%p=\nb", "%p=\n  a",
@@ -195,24 +176,46 @@ class EngineTest < Test::Unit::TestCase
       begin
         render(err)
       rescue Exception => e
-        assert(e.is_a?(Haml::Error),
-               "#{err.dump} doesn't produce Haml::SyntaxError!")
+        assert(e.is_a?(Haml::Error), "#{err.dump} doesn't produce Haml::SyntaxError")
       else
-        assert(false,
-               "#{err.dump} doesn't produce an exception!")
+        assert(false, "#{err.dump} doesn't produce an exception")
       end
     end
   end
 
+  def test_syntax_error
+    render("a\nb\n!!!\n  c\nd")
+  rescue Haml::SyntaxError => e
+    assert_equal(e.message, "Illegal Nesting: Nesting within a header command is illegal.")
+    assert_equal("(haml):3", e.backtrace[0])
+  rescue Exception => e
+    assert(false, '"a\nb\n!!!\n  c\nd" doesn\'t produce a Haml::SyntaxError')
+  else
+    assert(false, '"a\nb\n!!!\n  c\nd" doesn\'t produce an exception')
+  end
+
+  def test_exception
+    render("%p\n  hi\n  %a= undefined\n= 12")
+  rescue Exception => e
+    assert_match("(haml):3", e.backtrace[0])
+  else
+    # Test failed... should have raised an exception
+    assert(false)
+  end
+
   def test_compile_error
-    begin
-      render("a\nb\n- fee do\nc")
-    rescue Exception => e
-      assert_equal(3, e.haml_line)
-    else
-      assert(false,
-             '"a\nb\n- fee do\nc" doesn\'t produce an exception!')
-    end
+    render("a\nb\n- fee)\nc")
+  rescue Exception => e
+    assert_match(/^compile error\n\(haml\):3: syntax error/i, e.message)
+  else
+    assert(false,
+           '"a\nb\n- fee)\nc" doesn\'t produce an exception!')
+  end
+
+  def test_unbalanced_brackets
+    render('== #{1 + 5} foo #{6 + 7 bar #{8 + 9}')
+  rescue Haml::SyntaxError => e
+    assert_equal("Unbalanced brackets.", e.message)
   end
 
   def test_no_bluecloth
@@ -294,5 +297,47 @@ class EngineTest < Test::Unit::TestCase
     user = Struct.new('User', :id).new
     assert_equal("<p class='struct_user' id='struct_user_new'>New User</p>\n",
                  render("%p[user] New User", :locals => {:user => user}))
+  end
+
+  def test_render_should_accept_a_binding_as_scope
+    string = "This is a string!"
+    string.instance_variable_set("@var", "Instance variable")
+    b = string.instance_eval do
+      var = "Local variable"
+      binding
+    end
+
+    assert_equal("<p>THIS IS A STRING!</p>\n<p>Instance variable</p>\n<p>Local variable</p>\n",
+                 render("%p= upcase\n%p= @var\n%p= var", :scope => b))
+  end
+
+  def test_yield_should_work_with_binding
+    assert_equal("12\nFOO\n", render("= yield\n= upcase", :scope => "foo".instance_eval{binding}) { 12 })
+  end
+
+  def test_yield_should_work_with_def_method
+    s = "foo"
+    Haml::Engine.new("= yield\n= upcase").def_method(s, :render)
+    assert_equal("12\nFOO\n", s.render { 12 })
+  end
+
+  def test_def_method_with_module
+    Haml::Engine.new("= yield\n= upcase").def_method(String, :render_haml)
+    assert_equal("12\nFOO\n", "foo".render_haml { 12 })
+  end
+
+  def test_def_method_locals
+    obj = Object.new
+    Haml::Engine.new("%p= foo\n.bar{:baz => baz}= boom").def_method(obj, :render, :foo, :baz, :boom)
+    assert_equal("<p>1</p>\n<div baz='2' class='bar'>3</div>\n", obj.render(:foo => 1, :baz => 2, :boom => 3))
+  end
+
+  def test_render_proc_locals
+    proc = Haml::Engine.new("%p= foo\n.bar{:baz => baz}= boom").render_proc(Object.new, :foo, :baz, :boom)
+    assert_equal("<p>1</p>\n<div baz='2' class='bar'>3</div>\n", proc[:foo => 1, :baz => 2, :boom => 3])
+  end
+
+  def test_render_proc_with_binding
+    assert_equal("FOO\n", Haml::Engine.new("= upcase").render_proc("foo".instance_eval{binding}).call)
   end
 end

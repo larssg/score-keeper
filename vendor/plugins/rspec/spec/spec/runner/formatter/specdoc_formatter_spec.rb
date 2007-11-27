@@ -6,9 +6,11 @@ module Spec
       describe "SpecdocFormatter" do
         before(:each) do
           @io = StringIO.new
-          @options = Options.new(StringIO.new, @io)
-          @formatter = @options.create_formatter(SpecdocFormatter)
-          @behaviour = Class.new(::Spec::Example::ExampleGroup).describe("Some Examples")
+          @options = mock('options')
+          @options.stub!(:dry_run).and_return(false)
+          @options.stub!(:colour).and_return(false)
+          @formatter = SpecdocFormatter.new(@options, @io)
+          @example_group = Class.new(::Spec::Example::ExampleGroup).describe("Some Examples")
         end
 
         it "should produce standard summary without pending when pending has a 0 count" do
@@ -28,7 +30,7 @@ module Spec
 
         it "when having an error, should push failing spec name and failure number" do
           @formatter.example_failed(
-            @behaviour.create_example("spec"),
+            @example_group.it("spec"),
             98,
             Reporter::Failure.new("c s", RuntimeError.new)
           )
@@ -37,7 +39,7 @@ module Spec
 
         it "when having an expectation failure, should push failing spec name and failure number" do
           @formatter.example_failed(
-            @behaviour.create_example("spec"),
+            @example_group.it("spec"),
             98,
             Reporter::Failure.new("c s", Spec::Expectations::ExpectationNotMetError.new)
           )
@@ -55,22 +57,27 @@ module Spec
         end
 
         it "should push passing spec name" do
-          @formatter.example_passed(@behaviour.create_example("spec"))
+          @formatter.example_passed(@example_group.it("spec"))
           @io.string.should eql("- spec\n")
         end
 
         it "should push pending example name and message" do
-          @formatter.example_pending('behaviour', 'example','reason')
+          @formatter.example_pending('example_group', 'example','reason')
           @io.string.should eql("- example (PENDING: reason)\n")
         end
 
         it "should dump pending" do
-          @formatter.example_pending('behaviour', 'example','reason')
+          @formatter.example_pending('example_group', 'example','reason')
           @io.rewind
           @formatter.dump_pending
-          @io.string.should =~ /Pending\:\nbehaviour example \(reason\)\n/
+          @io.string.should =~ /Pending\:\nexample_group example \(reason\)\n/
         end
 
+        it "should not produce summary on dry run" do
+          @options.should_receive(:dry_run).and_return(true)
+          @formatter.dump_summary(3, 2, 1, 0)
+          @io.string.should eql("")
+        end
       end
     end
   end

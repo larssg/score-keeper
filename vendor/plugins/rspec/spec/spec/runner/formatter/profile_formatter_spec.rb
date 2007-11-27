@@ -7,8 +7,9 @@ module Spec
         
         before(:each) do
           @io = StringIO.new
-          @options = Options.new(StringIO.new, @io)
-          @formatter = @options.create_formatter(ProfileFormatter)
+          options = mock('options')
+          options.stub!(:colour).and_return(true)
+          @formatter = ProfileFormatter.new(options, @io)
         end
         
         it "should print a heading" do
@@ -16,9 +17,9 @@ module Spec
           @io.string.should eql("Profiling enabled.\n")
         end
         
-        it "should set the current behaviour" do
+        it "should set the current example_group" do
           @formatter.add_example_group('Test')
-          @formatter.instance_variable_get("@behaviour").should == 'Test'
+          @formatter.instance_variable_get("@example_group").should == 'Test'
         end
         
         it "should record the current time when starting a new example" do

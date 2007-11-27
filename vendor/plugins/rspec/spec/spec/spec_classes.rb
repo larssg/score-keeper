@@ -121,3 +121,9 @@ module Custom
   end
 end
 
+class FakeReporter < Spec::Runner::Reporter
+  attr_reader :added_example_group
+  def add_example_group(description)
+    @added_example_group = description
+  end
+end

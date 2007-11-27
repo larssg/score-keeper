@@ -1,5 +1,19 @@
 *SVN*
 
+* Asset timestamps are appended, not prepended. Closes #10276 [mnaberez]
+
+* Minor inconsistency in description of render example. Closes #10029 [ScottSchram]
+
+* Add #prepend_view_path and #append_view_path instance methods on ActionController::Base for consistency with the class methods.  [rick]
+
+* Refactor sanitizer helpers into HTML classes and make it easy to swap them out with custom implementations.  Closes #10129.  [rick]
+
+* Add deprecation for old subtemplate syntax for ActionMailer templates, use render :partial [rick]
+
+* Fix TemplateError so it doesn't bomb on exceptions while running tests [rick]
+
+* Fixed that named routes living under resources shouldn't have double slashes #10198 [isaacfeliu]
+
 * Make sure that cookie sessions use a secret that is at least 30 chars in length. [Koz]
 
 * Fixed that partial rendering should look at the type of the first render to determine its own type if no other clues are available (like when using text.plain.erb as the extension in AM) #10130 [java]

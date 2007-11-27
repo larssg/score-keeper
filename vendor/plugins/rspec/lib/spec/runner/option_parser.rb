@@ -68,7 +68,7 @@ module Spec
         :dry_run => ["-d", "--dry-run", "Invokes formatters without executing the examples."],
         :options_file => ["-O", "--options PATH", "Read options from a file"],
         :generate_options => ["-G", "--generate-options PATH", "Generate an options file for --options"],
-        :runner => ["-U", "--runner RUNNER", "Use a custom BehaviourRunner."],
+        :runner => ["-U", "--runner RUNNER", "Use a custom Runner."],
         :drb => ["-X", "--drb", "Run examples via DRb. (For example against script/spec_server)"],
         :version => ["-v", "--version", "Show version"],
         :help => ["-h", "--help", "You're looking at it"]
@@ -122,10 +122,6 @@ module Spec
 
         if @options.line_number
           set_spec_from_line_number
-        end
-
-        if @options.formatters.empty?
-          @options.create_formatter(Formatter::ProgressBarFormatter)
         end
 
         @options

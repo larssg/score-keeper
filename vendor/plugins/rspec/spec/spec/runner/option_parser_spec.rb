@@ -46,7 +46,7 @@ describe "OptionParser" do
   end
 
   it "should print help to stdout if no args" do
-    pending() do
+    pending 'A regression since 1.0.8' do
       options = parse([])
       @out.rewind
       @out.read.should match(/Usage: spec \(FILE\|DIRECTORY\|GLOB\)\+ \[options\]/m)
@@ -60,14 +60,17 @@ describe "OptionParser" do
   end
 
   it "should print instructions about how to require missing formatter" do
-    lambda { options = parse(["--format", "Custom::MissingFormatter"]) }.should raise_error(NameError)
+    lambda do 
+      options = parse(["--format", "Custom::MissingFormatter"]) 
+      options.formatters
+    end.should raise_error(NameError)
     @err.string.should match(/Couldn't find formatter class Custom::MissingFormatter/n)
   end
 
   it "should print version to stdout" do
     options = parse(["--version"])
     @out.rewind
-    @out.read.should match(/RSpec-\d+\.\d+\.\d+.*\(r\d+\) - BDD for Ruby\nhttp:\/\/rspec.rubyforge.org\/\n/n)
+    @out.read.should match(/RSpec-\d+\.\d+\.\d+.*\(build \d+\) - BDD for Ruby\nhttp:\/\/rspec.rubyforge.org\/\n/n)
   end
   
   it "should require file when require specified" do
@@ -131,6 +134,7 @@ describe "OptionParser" do
   it "should use html formatter with explicit output when format is html:test.html" do
     FileUtils.rm 'test.html' if File.exist?('test.html')
     options = parse(["--format", "html:test.html"])
+    options.formatters # creates the file
     File.should be_exist('test.html')
     options.formatters[0].class.should equal(Spec::Runner::Formatter::HtmlFormatter)
     options.formatters[0].close
@@ -228,7 +232,7 @@ describe "OptionParser" do
     @err.string.should match(/You must specify one file, not a directory when using the --line option/n)
   end
 
-  it "should fail with error message if file is dir along with --line" do
+  it "should fail with error message if file does not exist along with --line" do
     spec_parser = mock("spec_parser")
     @parser.instance_variable_set('@spec_parser', spec_parser)
 
@@ -318,8 +322,8 @@ describe "OptionParser" do
 
   it "should set an mtime comparator when --loadby mtime" do
     options = parse(["--loadby", 'mtime'])
-    runner = Spec::Runner::BehaviourRunner.new(options)
-    Spec::Runner::BehaviourRunner.should_receive(:new).
+    runner = Spec::Runner::ExampleGroupRunner.new(options)
+    Spec::Runner::ExampleGroupRunner.should_receive(:new).
       with(options).
       and_return(runner)
     runner.should_receive(:load_files).with(["most_recent_spec.rb", "command_line_spec.rb"])
@@ -334,8 +338,8 @@ describe "OptionParser" do
   end
 
   it "should use the standard runner by default" do
-    runner = ::Spec::Runner::BehaviourRunner.new(@parser.options)
-    ::Spec::Runner::BehaviourRunner.should_receive(:new).
+    runner = ::Spec::Runner::ExampleGroupRunner.new(@parser.options)
+    ::Spec::Runner::ExampleGroupRunner.should_receive(:new).
       with(@parser.options).
       and_return(runner)
     options = parse([])
@@ -343,20 +347,20 @@ describe "OptionParser" do
   end
 
   it "should use a custom runner when given" do
-    runner = Custom::BehaviourRunner.new(@parser.options, nil)
-    Custom::BehaviourRunner.should_receive(:new).
+    runner = Custom::ExampleGroupRunner.new(@parser.options, nil)
+    Custom::ExampleGroupRunner.should_receive(:new).
       with(@parser.options, nil).
       and_return(runner)
-    options = parse(["--runner", "Custom::BehaviourRunner"])
+    options = parse(["--runner", "Custom::ExampleGroupRunner"])
     options.run_examples
   end
 
   it "should use a custom runner with extra options" do
-    runner = Custom::BehaviourRunner.new(@parser.options, 'something')
-    Custom::BehaviourRunner.should_receive(:new).
+    runner = Custom::ExampleGroupRunner.new(@parser.options, 'something')
+    Custom::ExampleGroupRunner.should_receive(:new).
       with(@parser.options, 'something').
       and_return(runner)
-    options = parse(["--runner", "Custom::BehaviourRunner:something"])
+    options = parse(["--runner", "Custom::ExampleGroupRunner:something"])
     options.run_examples
   end
 end

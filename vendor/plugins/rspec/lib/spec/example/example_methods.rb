@@ -1,37 +1,36 @@
 module Spec
   module Example
     module ExampleMethods
+      extend ExampleGroupMethods
+      extend ModuleReopeningFix
+
       include ::Spec::Matchers
       include ::Spec::Example::Pending
       
-      attr_reader :example
+      attr_reader :_example
       
       def violated(message="")
         raise Spec::Expectations::ExpectationNotMetError.new(message)
       end
       
       def run
-        instance_eval(&example.example_block)
+        _example.run_in(self)
       end
       
       def description
-        example.description
+        _example.description
       end
       
       def description=(description)
-        example.description=(description)
+        _example.description=(description)
       end
             
       def use_generated_description?
-        example.description == :__generate_docstring
+        _example.description == :__generate_docstring
       end
 
       def copy_instance_variables_from(obj)
-        super(obj, [:@example, :@_result])
-      end
-
-      def run_before_all
-        self.class.run_before_all(self)
+        super(obj, [:@_example, :@_result])
       end
 
       def run_before_each
@@ -40,10 +39,6 @@ module Spec
 
       def run_after_each
         self.class.run_after_each(self)
-      end
-
-      def run_after_all
-        self.class.run_after_all(self)
       end
 
       def eval_each_fail_fast(procs) #:nodoc:

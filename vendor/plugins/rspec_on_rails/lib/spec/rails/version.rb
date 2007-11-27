@@ -1,23 +1,20 @@
 module Spec
   module Rails
     module VERSION #:nodoc:
-      unless defined?(REV)
-        # RANDOM_TOKEN: 0.530787323651054
-        REV = "$LastChangedRevision: 2944 $".match(/LastChangedRevision: (\d+)/)[1]
-      end
+      BUILD_TIME_UTC = 20071126200925
     end
   end
 end
 
-# Verifies that the plugin has the same revision as RSpec
-if Spec::VERSION::REV != Spec::Rails::VERSION::REV
+# Verify that the plugin has the same revision as RSpec
+if Spec::Rails::VERSION::BUILD_TIME_UTC != Spec::VERSION::BUILD_TIME_UTC
   raise <<-EOF
 
 ############################################################################
 Your RSpec on Rails plugin is incompatible with your installed RSpec.
 
-RSpec          : #{Spec::VERSION::FULL_VERSION}
-RSpec on Rails : r#{Spec::Rails::VERSION::REV}
+RSpec          : #{Spec::VERSION::BUILD_TIME_UTC}
+RSpec on Rails : r#{Spec::Rails::VERSION::BUILD_TIME_UTC}
 
 Make sure your RSpec on Rails plugin is compatible with your RSpec gem.
 See http://rspec.rubyforge.org/documentation/rails/install.html for details.
