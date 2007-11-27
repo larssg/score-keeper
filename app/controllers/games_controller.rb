@@ -84,9 +84,9 @@ class GamesController < ApplicationController
   def render_chart
     chart = setup_ranking_graph
     
-    memberships = @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at')
+    memberships = @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at, games.played_at AS played_at', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id')
     chart.set_data [2000] + memberships.collect { |m| m.current_ranking }
-    chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.created_at.to_s :db }
+    chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
     chart.line 2, '#3399CC'
 
     steps = (memberships.size / 20).to_i

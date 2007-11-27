@@ -49,7 +49,7 @@ class TeamsController < ApplicationController
       game_id = membership.game_id.to_i
       data[game_id] = ['null', 'null', nil] unless data.has_key?(game_id)
       data[game_id][@ids.index(membership.person_id)] = membership.current_ranking
-      data[game_id][2] = membership.created_at
+      data[game_id][2] = membership.played_at.to_time
     end
     
     people = {}
