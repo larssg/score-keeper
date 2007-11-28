@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 24) do
+ActiveRecord::Schema.define(:version => 25) do
 
   create_table "games", :force => true do |t|
     t.datetime "played_at"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 24) do
   end
 
   add_index "memberships", ["person_id"], :name => "index_memberships_on_person_id"
+  add_index "memberships", ["team_id"], :name => "index_memberships_on_team_id"
 
   create_table "mugshots", :force => true do |t|
     t.integer  "size"
