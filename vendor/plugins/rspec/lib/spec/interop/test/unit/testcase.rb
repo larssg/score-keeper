@@ -23,17 +23,34 @@ module Test
       extend Spec::Example::ExampleGroupMethods
       include Spec::Example::ExampleMethods
 
+      before(:each) {setup}
+      after(:each) {teardown}
+
       class << self
         def suite
           Test::Unit::TestSuiteAdapter.new(self)
         end
+
+        def example_method?(method_name)
+          should_method?(method_name) || test_method?(method_name)
+        end
+
+        def test_method?(method_name)
+          method_name =~ /^test./ && (
+            instance_method(method_name).arity == 0 ||
+            instance_method(method_name).arity == -1
+          )
+        end
       end
-      
+
       def initialize(example) #:nodoc:
         @_example = example
         @_result = ::Test::Unit::TestResult.new
+        # @method_name is important to set here because it "complies" with Test::Unit's interface.
+        # Some Test::Unit extensions depend on @method_name being present.
+        @method_name = example.description if example
       end
-      
+
       def run(ignore_this_argument=nil)
         super()
       end

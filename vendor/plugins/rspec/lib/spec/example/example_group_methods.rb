@@ -1,9 +1,8 @@
 module Spec
   module Example
 
-    # See http://rspec.rubyforge.org/documentation/before_and_after.html
     module ExampleGroupMethods
-      attr_accessor :description
+      attr_reader :description
 
       def inherited(klass)
         super
@@ -29,6 +28,7 @@ module Spec
       #
       def describe(*args, &example_group_block)
         if example_group_block
+          args.unshift(description) unless description.nil?
           Class.new(self) do
             describe(*args)
             register
@@ -90,8 +90,8 @@ module Spec
 
       # Creates an instance of Spec::Example::Example and adds
       # it to a collection of examples of the current behaviour.
-      def it(description=:__generate_docstring, &block)
-        example = create_example(description, &block)
+      def it(description=:__generate_docstring, &implementation)
+        example = create_example(description, &implementation)
         example_objects << example
         example
       end
@@ -107,7 +107,7 @@ module Spec
         customize_example
         return true if examples.empty?
 
-        reporter.add_example_group(description)
+        reporter.add_example_group(@description)
         before_and_after_all_example = new(nil)
         success = run_before_all(before_and_after_all_example)
         if success
@@ -116,8 +116,7 @@ module Spec
             example_group_instance = new(example)
             example_group_instance.copy_instance_variables_from(before_and_after_all_example)
 
-            runner = ExampleRunner.new(rspec_options, example_group_instance)
-            unless runner.run
+            unless example_group_instance.execute(rspec_options)
               success = false
             end
           end
@@ -135,21 +134,12 @@ module Spec
       end
 
       def described_type #:nodoc:
-        description.described_type
+        @description.described_type
       end
 
       def examples #:nodoc:
         examples = example_objects.dup
-        instance_methods.sort.each do |method_name|
-          if (is_test?(method_name) || is_spec?(method_name)) && (
-            instance_method(method_name).arity == 0 ||
-            instance_method(method_name).arity == -1
-          )
-            examples << create_example(method_name) do
-              __send__(method_name)
-            end
-          end
-        end
+        add_method_examples(examples)
         rspec_options.reverse ? examples.reverse : examples
       end
       
@@ -238,8 +228,8 @@ module Spec
       end
 
       def run_before_each(example)
-        execute_in_class_hierarchy(false) do |behaviour|
-          example.eval_each_fail_fast(behaviour.before_each_parts)
+        execute_in_class_hierarchy(false) do |example_group|
+          example.eval_each_fail_fast(example_group.before_each_parts)
         end
       end
       
@@ -259,8 +249,8 @@ module Spec
 
       def run_after_all(example)
         return true if dry_run
-        execute_in_class_hierarchy(true) do |behaviour|
-          example.eval_each_fail_slow(behaviour.after_all_parts)
+        execute_in_class_hierarchy(true) do |example_group|
+          example.eval_each_fail_slow(example_group.after_all_parts)
         end
         return true
       rescue Exception => e
@@ -270,8 +260,8 @@ module Spec
       end
       
       def run_after_each(example)
-        execute_in_class_hierarchy(true) do |behaviour|
-          example.eval_each_fail_slow(behaviour.after_each_parts)
+        execute_in_class_hierarchy(true) do |example_group|
+          example.eval_each_fail_slow(example_group.after_each_parts)
         end
       end
 
@@ -282,13 +272,15 @@ module Spec
 
       def examples_to_run
         all_examples = examples
-        return all_examples unless specified_examples
-        return all_examples if specified_examples.empty?
-        return all_examples if specified_examples.index(description.to_s)
-        all_examples.reject! do |example|
+        return all_examples unless specified_examples?
+        all_examples.reject do |example|
           matcher = ExampleMatcher.new(description.to_s, example.description)
           !matcher.matches?(specified_examples)
         end
+      end
+
+      def specified_examples?
+        specified_examples && !specified_examples.empty?
       end
 
       def specified_examples
@@ -331,14 +323,6 @@ module Spec
         klass.kind_of?(ExampleGroupMethods)
       end
       
-      def is_test?(method_name)
-        method_name =~ /^test_./
-      end
-      
-      def is_spec?(method_name)
-        !(method_name =~ /^should(_not)?$/) && method_name =~ /^should/
-      end
-
       def plugin_mock_framework
         case mock_framework = Spec::Runner.configuration.mock_framework
         when Module
@@ -384,11 +368,33 @@ module Spec
           args << {} unless Hash === args.last
           args.last[:example_group] = self
         end
-        self.description = ExampleGroupDescription.new(*args)
+        @description = ExampleGroupDescription.new(*args)
         if described_type.class == Module
           include described_type
         end
-        self.description
+        @description
+      end
+      
+      def add_method_examples(examples)
+        instance_methods.sort.each do |method_name|
+          if example_method?(method_name)
+            examples << create_example(method_name) do
+              __send__(method_name)
+            end
+          end
+        end
+      end
+      
+      def example_method?(method_name)
+        should_method?(method_name)
+      end
+      
+      def should_method?(method_name)
+        !(method_name =~ /^should(_not)?$/) && 
+        method_name =~ /^should/ && (
+          instance_method(method_name).arity == 0 ||
+          instance_method(method_name).arity == -1
+        )
       end
     end
     

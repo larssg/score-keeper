@@ -75,7 +75,7 @@ function less_ajax(url, verb, params, options){
     else{p = less_get_params(less_merge_objects({'_method': verb.toLowerCase()}, params))} 
     #{'console.log("less_merge_objects:v : " + v);' if @@debug} 
     #{'console.log("less_merge_objects:p : " + p);' if @@debug} 
-    res = jQuery.ajax(less_merge_objects({async:false, url: url, type: v, dataType: 'script', data: p}, options)).responseText;
+    res = jQuery.ajax(less_merge_objects({async:false, url: url, type: v, data: p}, options)).responseText;
   } else {  
     new Ajax.Request(url, less_merge_objects({asynchronous: false, method: verb, parameters: less_get_params(params), onComplete: function(r){res = r.responseText;}}, options));
   }

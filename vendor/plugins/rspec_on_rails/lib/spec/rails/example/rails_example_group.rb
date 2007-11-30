@@ -30,9 +30,6 @@ module Spec
           end
         end
 
-        before(:each) {setup}
-        after(:each) {teardown}
-
         include Spec::Rails::Matchers
 
         @@model_id = 1000

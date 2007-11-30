@@ -1,4 +1,12 @@
-*SVN*
+*2.0.0 [RC2]* (November 28th, 2007)
+
+* Raise UnknownHttpMethod exception for unknown HTTP methods. Closes #10303 [tarmo]
+
+* Update to Prototype -r8232.  [sam]
+
+* Make sure the optimisation code for routes doesn't get used if :host, :anchor or :port are provided in the hash arguments. [pager, Koz] #10292
+
+* Added protection from trailing slashes on page caching #10229 [devrieda]
 
 * Asset timestamps are appended, not prepended. Closes #10276 [mnaberez]
 
@@ -119,6 +127,7 @@
 * ActionController::Routing::DynamicSegment#interpolation_chunk should call #to_s on all values before calling URI.escape.  [Rick]
 
 * Only accept session ids from cookies, prevents session fixation attacks.  [bradediger] 
+
 
 *2.0.0 [Preview Release]* (September 29th, 2007) [Includes duplicates of changes from 1.12.2 - 1.13.3]
 
