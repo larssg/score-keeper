@@ -35,16 +35,16 @@ module Spec
         @mock_framework ||= mock_framework_path("rspec")
       end
       
-      # Declares modules to be included in all behaviours (<tt>describe</tt> blocks).
+      # Declares modules to be included in all example groups (<tt>describe</tt> blocks).
       #
       #   config.include(My::Bottle, My::Cup)
       #
-      # If you want to restrict the inclusion to a subset of all the behaviours then
+      # If you want to restrict the inclusion to a subset of all the example groups then
       # specify this in a Hash as the last argument:
       #
       #   config.include(My::Pony, My::Horse, :type => :farm)
       #
-      # Only behaviours that have that type will get the modules included:
+      # Only example groups that have that type will get the modules included:
       #
       #   describe "Downtown", :type => :city do
       #     # Will *not* get My::Pony and My::Horse included
@@ -60,7 +60,7 @@ module Spec
         required_example_group = get_type_from_options(options)
         required_example_group = required_example_group.to_sym if required_example_group
         modules.each do |mod|
-          ExampleGroupFactory.get!(required_example_group).send(:include, mod)
+          ExampleGroupFactory.get(required_example_group).send(:include, mod)
         end
       end
 
@@ -76,18 +76,18 @@ module Spec
         @predicate_matchers ||= {}
       end
       
-      # Prepends a global <tt>before</tt> block to all behaviours.
+      # Prepends a global <tt>before</tt> block to all example groups.
       # See #append_before for filtering semantics.
       def prepend_before(*args, &proc)
         scope, options = scope_and_options(*args)
-        example_group = ExampleGroupFactory.get!(
+        example_group = ExampleGroupFactory.get(
           get_type_from_options(options)
         )
         example_group.prepend_before(scope, &proc)
       end
-      # Appends a global <tt>before</tt> block to all behaviours.
+      # Appends a global <tt>before</tt> block to all example groups.
       #
-      # If you want to restrict the block to a subset of all the behaviours then
+      # If you want to restrict the block to a subset of all the example groups then
       # specify this in a Hash as the last argument:
       #
       #   config.prepend_before(:all, :type => :farm)
@@ -98,28 +98,28 @@ module Spec
       #
       def append_before(*args, &proc)
         scope, options = scope_and_options(*args)
-        example_group = ExampleGroupFactory.get!(
+        example_group = ExampleGroupFactory.get(
           get_type_from_options(options)
         )
         example_group.append_before(scope, &proc)
       end
       alias_method :before, :append_before
 
-      # Prepends a global <tt>after</tt> block to all behaviours.
+      # Prepends a global <tt>after</tt> block to all example groups.
       # See #append_before for filtering semantics.
       def prepend_after(*args, &proc)
         scope, options = scope_and_options(*args)
-        example_group = ExampleGroupFactory.get!(
+        example_group = ExampleGroupFactory.get(
           get_type_from_options(options)
         )
         example_group.prepend_after(scope, &proc)
       end
       alias_method :after, :prepend_after
-      # Appends a global <tt>after</tt> block to all behaviours.
+      # Appends a global <tt>after</tt> block to all example groups.
       # See #append_before for filtering semantics.
       def append_after(*args, &proc)
         scope, options = scope_and_options(*args)
-        example_group = ExampleGroupFactory.get!(
+        example_group = ExampleGroupFactory.get(
           get_type_from_options(options)
         )
         example_group.append_after(scope, &proc)

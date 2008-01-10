@@ -36,19 +36,21 @@ module Test
         end
 
         def test_method?(method_name)
-          method_name =~ /^test./ && (
+          method_name =~ /^test[_A-Z]./ && (
             instance_method(method_name).arity == 0 ||
             instance_method(method_name).arity == -1
           )
         end
       end
 
-      def initialize(example) #:nodoc:
-        @_example = example
+      def initialize(defined_description, &implementation)
+        @_defined_description = defined_description
+        @_implementation = implementation
+
         @_result = ::Test::Unit::TestResult.new
         # @method_name is important to set here because it "complies" with Test::Unit's interface.
         # Some Test::Unit extensions depend on @method_name being present.
-        @method_name = example.description if example
+        @method_name = @_defined_description
       end
 
       def run(ignore_this_argument=nil)

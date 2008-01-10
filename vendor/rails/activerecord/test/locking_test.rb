@@ -14,7 +14,7 @@ class ReadonlyFirstNamePerson < Person
   attr_readonly :first_name
 end
 
-class OptimisticLockingTest < Test::Unit::TestCase
+class OptimisticLockingTest < ActiveSupport::TestCase
   fixtures :people, :legacy_things
 
   # need to disable transactional fixtures, because otherwise the sqlite3
@@ -64,6 +64,15 @@ class OptimisticLockingTest < Test::Unit::TestCase
 
     assert_raises(ActiveRecord::StaleObjectError) { p2.save! }
   end
+  
+  def test_lock_new_with_nil
+    p1 = Person.new(:first_name => 'anika')
+    p1.save!
+    p1.lock_version = nil # simulate bad fixture or column with no default
+    p1.save!
+    assert_equal 1, p1.lock_version
+  end
+    
 
   def test_lock_column_name_existing
     t1 = LegacyThing.find(1)
@@ -167,7 +176,7 @@ end
 # TODO: The SQL Server, Sybase, and OpenBase adapters currently have no support for pessimistic locking
 
 unless current_adapter?(:SQLServerAdapter, :SybaseAdapter, :OpenBaseAdapter)
-  class PessimisticLockingTest < Test::Unit::TestCase
+  class PessimisticLockingTest < ActiveSupport::TestCase
     self.use_transactional_fixtures = false
     fixtures :people, :readers
 

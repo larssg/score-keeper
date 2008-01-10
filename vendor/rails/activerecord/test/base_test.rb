@@ -12,6 +12,7 @@ require 'fixtures/subscriber'
 require 'fixtures/keyboard'
 require 'fixtures/post'
 require 'fixtures/minimalistic'
+require 'fixtures/warehouse_thing'
 require 'rexml/document'
 
 class Category < ActiveRecord::Base; end
@@ -70,8 +71,8 @@ class TopicWithProtectedContentAndAccessibleAuthorName < ActiveRecord::Base
   attr_protected  :content
 end
 
-class BasicsTest < Test::Unit::TestCase
-  fixtures :topics, :companies, :developers, :projects, :computers, :accounts, :minimalistics
+class BasicsTest < ActiveSupport::TestCase
+  fixtures :topics, :companies, :developers, :projects, :computers, :accounts, :minimalistics, 'warehouse-things'
 
   def test_table_exists
     assert !NonExistentTable.table_exists?
@@ -590,9 +591,21 @@ class BasicsTest < Test::Unit::TestCase
     assert_nil Topic.find(2).last_read
   end
 
+  def test_update_all_with_non_standard_table_name
+    assert_equal 1, WarehouseThing.update_all(['value = ?', 0], ['id = ?', 1])
+    assert_equal 0, WarehouseThing.find(1).value
+  end
+
   if current_adapter?(:MysqlAdapter)
     def test_update_all_with_order_and_limit
       assert_equal 1, Topic.update_all("content = 'bulk updated!'", nil, :limit => 1, :order => 'id DESC')
+    end
+  end
+
+  def test_update_all_ignores_order_limit_from_association
+    author = Author.find(1)
+    assert_nothing_raised do
+      assert_equal author.posts_with_comments_and_categories.length, author.posts_with_comments_and_categories.update_all("body = 'bulk update!'")
     end
   end
 
@@ -743,7 +756,7 @@ class BasicsTest < Test::Unit::TestCase
     client.destroy
     assert client.frozen?
     assert_kind_of Firm, client.firm
-    assert_raises(TypeError) { client.name = "something else" }
+    assert_raises(ActiveSupport::FrozenObjectError) { client.name = "something else" }
   end
   
   def test_update_attribute
@@ -1229,19 +1242,21 @@ class BasicsTest < Test::Unit::TestCase
     topic = Topic.create('author_name' => author_name)
     assert_equal author_name, Topic.find(topic.id).author_name
   end
-  
-  def test_quote_chars
-    str = 'The Narrator'
-    topic = Topic.create(:author_name => str)
-    assert_equal str, topic.author_name
-    
-    assert_kind_of ActiveSupport::Multibyte::Chars, str.chars
-    topic = Topic.find_by_author_name(str.chars)
-    
-    assert_kind_of Topic, topic
-    assert_equal str, topic.author_name, "The right topic should have been found by name even with name passed as Chars"
+
+  if RUBY_VERSION < '1.9'
+    def test_quote_chars
+      str = 'The Narrator'
+      topic = Topic.create(:author_name => str)
+      assert_equal str, topic.author_name
+
+      assert_kind_of ActiveSupport::Multibyte::Chars, str.chars
+      topic = Topic.find_by_author_name(str.chars)
+
+      assert_kind_of Topic, topic
+      assert_equal str, topic.author_name, "The right topic should have been found by name even with name passed as Chars"
+    end
   end
-  
+
   def test_class_level_destroy
     should_be_destroyed_reply = Reply.create("title" => "hello", "content" => "world")
     Topic.find(1).replies << should_be_destroyed_reply
@@ -1275,6 +1290,15 @@ class BasicsTest < Test::Unit::TestCase
     assert_equal 1, topics(:first).parent_id
   end
   
+  def test_increment_attribute_by
+    assert_equal 50, accounts(:signals37).credit_limit
+    accounts(:signals37).increment! :credit_limit, 5
+    assert_equal 55, accounts(:signals37, :reload).credit_limit    
+
+    accounts(:signals37).increment(:credit_limit, 1).increment!(:credit_limit, 3)
+    assert_equal 59, accounts(:signals37, :reload).credit_limit
+  end
+  
   def test_decrement_attribute
     assert_equal 50, accounts(:signals37).credit_limit
 
@@ -1283,6 +1307,15 @@ class BasicsTest < Test::Unit::TestCase
   
     accounts(:signals37).decrement(:credit_limit).decrement!(:credit_limit)
     assert_equal 47, accounts(:signals37, :reload).credit_limit
+  end
+  
+  def test_decrement_attribute_by
+    assert_equal 50, accounts(:signals37).credit_limit
+    accounts(:signals37).decrement! :credit_limit, 5
+    assert_equal 45, accounts(:signals37, :reload).credit_limit    
+
+    accounts(:signals37).decrement(:credit_limit, 1).decrement!(:credit_limit, 3)
+    assert_equal 41, accounts(:signals37, :reload).credit_limit
   end
   
   def test_toggle_attribute
@@ -1682,19 +1715,19 @@ class BasicsTest < Test::Unit::TestCase
   
   def test_except_attributes
     assert_equal(
-      %w( author_name type id approved replies_count bonus_time written_on content author_email_address parent_id last_read), 
-      topics(:first).attributes(:except => :title).keys
+      %w( author_name type id approved replies_count bonus_time written_on content author_email_address parent_id last_read).sort,
+      topics(:first).attributes(:except => :title).keys.sort
     )
 
     assert_equal(
-      %w( replies_count bonus_time written_on content author_email_address parent_id last_read), 
-      topics(:first).attributes(:except => [ :title, :id, :type, :approved, :author_name ]).keys
+      %w( replies_count bonus_time written_on content author_email_address parent_id last_read).sort,
+      topics(:first).attributes(:except => [ :title, :id, :type, :approved, :author_name ]).keys.sort
     )
   end
   
   def test_include_attributes
     assert_equal(%w( title ), topics(:first).attributes(:only => :title).keys)
-    assert_equal(%w( title author_name type id approved ), topics(:first).attributes(:only => [ :title, :id, :type, :approved, :author_name ]).keys)
+    assert_equal(%w( title author_name type id approved ).sort, topics(:first).attributes(:only => [ :title, :id, :type, :approved, :author_name ]).keys.sort)
   end
   
   def test_type_name_with_module_should_handle_beginning
@@ -1732,9 +1765,67 @@ class BasicsTest < Test::Unit::TestCase
 
   def test_attribute_for_inspect
     t = topics(:first)
-    t.content = %(This is some really long content, longer than 50 characters, so I can test that text is truncated correctly by the new ActiveRecord::Base#inspect method! Yay! BOOM!)
+    t.title = "The First Topic Now Has A Title With\nNewlines And More Than 50 Characters"
 
     assert_equal %("#{t.written_on.to_s(:db)}"), t.attribute_for_inspect(:written_on)
-    assert_equal '"This is some really long content, longer than 50 ch..."', t.attribute_for_inspect(:content)
+    assert_equal '"The First Topic Now Has A Title With\nNewlines And M..."', t.attribute_for_inspect(:title)
+  end
+  
+  def test_becomes
+    assert_kind_of Reply, topics(:first).becomes(Reply)
+    assert_equal "The First Topic", topics(:first).becomes(Reply).title
+  end
+
+  def test_silence_sets_log_level_to_error_in_block
+    original_logger = ActiveRecord::Base.logger
+    log = StringIO.new
+    ActiveRecord::Base.logger = Logger.new(log)
+    ActiveRecord::Base.logger.level = Logger::DEBUG
+    ActiveRecord::Base.silence do
+      ActiveRecord::Base.logger.warn "warn"
+      ActiveRecord::Base.logger.error "error"
+    end
+    assert_equal "error\n", log.string
+  ensure
+    ActiveRecord::Base.logger = original_logger
+  end
+
+  def test_silence_sets_log_level_back_to_level_before_yield
+    original_logger = ActiveRecord::Base.logger
+    log = StringIO.new
+    ActiveRecord::Base.logger = Logger.new(log)
+    ActiveRecord::Base.logger.level = Logger::WARN
+    ActiveRecord::Base.silence do
+    end
+    assert_equal Logger::WARN, ActiveRecord::Base.logger.level
+  ensure
+    ActiveRecord::Base.logger = original_logger
+  end
+
+  def test_benchmark_with_log_level
+    original_logger = ActiveRecord::Base.logger
+    log = StringIO.new
+    ActiveRecord::Base.logger = Logger.new(log)
+    ActiveRecord::Base.logger.level = Logger::WARN
+    ActiveRecord::Base.benchmark("Debug Topic Count", Logger::DEBUG) { Topic.count }
+    ActiveRecord::Base.benchmark("Warn Topic Count",  Logger::WARN)  { Topic.count }
+    ActiveRecord::Base.benchmark("Error Topic Count", Logger::ERROR) { Topic.count }
+    assert_no_match /Debug Topic Count/, log.string
+    assert_match /Warn Topic Count/, log.string
+    assert_match /Error Topic Count/, log.string
+  ensure
+    ActiveRecord::Base.logger = original_logger
+  end
+
+  def test_benchmark_with_use_silence
+    original_logger = ActiveRecord::Base.logger
+    log = StringIO.new
+    ActiveRecord::Base.logger = Logger.new(log)
+    ActiveRecord::Base.benchmark("Logging", Logger::DEBUG, true) { ActiveRecord::Base.logger.debug "Loud" }
+    ActiveRecord::Base.benchmark("Logging", Logger::DEBUG, false)  { ActiveRecord::Base.logger.debug "Quiet" }
+    assert_no_match /Loud/, log.string
+    assert_match /Quiet/, log.string
+  ensure
+    ActiveRecord::Base.logger = original_logger
   end
 end

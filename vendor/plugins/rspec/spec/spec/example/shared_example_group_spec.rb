@@ -3,11 +3,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 module Spec
   module Example
     describe ExampleGroup, "with :shared => true" do
-      attr_reader :options, :original_rspec_options, :formatter, :example_group
+      it_should_behave_like "sandboxed rspec_options"
+      attr_reader :formatter, :example_group
       before(:each) do
-        @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
-        @original_rspec_options = $rspec_options
-        $rspec_options = options
         @formatter = Spec::Mocks::Mock.new("formatter", :null_object => true)
         options.formatters << formatter
         @example_group = Class.new(ExampleGroup).describe("example_group")
@@ -17,7 +15,6 @@ module Spec
       end
 
       after(:each) do
-        $rspec_options = @original_rspec_options
         @formatter.rspec_verify
         @example_group = nil
         $shared_example_groups.clear unless $shared_example_groups.nil?
@@ -59,20 +56,6 @@ module Spec
         SharedExampleGroup.shared_example_groups.should_not include(example_group)
       end
 
-      it "should raise if run when shared" do
-        example_group = make_shared_example_group("context") {}
-        $example_ran = false
-        example_group.it("test") {$example_ran = true}
-        lambda { example_group.run }.should raise_error
-        $example_ran.should be_false
-      end
-
-      it "should contain examples when shared" do
-        shared_example_group = make_shared_example_group("shared example_group") {}
-        shared_example_group.it("shared example") {}
-        shared_example_group.number_of_examples.should == 1
-      end
-
       it "should complain when adding a second shared example_group with the same description" do
         describe "shared example_group", :shared => true do
         end
@@ -98,22 +81,32 @@ module Spec
       end
 
       it "should NOT complain when adding the same shared example_group in same file with different absolute path" do
-        shared_example_group_1 = Class.new(ExampleGroup).describe("shared example_group", :shared => true)
-        shared_example_group_2 = Class.new(ExampleGroup).describe("shared example_group", :shared => true)
-
-        shared_example_group_1.description[:spec_path] = "/my/spec/a/../shared.rb"
-        shared_example_group_2.description[:spec_path] = "/my/spec/b/../shared.rb"
+        shared_example_group_1 = Class.new(ExampleGroup).describe(
+          "shared example_group",
+          :shared => true,
+          :spec_path => "/my/spec/a/../shared.rb"
+        )
+        shared_example_group_2 = Class.new(ExampleGroup).describe(
+          "shared example_group",
+          :shared => true,
+          :spec_path => "/my/spec/b/../shared.rb"
+        )
 
         SharedExampleGroup.add_shared_example_group(shared_example_group_1)
         SharedExampleGroup.add_shared_example_group(shared_example_group_2)
       end
 
       it "should complain when adding a different shared example_group with the same name in a different file with the same basename" do
-        shared_example_group_1 = Class.new(ExampleGroup).describe("shared example_group", :shared => true)
-        shared_example_group_2 = Class.new(ExampleGroup).describe("shared example_group", :shared => true)
-
-        shared_example_group_1.description[:spec_path] = "/my/spec/a/shared.rb"
-        shared_example_group_2.description[:spec_path] = "/my/spec/b/shared.rb"
+        shared_example_group_1 = Class.new(ExampleGroup).describe(
+          "shared example_group",
+          :shared => true,
+          :spec_path => "/my/spec/a/shared.rb"
+        )
+        shared_example_group_2 = Class.new(ExampleGroup).describe(
+          "shared example_group",
+          :shared => true,
+          :spec_path => "/my/spec/b/shared.rb"
+        )
 
         SharedExampleGroup.add_shared_example_group(shared_example_group_1)
         lambda do
@@ -122,9 +115,10 @@ module Spec
       end
 
       it "should add examples to current example_group using it_should_behave_like" do
-        shared_example_group = make_shared_example_group("shared example_group") {}
-        shared_example_group.it("shared example") {}
-        shared_example_group.it("shared example 2") {}
+        shared_example_group = make_shared_example_group("shared example_group") do
+          it("shared example") {}
+          it("shared example 2") {}
+        end
 
         example_group.it("example") {}
         example_group.number_of_examples.should == 1
@@ -158,8 +152,9 @@ module Spec
 
       it "should run shared examples" do
         shared_example_ran = false
-        shared_example_group = make_shared_example_group("shared example_group") {}
-        shared_example_group.it("shared example") { shared_example_ran = true }
+        shared_example_group = make_shared_example_group("shared example_group") do
+          it("shared example") { shared_example_ran = true }
+        end
 
         example_ran = false
 
@@ -173,10 +168,11 @@ module Spec
       it "should run setup and teardown from shared example_group" do
         shared_setup_ran = false
         shared_teardown_ran = false
-        shared_example_group = make_shared_example_group("shared example_group") {}
-        shared_example_group.before { shared_setup_ran = true }
-        shared_example_group.after { shared_teardown_ran = true }
-        shared_example_group.it("shared example") { shared_example_ran = true }
+        shared_example_group = make_shared_example_group("shared example_group") do
+          before { shared_setup_ran = true }
+          after { shared_teardown_ran = true }
+          it("shared example") { shared_example_ran = true }
+        end
 
         example_ran = false
 
@@ -191,10 +187,11 @@ module Spec
       it "should run before(:all) and after(:all) only once from shared example_group" do
         shared_before_all_run_count = 0
         shared_after_all_run_count = 0
-        shared_example_group = make_shared_example_group("shared example_group") {}
-        shared_example_group.before(:all) { shared_before_all_run_count += 1}
-        shared_example_group.after(:all) { shared_after_all_run_count += 1}
-        shared_example_group.it("shared example") { shared_example_ran = true }
+        shared_example_group = make_shared_example_group("shared example_group") do
+          before(:all) { shared_before_all_run_count += 1}
+          after(:all) { shared_after_all_run_count += 1}
+          it("shared example") { shared_example_ran = true }
+        end
 
         example_ran = false
 
@@ -209,8 +206,9 @@ module Spec
       it "should include modules, included into shared example_group, into current example_group" do
         @formatter.should_receive(:add_example_group).with(any_args)
 
-        shared_example_group = make_shared_example_group("shared example_group") {}
-        shared_example_group.it("shared example") { shared_example_ran = true }
+        shared_example_group = make_shared_example_group("shared example_group") do
+          it("shared example") { shared_example_ran = true }
+        end
 
         mod1_method_called = false
         mod1 = Module.new do

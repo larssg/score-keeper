@@ -31,8 +31,10 @@ module ActionView
       #      <%= render :partial => "topics", :collection => @topic_list %>
       #      <i>Topics listed alphabetically</i>
       #    <% end %>
-      def cache(name = {}, &block)
-        @controller.cache_erb_fragment(block, name)
+      def cache(name = {}, options = nil, &block)
+        template_extension = find_template_extension_for(first_render)[/\.(\w+)$/, 1].to_sym
+        handler = Base.handler_for_extension(template_extension)
+        handler.new(@controller).cache_fragment(block, name, options)
       end
     end
   end

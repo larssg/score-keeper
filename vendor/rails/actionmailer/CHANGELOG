@@ -1,4 +1,14 @@
-*2.0.0 [RC2]* (November 28th, 2007)
+*SVN*
+
+* Fixed that you don't have to call super in ActionMailer::TestCase#setup #10406 [jamesgolick]
+
+
+*2.0.2* (December 16th, 2007)
+
+* Included in Rails 2.0.2
+
+
+*2.0.1* (December 7th, 2007)
 
 * Update ActionMailer so it treats ActionView the same way that ActionController does.  Closes #10244 [rick]
 
@@ -17,12 +27,9 @@
 
 * Fix silent failure of rxml templates.  #9879 [jstewart]
 
-
-*2.0.0 [Preview Release]* (September 29th, 2007)
-
 * Fix attachment decoding when using the TMail C extension.  #7861 [orangechicken]
 
-* Increase mail delivery test coverage.  #8692 [kamal]
+* Increase mail delivery test coverage.  #8692 [Kamal Fariz Mahyuddin]
 
 * Register alternative template engines using ActionMailer::Base.register_template_extension('haml').  #7534 [cwd, Josh Peek]
 

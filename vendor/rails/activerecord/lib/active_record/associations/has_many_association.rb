@@ -41,10 +41,10 @@ module ActiveRecord
 
           if ids.size == 1
             id = ids.first
-            record = load_target.detect { |record| id == record.id }
+            record = load_target.detect { |r| id == r.id }
             expects_array ? [ record ] : record
           else
-            load_target.select { |record| ids.include?(record.id) }
+            load_target.select { |r| ids.include?(r.id) }
           end
         else
           conditions = "#{@finder_sql}"
@@ -144,12 +144,12 @@ module ActiveRecord
 
             when @reflection.options[:as]
               @finder_sql = 
-                "#{@reflection.klass.table_name}.#{@reflection.options[:as]}_id = #{@owner.quoted_id} AND " + 
-                "#{@reflection.klass.table_name}.#{@reflection.options[:as]}_type = #{@owner.class.quote_value(@owner.class.base_class.name.to_s)}"
+                "#{@reflection.quoted_table_name}.#{@reflection.options[:as]}_id = #{@owner.quoted_id} AND " +
+                "#{@reflection.quoted_table_name}.#{@reflection.options[:as]}_type = #{@owner.class.quote_value(@owner.class.base_class.name.to_s)}"
               @finder_sql << " AND (#{conditions})" if conditions
             
             else
-              @finder_sql = "#{@reflection.klass.table_name}.#{@reflection.primary_key_name} = #{@owner.quoted_id}"
+              @finder_sql = "#{@reflection.quoted_table_name}.#{@reflection.primary_key_name} = #{@owner.quoted_id}"
               @finder_sql << " AND (#{conditions})" if conditions
           end
 

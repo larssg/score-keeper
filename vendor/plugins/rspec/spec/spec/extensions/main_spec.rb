@@ -3,13 +3,12 @@ require File.dirname(__FILE__) + '/../../spec_helper.rb'
 module Spec
   module Extensions
     describe Main do
+      it_should_behave_like "sandboxed rspec_options"
       before(:each) do
         @main = Class.new do; include Main; end
-        @original_rspec_options, $rspec_options = $rspec_options, nil
       end
 
       after(:each) do
-        $rspec_options = @original_rspec_options
         $rspec_story_steps = @original_rspec_story_steps
       end
 
@@ -30,9 +29,7 @@ module Spec
       end
 
       it "should registered ExampleGroups by default" do
-        example_group = @main.describe("The ExampleGroup") do
-        end
-
+        example_group = @main.describe("The ExampleGroup") do end
         rspec_options.example_groups.should include(example_group)
       end
 
@@ -42,6 +39,37 @@ module Spec
         end
 
         rspec_options.example_groups.should_not include(example_group)
+      end
+      
+      it "should create a shared ExampleGroup with share_examples_for" do
+        group = @main.share_examples_for "all things" do end
+        group.should be_an_instance_of(Spec::Example::SharedExampleGroup)
+      end
+      
+      describe "#share_as" do
+        before(:each) do
+          $share_as_examples_example_module_number ||= 1
+          $share_as_examples_example_module_number += 1
+          t = Time.new.to_i
+          @group_name = "Group#{$share_as_examples_example_module_number}"
+        end
+
+        it "should create a shared ExampleGroup" do
+          group = @main.share_as @group_name do end
+          group.should be_an_instance_of(Spec::Example::SharedExampleGroup)
+        end
+        
+        it "should create a constant that points to a Module" do
+          group = @main.share_as @group_name do end
+          Object.const_get(@group_name).should equal(group)
+        end
+        
+        it "should bark if you pass it something not-constantizable" do
+          lambda do
+            @group = @main.share_as "Non Constant" do end
+          end.should raise_error(NameError, /The first argument to share_as must be a legal name for a constant/)
+        end
+        
       end
     end
   end

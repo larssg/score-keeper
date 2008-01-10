@@ -1,7 +1,7 @@
 module Spec
   module Runner
     class Reporter
-      attr_reader :options
+      attr_reader :options, :example_groups
       
       def initialize(options)
         @options = options
@@ -9,26 +9,39 @@ module Spec
         clear
       end
       
-      def add_example_group(name)
-        formatters.each{|f| f.add_example_group(name)}
-        @example_group_names << name
+      def add_example_group(example_group)
+        formatters.each do |f|
+          f.add_example_group(example_group)
+        end
+        example_groups << example_group
       end
       
       def example_started(example)
         formatters.each{|f| f.example_started(example)}
       end
       
-      def example_finished(example, error=nil, failure_location=nil, pending=false)
+      def example_finished(example, error=nil)
         @examples << example
         
         if error.nil?
           example_passed(example)
         elsif Spec::Example::ExamplePendingError === error
-          example_pending(@example_group_names.last, example, error.message)
+          example_pending(example_groups.last, example, error.message)
         else
-          example_failed(example, error, failure_location)
+          example_failed(example, error)
         end
       end
+
+      def failure(example, error)
+        backtrace_tweaker.tweak_backtrace(error)
+        example_name = "#{example_groups.last.description} #{example.description}"
+        failure = Failure.new(example_name, error)
+        @failures << failure
+        formatters.each do |f|
+          f.example_failed(example, @failures.length, failure)
+        end
+      end
+      alias_method :example_failed, :failure
 
       def start(number_of_examples)
         clear
@@ -63,7 +76,7 @@ module Spec
       end
   
       def clear
-        @example_group_names = []
+        @example_groups = []
         @failures = []
         @pending_count = 0
         @examples = []
@@ -87,21 +100,15 @@ module Spec
         return "0.0"
       end
       
-      def example_passed(name)
-        formatters.each{|f| f.example_passed(name)}
-      end
-
-      def example_failed(name, error, failure_location)
-        backtrace_tweaker.tweak_backtrace(error, failure_location)
-        example_name = "#{@example_group_names.last} #{name}"
-        failure = Failure.new(example_name, error)
-        @failures << failure
-        formatters.each{|f| f.example_failed(name, @failures.length, failure)}
+      def example_passed(example)
+        formatters.each{|f| f.example_passed(example)}
       end
       
-      def example_pending(behaviour_name, example_name, message="Not Yet Implemented")
+      def example_pending(example_group, example, message="Not Yet Implemented")
         @pending_count += 1
-        formatters.each{|f| f.example_pending(behaviour_name, example_name, message)}
+        formatters.each do |f|
+          f.example_pending(example_group.description, example, message)
+        end
       end
       
       class Failure

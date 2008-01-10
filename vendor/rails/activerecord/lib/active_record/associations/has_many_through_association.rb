@@ -120,8 +120,8 @@ module ActiveRecord
       def count(*args)
         column_name, options = @reflection.klass.send(:construct_count_options_from_args, *args)
         if @reflection.options[:uniq]
-          # This is needed becase 'SELECT count(DISTINCT *)..' is not valid sql statement.
-          column_name = "#{@reflection.klass.table_name}.#{@reflection.klass.primary_key}" if column_name == :all
+          # This is needed because 'SELECT count(DISTINCT *)..' is not valid sql statement.
+          column_name = "#{@reflection.quoted_table_name}.#{@reflection.klass.primary_key}" if column_name == :all
           options.merge!(:distinct => true) 
         end
         @reflection.klass.send(:with_scope, construct_scope) { @reflection.klass.count(column_name, options) } 
@@ -148,7 +148,8 @@ module ActiveRecord
             :include    => @reflection.options[:include] || @reflection.source_reflection.options[:include]
           )
 
-          @reflection.options[:uniq] ? records.to_set.to_a : records
+          records.uniq! if @reflection.options[:uniq]
+          records
         end
 
         # Construct attributes for associate pointing to owner.
@@ -184,7 +185,7 @@ module ActiveRecord
 
         # Build SQL conditions from attributes, qualified by table name.
         def construct_conditions
-          table_name = @reflection.through_reflection.table_name
+          table_name = @reflection.through_reflection.quoted_table_name
           conditions = construct_quoted_owner_attributes(@reflection.through_reflection).map do |attr, value|
             "#{table_name}.#{attr} = #{value}"
           end
@@ -193,11 +194,11 @@ module ActiveRecord
         end
 
         def construct_from
-          @reflection.table_name
+          @reflection.quoted_table_name
         end
 
         def construct_select(custom_select = nil)
-          selected = custom_select || @reflection.options[:select] || "#{@reflection.table_name}.*"
+          selected = custom_select || @reflection.options[:select] || "#{@reflection.quoted_table_name}.*"
         end
 
         def construct_joins(custom_joins = nil)
@@ -207,7 +208,7 @@ module ActiveRecord
             source_primary_key     = @reflection.source_reflection.primary_key_name
             if @reflection.options[:source_type]
               polymorphic_join = "AND %s.%s = %s" % [
-                @reflection.through_reflection.table_name, "#{@reflection.source_reflection.options[:foreign_type]}",
+                @reflection.through_reflection.quoted_table_name, "#{@reflection.source_reflection.options[:foreign_type]}",
                 @owner.class.quote_value(@reflection.options[:source_type])
               ]
             end
@@ -216,7 +217,7 @@ module ActiveRecord
             source_primary_key     = @reflection.klass.primary_key
             if @reflection.source_reflection.options[:as]
               polymorphic_join = "AND %s.%s = %s" % [
-                @reflection.table_name, "#{@reflection.source_reflection.options[:as]}_type",
+                @reflection.quoted_table_name, "#{@reflection.source_reflection.options[:as]}_type",
                 @owner.class.quote_value(@reflection.through_reflection.klass.name)
               ]
             end
@@ -245,7 +246,7 @@ module ActiveRecord
             when @reflection.options[:finder_sql]
               @finder_sql = interpolate_sql(@reflection.options[:finder_sql])
 
-              @finder_sql = "#{@reflection.klass.table_name}.#{@reflection.primary_key_name} = #{@owner.quoted_id}"
+              @finder_sql = "#{@reflection.quoted_table_name}.#{@reflection.primary_key_name} = #{@owner.quoted_id}"
               @finder_sql << " AND (#{conditions})" if conditions
           end
 
@@ -261,12 +262,31 @@ module ActiveRecord
         end
 
         def conditions
-          @conditions ||= [
-            (interpolate_sql(@reflection.klass.send(:sanitize_sql, @reflection.options[:conditions])) if @reflection.options[:conditions]),
-            (interpolate_sql(@reflection.active_record.send(:sanitize_sql, @reflection.through_reflection.options[:conditions])) if @reflection.through_reflection.options[:conditions]),
-            (interpolate_sql(@reflection.active_record.send(:sanitize_sql, @reflection.source_reflection.options[:conditions])) if @reflection.source_reflection.options[:conditions]),
-            ("#{@reflection.through_reflection.table_name}.#{@reflection.through_reflection.klass.inheritance_column} = #{@reflection.klass.quote_value(@reflection.through_reflection.klass.name.demodulize)}" unless @reflection.through_reflection.klass.descends_from_active_record?)
-          ].compact.collect { |condition| "(#{condition})" }.join(' AND ') unless (!@reflection.options[:conditions] && !@reflection.through_reflection.options[:conditions]  && !@reflection.source_reflection.options[:conditions] && @reflection.through_reflection.klass.descends_from_active_record?)
+          @conditions = build_conditions unless defined?(@conditions)
+          @conditions
+        end
+
+        def build_conditions
+          association_conditions = @reflection.options[:conditions]
+          through_conditions = @reflection.through_reflection.options[:conditions]
+          source_conditions = @reflection.source_reflection.options[:conditions]
+          uses_sti = !@reflection.through_reflection.klass.descends_from_active_record?
+
+          if association_conditions || through_conditions || source_conditions || uses_sti
+            all = []
+
+            [association_conditions, through_conditions, source_conditions].each do |conditions|
+              all << interpolate_sql(sanitize_sql(conditions)) if conditions
+            end
+
+            all << build_sti_condition if uses_sti
+
+            all.map { |sql| "(#{sql})" } * ' AND '
+          end
+        end
+
+        def build_sti_condition
+          "#{@reflection.through_reflection.quoted_table_name}.#{@reflection.through_reflection.klass.inheritance_column} = #{@reflection.klass.quote_value(@reflection.through_reflection.klass.name.demodulize)}"
         end
 
         alias_method :sql_conditions, :conditions

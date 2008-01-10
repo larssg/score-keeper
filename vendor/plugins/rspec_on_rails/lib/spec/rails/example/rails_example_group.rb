@@ -6,30 +6,14 @@ module Spec
   module Rails
     module Example
       class RailsExampleGroup < Test::Unit::TestCase
-        cattr_accessor(
-          :fixture_path,
-          :use_transactional_fixtures,
-          :use_instantiated_fixtures,
-          :global_fixtures
-        )
-        
-        class << self
-          def before_eval #:nodoc:
-            super
-            configure
-          end
-          
-          def configure
-            self.fixture_table_names = []
-            self.fixture_class_names = {}
-            self.use_transactional_fixtures = Spec::Runner.configuration.use_transactional_fixtures
-            self.use_instantiated_fixtures = Spec::Runner.configuration.use_instantiated_fixtures
-            self.fixture_path = Spec::Runner.configuration.fixture_path
-            self.global_fixtures = Spec::Runner.configuration.global_fixtures
-            self.fixtures(self.global_fixtures) if self.global_fixtures
-          end
+        # Rails >= r8570 uses setup/teardown_fixtures explicitly
+        before(:each) do
+          setup_fixtures if self.respond_to?(:setup_fixtures)
         end
-
+        after(:each) do
+          teardown_fixtures if self.respond_to?(:teardown_fixtures)
+        end
+        
         include Spec::Rails::Matchers
 
         @@model_id = 1000
@@ -37,15 +21,17 @@ module Spec
         # methods stubbed out.
         # Additional methods may be easily stubbed (via add_stubs) if +stubs+ is passed.
         def mock_model(model_class, options_and_stubs = {})
-          null = options_and_stubs.delete(:null_object)
-          stubs = options_and_stubs
+          # null = options_and_stubs.delete(:null_object)
+          # stubs = options_and_stubs
           id = @@model_id
           @@model_id += 1
-          m = mock("#{model_class.name}_#{id}", :null_object => null)
-          m.stub!(:id).and_return(id)
-          m.stub!(:to_param).and_return(id.to_s)
-          m.stub!(:new_record?).and_return(false)
-          m.stub!(:errors).and_return(stub("errors", :count => 0))
+          options_and_stubs = {
+            :id => id,
+            :to_param => id.to_s,
+            :new_record? => false,
+            :errors => stub("errors", :count => 0)
+          }.merge(options_and_stubs)
+          m = mock("#{model_class.name}_#{id}", options_and_stubs)
           m.send(:__mock_proxy).instance_eval <<-CODE
             def @target.is_a?(other)
               #{model_class}.ancestors.include?(other)
@@ -60,7 +46,6 @@ module Spec
               #{model_class}
             end
           CODE
-          add_stubs(m, stubs)
           yield m if block_given?
           m
         end
@@ -76,7 +61,7 @@ module Spec
           stubs.each {|k,v| m.stub!(k).and_return(v)}
           m
         end
-        Spec::Example::ExampleGroupFactory.register(:default, self)
+        Spec::Example::ExampleGroupFactory.default(self)
       end
     end
   end

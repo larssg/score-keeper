@@ -1,4 +1,5 @@
 require 'erb'
+require 'spec/runner/formatter/base_text_formatter'
 
 module Spec
   module Runner
@@ -30,7 +31,8 @@ module Spec
           @output.flush
         end
 
-        def add_example_group(name)
+        def add_example_group(example_group)
+          super
           @example_group_red = false
           @example_group_red = false
           @current_example_group_number += 1
@@ -40,7 +42,7 @@ module Spec
           end
           @output.puts "<div class=\"example_group\">"
           @output.puts "  <dl>"
-          @output.puts "  <dt id=\"example_group_#{current_example_group_number}\">#{h(name)}</dt>"
+          @output.puts "  <dt id=\"example_group_#{current_example_group_number}\">#{h(example_group.description)}</dt>"
           @output.flush
         end
 
@@ -79,11 +81,11 @@ module Spec
           @output.flush
         end
 
-        def example_pending(example_group_name, example_name, message)
+        def example_pending(example_group_description, example, message)
           @output.puts "    <script type=\"text/javascript\">makeYellow('rspec-header');</script>" unless @header_red
           @output.puts "    <script type=\"text/javascript\">makeYellow('example_group_#{current_example_group_number}');</script>" unless @example_group_red
           move_progress
-          @output.puts "    <dd class=\"spec not_implemented\"><span class=\"not_implemented_spec_name\">#{h(example_name)} (PENDING: #{h(message)})</span></dd>"
+          @output.puts "    <dd class=\"spec not_implemented\"><span class=\"not_implemented_spec_name\">#{h(example.description)} (PENDING: #{h(message)})</span></dd>"
           @output.flush
         end
 
@@ -91,6 +93,8 @@ module Spec
         # could output links to images or other files produced during the specs.
         #
         def extra_failure_content(failure)
+          require 'spec/runner/formatter/snippet_extractor'
+          @snippet_extractor ||= SnippetExtractor.new
           "    <pre class=\"ruby\"><code>#{@snippet_extractor.snippet(failure.exception)}</code></pre>"
         end
         

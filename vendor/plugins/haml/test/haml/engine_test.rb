@@ -93,6 +93,10 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("<img alt='' src='/foo.png' />\n", render("%img{:width => nil, :src => '/foo.png', :alt => String.new}"))
   end
 
+  def test_end_of_file_multiline
+    assert_equal("<p>0</p>\n<p>1</p>\n<p>2</p>\n", render("- for i in (0...3)\n  %p= |\n   i |"))
+  end
+
   # Options tests
 
   def test_stop_eval
@@ -133,6 +137,19 @@ class EngineTest < Test::Unit::TestCase
   def test_nil_attrs
     assert_equal("<p>nil</p>\n", render("%p{ :attr => nil } nil"))
     assert_equal("<p>nil</p>\n", render("%p{ :attr => x } nil", :locals => {:x => nil}))
+  end
+
+  def test_nil_id_with_syntactic_id
+    assert_equal("<p id='foo'>nil</p>\n", render("%p#foo{:id => nil} nil"))
+    assert_equal("<p id='foo_bar'>nil</p>\n", render("%p#foo{{:id => 'bar'}, :id => nil} nil"))
+    assert_equal("<p id='foo_bar'>nil</p>\n", render("%p#foo{{:id => nil}, :id => 'bar'} nil"))
+  end
+
+  def test_nil_class_with_syntactic_class
+    assert_equal("<p class='foo'>nil</p>\n", render("%p.foo{:class => nil} nil"))
+    assert_equal("<p class='bar foo'>nil</p>\n", render("%p.bar.foo{:class => nil} nil"))
+    assert_equal("<p class='bar foo'>nil</p>\n", render("%p.foo{{:class => 'bar'}, :class => nil} nil"))
+    assert_equal("<p class='bar foo'>nil</p>\n", render("%p.foo{{:class => nil}, :class => 'bar'} nil"))
   end
 
   def test_locals
@@ -297,6 +314,12 @@ class EngineTest < Test::Unit::TestCase
     user = Struct.new('User', :id).new
     assert_equal("<p class='struct_user' id='struct_user_new'>New User</p>\n",
                  render("%p[user] New User", :locals => {:user => user}))
+  end
+
+  def test_non_literal_attributes
+    assert_equal("<p a1='foo' a2='bar' a3='baz' />\n",
+                 render("%p{a2, a1, :a3 => 'baz'}/",
+                        :locals => {:a1 => {:a1 => 'foo'}, :a2 => {:a2 => 'bar'}}))
   end
 
   def test_render_should_accept_a_binding_as_scope

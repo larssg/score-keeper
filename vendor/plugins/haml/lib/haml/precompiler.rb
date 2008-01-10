@@ -122,7 +122,7 @@ END
       @tab_change  = 0
 
       old_line = Line.new
-      (@template + "\n-#").each_with_index do |text, index|
+      (@template + "\n-#\n-#").split("\n").each_with_index do |text, index|
         line = Line.new text.strip, text.lstrip.chomp, index
         line.spaces, line.tabs = count_soft_tabs(text)
 
@@ -194,13 +194,13 @@ END
       @index = index + 1
 
       case text[0]
-      when DIV_CLASS, DIV_ID: render_div(text)
-      when ELEMENT: render_tag(text)
-      when COMMENT: render_comment(text)
+      when DIV_CLASS, DIV_ID; render_div(text)
+      when ELEMENT; render_tag(text)
+      when COMMENT; render_comment(text)
       when SCRIPT
         return push_script(unescape_interpolation(text[2..-1].strip), false) if text[1] == SCRIPT
         push_script(text[1..-1], false)
-      when FLAT_SCRIPT: push_flat_script(text[1..-1])
+      when FLAT_SCRIPT; push_flat_script(text[1..-1])
       when SILENT_SCRIPT
         return start_haml_comment if text[1] == SILENT_COMMENT
 
@@ -209,11 +209,11 @@ END
         if (@block_opened && !mid_block_keyword?(text)) || text[1..-1].split(' ', 2)[0] == "case"
           push_and_tabulate([:script])
         end
-      when FILTER: start_filtered(text[1..-1].downcase)
+      when FILTER; start_filtered(text[1..-1].downcase)
       when DOCTYPE
         return render_doctype(text) if text[0...3] == '!!!'
         push_plain text
-      when ESCAPE: push_plain text[1..-1]
+      when ESCAPE; push_plain text[1..-1]
       else push_plain text
       end
     end
@@ -343,12 +343,12 @@ END
     def close
       tag, value = @to_close_stack.pop
       case tag
-      when :script: close_block
-      when :comment: close_comment value
-      when :element: close_tag value
-      when :loud: close_loud value
-      when :filtered: close_filtered value
-      when :haml_comment: close_haml_comment
+      when :script; close_block
+      when :comment; close_comment value
+      when :element; close_tag value
+      when :loud; close_loud value
+      when :filtered; close_filtered value
+      when :haml_comment; close_haml_comment
       end
     end
 
@@ -415,7 +415,7 @@ END
             attributes['class'] = ""
           end
           attributes['class'] += property
-        when '#': attributes['id'] = property
+        when '#'; attributes['id'] = property
         end
       end
       attributes
@@ -431,14 +431,14 @@ END
     end
     
     def parse_static_hash(text)  
-      return {} unless text && inner = text.scan(/^\{(.*)\}$/)[0]
+      return {} unless text
 
       attributes = {}
-      inner[0].split(',').each do |attrib|
+      text.split(',').each do |attrib|
         key, value, more = attrib.split('=>')
 
         # Make sure the key and value and only the key and value exist
-        # Otherwise, it's too complicated and we'll defer it to the actual Ruby parser
+        # Otherwise, it's too complicated or dynamic and we'll defer it to the actual Ruby parser
         key = parse_literal_value key
         value = parse_literal_value value
         return nil if more || key.nil? || value.nil?
@@ -480,13 +480,14 @@ END
       raise SyntaxError.new("Invalid tag: \"#{line}\"") unless match = line.scan(TAG_REGEX)[0]
       tag_name, attributes, attributes_hash, object_ref, action, value = match
       value = value.to_s.strip
+      attributes_hash = attributes_hash[1...-1] if attributes_hash
 
       raise SyntaxError.new("Illegal element: classes and ids must have values.") if attributes =~ /[\.#](\.|#|\z)/
 
       case action
-      when '/': atomic = true
-      when '~': parse = flattened = true
-      when '=':
+      when '/'; atomic = true
+      when '~'; parse = flattened = true
+      when '='
         parse = true
         value = unescape_interpolation(value[1..-1].strip) if value[0] == ?=
       end
@@ -499,7 +500,7 @@ END
       object_ref = "nil" if object_ref.nil? || @options[:suppress_eval]
 
       static_attributes = parse_static_hash(attributes_hash) # Try pre-compiling a static attributes hash
-      attributes_hash = "{nil}" if attributes_hash.nil? || static_attributes || @options[:suppress_eval]
+      attributes_hash = nil if static_attributes || @options[:suppress_eval]
       attributes = parse_class_and_id(attributes)
       Buffer.merge_attrs(attributes, static_attributes) if static_attributes
 
@@ -510,7 +511,7 @@ END
 
       atomic = true if !@block_opened && value.empty? && @options[:autoclose].include?(tag_name)
       
-      if object_ref == "nil" && attributes_hash == "{nil}" && !flattened && (parse || Buffer.one_liner?(value))
+      if object_ref == "nil" && attributes_hash.nil? && !flattened && (parse || Buffer.one_liner?(value))
         # This means that we can render the tag directly to text and not process it in the buffer
         tag_closed = !value.empty? && Buffer.one_liner?(value) && !parse
 
@@ -523,7 +524,8 @@ END
       else
         flush_merged_text
         content = value.empty? || parse ? 'nil' : value.dump
-        push_silent "_hamlout.open_tag(#{tag_name.inspect}, #{atomic.inspect}, #{(!value.empty?).inspect}, #{attributes.inspect}, #{object_ref}, #{content}, #{attributes_hash[1...-1]})"
+        attributes_hash = ', ' + attributes_hash if attributes_hash
+        push_silent "_hamlout.open_tag(#{tag_name.inspect}, #{atomic.inspect}, #{(!value.empty?).inspect}, #{attributes.inspect}, #{object_ref}, #{content}#{attributes_hash})"
       end
           
       return if atomic
@@ -591,8 +593,8 @@ END
       end
 
       case type
-      when "strict":   return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
-      when "frameset": return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'
+      when "strict";   return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+      when "frameset"; return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'
       else             return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
       end
     end
@@ -641,7 +643,7 @@ END
 
     # Counts the tabulation of a line.
     def count_soft_tabs(line)
-      spaces = line.index(/[^ ]/)
+      spaces = line.index(/([^ ]|$)/)
       if line[spaces] == ?\t
         return nil if line.strip.empty?
         raise SyntaxError.new("Illegal Indentation: Only two space characters are allowed as tabulation.")

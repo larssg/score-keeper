@@ -17,34 +17,31 @@ module WillPaginate
 
     # = Paginating finders for ActiveRecord models
     # 
-    # WillPaginate doesn't really add extra methods to your ActiveRecord models (except +per_page+
-    # unless it's already available). It simply intercepts
-    # the calls to paginating finders such as +paginate+, +paginate_by_user_id+ (and so on) and
-    # translates them to ordinary finders: +find+, +find_by_user_id+, etc. It does so with some
-    # method_missing magic, but you don't need to care for that. You simply use paginating finders
-    # same way you used ordinary ones. You only need to tell them what page you want in options.
+    # WillPaginate doesn't really add extra methods to your ActiveRecord models
+    # (except +per_page+ unless it's already available). It simply intercepts
+    # the calls to paginating finders such as +paginate+, +paginate_by_user_id+
+    # (and so on) and translates them to ordinary finders: +find+,
+    # +find_by_user_id+, etc. It does so with some +method_missing+ magic, but
+    # you don't need to care for that. You simply use paginating finders same
+    # way you used ordinary ones. You only need to specify what page do you want:
     #
-    #   @topics = Topic.paginate :all, :page => params[:page]
+    #   @posts = Post.paginate :page => params[:page]
     # 
-    # In paginating finders, "all" is implicit. No sense in paginating a single record, right? So:
+    # In paginating finders, "all" is implicit. No sense in paginating a single
+    # record, right? So:
     # 
     #   Post.paginate                  => Post.find :all
     #   Post.paginate_all_by_something => Post.find_all_by_something
     #   Post.paginate_by_something     => Post.find_all_by_something
     #
-    # Knowing that, the above example can be written simply as:
+    # Don't forget to pass the +page+ parameter! Without it, paginating finders
+    # will raise an error.
     #
-    #   @topics = Topic.paginate :page => params[:page]
-    #
-    # Don't forget to pass the +page+ parameter! Without it, paginating finders will raise an error.
-    #
-    # == Options
-    # Options for paginating finders are:
-    # 
-    #   page           REQUIRED, but defaults to 1 if false or nil
-    #   per_page       (default is read from the model, which is 30 if not overridden)
-    #   total entries  not needed unless you want to count the records yourself somehow
-    #   count          hash of options that are used only for the call to count
+    # == Options for paginating finders
+    # * <tt>:page</tt> -- REQUIRED, but defaults to 1 if false or nil
+    # * <tt>:per_page</tt> -- defaults to <tt>CurrentModel.per_page</tt> (which is 30 if not overridden)
+    # * <tt>:total_entries</tt> -- use only if you manually count total entries
+    # * <tt>:count</tt> -- additional options that are passed on to +count+
     # 
     module ClassMethods
       # This methods wraps +find_by_sql+ by simply adding LIMIT and OFFSET to your SQL string
@@ -54,19 +51,28 @@ module WillPaginate
       # 
       #   @developers = Developer.paginate_by_sql ['select * from developers where salary > ?', 80000],
       #                           :page => params[:page], :per_page => 3
+      #
+      # A query for counting rows will automatically be generated if you don't
+      # supply <tt>:total_entries</tt>. If you experience problems with this
+      # generated SQL, you might want to perform the count manually in your
+      # application.
       # 
       def paginate_by_sql(sql, options)
-        options, page, per_page = wp_parse_options!(options)
-
-        WillPaginate::Collection.create(page, per_page) do |pager|
+        WillPaginate::Collection.create(*wp_parse_options!(options)) do |pager|
           query = sanitize_sql(sql)
-          count_query = "SELECT COUNT(*) FROM (#{query}) AS count_table" unless options[:total_entries]
           options.update :offset => pager.offset, :limit => pager.per_page
           
+          original_query = query.dup
           add_limit! query, options
+          # perfom the find
           pager.replace find_by_sql(query)
           
-          pager.total_entries = options[:total_entries] || count_by_sql(count_query) unless pager.total_entries
+          unless pager.total_entries
+            count_query = original_query.sub /\bORDER\s+BY\s+[\w`,\s]+$/mi, ''
+            count_query = "SELECT COUNT(*) FROM (#{count_query}) AS count_table"
+            # perform the count query
+            pager.total_entries = count_by_sql(count_query)
+          end
         end
       end
 
@@ -87,7 +93,8 @@ module WillPaginate
           return method_missing_without_paginate(method, *args, &block) 
         end
 
-        options, page, per_page, total_entries = wp_parse_options!(args.pop)
+        options = args.pop
+        page, per_page, total_entries = wp_parse_options!(options)
         # an array of IDs may have been given:
         total_entries ||= (Array === args.first and args.first.size)
         
@@ -154,7 +161,7 @@ module WillPaginate
         page     = options.delete(:page) || 1
         per_page = options.delete(:per_page) || self.per_page
         total    = options.delete(:total_entries)
-        [options, page, per_page, total]
+        [page, per_page, total]
       end
 
     private

@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../../../spec_helper.rb'
+require 'spec/runner/formatter/progress_bar_formatter'
 
 module Spec
   module Runner
@@ -23,7 +24,7 @@ module Spec
         end
         
         it "should produce standard summary" do
-          @formatter.example_pending("example_group", "example", "message")
+          @formatter.example_pending("example_group", ExampleGroup.new("example"), "message")
           @io.rewind
           @formatter.dump_summary(3, 2, 1, 1)
           @io.string.should eql(%Q|
@@ -83,7 +84,7 @@ EOE
         end
         
         it "should dump pending" do
-          @formatter.example_pending("example_group", "example", "message")
+          @formatter.example_pending("example_group", ExampleGroup.new("example"), "message")
           @formatter.dump_pending
           @io.string.should =~ /Pending\:\nexample_group example \(message\)\n/
         end
@@ -105,6 +106,20 @@ EOE
         it "should not throw NoMethodError on output_to_tty?" do
           @out.should_receive(:tty?).and_raise(NoMethodError)
           @formatter.output_to_tty?.should be_false
+        end
+      end
+
+      describe ProgressBarFormatter, "dry run" do
+        before(:each) do
+          @io = StringIO.new
+          options = mock('options')
+          options.stub!(:dry_run).and_return(true)
+          @formatter = ProgressBarFormatter.new(options, @io)
+        end
+      
+        it "should not produce summary on dry run" do
+          @formatter.dump_summary(3, 2, 1, 0)
+          @io.string.should eql("")
         end
       end
     end

@@ -63,6 +63,7 @@ module Spec
       #   end
       class ControllerExampleGroup < FunctionalExampleGroup
         class << self
+                    
           # Use this to instruct RSpec to render views in your controller examples (Integration Mode).
           #
           #   describe ThingController do
@@ -117,7 +118,7 @@ module Spec
 
         attr_reader :response, :request, :controller
 
-        def initialize(example)
+        def initialize(defined_description, &implementation) #:nodoc:
           super
           controller_class_name = self.class.controller_class_name
           if controller_class_name

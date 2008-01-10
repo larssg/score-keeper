@@ -88,6 +88,11 @@ require 'controller_spec_controller'
       params_from(:get, '/controller_spec/some_action').should == {:controller => "controller_spec", :action => "some_action"}
     end
     
+    it "should expose instance vars through the assigns hash" do
+      get 'action_setting_the_assigns_hash'
+      assigns[:indirect_assigns_key].should == :indirect_assigns_key_value
+    end
+    
     it "should expose the assigns hash directly" do
       get 'action_setting_the_assigns_hash'
       assigns[:direct_assigns_key].should == :direct_assigns_key_value
@@ -153,5 +158,22 @@ end
 
 describe ControllerSpecController, :type => :controller do
   it "should not require naming the controller if describe is passed a type" do
+  end  
+end
+
+module Spec
+  module Rails
+    module Example
+      describe ControllerExampleGroup do
+        it "should clear its name from the description" do
+          group = describe("foo", :type => :controller) do
+            $nested_group = describe("bar") do
+            end
+          end
+          group.description.to_s.should == "foo"
+          $nested_group.description.to_s.should == "foo bar"
+        end
+      end
+    end
   end
 end

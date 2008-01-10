@@ -9,11 +9,10 @@
 (function($) {
   $.extend({ // Translate field to event
     fieldEvent: function(el, obs) {
-      var field = el[0] || el;
-      if (field.type == 'radio' || field.type == 'checkbox') event = 'click';
-      else if (obs && field.type == 'text' || field.type == 'textarea') event = 'keyup';
-      else event = 'change';
-      return event;
+      var field = el[0] || el, e = 'change';
+      if (field.type == 'radio' || field.type == 'checkbox') e = 'click';
+      else if (obs && field.type == 'text' || field.type == 'textarea') e = 'keyup';
+      return e;
     }
   });
   $.fn.extend({ // Delayed observer for fields and forms
@@ -72,6 +71,9 @@
 
 (function($) {
   $.fn.extend({
+    visualEffect : function(o) {
+      return this.effect(o);
+    },
     Appear : function(speed, callback) {
       return this.fadeIn(speed, callback);
     },

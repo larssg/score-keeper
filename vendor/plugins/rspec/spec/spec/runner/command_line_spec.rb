@@ -3,9 +3,11 @@ require File.dirname(__FILE__) + '/../../spec_helper.rb'
 module Spec
   module Runner
     describe CommandLine, ".run" do
+      it_should_behave_like "sandboxed rspec_options"
+      attr_reader :options, :err, :out
       before do
-        @err = StringIO.new
-        @out = StringIO.new
+        @err = options.error_stream
+        @out = options.output_stream
       end
 
       it "should run directory" do
@@ -45,7 +47,7 @@ module Spec
           end
 
           it "should interrupt" do
-            raise Interrupt
+            raise Interrupt, "I'm interrupting"
           end
         end
 
@@ -94,16 +96,17 @@ module Spec
         Spec::Runner::CommandLine.run(OptionParser.parse([], @err, @out))
       end
 
-      it "should pass its Description to the reporter" do
+      it "should pass its ExampleGroup to the reporter" do
         example_group = Class.new(::Spec::Example::ExampleGroup).describe("example_group") do
           it "should" do
           end
         end
-
         options = ::Spec::Runner::Options.new(@err, @out)
-        ::Spec::Runner::Options.should_receive(:new).with(@err, @out).and_return(options)
-        options.reporter.should_receive(:add_example_group).with(an_instance_of(Spec::Example::ExampleGroupDescription))
         options.add_example_group(example_group)
+
+        ::Spec::Runner::Options.should_receive(:new).with(@err, @out).and_return(options)
+        options.reporter.should_receive(:add_example_group).with(example_group)
+        
         Spec::Runner::CommandLine.run(OptionParser.parse([], @err, @out))
       end
 
@@ -123,7 +126,7 @@ module Spec
           end
         end
 
-        options.reporter.should_receive(:add_example_group).with(an_instance_of(Spec::Example::ExampleGroupDescription))
+        options.reporter.should_receive(:add_example_group).with(example_group)
 
         options.add_example_group example_group
         Spec::Runner::CommandLine.run(OptionParser.parse([], @err, @out))

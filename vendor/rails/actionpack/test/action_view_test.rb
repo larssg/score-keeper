@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/abstract_unit'
-require 'test/unit'
+require 'abstract_unit'
 
 class ActionViewTests < Test::Unit::TestCase
   def test_find_template_extension_from_first_render
@@ -23,4 +22,22 @@ class ActionViewTests < Test::Unit::TestCase
       assert_equal expectation, base.send(:find_template_extension_from_first_render)
     end
   end
+  
+  def test_should_report_file_exists_correctly
+    base = ActionView::Base.new
+
+    assert_nil base.send(:find_template_extension_from_first_render)
+    
+    assert_equal false, base.send(:file_exists?, 'test.rhtml')
+    assert_equal false, base.send(:file_exists?, 'test.rb')
+
+    base.instance_variable_set('@first_render', 'foo.rb')
+    
+    assert_equal 'rb', base.send(:find_template_extension_from_first_render)
+    
+    assert_equal false, base.send(:file_exists?, 'baz')
+    assert_equal false, base.send(:file_exists?, 'baz.rb')
+
+  end
+  
 end

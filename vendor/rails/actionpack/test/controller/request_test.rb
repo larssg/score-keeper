@@ -1,4 +1,5 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
+require 'action_controller/integration'
 
 class RequestTest < Test::Unit::TestCase
   def setup
@@ -315,7 +316,7 @@ class RequestTest < Test::Unit::TestCase
 
   def test_allow_method_hacking_on_post
     set_request_method_to :post
-    [:get, :head, :put, :post, :delete].each do |method|
+    [:get, :head, :options, :put, :post, :delete].each do |method|
       @request.instance_eval { @parameters = { :_method => method } ; @request_method = nil }
       assert_equal(method == :head ? :get : method, @request.method)
     end
@@ -730,10 +731,24 @@ class MultipartRequestParameterParsingTest < Test::Unit::TestCase
     assert_equal 'bar', params['foo']
 
     file = params['file']
-    assert_kind_of Tempfile, file
+    if RUBY_VERSION > '1.9'
+      assert_kind_of File, file
+    else
+      assert_kind_of Tempfile, file
+    end
     assert_equal 'file.txt', file.original_filename
     assert_equal "text/plain", file.content_type
     assert ('a' * 20480) == file.read
+  end
+
+  uses_mocha "test_no_rewind_stream" do
+    def test_no_rewind_stream
+      # Ensures that parse_multipart_form_parameters works with streams that cannot be rewound
+      file = File.open(File.join(FIXTURE_PATH, 'large_text_file'), 'rb')
+      file.expects(:rewind).raises(Errno::ESPIPE)
+      params = ActionController::AbstractRequest.parse_multipart_form_parameters(file, 'AaB03x', file.stat.size, {})
+      assert_not_equal 0, file.pos  # file was not rewound after reading
+    end
   end
 
   def test_binary_file
@@ -778,7 +793,7 @@ end
 
 class XmlParamsParsingTest < Test::Unit::TestCase
   def test_single_file
-    person = parse_body("<person><name>David</name><avatar type='file' name='me.jpg' content_type='image/jpg'>#{Base64.encode64('ABC')}</avatar></person>")
+    person = parse_body("<person><name>David</name><avatar type='file' name='me.jpg' content_type='image/jpg'>#{ActiveSupport::Base64.encode64('ABC')}</avatar></person>")
 
     assert_equal "image/jpg", person['person']['avatar'].content_type
     assert_equal "me.jpg", person['person']['avatar'].original_filename
@@ -790,8 +805,8 @@ class XmlParamsParsingTest < Test::Unit::TestCase
       <person>
         <name>David</name>
         <avatars>
-          <avatar type='file' name='me.jpg' content_type='image/jpg'>#{Base64.encode64('ABC')}</avatar>
-          <avatar type='file' name='you.gif' content_type='image/gif'>#{Base64.encode64('DEF')}</avatar>
+          <avatar type='file' name='me.jpg' content_type='image/jpg'>#{ActiveSupport::Base64.encode64('ABC')}</avatar>
+          <avatar type='file' name='you.gif' content_type='image/gif'>#{ActiveSupport::Base64.encode64('DEF')}</avatar>
         </avatars>
       </person>
     end_body

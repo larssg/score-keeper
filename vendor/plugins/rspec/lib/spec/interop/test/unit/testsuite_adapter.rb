@@ -9,12 +9,12 @@ module Test
       end
 
       def name
-        example_group.description.text
+        example_group.description
       end
 
       def run(*args)
         return true unless args.empty?
-        example_group.run(examples)
+        example_group.run
       end
 
       def size

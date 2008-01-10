@@ -104,7 +104,7 @@ module ActiveRecord
     # changed through means other than the writer method.
     #
     # The immutable requirement is enforced by Active Record by freezing any object assigned as a value object. Attempting to 
-    # change it afterwards will result in a <tt>TypeError</tt>.
+    # change it afterwards will result in a <tt>ActiveSupport::FrozenObjectError</tt>.
     # 
     # Read more about value objects on http://c2.com/cgi/wiki?ValueObject and on the dangers of not keeping value objects
     # immutable on http://c2.com/cgi/wiki?ValueObjectsShouldBeImmutable
@@ -123,7 +123,7 @@ module ActiveRecord
       #   This defaults to +false+.
       #
       # An optional block can be passed to convert the argument that is passed to the writer method into an instance of
-      # <tt>:class_name</tt>. The block will only be called if the arguement is not already an instance of <tt>:class_name</tt>.
+      # <tt>:class_name</tt>. The block will only be called if the argument is not already an instance of <tt>:class_name</tt>.
       #
       # Option examples:
       #   composed_of :temperature, :mapping => %w(reading celsius)
@@ -155,7 +155,7 @@ module ActiveRecord
               if (instance_variable_get("@#{name}").nil? || force_reload) && (!allow_nil || mapping.any? {|pair| !read_attribute(pair.first).nil? })
                 instance_variable_set("@#{name}", class_name.constantize.new(*mapping.collect {|pair| read_attribute(pair.first)}))
               end
-              return instance_variable_get("@#{name}")
+              instance_variable_get("@#{name}")
             end
           end
 

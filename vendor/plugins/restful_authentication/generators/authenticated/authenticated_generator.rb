@@ -1,4 +1,8 @@
+require 'restful_authentication/rails_commands'
 class AuthenticatedGenerator < Rails::Generator::NamedBase
+  default_options :skip_migration => false,
+                  :include_activation => false
+                  
   attr_reader   :controller_name,
                 :controller_class_path,
                 :controller_file_path,
@@ -6,8 +10,8 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
                 :controller_class_nesting_depth,
                 :controller_class_name,
                 :controller_singular_name,
-                :controller_plural_name
-  alias_method  :controller_file_name,  :controller_singular_name
+                :controller_plural_name,
+                :controller_file_name
   alias_method  :controller_table_name, :controller_plural_name
   attr_reader   :model_controller_name,
                 :model_controller_class_path,
@@ -30,7 +34,8 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
 
     # sessions controller
     base_name, @controller_class_path, @controller_file_path, @controller_class_nesting, @controller_class_nesting_depth = extract_modules(@controller_name)
-    @controller_class_name_without_nesting, @controller_singular_name, @controller_plural_name = inflect_names(base_name)
+    @controller_class_name_without_nesting, @controller_file_name, @controller_plural_name = inflect_names(base_name)
+    @controller_singular_name = @controller_file_name.singularize
 
     if @controller_class_nesting.empty?
       @controller_class_name = @controller_class_name_without_nesting
@@ -160,14 +165,14 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
 
 
       # Controller templates
-      m.template 'login.rhtml',  File.join('app/views', controller_class_path, controller_file_name, "new.rhtml")
-      m.template 'signup.rhtml', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.rhtml")
+      m.template 'login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
+      m.template 'signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
 
       if options[:include_activation]
         # Mailer templates
         %w( activation signup_notification ).each do |action|
-          m.template "#{action}.rhtml",
-                     File.join('app/views', "#{file_name}_mailer", "#{action}.rhtml")
+          m.template "#{action}.html.erb",
+                     File.join('app/views', "#{file_name}_mailer", "#{action}.html.erb")
         end
       end
 
@@ -176,6 +181,9 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
           :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}"
         }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
       end
+      
+      m.route_resource  controller_singular_name
+      m.route_resources model_controller_plural_name
     end
 
     action = nil
@@ -186,20 +194,19 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
         puts ("-" * 70)
         puts "Don't forget to:"
         puts
-        puts "  - add restful routes in config/routes.rb"
-        puts "    map.resources :#{model_controller_file_name}"
-        puts "    map.resource  :#{controller_singular_name.singularize}"
-        puts
-        puts " Rails 1.2.3 may need a :controller option for the singular resource:"
-        puts "  - map.resource :#{controller_singular_name.singularize}, :controller => '#{controller_file_name}'"
-        puts
         if options[:include_activation]
           puts "    map.activate '/activate/:activation_code', :controller => '#{model_controller_file_name}', :action => 'activate'"
           puts
           puts "  - add an observer to config/environment.rb"
           puts "    config.active_record.observers = :#{file_name}_observer"
+          puts
         end
-        puts
+        if options[:stateful]
+          puts "Also, don't forget to install the acts_as_state_machine plugin!"
+          puts
+          puts "  svn co http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk vendor/plugins/acts_as_state_machine"
+          puts
+        end
         puts "Try these for some familiar login URLs if you like:"
         puts
         puts "  map.signup '/signup', :controller => '#{model_controller_file_name}', :action => 'new'"
@@ -228,7 +235,7 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
   end
 
   def has_rspec?
-    File.exist?('spec') && File.directory?('spec')
+    options[:rspec] || (File.exist?('spec') && File.directory?('spec'))
   end
   
   protected
@@ -243,6 +250,10 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
       opt.on("--skip-migration", 
              "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
       opt.on("--include-activation", 
-             "Generate signup 'activation code' confirmation via email") { |v| options[:include_activation] = v }
+             "Generate signup 'activation code' confirmation via email") { |v| options[:include_activation] = true }
+      opt.on("--stateful", 
+             "Use acts_as_state_machine.  Assumes --include-activation") { |v| options[:include_activation] = options[:stateful] = true }
+      opt.on("--rspec",
+             "Force rspec mode (checks for RAILS_ROOT/spec by default)") { |v| options[:rspec] = true }
     end
 end

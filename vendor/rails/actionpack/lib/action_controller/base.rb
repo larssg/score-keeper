@@ -70,7 +70,7 @@ module ActionController #:nodoc:
   end
 
   class DoubleRenderError < ActionControllerError #:nodoc:
-    DEFAULT_MESSAGE = "Render and/or redirect were called multiple times in this action. Please note that you may only call render OR redirect, and at most once per action. Also note that neither redirect nor render terminate execution of the action, so if you want to exit an action after redirecting, you need to do something like \"redirect_to(...) and return\". Finally, note that to cause a before filter to halt execution of the rest of the filter chain, the filter must return false, explicitly, so \"render(...) and return false\"."
+    DEFAULT_MESSAGE = "Render and/or redirect were called multiple times in this action. Please note that you may only call render OR redirect, and at most once per action. Also note that neither redirect nor render terminate execution of the action, so if you want to exit an action after redirecting, you need to do something like \"redirect_to(...) and return\"."
 
     def initialize(message = nil)
       super(message || DEFAULT_MESSAGE)
@@ -164,7 +164,7 @@ module ActionController #:nodoc:
   # For removing objects from the session, you can either assign a single key to nil, like <tt>session[:person] = nil</tt>, or you can
   # remove the entire session with reset_session.
   #
-  # Sessions are stored in a browser cookie that's crytographically signed, but unencrypted, by default. This prevents
+  # Sessions are stored in a browser cookie that's cryptographically signed, but unencrypted, by default. This prevents
   # the user from tampering with the session but also allows him to see its contents.
   #
   # Do not put secret information in session!
@@ -293,7 +293,7 @@ module ActionController #:nodoc:
     # The param_parsers hash lets you register handlers which will process the http body and add parameters to the
     # <tt>params</tt> hash. These handlers are invoked for post and put requests.
     #
-    # By default application/xml is enabled. A XmlSimple class with the same param name as the root will be instanciated
+    # By default application/xml is enabled. A XmlSimple class with the same param name as the root will be instantiated
     # in the <tt>params</tt>. This allows XML requests to mask themselves as regular form submissions, so you can have one
     # action serve both regular forms and web service requests.
     #
@@ -454,10 +454,10 @@ module ActionController #:nodoc:
         view_paths.push(*path)
       end
       
-      # Replace sensitive paramater data from the request log.
-      # Filters paramaters that have any of the arguments as a substring.
+      # Replace sensitive parameter data from the request log.
+      # Filters parameters that have any of the arguments as a substring.
       # Looks in all subhashes of the param hash for keys to filter.
-      # If a block is given, each key and value of the paramater hash and all
+      # If a block is given, each key and value of the parameter hash and all
       # subhashes is passed to it, the value or key
       # can be replaced using String#replace or similar method.
       #
@@ -590,7 +590,7 @@ module ActionController #:nodoc:
       # However, you might ask why the action from the current request, 'contacts', isn't carried over into the new URL. The
       # answer has to do with the order in which the parameters appear in the generated path. In a nutshell, since the
       # value that appears in the slot for <tt>:first</tt> is not equal to default value for <tt>:first</tt> we stop using
-      # defaults. On it's own, this rule can account for much of the typical Rails URL behavior.
+      # defaults. On its own, this rule can account for much of the typical Rails URL behavior.
       #  
       # Although a convenience, defaults can occasionally get in your way. In some cases a default persists longer than desired.
       # The default may be cleared by adding <tt>:name => nil</tt> to <tt>url_for</tt>'s options.
@@ -850,8 +850,8 @@ module ActionController #:nodoc:
           response.headers["Location"] = url_for(location)
         end
 
-        if text = options[:text]
-          render_for_text(text, options[:status])
+        if options.has_key?(:text)
+          render_for_text(options[:text], options[:status])
 
         else
           if file = options[:file]
@@ -862,7 +862,7 @@ module ActionController #:nodoc:
 
           elsif inline = options[:inline]
             add_variables_to_assigns
-            render_for_text(@template.render_template(options[:type] || :erb, inline, nil, options[:locals] || {}), options[:status])
+            render_for_text(@template.render_template(options[:type], inline, nil, options[:locals] || {}), options[:status])
 
           elsif action_name = options[:action]
             template = default_template_name(action_name.to_s)
@@ -873,13 +873,13 @@ module ActionController #:nodoc:
             end            
 
           elsif xml = options[:xml]
-            response.content_type = Mime::XML
+            response.content_type ||= Mime::XML
             render_for_text(xml.respond_to?(:to_xml) ? xml.to_xml : xml, options[:status])
 
           elsif json = options[:json]
             json = json.to_json unless json.is_a?(String)
             json = "#{options[:callback]}(#{json})" unless options[:callback].blank?
-            response.content_type = Mime::JSON
+            response.content_type ||= Mime::JSON
             render_for_text(json, options[:status])
 
           elsif partial = options[:partial]
@@ -943,19 +943,9 @@ module ActionController #:nodoc:
           raise ArgumentError, "too many arguments to head"
         elsif args.empty?
           raise ArgumentError, "too few arguments to head"
-        elsif args.length == 2
-          status = args.shift
-          options = args.shift
-        elsif args.first.is_a?(Hash)
-          options = args.first
-        else
-          status = args.first
-          options = {}
         end
-
-        raise ArgumentError, "head requires an options hash" if !options.is_a?(Hash)
-
-        status = interpret_status(status || options.delete(:status) || :ok)
+        options = args.extract_options!
+        status = interpret_status(args.shift || options.delete(:status) || :ok)
 
         options.each do |key, value|
           headers[key.to_s.dasherize.split(/-/).map { |v| v.capitalize }.join("-")] = value.to_s
@@ -1024,6 +1014,7 @@ module ActionController #:nodoc:
       #   redirect_to post
       #   redirect_to "http://www.rubyonrails.org"
       #   redirect_to "/images/screenshot.jpg"
+      #   redirect_to articles_url
       #   redirect_to :back
       #
       # The redirection happens as a "302 Moved" header unless otherwise specified. 
@@ -1219,7 +1210,7 @@ module ActionController #:nodoc:
 
       def add_instance_variables_to_assigns
         @@protected_variables_cache ||= Set.new(protected_instance_variables)
-        instance_variables.each do |var|
+        instance_variable_names.each do |var|
           next if @@protected_variables_cache.include?(var)
           @assigns[var[1..-1]] = instance_variable_get(var)
         end

@@ -1,3 +1,5 @@
+require 'spec/runner/formatter/base_text_formatter'
+
 module Spec
   module Runner
     module Formatter
@@ -14,10 +16,11 @@ module Spec
         
           def run_started(count)
             @count = count
-            @output.puts "Running #@count scenarios:\n"
+            @output.puts "Running #@count scenarios\n\n"
           end
 
           def story_started(title, narrative)
+            @current_story_title = title
             @output.puts "Story: #{title}\n\n"
             narrative.each_line do |line|
               @output.print "  "
@@ -31,8 +34,9 @@ module Spec
           end
 
           def scenario_started(story_title, scenario_name)
+            @current_scenario_name = scenario_name
             @scenario_already_failed = false
-            @output.print "\n\nScenario: #{scenario_name}"
+            @output.print "\n\n  Scenario: #{scenario_name}"
             @scenario_ok = true
           end
         
@@ -41,23 +45,23 @@ module Spec
           end
         
           def scenario_failed(story_title, scenario_name, err)
+            @options.backtrace_tweaker.tweak_backtrace(err)
             @failed_scenarios << [story_title, scenario_name, err] unless @scenario_already_failed
             @scenario_already_failed = true
           end
         
           def scenario_pending(story_title, scenario_name, msg)
-            @pending_steps << [story_title, scenario_name, msg]
             @pending_scenario_count += 1 unless @scenario_already_failed
             @scenario_already_failed = true
           end
         
           def run_ended
-            @output.puts "\n\n#@count scenarios: #@successful_scenario_count succeeded, #{@failed_scenarios.size} failed, #@pending_scenario_count pending"
+            @output.puts "#@count scenarios: #@successful_scenario_count succeeded, #{@failed_scenarios.size} failed, #@pending_scenario_count pending"
             unless @pending_steps.empty?
               @output.puts "\nPending Steps:"
               @pending_steps.each_with_index do |pending, i|
-                title, scenario_name, msg = pending
-                @output.puts "#{i+1}) #{title} (#{scenario_name}): #{msg}"
+                story_name, scenario_name, msg = pending
+                @output.puts "#{i+1}) #{story_name} (#{scenario_name}): #{msg}"
               end
             end
             unless @failed_scenarios.empty?
@@ -68,9 +72,9 @@ module Spec
     #{i+1}) #{title} (#{scenario_name}) FAILED
     #{err.class}: #{err.message}
     #{err.backtrace.join("\n")}
-    ]
+]
               end
-            end
+            end            
           end
         
           def step_succeeded(type, description, *args)
@@ -79,6 +83,7 @@ module Spec
         
           def step_pending(type, description, *args)
             found_step(type, description, false, *args)
+            @pending_steps << [@current_story_title, @current_scenario_name, description]
             @output.print " (PENDING)"
             @scenario_ok = false
           end
@@ -91,14 +96,18 @@ module Spec
           
           def collected_steps(steps)
           end
+          
+          def method_missing(sym, *args, &block) #:nodoc:
+            # noop - ignore unknown messages
+          end
 
         private
 
           def found_step(type, description, failed, *args)
             text = if(type == @previous_type)
-              "\n  And "
+              "\n    And "
             else
-              "\n\n  #{type.to_s.capitalize} "
+              "\n\n    #{type.to_s.capitalize} "
             end
             i = -1
             text << description.gsub(::Spec::Story::Step::PARAM_PATTERN) { |param| args[i+=1] }
