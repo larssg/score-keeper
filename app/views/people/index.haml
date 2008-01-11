@@ -14,7 +14,7 @@
         - admin_area do
           = link_to 'Edit'[], edit_person_path(person)
 
-      %td= person.display_name, 
+      %td= person.display_name 
       %td= link_to 'Remove'[], person_path(person), :method => :delete, :confirm => 'Are you sure?' if admin?
 
 - if admin?
