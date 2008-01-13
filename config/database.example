@@ -14,7 +14,7 @@
 development:
   adapter: mysql
   encoding: utf8
-  database: table_soccer_development
+  database: scorekeeper_development
   username: root
   password:
   socket: /tmp/mysql.sock
@@ -25,7 +25,7 @@ development:
 test:
   adapter: mysql
   encoding: utf8
-  database: table_soccer_test
+  database: scorekeeper_test
   username: root
   password:
   socket: /tmp/mysql.sock
@@ -33,7 +33,7 @@ test:
 production:
   adapter: mysql
   encoding: utf8
-  database: table_soccer_production
+  database: scorekeeper_production
   username: root
   password: 
   socket: /tmp/mysql.sock
