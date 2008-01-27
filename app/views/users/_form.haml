@@ -7,6 +7,10 @@
   = f.text_field :name
 
 %label
+  = 'Display name'[]
+  = f.text_field :display_name
+
+%label
   = 'Email'[]
   = f.text_field :email
 
@@ -29,22 +33,28 @@
   = 'Confirm Password'[]
   = f.password_field :password_confirmation
 
+- fields_for :mugshot do |fi|
+  %label
+    = 'Picture'[]
+    = fi.file_field :uploaded_data
+
 - if admin?
   %label
     = 'Administrator'[]
     = f.check_box :is_admin
 
-- if @user_openids.nil? && (@user.nil? || @user.identity_url.blank?)
-  %p
-    ='...' + 'or use'[] + ':'
+- unless logged_in?
+  - if @user_openids.nil? && (@user.nil? || @user.identity_url.blank?)
+    %p
+      ='...' + 'or use'[] + ':'
 
-  %p
+    %p
+      %label
+        = 'OpenID'[] + ':'
+        = text_field_tag 'openid_url'
+
+  - elsif @user_openids.nil?
     %label
-      = 'OpenID'[] + ':'
-      = text_field_tag 'openid_url'
-
-- elsif @user_openids.nil?
-  %label
-    = 'OpenID'[]
-    %br
-    = f.text_field :identity_url, :readonly => true
+      = 'OpenID'[]
+      %br
+      = f.text_field :identity_url, :readonly => true

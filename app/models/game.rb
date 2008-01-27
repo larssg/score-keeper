@@ -31,28 +31,28 @@ class Game < ActiveRecord::Base
     teams.each do |team_info|
       team = self.teams.build(:score => team_info[:score])
       team_info[:members].each do |member_id|
-        team.memberships.build(:person_id => member_id)
+        team.memberships.build(:user_id => member_id)
       end
     end
   end
   
   def validate
-    person_ids = []
+    user_ids = []
     
     if self.teams.length == 2
       self.teams.each do |team|
         team.memberships.each do |membership|
-          unless person_ids.index(membership.person_id).nil?
-            errors.add(:people, 'cannot contain the same person twice'[])
+          unless user_ids.index(membership.user_id).nil?
+            errors.add(:people, 'cannot contain the same user twice'[])
           end
-          person_ids << membership.person_id
+          user_ids << membership.user_id
         end
       end
     end
   end
 
   def self.reset_rankings
-    Person.update_all("ranking = 2000")
+    User.update_all("ranking = 2000")
     Game.find(:all).each do |game|
       game.update_rankings
     end
@@ -72,14 +72,14 @@ class Game < ActiveRecord::Base
   def update_winners
     self.teams.each do |team|
       team.memberships.each do |membership|
-        person = membership.person
+        user = membership.user
 
-        person.increment(:games_won) if team == self.winner
-        person.goals_for += team.score
-        person.goals_against += team.other.score
-        person.memberships_count = Membership.count(:conditions => { :person_id => person.id })
+        user.increment(:games_won) if team == self.winner
+        user.goals_for += team.score
+        user.goals_against += team.other.score
+        user.memberships_count = Membership.count(:conditions => { :user_id => user.id })
         
-        person.save
+        user.save
       end
       
       team.update_attribute :won, team == self.winner
@@ -89,14 +89,14 @@ class Game < ActiveRecord::Base
   def update_after_destroy
     self.teams.each do |team|
       team.memberships.each do |membership|
-        person = membership.person
+        user = membership.user
         
-        person.decrement(:games_won) if team == self.winner
-        person.goals_for -= team.score
-        person.goals_against -= team.other.score
-        person.decrement(:memberships_count)
+        user.decrement(:games_won) if team == self.winner
+        user.goals_for -= team.score
+        user.goals_against -= team.other.score
+        user.decrement(:memberships_count)
         
-        person.save
+        user.save
       end
     end
     
@@ -121,6 +121,6 @@ class Game < ActiveRecord::Base
   end
   
   def self.goals_scored
-    Person.sum(:goals_for) / 2
+    User.sum(:goals_for) / 2
   end
 end

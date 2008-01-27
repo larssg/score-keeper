@@ -5,7 +5,9 @@ class User < ActiveRecord::Base
   attr_accessor :identity_url
   
   has_many :user_openids, :dependent => :destroy
-
+  has_many :memberships
+  belongs_to :mugshot
+  
   validates_presence_of     :email,                       :if => :not_openid?
   validates_length_of       :email,    :within => 3..100, :if => :not_openid?
   validates_presence_of     :login
@@ -22,7 +24,63 @@ class User < ActiveRecord::Base
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :name, :identity_url
+  attr_accessible :login, :email, :password, :password_confirmation, :name, :identity_url, :display_name
+  
+  before_destroy :remove_games
+
+  def initials
+    self.name.split(' ').collect{ |n| n.first }.join
+  end
+
+  def self.find_all
+    find(:all, :order => 'name, display_name')
+  end
+  
+  def games_lost
+    memberships_count - games_won
+  end
+
+  def winning_percentage
+    return 0.0 if memberships_count == 0
+    ((games_won.to_f / memberships_count.to_f) * 1000).to_i / 10.to_f
+  end
+  
+  def difference
+    goals_for - goals_against
+  end
+  
+  def difference_average
+    return 0.0 if memberships_count == 0
+    ((10 * difference) / memberships_count) / 10.0
+  end
+
+  def all_time_high
+    Membership.find(:first, :conditions => { :user_id => self.id }, :order => 'memberships.current_ranking DESC')
+  end
+  
+  def all_time_low
+    Membership.find(:first, :conditions => { :user_id => self.id }, :order => 'memberships.current_ranking')
+  end
+  
+  def position
+    ranked = User.find_ranked
+    ranked.each_with_index do |user, index|
+      return index + 1 if user.id == self.id
+    end
+    
+    newbies = User.find_newbies
+    newbies.each_with_index do |user, index|
+      return index + 1 + ranked.size if user.id == self.id
+    end
+  end
+  
+  def self.find_ranked
+    User.find(:all, :order => 'ranking DESC, games_won DESC, name', :conditions => 'memberships_count >= 20')
+  end
+  
+  def self.find_newbies
+    User.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, name', :conditions => 'memberships_count < 20')
+  end  
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
@@ -75,6 +133,17 @@ class User < ActiveRecord::Base
   end
 
   protected
+    def remove_games
+      self.memberships.each do |membership|
+        game = membership.team.game
+        game.postpone_ranking_update = true
+        game.destroy
+      end
+    
+      # Fix stats
+      Game.reset_rankings
+    end
+
     # before filter 
     def encrypt_password
       return if password.blank?

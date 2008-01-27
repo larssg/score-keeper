@@ -22,10 +22,11 @@
 
 - content_for :sidebar do
   - cache(dashboard_path + '_sidebar') do
-    #leader
-      %h3= 'Leader'[]
-      .mugshot= link_to image_tag(@leader.mugshot.public_filename(:thumb), :alt => @leader.full_name), person_path(@leader) if @leader.mugshot
-      = person_link_full @leader
+    - unless @leader.nil?
+      #leader
+        %h3= 'Leader'[]
+        .mugshot= link_to image_tag(@leader.mugshot.public_filename(:thumb), :alt => @leader.name), user_path(@leader) if @leader.mugshot
+        = user_link_full @leader
 
     #counts
       %p
@@ -34,16 +35,18 @@
       %p
         %label= 'Goals scored'[] + ':'
         = @goals_scored
-      %p
-        %label= 'All time high'[] + ':'
-        = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
-        = 'by'[]
-        = person_link_full @all_time_high.person
-      %p
-        %label= 'All time low'[] + ':'
-        = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
-        = 'by'[]
-        = person_link_full @all_time_low.person
+      - unless @all_time_high.nil?
+        %p
+          %label= 'All time high'[] + ':'
+          = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
+          = 'by'[]
+          = user_link_full @all_time_high.user
+      - unless @all_time_low.nil?
+        %p
+          %label= 'All time low'[] + ':'
+          = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
+          = 'by'[]
+          = user_link_full @all_time_low.user
 
   - if logged_in?
     = render :partial => 'games/form'

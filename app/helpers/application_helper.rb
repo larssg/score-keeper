@@ -20,12 +20,12 @@ module ApplicationHelper
     logged_in? && current_user.is_admin?
   end
   
-  def person_link(person)
-    link_to person.display_name, person_path(person), :class => 'person'
+  def user_link(user)
+    link_to user.display_name, user_path(user), :class => 'user'
   end
   
-  def person_link_full(person)
-    link_to person.full_name, person_path(person), :class => 'person'
+  def user_link_full(user)
+    link_to user.name, user_path(user), :class => 'user'
   end
   
   def graph(url)

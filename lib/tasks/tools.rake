@@ -15,13 +15,13 @@ namespace :tools do
       names = ['Al Pine', 'Barry Tone', 'Bill Board', 'Ed Cetera', 'Gene Ohme', 'Justin Case', 'Norm Al', 'Sal Uthe', 'Tim Berr', 'Wall Russ']
       names.each do |name|
         first_name, last_name = name.split
-        Person.create(:first_name => first_name, :last_name => last_name, :display_name => first_name)
+        User.create(:first_name => first_name, :last_name => last_name, :display_name => first_name)
       end
     end
     
     desc "Insert 500 fake games"
     task :games => :environment do
-      people = Person.find(:all)
+      people = User.find(:all)
       
       500.times do |index|
         players = people.sort_by{ rand }.slice(0...4)

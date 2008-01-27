@@ -4,11 +4,11 @@
   - fields_for :teams do |fi|
     %label
       %span= 'Attacker'[]
-      = fi.collection_select 'person11', @person_list, :id, :full_name, :include_blank => true, :class => 'person'
+      = fi.collection_select 'user11', @user_list, :id, :name, :include_blank => true, :class => 'user'
 
     %label
       %span= 'Defender'[]
-      = fi.collection_select 'person12', @person_list, :id, :full_name, :include_blank => true, :class => 'person'
+      = fi.collection_select 'user12', @user_list, :id, :name, :include_blank => true, :class => 'user'
 
     %label
       %span= 'Score'[]
@@ -22,10 +22,10 @@
 
     %label
       %span= 'Attacker'[]
-      = fi.collection_select 'person21', @person_list, :id, :full_name, :include_blank => true, :class => 'person'
+      = fi.collection_select 'user21', @user_list, :id, :name, :include_blank => true, :class => 'user'
 
     %label
       %span= 'Defender'[]
-      = fi.collection_select 'person22', @person_list, :id, :full_name, :include_blank => true, :class => 'person'
+      = fi.collection_select 'user22', @user_list, :id, :name, :include_blank => true, :class => 'user'
 
   = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'

@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_filter :login_required, :except => [ :index, :show ]
+  before_filter :login_required
   cache_sweeper :game_sweeper
   
   make_resourceful do
@@ -31,15 +31,15 @@ class GamesController < ApplicationController
       format.atom { render :layout => false } # index.atom.builder
       format.rss { render :layout => false } # index.rss.builder
       format.xml do
-        if params[:person_id]
-          @memberships = @person.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
-          render :action => 'person_games'
+        if params[:user_id]
+          @memberships = @user.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
+          render :action => 'user_games'
         else
           render :xml => @games.to_xml
         end
       end
       format.graph do
-        render_chart if params[:person_id]
+        render_chart if params[:user_id]
       end
     end
   end
@@ -50,21 +50,21 @@ class GamesController < ApplicationController
   
   protected
   def load_data_for_index
-    if params[:person_id]
-      @person = Person.find(params[:person_id])
+    if params[:user_id]
+      @user = User.find(params[:user_id])
     else
       conditions = nil
       if params[:filter]
-        @filter = Person.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, last_name, first_name')
+        @filter = User.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
         if params[:filter].index(',')
           conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
         else
           conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
         end
       end
-      @games = Game.paginate_recent(:include => { :teams => { :memberships => :person } }, :conditions => conditions, :page => params[:page])
+      @games = Game.paginate_recent(:include => { :teams => { :memberships => :user } }, :conditions => conditions, :page => params[:page])
       @game = current_model.new
-      @person_list = Person.find_all
+      @user_list = User.find_all
     end
   end
 
@@ -72,11 +72,11 @@ class GamesController < ApplicationController
     [
       {
         :score => params[:teams][:score1],
-        :members => [ params[:teams][:person11], params[:teams][:person12] ]
+        :members => [ params[:teams][:user11], params[:teams][:user12] ]
       },
       {
         :score => params[:teams][:score2],
-        :members => [ params[:teams][:person21], params[:teams][:person22] ]
+        :members => [ params[:teams][:user21], params[:teams][:user22] ]
       }
     ]
   end
@@ -84,7 +84,7 @@ class GamesController < ApplicationController
   def render_chart
     chart = setup_ranking_graph
     
-    memberships = @person.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at, games.played_at AS played_at', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id')
+    memberships = @user.memberships.find(:all, :order => 'memberships.id', :select => 'memberships.current_ranking, memberships.created_at, games.played_at AS played_at', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id')
     chart.set_data [2000] + memberships.collect { |m| m.current_ranking }
     chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
     chart.line 2, '#3399CC'

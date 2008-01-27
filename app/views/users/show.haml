@@ -1,0 +1,49 @@
+- title 'Ranking chart for {name}'[:ranking_chart_for, @user.name]
+
+- if @user.memberships_count > 0
+  %h3= 'Ranking chart for {name}'[:ranking_chart_for, @user.name]
+  #graph= graph(formatted_user_games_url(@user.id, :graph))
+
+- content_for :sidebar do
+  .user
+    - if @user.mugshot
+      .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => @user.name
+
+    #counts
+      %p.position
+        %label= 'Position'[] + ':'
+        = @user.position
+
+      %p
+        %label= 'Played games'[] + ':'
+        = @user.memberships_count
+  
+      %table.for_against
+        %tr
+          %td.for
+            %label= 'Games won'[] + ':'
+            = @user.games_won
+          %td.against
+            %label= 'Games lost'[] + ':'
+            = @user.games_lost
+
+        %tr
+          %td.for
+            %label= 'Goals for'[] + ':'
+            = @user.goals_for
+          %td.against
+            %label= 'Goals against'[] + ':'
+            = @user.goals_against
+
+        - if @all_time_high && @all_time_low
+          %tr
+            %td.for
+              %label= 'Best ranking'[] + ':'
+              = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
+            %td.against
+              %label= 'Worst ranking'[] + ':'
+              = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
+
+      - admin_area do
+        %p
+          = link_to 'Edit'[], edit_user_path(@user)

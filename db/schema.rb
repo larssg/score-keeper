@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 25) do
   add_index "games", ["played_on"], :name => "index_games_on_played_on"
 
   create_table "memberships", :force => true do |t|
-    t.integer  "person_id"
+    t.integer  "user_id"
     t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(:version => 25) do
     t.integer  "current_ranking"
   end
 
-  add_index "memberships", ["person_id"], :name => "index_memberships_on_person_id"
+  add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
   add_index "memberships", ["team_id"], :name => "index_memberships_on_team_id"
 
   create_table "mugshots", :force => true do |t|
@@ -64,21 +64,6 @@ ActiveRecord::Schema.define(:version => 25) do
   create_table "open_id_authentication_settings", :force => true do |t|
     t.string "setting"
     t.binary "value"
-  end
-
-  create_table "people", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "display_name"
-    t.integer  "memberships_count"
-    t.integer  "games_won",         :default => 0
-    t.integer  "goals_for",         :default => 0
-    t.integer  "goals_against",     :default => 0
-    t.integer  "mugshot_id"
-    t.integer  "ranking",           :default => 2000
-    t.integer  "new_ranking",       :default => 0
   end
 
   create_table "teams", :force => true do |t|
@@ -115,6 +100,13 @@ ActiveRecord::Schema.define(:version => 25) do
     t.datetime "activated_at"
     t.boolean  "is_admin",                                :default => false
     t.string   "name"
+    t.string   "display_name"
+    t.integer  "memberships_count",                       :default => 0
+    t.integer  "games_won",                               :default => 0
+    t.integer  "goals_for",                               :default => 0
+    t.integer  "goals_against",                           :default => 0
+    t.integer  "mugshot_id"
+    t.integer  "ranking",                                 :default => 2000
   end
 
 end

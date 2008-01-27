@@ -29,8 +29,8 @@ Rails::Initializer.run do |config|
   # Your secret key for verifying cookie session data integrity.
   # If you change this key, all old sessions will become invalid!
   config.action_controller.session = {
-    :session_key => '_table_soccer_session',
-    :secret      => 'c15b2ff4bd6029e84f5c526812f52a7b'
+    :session_key => '_scorekeeper_session',
+    :secret      => 'a055c4990a4c218c9c8c46ed9f3d3581f922c108bf15bb01ade6eed82ca5f6628242fb3e268246c3ea34c27f142ddb30e7e076fbcedadaa6f77dba363cab3365'
   }
 
   # Use the database for sessions instead of the file system

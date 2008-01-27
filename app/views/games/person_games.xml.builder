@@ -1,5 +1,5 @@
-xml.person do
-  xml.name @person.full_name
+xml.user do
+  xml.name @user.name
   @memberships.each do |membership|
     xml.match do
       game = membership.team.game
@@ -8,10 +8,10 @@ xml.person do
         game.teams.each do |team|
           xml.team do
             team.memberships.each do |game_membership|
-              person = game_membership.person
+              user = game_membership.user
               xml.player do
-                xml.id person.id
-                xml.full_name person.full_name
+                xml.id user.id
+                xml.name user.name
               end 
             end
             xml.score team.score

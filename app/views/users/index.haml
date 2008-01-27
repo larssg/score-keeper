@@ -2,14 +2,27 @@
 
 %table.list
   %tr
+    %th= '&nbsp';
     %th= 'Name'[]
     %th= 'Email'[]
     %th= 'Administrator'[]
     %th= 'Created at'[]
+    %th &nbsp;
 
   - @users.each do |user|
-    %tr
-      %td= link_to user.login, edit_user_path(user)
+    %tr{ :class => cycle('odd', 'even') }
+      %td= image_tag user.mugshot.public_filename(:thumb), :alt => user.name if user.mugshot
+      %td= link_to user.name, edit_user_path(user)
       %td= mail_to user.email
       %td= user.is_admin? ? 'Yes'[] : 'No'[]
       %td= user.created_at.to_s :long
+      %td= link_to 'Remove'[], user_path(user), :method => :delete, :confirm => 'Are you sure?' if admin?
+
+- if admin?
+  - content_for :sidebar do
+    = error_messages_for :user
+    - form_for @user, :html => { :multipart => true } do |f|
+      %h3= 'Add user'[]
+
+      = render :partial => 'form', :locals => { :f => f }
+      = submit_tag 'Save'[]

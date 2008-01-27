@@ -1,4 +1,4 @@
 - team.memberships.each_with_index do |membership, index|
   = ' - ' if index == 1
   %span{ :title => membership.points_awarded }
-    = person_link(membership.person)
+    = user_link(membership.user)

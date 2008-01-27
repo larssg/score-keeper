@@ -13,11 +13,11 @@ class Team < ActiveRecord::Base
   end
   
   def ranking_total
-    self.memberships.collect{ |m| m.person.ranking }.sum.to_f
+    self.memberships.collect{ |m| m.user.ranking }.sum.to_f
   end
   
   def award_points(amount)
-    members = self.memberships.collect { |m| m.person }
+    members = self.memberships.collect { |m| m.user }
     lead = members.first.ranking > members.last.ranking ? members.first : members.last
     trail = lead == members.first ? members.last : members.first
 
@@ -46,12 +46,12 @@ class Team < ActiveRecord::Base
     trail.ranking += award_to_trail
 
     # Save points
-    lead_membership = self.memberships.select{ |m| m.person == lead }.first
+    lead_membership = self.memberships.select{ |m| m.user == lead }.first
     lead_membership.points_awarded = award_to_lead
     lead_membership.current_ranking = lead.ranking
     lead_membership.save
     
-    lead_membership = self.memberships.select{ |m| m.person == trail }.first
+    lead_membership = self.memberships.select{ |m| m.user == trail }.first
     lead_membership.points_awarded = award_to_trail
     lead_membership.current_ranking = trail.ranking
     lead_membership.save
@@ -61,7 +61,7 @@ class Team < ActiveRecord::Base
   end
   
   def update_cache_values
-    self.team_ids = self.memberships.collect{ |m| m.person_id }.sort.join(',')
+    self.team_ids = self.memberships.collect{ |m| m.user_id }.sort.join(',')
   end
   
   def update_team_cache_on_game
@@ -73,6 +73,6 @@ class Team < ActiveRecord::Base
   end
   
   def display_names
-    self.memberships.collect { |m| m.person.display_name }
+    self.memberships.collect { |m| m.user.display_name }
   end
 end

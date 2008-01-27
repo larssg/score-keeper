@@ -12,19 +12,19 @@
     %th{ :title => 'Goals for - goals against'[] }= '+/-'
     %th= '+/- ' + 'Average'[]
 
-  - people.each_with_index do |person, index|
+  - people.each_with_index do |user, index|
     %tr{ :class => cycle('odd', 'even') }
       %td= index + start_at
       %td
-        = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this person's games"[]), games_path(:filter => person.id)
-        = person_link_full(person)
-      %td= person.ranking
-      %td= person.memberships_count
-      %td= person.games_won
-      %td= person.games_lost
-      %td= person.winning_percentage.to_s + '%'
-      %td= person.goals_for
-      %td= person.goals_against
-      %td= person.difference
-      %td= person.difference_average
+        = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this user's games"[]), games_path(:filter => user.id)
+        = user_link_full(user)
+      %td= user.ranking
+      %td= user.memberships_count
+      %td= user.games_won
+      %td= user.games_lost
+      %td= user.winning_percentage.to_s + '%'
+      %td= user.goals_for
+      %td= user.goals_against
+      %td= user.difference
+      %td= user.difference_average
   - reset_cycle

@@ -23,13 +23,13 @@ describe Game, "with people" do
   end
   
   it "should update games_won for users" do
-    @people.each do |person|
-      person.games_won.should == 0
+    @people.each do |user|
+      user.games_won.should == 0
     end
     
     Factory.create_default_game(:people => @people, :team_scores => [10, 4])
     
-    @people.each { |person| person.reload }
+    @people.each { |user| user.reload }
     @people[0].games_won.should == 1
     @people[1].games_won.should == 1
     @people[2].games_won.should == 0
@@ -40,21 +40,21 @@ describe Game, "with people" do
     game = Factory.create_default_game(:people => @people, :team_scores => [10, 4])
     game.destroy
     
-    @people.each { |person| person.reload }
-    @people.each do |person|
-      person.games_won.should == 0
+    @people.each { |user| user.reload }
+    @people.each do |user|
+      user.games_won.should == 0
     end
   end
   
   it "should update goals_for and goals_against for users" do
-    @people.each do |person|
-      person.goals_for.should == 0
-      person.goals_against.should == 0
+    @people.each do |user|
+      user.goals_for.should == 0
+      user.goals_against.should == 0
     end
     
     game = Factory.create_default_game(:people => @people, :team_scores => [10, 4])
     
-    @people.each { |person| person.reload }
+    @people.each { |user| user.reload }
     @people[0].goals_for.should == 10
     @people[0].goals_against.should == 4
     @people[1].goals_for.should == 10
@@ -69,9 +69,9 @@ describe Game, "with people" do
     game = Factory.create_default_game(:people => @people, :team_scores => [10, 4])
     game.destroy
     
-    @people.each do |person|
-      person.goals_for.should == 0
-      person.goals_against.should == 0
+    @people.each do |user|
+      user.goals_for.should == 0
+      user.goals_against.should == 0
     end
   end
 end

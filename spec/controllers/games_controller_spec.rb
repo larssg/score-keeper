@@ -31,11 +31,11 @@ describe GamesController, "creating a game (logged in)" do
       { :teams =>
         { 
           :score1 => 10,
-          :person11 => mock_model(Person).id,
-          :person12 => mock_model(Person).id,
+          :user11 => mock_model(User).id,
+          :user12 => mock_model(User).id,
           :score2 => 8,
-          :person21 => mock_model(Person).id,
-          :person22 => mock_model(Person).id
+          :user21 => mock_model(User).id,
+          :user22 => mock_model(User).id
         }
       }
       

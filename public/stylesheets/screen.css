@@ -211,16 +211,16 @@ h3 {
     #bd a.rss img {
       position: relative;
       top: 3px; }
-  #bd tr.person .admin {
+  #bd tr.user .admin {
     display: inline; }
-  #bd a.person, #bd a.game {
+  #bd a.user, #bd a.game {
     color: #000000;
     text-decoration: none; }
-    #bd a.person:hover, #bd a.game:hover {
+    #bd a.user:hover, #bd a.game:hover {
       text-decoration: underline; }
   #bd table.teams td, #bd table.teams th {
     width: 20%; }
-  #bd table.teams .person {
+  #bd table.teams .user {
     width: 0%;
     white-space: nowrap; }
   #bd table.teams .ranking {
@@ -229,10 +229,10 @@ h3 {
     margin-top: 1em; }
     #bd #graph #chart {
       margin-bottom: 20px; }
-  #bd .person .mugshot {
+  #bd .user .mugshot {
     text-align: center;
     padding-bottom: 1em; }
-  #bd .person p.position {
+  #bd .user p.position {
     padding: 0;
     padding-top: 10px;
     padding-bottom: 4px;
@@ -242,17 +242,17 @@ h3 {
     font-size: 250%;
     font-weight: bold;
     text-align: center; }
-    #bd .person p.position label {
+    #bd .user p.position label {
       font-size: 13px; }
-  #bd .person table.for_against {
+  #bd .user table.for_against {
     width: 100%; }
-    #bd .person table.for_against td {
+    #bd .user table.for_against td {
       border: 0;
       padding: 0;
       margin: 0;
       padding-right: 2px;
       padding-bottom: 1em; }
-    #bd .person table.for_against td.against {
+    #bd .user table.for_against td.against {
       padding-right: 0;
       padding-left: 2px;
       text-align: right; }
