@@ -51,15 +51,23 @@ module Resourceful
       # which provides a lot of flexibility
       # (see the documentation for current_model for details).
       def current_objects
+        if defined?(model_includes)
+          STDERR.puts <<END.gsub("\n", ' ')
+DEPRECATION WARNING: 
+The make_resourceful #model_includes accessor
+is deprecated and will be removed in 0.3.0.
+Override #current_objects instead.
+END
+          @current_objects ||= current_model.find(:all, :includes => model_includes)
+          return @current_objects
+        end
+
         @current_objects ||= current_model.find(:all)
       end
 
       # Calls current_objects and stores
       # the result in an instance variable
       # named after the controller.
-      #
-      # This is called automatically by the default make_resourceful actions.
-      # You shouldn't need to use it directly unless you're creating a new action.
       # 
       # For example, in UsersController,
       # calling +load_objects+ sets <tt>@users = current_objects</tt>.
@@ -86,9 +94,19 @@ module Resourceful
       # then in HatsController current_object essentially runs <tt>Person.find(params[:person_id]).hat</tt>.
       def current_object
         @current_object ||= if plural?
+          if defined?(current_param)
+            STDERR.puts <<END.gsub("\n", ' ')
+DEPRECATION WARNING: 
+The make_resourceful #current_param accessor
+is deprecated and will be removed in 0.3.0.
+Override #current_object instead.
+END
+            return current_model.find(current_param)
+          end
+
           current_model.find(params[:id])
         else
-          parent_object.send(instance_variable_name)
+          parent_objects[-1].send(instance_variable_name)
         end
       end
 
@@ -96,9 +114,6 @@ module Resourceful
       # Calls current_object and stores
       # the result in an instance variable
       # named after the controller.
-      #
-      # This is called automatically by the default make_resourceful actions.
-      # You shouldn't need to use it directly unless you're creating a new action.
       # 
       # For example, in UsersController,
       # calling +load_object+ sets <tt>@user = current_object</tt>.
@@ -111,16 +126,8 @@ module Resourceful
       # +current_object+ then returns this object for this action
       # instead of looking up a new object.
       #
-      # This is called automatically by the default make_resourceful actions.
-      # You shouldn't need to use it directly unless you're creating a new action.
-      #
-      # Note that if a parent object exists,
-      # the newly created object will automatically be a child of the parent object.
-      # For example, on POST /people/4/things,
-      #
-      #   build_object
-      #   current_object.person.id #=> 4
-      # 
+      # Note that if this is a nested controller,
+      # the newly created object will automatically be a child of the current parent object.
       def build_object
         @current_object = if current_model.respond_to? :build
           current_model.build(object_parameters)
@@ -150,9 +157,9 @@ module Resourceful
       end
 
       # The class of the current model.
-      # Note that if a parent object exists,
+      # Note that if this is a nested controller,
       # this instead returns the association object.
-      # For example, in HatsController where Person has_many :hats,
+      # For examle, in HatsController where Person has_many :hats,
       #
       #   current_model #=> Person.find(params[:person_id]).hats
       #
@@ -162,10 +169,10 @@ module Resourceful
       # to ensure that the object returned is actually a child of the parent,
       # and so forth.
       def current_model
-        if !parent? || singular?
+        if parent_objects.empty? || singular?
           current_model_name.constantize
         else
-          parent_object.send(instance_variable_name)
+          parent_objects[-1].send(instance_variable_name)
         end
       end
 
@@ -177,112 +184,72 @@ module Resourceful
         params[current_model_name.underscore]
       end
 
-      # Returns a list of the names of all the potential parents of the current model.
+      # Returns a list of the names of the parents of the current model.
       # For a non-nested controller, this is <tt>[]</tt>.
-      # For example, in HatsController where Rack has_many :hats and Person has_many :hats,
+      # For example, in HatsController where Group has_many :people and Person has_many :hats,
       #
-      #   parents #=> ["rack", "person"]
+      #   parents #=> ["group", "person"]
       #
-      # Note that the parents must be declared via Builder#belongs_to.
-      def parent_names
+      # Note that nesting must be declared via Builder#belongs_to.
+      def parents
         self.class.read_inheritable_attribute :parents
       end
 
-      # Returns true if an appropriate parent id parameter has been supplied.
-      # For example, in HatsController where Rack has_many :hats and Person has_many :hats,
-      # if <tt>params[:rack_id]</tt> or <tt>params[:person_id]</tt> is given,
+      # Returns the names of the model classes of the parents of the current model.
+      # For example, in HatsController where Group has_many :people and Person has_many :hats,
       #
-      #   parent? #=> true
+      #   parent_model_names #=> ["Group", "Person"]
       #
-      # Otherwise, if both <tt>params[:rack_id]</tt> and <tt>params[:rack_id]</tt> are nil,
-      #
-      #   parent? #=> false
-      #
-      # Note that parents must be declared via Builder#belongs_to.
-      def parent?
-        !!parent_name
+      # Note that nesting must be declared via Builder#belongs_to.
+      def parent_model_names
+        parents.map { |p| p.camelize }
       end
 
-      # Returns the name of the current parent object if a parent id is given, or nil otherwise.
-      # For example, in HatsController where Rack has_many :hats and Person has_many :hats,
-      # if <tt>params[:rack_id]</tt> is given,
+      # Returns the HTTP parameters designating the ids for the parent objects of the current model.
+      # For example, in HatsController where Group has_many :people and Person has_many :hats,
       #
-      #   parent_name #=> "rack"
+      #   parent_params #=> [params[:group_id], params[:person_id]]
       #
-      # If <tt>params[:person_id]</tt> is given,
-      #
-      #   parent_name #=> "person"
-      #
-      # If both <tt>params[:rack_id]</tt> and <tt>params[:rack_id]</tt> are nil,
-      #
-      #   parent_name #=> nil
-      #
-      # There are several things to note about this method.
-      # First, make_resourceful only supports single-level model nesting.
-      # Thus, if neither <tt>params[:rack_id]</tt> nor <tt>params[:rack_id]</tt> are nil,
-      # the return value of +parent_name+ is undefined.
-      #
-      # Second, don't use parent_name to check whether a parent id is given.
-      # It's better to use the more semantic parent? method.
-      #
-      # Third, parent_name caches its return value in the <tt>@parent_name</tt> variable,
-      # which you should keep in mind if you're overriding it.
-      # However, because <tt>@parent_name == nil</tt> could mean that there is no parent
-      # _or_ that the method hasn't been run yet,
-      # it uses <tt>defined?(@parent_name)</tt> to do the caching
-      # rather than <tt>@parent_name ||=</tt>. See the source code.
-      # 
-      # Finally, note that parents must be declared via Builder#belongs_to.
-      def parent_name
-        return @parent_name if defined?(@parent_name)
-        @parent_name = parent_names.find { |name| params["#{name}_id"] }
+      # Note that nesting must be declared via Builder#belongs_to.
+      def parent_params
+        parents.map { |p| params["#{p}_id"] }
       end
 
-      # Returns the model class of the current parent.
-      # For example, in HatsController where Person has_many :hats,
-      # if <tt>params[:person_id]</tt> is given,
+      # Returns the model classes of the parents of the current model.
+      # For example, in HatsController where Group has_many :people and Person has_many :hats,
       #
-      #   parent_models #=> Rack
+      #   parent_models #=> [Group, Person]
       #
-      # Note that parents must be declared via Builder#belongs_to.
-      def parent_model
-        parent_name.camelize.constantize
+      # Note that nesting must be declared via Builder#belongs_to.
+      def parent_models
+        parent_model_names.map { |p| p.constantize }
       end
 
-      # Returns the current parent object for the current object.
-      # For example, in HatsController where Person has_many :hats,
-      # if <tt>params[:person_id]</tt> is given,
-      #
-      #   parent_object #=> Person.find(params[:person_id])
-      #
-      # Note that parents must be declared via Builder#belongs_to.
+      # Returns the parent objects for the current object.
+      # Note that nesting must be declared via Builder#belongs_to.
       #
       # Note also that the results of this method are cached
       # so that multiple calls don't result in multiple SQL queries.
-      def parent_object
-        @parent_object ||= parent_model.find(params["#{parent_name}_id"])
+      # In addition, each object except the first is scoped
+      # so that it's guaranteed to be a child of its parent object.
+      def parent_objects
+        return [] if parents.empty?
+        return @parent_objects if @parent_objects
+
+        first = parent_models[0].find(parent_params[0])
+        @parent_objects = [first]
+        parent_params.zip(parents)[1..-1].inject(first) do |object, arr|
+          id, name = arr
+          @parent_objects << object.send(name.pluralize).find(id)
+          @parent_objects[-1]
+        end
+        @parent_objects
       end
 
-      # Assigns the current parent object, as given by parent_objects,
-      # to its proper instance variable, as given by parent_name.
-      #
-      # This is automatically added as a before_filter.
-      # You shouldn't need to use it directly unless you're creating a new action.
-      def load_parent_object
-        instance_variable_set("@#{parent_name}", parent_object) if parent?
-      end
-
-      # Renders a 422 error if no parent id is given.
-      # This is meant to be used with before_filter
-      # to ensure that some actions are only called with a parent id.
-      # For example:
-      #
-      #   before_filter :ensure_parent_exists, :only => [:create, :update]
-      # 
-      def ensure_parent_exists
-        return true if parent?
-        render :text => 'No parent id given', :status => 422
-        return false
+      # Assigns each parent object, as given by parent_objects,
+      # to its proper instance variable, as given by parents.
+      def load_parent_objects
+        parents.zip(parent_objects).map { |name, obj| instance_variable_set("@#{name}", obj) }
       end
 
       # Returns whether or not the database update in the +create+, +update+, and +destroy+

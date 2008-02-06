@@ -11,3 +11,27 @@
 - dir: haml
   rev: 738
   url: svn://hamptoncatlin.com/haml/trunk
+- dir: make_resourceful
+  rev: 155
+  url: http://svn.hamptoncatlin.com/make_resourceful/tags/make_resourceful/
+- dir: restful_authentication
+  rev: 3120
+  url: http://svn.techno-weenie.net/projects/plugins/restful_authentication/
+- dir: will_paginate
+  rev: 443
+  url: svn://errtheblog.com/svn/plugins/will_paginate
+- dir: exception_notification
+  rev: 8194
+  url: http://dev.rubyonrails.org/svn/rails/plugins/exception_notification/
+- dir: jrails
+  rev: 21
+  url: http://ennerchi.googlecode.com/svn/trunk/plugins/jrails
+- dir: mini-magick
+  rev: 34
+  url: http://mini-magick.rubyforge.org/svn/trunk/
+- dir: gibberish
+  rev: 331
+  url: svn://errtheblog.com/svn/plugins/gibberish
+- dir: open_id_authentication
+  rev: 8476
+  url: http://dev.rubyonrails.org/svn/rails/plugins/open_id_authentication

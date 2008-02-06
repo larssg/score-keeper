@@ -64,9 +64,9 @@ module AuthenticatedSystem
       respond_to do |format|
         format.html do
           store_location
-          redirect_to new_<%= controller_singular_name %>
+          redirect_to new_<%= controller_singular_name %>_path
         end
-        format.xml do
+        format.any do
           request_http_basic_authentication 'Web Password'
         end
       end

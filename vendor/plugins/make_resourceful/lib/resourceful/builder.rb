@@ -20,7 +20,6 @@ module Resourceful
     # additions to the controller.
     def initialize(kontroller)
       @controller       = kontroller
-      @inherited        = !kontroller.read_inheritable_attribute(:resourceful_responses).blank?
       @action_module    = Resourceful::Default::Actions.dup
       @ok_actions       = []
       @callbacks        = {:before => {}, :after => {}}
@@ -52,10 +51,9 @@ module Resourceful
 
       kontroller.read_inheritable_attribute(:resourceful_callbacks).merge! @callbacks
       kontroller.read_inheritable_attribute(:resourceful_responses).merge! @responses
-      kontroller.write_inheritable_attribute(:made_resourceful, true)
 
       kontroller.write_inheritable_attribute(:parents, @parents)
-      kontroller.before_filter :load_parent_object, :only => @ok_actions
+      kontroller.before_filter { |c| c.send(:load_parent_objects) }
     end
 
     # :call-seq:
@@ -188,8 +186,6 @@ module Resourceful
     # The default responses are defined by
     # Default::Responses.included[link:classes/Resourceful/Default/Responses.html#M000011].
     def response_for(*actions, &block)
-      raise "Must specify one or more actions for response_for." if actions.empty?
-
       if block.arity < 1
         response_for(*actions) do |format|
           format.html(&block)
@@ -294,33 +290,18 @@ module Resourceful
       end
     end
 
-    # Specifies parent resources for the current resource.
-    # Each of these parents will be loaded automatically
-    # if the proper id parameter is given.
-    # For example,
+    # Specifies a hierarchy of parent models
+    # for the current model.
+    # The array should be ordered as <tt>[..., :great_grandparent, :grandparent, :parent]</tt>.
+    # Each parent's object is automatically loaded into the proper instance variable
+    # (e.g. Person would be loaded into <tt>@person</tt>),
+    # and all child lookups are scoped so that they're guaranteed to be children of the proper parent.
     #
-    #   # cake_controller.rb
-    #   belongs_to :baker, :customer
-    #
-    # Then on GET /bakers/12/cakes,
-    #
-    #   params[:baker_id] #=> 12
-    #   parent?           #=> true
-    #   parent_name       #=> "baker"
-    #   parent_model      #=> Baker
-    #   parent_object     #=> Baker.find(12)
-    #   current_objects   #=> Baker.find(12).cakes
-    #
+    # <b>Note that the semantics of this function will likely change in the next release.</b>
+    # Using it with only one parent is safe,
+    # but more than one will probably break in the future.
     def belongs_to(*parents)
       @parents = parents.map(&:to_s)
-    end
-    
-    # This method is only meant to be called internally.
-    #
-    # Returns whether or not the Builder's controller
-    # inherits make_resourceful settings from a parent controller.
-    def inherited?
-      @inherited
     end
 
     private

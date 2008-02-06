@@ -34,13 +34,10 @@ describe Resourceful::Builder, " applied without any modification" do
     parents.should be_empty
   end
 
-  it "should set the controller as made_resourceful" do
-    @builder.apply
-    @kontroller.read_inheritable_attribute(:made_resourceful).should be_true
-  end
-
-  it "should set load_parent_object as a before_filter for no actions" do
-    @kontroller.expects(:before_filter).with(:load_parent_object, :only => [])
+  it "should set load_parent_objects as a before_filter" do
+    yielded = stub
+    @kontroller.expects(:before_filter).yields(yielded)
+    yielded.expects(:send).with(:load_parent_objects)
     @builder.apply
   end
 end
@@ -65,11 +62,6 @@ describe Resourceful::Builder, " with some actions set" do
   it "should un-hide the given actions" do
     @builder.apply
     (@kontroller.hidden_actions & @actions).should be_empty
-  end
-
-  it "should set load_parent_object as a before_filter for the given actions" do
-    @kontroller.expects(:before_filter).with(:load_parent_object, :only => [:show, :index, :new, :create])
-    @builder.apply
   end
 end
 
@@ -172,18 +164,6 @@ describe Resourceful::Builder, " with a response set for the default format" do
   it "should save the response as a response for HTML in the :resourceful_responses inheritable_attribute" do
     responses[:index].map(&:first).should == [:html]
     responses[:index].map(&:last).each(&:call)
-  end
-end
-
-describe Resourceful::Builder, " with a response set for no actions" do
-  include ControllerMocks
-  before :each do
-    mock_kontroller
-    create_builder
-  end
-
-  it "should raise an error" do
-    lambda { @builder.response_for {} }.should raise_error("Must specify one or more actions for response_for.")
   end
 end
 
