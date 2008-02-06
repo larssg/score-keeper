@@ -8,3 +8,6 @@
 - dir: attachment_fu
   rev: 3118
   url: http://svn.techno-weenie.net/projects/plugins/attachment_fu/
+- dir: haml
+  rev: 738
+  url: svn://hamptoncatlin.com/haml/trunk
