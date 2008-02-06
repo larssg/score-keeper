@@ -4,16 +4,14 @@
 
 module Haml
   class Template
+    include ActionView::TemplateHandlers::Compilable if defined?(ActionView::TemplateHandlers::Compilable)
+
     def self.line_offset
       1
     end
 
-    def self.compilable?
-      true
-    end
-   
     def compilable?
-      self.class.compilable?
+      true
     end
  
     def line_offset
@@ -27,6 +25,16 @@ module Haml
     def compile(template)
       options = Haml::Template.options.dup
       Haml::Engine.new(template, options).send(:precompiled_with_ambles, [])
+    end
+   
+    def cache_fragment(block, name = {}, options = nil)
+      @view.fragment_for(block, name, options) do
+        eval("_hamlout.buffer", block.binding)
+      end
+    end
+   
+    def read_template_file(template_path, extension)
+      File.read(template_path)
     end
   end
 end
