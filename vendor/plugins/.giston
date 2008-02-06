@@ -5,3 +5,6 @@
 - dir: rspec_on_rails
   rev: 3278
   url: http://rspec.rubyforge.org/svn/tags/CURRENT/rspec_on_rails
+- dir: attachment_fu
+  rev: 3118
+  url: http://svn.techno-weenie.net/projects/plugins/attachment_fu/
