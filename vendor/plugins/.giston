@@ -1,0 +1,7 @@
+--- 
+- dir: rspec
+  rev: 3278
+  url: http://rspec.rubyforge.org/svn/tags/CURRENT/rspec
+- dir: rspec_on_rails
+  rev: 3278
+  url: http://rspec.rubyforge.org/svn/tags/CURRENT/rspec_on_rails

@@ -170,20 +170,10 @@ module Spec
           def render(options=nil, deprecated_status=nil, &block)
             unless block_given?
               unless integrate_views?
-                if @template.respond_to?(:finder)
-                  @template.finder.metaclass.class_eval do
-                    define_method :file_exists? do
-                      true
-                    end
-                  end
-                else
-                  @template.metaclass.class_eval do
-                    define_method :file_exists? do
-                      true
-                    end
-                  end
-                end
                 @template.metaclass.class_eval do
+                  define_method :file_exists? do
+                    true
+                  end
                   define_method :render_file do |*args|
                     @first_render ||= args[0]
                   end
