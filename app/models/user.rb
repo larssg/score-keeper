@@ -28,10 +28,6 @@ class User < ActiveRecord::Base
   
   before_destroy :remove_games
 
-  def initials
-    self.name.split(' ').collect{ |n| n.first }.join
-  end
-
   def self.find_all
     find(:all, :order => 'name, display_name')
   end
