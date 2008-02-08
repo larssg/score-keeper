@@ -17,7 +17,10 @@ module Factory
   def self.create_people(amount)
     people = []
     (1..amount).each do |number|
-      people << Factory.create_user(:last_name => "Personson #{amount}")
+      people << Factory.create_user(
+        :login => "user#{number}",
+        :email => "user#{number}@example.com",
+        :last_name => "Personson #{number}")
     end
     people
   end
@@ -44,6 +47,8 @@ module Factory
     team_two = game.teams.build(:score => team_scores[1])
     team_two.memberships.build(:user => people[2])
     team_two.memberships.build(:user => people[3])
+    
+    game.played_at ||= Time.now
     
     game.save!
     game

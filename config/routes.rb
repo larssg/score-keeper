@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
     user.resources :user_openids
     user.resources :games
   end
-  map.resource  :sessions
+  map.resources :sessions
   
   map.dashboard 'd/:action', :controller => 'dashboard'
   map.resources :games
