@@ -206,6 +206,15 @@ h3 {
         margin: 0; }
     #bd #sidebar #counts label {
       font-weight: bold; }
+    #bd #sidebar #opponents .odd {
+      background-color: #F0F0F0; }
+    #bd #sidebar #opponents .even {
+      background-color: #F9F9F9; }
+    #bd #sidebar #opponents .opponent {
+      padding: 5px; }
+      #bd #sidebar #opponents .opponent label {
+        display: inline;
+        font-weight: bold; }
   #bd a.rss {
     text-decoration: none; }
     #bd a.rss img {

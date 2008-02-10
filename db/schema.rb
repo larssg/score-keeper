@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 25) do
+ActiveRecord::Schema.define(:version => 26) do
 
   create_table "games", :force => true do |t|
     t.datetime "played_at"
@@ -72,10 +72,12 @@ ActiveRecord::Schema.define(:version => 25) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "team_ids"
-    t.boolean  "won",        :default => false
+    t.boolean  "won",          :default => false
+    t.string   "opponent_ids"
   end
 
   add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
+  add_index "teams", ["opponent_ids"], :name => "index_teams_on_opponent_ids"
 
   create_table "user_openids", :force => true do |t|
     t.string   "openid_url", :default => "", :null => false

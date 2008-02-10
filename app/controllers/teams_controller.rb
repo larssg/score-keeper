@@ -33,10 +33,11 @@ class TeamsController < ApplicationController
   end
   
   def show
-    @ids = params[:id].split(',').collect { |id| id.to_i }
+    @ids = params[:id].split(',').collect { |id| id.to_i }.sort
     respond_to do |format|
       format.html do
-        @people = User.find(:all, :conditions => { :id => @ids }, :limit => 2)
+        @team_members = User.find(:all, :conditions => { :id => @ids }, :limit => 2)
+        @opponents = Team.opponents(@ids.join(','))
       end
       format.graph { render_chart } 
     end

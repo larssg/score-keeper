@@ -125,9 +125,11 @@ class Game < ActiveRecord::Base
     team1 = teams.build(:score => score1)
     team1.memberships.build(:user_id => user11)
     team1.memberships.build(:user_id => user12)
+    team1.opponent_ids = [user21, user22].collect { |user_id| user_id.to_i }.sort.join(',')
 
     team2 = teams.build(:score => score2)
     team2.memberships.build(:user_id => user21)
     team2.memberships.build(:user_id => user22)
+    team2.opponent_ids = [user11, user12].collect { |user_id| user_id.to_i }.sort.join(',')
   end
 end

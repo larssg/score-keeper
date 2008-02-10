@@ -16,6 +16,17 @@ class Team < ActiveRecord::Base
     self.memberships.collect{ |m| m.user.ranking }.sum.to_f
   end
   
+  def self.opponents(team_ids)
+    Team.find(:all,
+      :conditions => { :team_ids => team_ids },
+      :group => 'opponent_ids',
+      :select => 'SUM(won) AS wins, COUNT(*) AS games, opponent_ids AS team_ids')
+  end
+  
+  def self.team_members(user_ids)
+    user_ids.split(',').collect { |user_id| user_id.to_i }.sort.collect { |user_id| User.find(user_id) }
+  end
+  
   def award_points(amount)
     members = self.memberships.collect { |m| m.user }
     lead = members.first.ranking > members.last.ranking ? members.first : members.last
