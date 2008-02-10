@@ -1,7 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe GamesController, "not logged in" do
+describe GamesController, "logged in" do
+  fixtures :users
+
   before(:each) do
+    login_as :aaron
     @game = mock_model(Game)
     Game.stub!(:find_recent).and_return([@game])
   end
@@ -24,8 +27,10 @@ describe GamesController, "not logged in" do
 end
 
 describe GamesController, "creating a game (logged in)" do
+  fixtures :users
+
   before(:each) do
-    login_as Factory.create_user
+    login_as :aaron
     @game = mock_model(Game)
     @params = 
       { :teams =>
@@ -39,6 +44,7 @@ describe GamesController, "creating a game (logged in)" do
         }
       }
       
+      @game.should_receive(:update_winners).and_return(true)
       Game.stub!(:save).and_return(@game)
   end
   
