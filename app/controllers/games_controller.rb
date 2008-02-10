@@ -7,9 +7,9 @@ class GamesController < ApplicationController
     build :edit, :create, :update, :destroy
 
     before :create do
+      current_object.attributes = params[:teams]
       current_object.creator = current_user
       current_object.played_at ||= 5.minutes.ago
-      current_object.teams_from_params(team_params)
     end
     
     response_for :create do
@@ -66,19 +66,6 @@ class GamesController < ApplicationController
       @game = current_model.new
       @user_list = User.find_all
     end
-  end
-
-  def team_params
-    [
-      {
-        :score => params[:teams][:score1],
-        :members => [ params[:teams][:user11], params[:teams][:user12] ]
-      },
-      {
-        :score => params[:teams][:score2],
-        :members => [ params[:teams][:user21], params[:teams][:user22] ]
-      }
-    ]
   end
   
   def render_chart

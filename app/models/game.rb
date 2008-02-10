@@ -1,9 +1,14 @@
 class Game < ActiveRecord::Base
   attr_accessor :postpone_ranking_update
-  
+
+  # Virtual attributes for game info
+  attr_accessor :score1, :user11, :user12
+  attr_accessor :score2, :user21, :user22
+
   has_many :teams
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
+  before_create :build_teams
   before_save :set_played_on
   after_create :update_winners
   after_create :update_rankings
@@ -26,16 +31,7 @@ class Game < ActiveRecord::Base
   def loser
     @loser ||= self.winner.other
   end
-  
-  def teams_from_params(teams)
-    teams.each do |team_info|
-      team = self.teams.build(:score => team_info[:score])
-      team_info[:members].each do |member_id|
-        team.memberships.build(:user_id => member_id)
-      end
-    end
-  end
-  
+
   def validate
     user_ids = []
     
@@ -122,5 +118,16 @@ class Game < ActiveRecord::Base
   
   def self.goals_scored
     User.sum(:goals_for) / 2
+  end
+  
+  protected
+  def build_teams
+    team1 = teams.build(:score => score1)
+    team1.memberships.build(:user_id => user11)
+    team1.memberships.build(:user_id => user12)
+
+    team2 = teams.build(:score => score2)
+    team2.memberships.build(:user_id => user21)
+    team2.memberships.build(:user_id => user22)
   end
 end
