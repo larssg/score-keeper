@@ -1,0 +1,7 @@
+<% form_for @comment, :url => game_comment_path(@comment.game_id, @comment.id) do |f| %>
+  <%= render :partial => 'comments/form', :locals => { :f => f } %>
+  <p>
+    <%= submit_tag 'Save changes'[] %>
+    <%= link_to_remote 'Cancel', :update => "content_#{@comment.id}", :url => game_comment_path(@comment.game_id, @comment.id) %>
+  </p>
+<% end %>

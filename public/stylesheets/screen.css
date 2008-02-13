@@ -159,10 +159,16 @@ h3 {
           display: inline; }
         #bd #comments .comment .info .user {
           font-weight: bold; }
+      #bd #comments .comment .edit {
+        margin-bottom: 1em; }
+      #bd #comments .comment textarea {
+        height: 5em; }
     #bd #comments #new_comment {
       margin-top: 1em; }
       #bd #comments #new_comment textarea {
         height: 6em; }
+  #bd .edit_comment {
+    margin-bottom: 1em; }
   #bd .filter a.clear {
     font-size: 85%; }
   #bd .pagination {

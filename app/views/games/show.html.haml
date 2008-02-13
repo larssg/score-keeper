@@ -12,14 +12,13 @@
         .index= '#' + (index + 1).to_s
         .user= comment.user.name
         .time= time_ago_in_words(comment.created_at) + ' ago'
-      %div.body= simple_format(h(comment.body))
+      .content{ :id => "content_#{comment.id}" }
+        = render :partial => 'comments/show', :locals => { :comment => comment }
       .clear
         %hd
 
   - form_for @comment, :url => game_comments_path(@game) do |f|
-    %p
-      %label= 'Comment' + ':'
-      = f.text_area :body
+    = render :partial => 'comments/form', :locals => { :f => f }
       
     %p
       = submit_tag 'Add comment'
