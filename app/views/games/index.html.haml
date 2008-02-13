@@ -16,8 +16,9 @@
         %th= 'Team one'[]
         %th.score= 'Score'[]
         %th= 'Team two'[]
+        %th &nbsp;
         %th= 'Created'[]
-        %th= '&nbsp';
+        %th &nbsp;
 
       - @games.each do |game|
         %tr{ :class => cycle('odd', 'even') }

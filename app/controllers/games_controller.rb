@@ -46,6 +46,8 @@ class GamesController < ApplicationController
   
   def show
     @game = Game.find(params[:id])
+    @comments = @game.comments.find(:all, :order => 'created_at')
+    @comment = @game.comments.build
   end
   
   protected

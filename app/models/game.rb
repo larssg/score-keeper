@@ -6,6 +6,7 @@ class Game < ActiveRecord::Base
   attr_accessor :score2, :user21, :user22
 
   has_many :teams
+  has_many :comments
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
   before_create :build_teams

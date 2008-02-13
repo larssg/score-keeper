@@ -15,6 +15,7 @@ class GameSweeper < ActionController::Caching::Sweeper
   
   def expire_cache_for(game)
     expire_fragment(dashboard_path)
+    expire_fragment(dashboard_path + '_games_per_day')
     expire_fragment(dashboard_path + '_sidebar')
     expire_fragment(teams_path)
   end

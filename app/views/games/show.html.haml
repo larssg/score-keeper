@@ -2,3 +2,24 @@
 .game
   %label= 'Played at' + ':'
   = @game.played_at.to_s :long
+  
+%h3= 'Comments'
+#comments
+  - @comments.each_with_index do |comment, index|
+    .comment{ :class => cycle('odd', 'even') }
+      .mugshot= link_to image_tag(comment.user.mugshot.public_filename(:thumb), :alt => comment.user.name), user_path(comment.user) if comment.user.mugshot
+      .info
+        .index= '#' + (index + 1).to_s
+        .user= comment.user.name
+        .time= time_ago_in_words(comment.created_at) + ' ago'
+      %div.body= simple_format(h(comment.body))
+      .clear
+        %hd
+
+  - form_for @comment, :url => game_comments_path(@game) do |f|
+    %p
+      %label= 'Comment' + ':'
+      = f.text_area :body
+      
+    %p
+      = submit_tag 'Add comment'

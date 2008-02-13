@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   
   has_many :user_openids, :dependent => :destroy
   has_many :memberships
+  has_many :comments
   belongs_to :mugshot
   
   validates_presence_of     :email,                       :if => :not_openid?

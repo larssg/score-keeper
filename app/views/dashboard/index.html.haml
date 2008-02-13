@@ -9,12 +9,13 @@
     %h3.noobs= 'Newbies'[]
     = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1 }
 
-  .columns
-    .left-column
-      #recent_games
-        %h3= 'Recent games'[]
-        = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
-
+.columns
+  .left-column
+    #recent_games
+      %h3= 'Recent games'[]
+      = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
+      
+  - cache(dashboard_path + '_games_per_day') do
     .right-column
       #games_per_day
         %h3= 'Games played per day'[]

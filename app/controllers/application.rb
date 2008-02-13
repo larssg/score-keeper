@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  around_filter :set_language
+#  around_filter :set_language
 
   include AuthenticatedSystem
 

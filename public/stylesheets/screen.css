@@ -136,6 +136,33 @@ h3 {
     margin-bottom: 5px; }
   #bd #games .score {
     text-align: center; }
+  #bd #games .comments {
+    white-space: nowrap; }
+    #bd #games .comments a {
+      text-decoration: none;
+      color: #000000; }
+  #bd #comments {
+    border-top: 1px solid #CCCCCC; }
+    #bd #comments .odd {
+      background-color: #F5F5F5; }
+    #bd #comments .comment {
+      margin: 0;
+      padding: 1em;
+      border-bottom: 1px solid #CCCCCC;
+      padding-bottom: 0; }
+      #bd #comments .comment .mugshot {
+        float: right;
+        padding-bottom: 1em; }
+      #bd #comments .comment .info {
+        margin-bottom: 1em; }
+        #bd #comments .comment .info div {
+          display: inline; }
+        #bd #comments .comment .info .user {
+          font-weight: bold; }
+    #bd #comments #new_comment {
+      margin-top: 1em; }
+      #bd #comments #new_comment textarea {
+        height: 6em; }
   #bd .filter a.clear {
     font-size: 85%; }
   #bd .pagination {
@@ -174,12 +201,14 @@ h3 {
   #bd #recent_games .score {
     width: 20%;
     text-align: center; }
+  #bd #recent_games .comments {
+    white-space: nowrap; }
+    #bd #recent_games .comments a {
+      text-decoration: none;
+      color: #000000; }
   #bd #games_per_day .games_played {
     text-align: right; }
-  #bd img.team {
-    position: relative;
-    top: 2px; }
-  #bd img.winner {
+  #bd img.team, #bd img.winner, #bd img.comments {
     position: relative;
     top: 2px; }
   #bd #sidebar {

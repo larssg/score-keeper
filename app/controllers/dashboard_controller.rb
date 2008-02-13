@@ -2,10 +2,11 @@ class DashboardController < ApplicationController
   before_filter :login_required
 
   def index
+    @recent_games = Game.find_recent(:limit => 8, :include => { :teams => :memberships })
+
     unless cached?
       @rankings = User.find_ranked
       @newbies = User.find_newbies
-      @recent_games = Game.find_recent(:limit => 8)
       @games_per_day = Game.count(:group => :played_on, :limit => 10, :order => 'games.played_on DESC')
 
       # Sidebar

@@ -171,6 +171,43 @@ h3
     .score
       :text-align center
 
+    .comments
+      :white-space nowrap
+
+      a
+        :text-decoration none
+        :color #000000
+      
+  #comments
+    :border-top 1px solid #CCCCCC
+
+    .odd
+      :background-color #F5F5F5
+  
+    .comment
+      :margin 0
+      :padding 1em
+      :border-bottom 1px solid #CCCCCC
+      :padding-bottom 0
+      
+      .mugshot
+        :float right
+        :padding-bottom 1em
+  
+      .info
+        :margin-bottom 1em
+        div
+          :display inline
+    
+        .user
+          :font-weight bold
+          
+    #new_comment
+      :margin-top 1em
+      
+      textarea
+        :height 6em
+
   .filter
     a.clear
       :font-size 85%
@@ -226,15 +263,18 @@ h3
       :width 20%
       :text-align center
 
+    .comments
+      :white-space nowrap
+
+      a
+        :text-decoration none
+        :color #000000
+
   #games_per_day
     .games_played
       :text-align right
 
-  img.team
-    :position relative
-    :top 2px
-
-  img.winner
+  img.team, img.winner, img.comments
     :position relative
     :top 2px
 

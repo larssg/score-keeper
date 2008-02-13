@@ -9,7 +9,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 26) do
+ActiveRecord::Schema.define(:version => 27) do
+
+  create_table "comments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+  add_index "comments", ["game_id"], :name => "index_comments_on_game_id"
 
   create_table "games", :force => true do |t|
     t.datetime "played_at"
@@ -19,6 +30,7 @@ ActiveRecord::Schema.define(:version => 26) do
     t.string   "team_one"
     t.string   "team_two"
     t.datetime "played_on"
+    t.integer  "comments_count", :default => 0
   end
 
   add_index "games", ["played_on"], :name => "index_games_on_played_on"
@@ -109,6 +121,7 @@ ActiveRecord::Schema.define(:version => 26) do
     t.integer  "goals_against",                           :default => 0
     t.integer  "mugshot_id"
     t.integer  "ranking",                                 :default => 2000
+    t.integer  "comments_count",                          :default => 0
   end
 
 end
