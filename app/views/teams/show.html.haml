@@ -1,6 +1,6 @@
-- title 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, @team_members.first.name, @team_members.last.name]
+- title 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
 
-%h3= 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, @team_members.first.name, @team_members.last.name]
+%h3= 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
 #graph= graph(formatted_team_url(params[:id], :graph))
 
 - content_for :sidebar do
@@ -8,15 +8,15 @@
   - @team_members.each do |user|
     %p
       - if user.mugshot
-        .mugshot= image_tag user.mugshot.public_filename(:thumb), :alt => user.name
-      = link_to user.name, user
+        .mugshot= image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name)
+      = link_to h(user.name), user
       
   %h3= 'Opponents'[]
   #opponents
     - @opponents.each do |opponent|
       .opponent{ :class => cycle('odd', 'even') }
         .members
-          = link_to Team.team_members(opponent.team_ids).collect { |user| user.display_name }.join(', '), team_path(opponent.team_ids)
+          = link_to Team.team_members(opponent.team_ids).collect { |user| h(user.display_name) }.join(', '), team_path(opponent.team_ids)
         %label= 'Games'[] + ':'
         = opponent.games
         %label= 'Won'[] + ':'

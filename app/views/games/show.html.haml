@@ -1,4 +1,4 @@
-%h3= @game.title
+%h3= h(@game.title)
 .game
   %label= 'Played at' + ':'
   = @game.played_at.to_s :long
@@ -10,7 +10,7 @@
       .mugshot= link_to image_tag(comment.user.mugshot.public_filename(:thumb), :alt => comment.user.name), user_path(comment.user) if comment.user.mugshot
       .info
         .index= '#' + (index + 1).to_s
-        .user= comment.user.name
+        .user= h(comment.user.name)
         .time= time_ago_in_words(comment.created_at) + ' ago'
       .content{ :id => "content_#{comment.id}" }
         = render :partial => 'comments/show', :locals => { :comment => comment }

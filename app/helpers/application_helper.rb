@@ -21,11 +21,11 @@ module ApplicationHelper
   end
   
   def user_link(user)
-    link_to user.display_name, user_path(user), :class => 'user'
+    link_to h(user.display_name), user_path(user), :class => 'user'
   end
   
   def user_link_full(user)
-    link_to user.name, user_path(user), :class => 'user'
+    link_to h(user.name), user_path(user), :class => 'user'
   end
   
   def graph(url)

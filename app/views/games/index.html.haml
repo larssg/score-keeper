@@ -4,9 +4,9 @@
   - if @filter
     %p.filter
       - if @filter.length > 1
-        = 'Filter by <b>{first}</b> and <b>{second}</b>'[:filter_by_two, @filter[0].display_name, @filter[1].display_name]
+        = 'Filter by <b>{first}</b> and <b>{second}</b>'[:filter_by_two, h(@filter[0].display_name), h(@filter[1].display_name)]
       - else
-        = 'Filter by <b>{first}</b>'[:filter_by_one, @filter[0].display_name]
+        = 'Filter by <b>{first}</b>'[:filter_by_one, h(@filter[0].display_name)]
 
       = link_to 'Clear filter', games_path, :class => 'clear'
 

@@ -11,8 +11,8 @@
 
   - @users.each do |user|
     %tr{ :class => cycle('odd', 'even') }
-      %td= image_tag user.mugshot.public_filename(:thumb), :alt => user.name if user.mugshot
-      %td= link_to user.name, edit_user_path(user)
+      %td= image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name) if user.mugshot
+      %td= link_to h(user.name), edit_user_path(user)
       %td= mail_to user.email
       %td= user.is_admin? ? 'Yes'[] : 'No'[]
       %td= user.created_at.to_s :long

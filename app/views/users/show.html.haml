@@ -1,13 +1,13 @@
-- title 'Ranking chart for {name}'[:ranking_chart_for, @user.name]
+- title 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
 
 - if @user.memberships_count > 0
-  %h3= 'Ranking chart for {name}'[:ranking_chart_for, @user.name]
+  %h3= 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
   #graph= graph(formatted_user_games_url(@user.id, :graph))
 
 - content_for :sidebar do
   .user
     - if @user.mugshot
-      .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => @user.name
+      .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
 
     #counts
       %p.position
