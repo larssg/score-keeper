@@ -1,3 +1,11 @@
+@import lib/reset.css
+@import lib/typography.css
+@import lib/grid.css
+@import lib/forms.css
+
+.box
+  :background-color #FFFFFF
+
 th
   :text-align left
   
@@ -5,21 +13,26 @@ table
   :margin 0
 
 #hd
-  :margin-top 10px
   :background-color #3399CC
   :background-image url('../images/header_right.gif')
   :background-repeat no-repeat
   :background-position right top
   
-  h1
+  #logo
     :margin 0
     :padding 21px
     :padding-top 14px
-    :padding-bottom 12px
+    :padding-bottom 8px
     :background-image url('../images/header_left.gif')
     :background-repeat no-repeat
     :background-position left top
     :border-bottom 1px solid #FFFFFF
+    
+    a
+      :margin 0
+      
+      img
+        :margin 0
    
   #links
     :float right
@@ -105,14 +118,6 @@ h3
   :padding 0
 
 #bd
-  :padding-top 20px
-  :padding-bottom 0
-  :padding-left 20px
-  :padding-right 20px
-  :border 1px solid #77BBDD
-  :border-top 0px
-  :clear both
-
   .bottom_space
     :padding-bottom 20px
 
@@ -121,7 +126,7 @@ h3
     :background-color #EEEEEE
     :padding 10px
     :margin-bottom 10px
-    
+  
     #notice
     :background-color #CFC
     :border solid 1px #6C6
@@ -136,31 +141,39 @@ h3
 
   label
     :display block
-    
+  
     input
       :display block
       :margin-bottom 10px
-      
-  table.list
-    :width 100%
-    :margin-bottom 20px
+  
+  .list
+    :margin-top 1.5em
 
-    th
-      :border 0
-      :border-bottom 1px solid #3399CC
-      :background-color #77BBDD
-      :padding 3px
-      :color #FFFFFF
+    table
+      :width 100%
 
-    td
-      :border 0
-      :padding 3px
-      :text-align left
+      th
+        :border 0
+        :border-bottom 1px solid #3399CC
+        :background-color #77BBDD
+        :padding 3px
+        :color #FFFFFF
 
-    tr.even
       td
-        :background-color #EEEEEE
+        :border 0
+        :padding 3px
+        :text-align left
+        :vertical-align top
+      
+        img
+          :margin 0
+          :padding 0
+          :vertical-align text-bottom
 
+      tr.even
+        td
+          :background-color #EEEEEE
+        
   #games
     h3
       :font-size 13px
@@ -177,43 +190,43 @@ h3
       a
         :text-decoration none
         :color #000000
-      
+    
   #comments
     :border-top 1px solid #CCCCCC
 
     .odd
       :background-color #F5F5F5
-  
+
     .comment
       :margin 0
       :padding 1em
       :border-bottom 1px solid #CCCCCC
       :padding-bottom 0
-      
+    
       .mugshot
         :float right
         :padding-bottom 1em
-  
+
       .info
         :margin-bottom 1em
         div
           :display inline
-    
+  
         .user
           :font-weight bold
-          
+        
       .edit
         :margin-bottom 1em
-        
-      textarea
-        :height 5em
-          
-    #new_comment
-      :margin-top 1em
       
       textarea
-        :height 6em
+        :height 5em
+        
+    #new_comment
+      :margin-top 1em
     
+      textarea
+        :height 6em
+  
   .edit_comment
     :margin-bottom 1em
 
@@ -283,13 +296,80 @@ h3
     .games_played
       :text-align right
 
-  img.team, img.winner, img.comments
-    :position relative
-    :top 2px
+  a.rss
+    :text-decoration none
 
-  #sidebar
-    :width 220px
-    :padding-bottom 20px
+    img
+      :position relative
+      :top 3px
+
+  tr.user
+    .admin
+      :display inline
+
+  a.user, a.game
+    :color #000000
+    :text-decoration none
+
+    &:hover
+      :text-decoration underline
+
+  table.teams
+    td, th
+      :width 20%
+
+    .user
+      :width 0%
+      :white-space nowrap
+    
+    .ranking
+      :padding-left 20px
+
+  #graph
+    :margin-top 1em
+
+    #chart
+      :margin-bottom 20px
+
+  .user
+    .mugshot
+      :text-align center
+      :padding-bottom 1em
+    
+    p.position
+      :padding 0
+      :padding-top 10px
+      :padding-bottom 4px
+      :margin-bottom 15px
+      :border-top 1px solid #999999
+      :border-bottom 1px solid #999999
+      :font-size 250%
+      :font-weight bold
+      :text-align center
+    
+      label
+        :font-size 13px
+    
+    table.for_against
+      :width 100%
+
+      td
+        :border 0
+        :padding 0
+        :margin 0
+        :padding-right 2px
+        :padding-bottom 1em
+
+      td.against
+        :padding-right 0
+        :padding-left 2px
+        :text-align right
+
+#sidebar
+  .content
+    :padding-top 1.5em
+    :padding-left 1em
+    :padding-bottom 1.5em
 
     h2
       :margin 0
@@ -320,85 +400,16 @@ h3
     #opponents
       .odd
         :background-color #F0F0F0
-      
+
       .even
         :background-color #F9F9F9
 
       .opponent
         :padding 5px
-    
+
         label
           :display inline
           :font-weight bold
-
-  a.rss
-    :text-decoration none
-
-    img
-      :position relative
-      :top 3px
-
-  tr.user
-    .admin
-      :display inline
-
-  a.user, a.game
-    :color #000000
-    :text-decoration none
-
-    &:hover
-      :text-decoration underline
-
-  table.teams
-    td, th
-      :width 20%
-
-    .user
-      :width 0%
-      :white-space nowrap
-      
-    .ranking
-      :padding-left 20px
-
-  #graph
-    :margin-top 1em
-
-    #chart
-      :margin-bottom 20px
-
-  .user
-    .mugshot
-      :text-align center
-      :padding-bottom 1em
-      
-    p.position
-      :padding 0
-      :padding-top 10px
-      :padding-bottom 4px
-      :margin-bottom 15px
-      :border-top 1px solid #999999
-      :border-bottom 1px solid #999999
-      :font-size 250%
-      :font-weight bold
-      :text-align center
-      
-      label
-        :font-size 13px
-      
-    table.for_against
-      :width 100%
-
-      td
-        :border 0
-        :padding 0
-        :margin 0
-        :padding-right 2px
-        :padding-bottom 1em
-
-      td.against
-        :padding-right 0
-        :padding-left 2px
-        :text-align right
 
 #ft
   :color #999999
@@ -420,6 +431,3 @@ input#openid_url
   
   hr
     :display none
-
-.yui-t5 #yui-main .yui-b
-  :margin-right 240px

@@ -1,28 +1,29 @@
 - title 'Teams'[]
 
 - cache(teams_path) do
-  %table.list.teams
-    %tr
-      %th{ :colspan => 5 }= 'Members'[]
-      %th.ranking= 'Total ranking'[]
-      %th= 'Games won'[]
-      %th= 'Games played'[]
-      %th= 'Winning percentage'[]
-      %th{ :colspan => 2 }= '% of games on team'[]
+  .list
+    %table.teams
+      %tr
+        %th{ :colspan => 5 }= 'Members'[]
+        %th.ranking= 'Total ranking'[]
+        %th= 'Games won'[]
+        %th= 'Games played'[]
+        %th= 'Winning percentage'[]
+        %th{ :colspan => 2 }= '% of games on team'[]
 
-    - @teams.each do |team|
-      %tr{ :class => cycle('odd', 'even') }
-        %td.user= user_link_full(team[:players].first)
-        %td.user -
-        %td.user= user_link_full(team[:players].last)
-        %td.user
-          = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => team[:team_ids])
-        %td.user
-          = link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team_ids])
-        %td.ranking= team[:total_ranking]
-        %td= team[:games_won]
-        %td= team[:games_played]
-        %td= team[:percentage].to_s + '%'
-        - team[:players].each do |player|
-          %td
-            = (((team[:games_played].to_f / player.memberships_count.to_f) * 1000).to_i / 10.0).to_s + '%'
+      - @teams.each do |team|
+        %tr{ :class => cycle('odd', 'even') }
+          %td.user= user_link_full(team[:players].first)
+          %td.user -
+          %td.user= user_link_full(team[:players].last)
+          %td.user
+            = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]), games_path(:filter => team[:team_ids])
+          %td.user
+            = link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team_ids])
+          %td.ranking= team[:total_ranking]
+          %td= team[:games_won]
+          %td= team[:games_played]
+          %td= team[:percentage].to_s + '%'
+          - team[:players].each do |player|
+            %td
+              = (((team[:games_played].to_f / player.memberships_count.to_f) * 1000).to_i / 10.0).to_s + '%'

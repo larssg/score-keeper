@@ -1,3 +1,10 @@
+@import url(lib/reset.css);
+@import url(lib/typography.css);
+@import url(lib/grid.css);
+@import url(lib/forms.css);
+.box {
+  background-color: #FFFFFF; }
+
 th {
   text-align: left; }
 
@@ -5,20 +12,23 @@ table {
   margin: 0; }
 
 #hd {
-  margin-top: 10px;
   background-color: #3399CC;
   background-image: url('../images/header_right.gif');
   background-repeat: no-repeat;
   background-position: right top; }
-  #hd h1 {
+  #hd #logo {
     margin: 0;
     padding: 21px;
     padding-top: 14px;
-    padding-bottom: 12px;
+    padding-bottom: 8px;
     background-image: url('../images/header_left.gif');
     background-repeat: no-repeat;
     background-position: left top;
     border-bottom: 1px solid #FFFFFF; }
+    #hd #logo a {
+      margin: 0; }
+      #hd #logo a img {
+        margin: 0; }
   #hd #links {
     float: right;
     padding: 21px;
@@ -88,218 +98,215 @@ h3 {
   margin: 0;
   padding: 0; }
 
-#bd {
-  padding-top: 20px;
-  padding-bottom: 0;
-  padding-left: 20px;
-  padding-right: 20px;
-  border: 1px solid #77BBDD;
-  border-top: 0px;
-  clear: both; }
-  #bd .bottom_space {
-    padding-bottom: 20px; }
-  #bd #messages {
-    border: 1px solid #999999;
-    background-color: #EEEEEE;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #CFC;
-    border: solid 1px #6C6;
-    background-color: #DD9A24;
-    border: solid 1px #DD9A24;
-    background-color: #FCC;
-    border: solid 1px #C66; }
-  #bd label {
-    display: block; }
-    #bd label input {
-      display: block;
-      margin-bottom: 10px; }
-  #bd table.list {
-    width: 100%;
-    margin-bottom: 20px; }
-    #bd table.list th {
-      border: 0;
-      border-bottom: 1px solid #3399CC;
-      background-color: #77BBDD;
-      padding: 3px;
-      color: #FFFFFF; }
-    #bd table.list td {
-      border: 0;
-      padding: 3px;
-      text-align: left; }
-    #bd table.list tr.even td {
-      background-color: #EEEEEE; }
-  #bd #games h3 {
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
-    margin-bottom: 5px; }
-  #bd #games .score {
-    text-align: center; }
-  #bd #games .comments {
-    white-space: nowrap; }
-    #bd #games .comments a {
-      text-decoration: none;
-      color: #000000; }
-  #bd #comments {
-    border-top: 1px solid #CCCCCC; }
-    #bd #comments .odd {
-      background-color: #F5F5F5; }
-    #bd #comments .comment {
-      margin: 0;
-      padding: 1em;
-      border-bottom: 1px solid #CCCCCC;
-      padding-bottom: 0; }
-      #bd #comments .comment .mugshot {
-        float: right;
-        padding-bottom: 1em; }
-      #bd #comments .comment .info {
-        margin-bottom: 1em; }
-        #bd #comments .comment .info div {
-          display: inline; }
-        #bd #comments .comment .info .user {
-          font-weight: bold; }
-      #bd #comments .comment .edit {
-        margin-bottom: 1em; }
-      #bd #comments .comment textarea {
-        height: 5em; }
-    #bd #comments #new_comment {
-      margin-top: 1em; }
-      #bd #comments #new_comment textarea {
-        height: 6em; }
-  #bd .edit_comment {
-    margin-bottom: 1em; }
-  #bd .filter a.clear {
-    font-size: 85%; }
-  #bd .pagination {
-    padding-top: 10px;
-    padding-bottom: 10px; }
-  #bd .game {
-    margin-bottom: 20px; }
-    #bd .game label {
-      font-weight: bold; }
-  #bd #new_game h3 {
+#bd .bottom_space {
+  padding-bottom: 20px; }
+#bd #messages {
+  border: 1px solid #999999;
+  background-color: #EEEEEE;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #CFC;
+  border: solid 1px #6C6;
+  background-color: #DD9A24;
+  border: solid 1px #DD9A24;
+  background-color: #FCC;
+  border: solid 1px #C66; }
+#bd label {
+  display: block; }
+  #bd label input {
     display: block;
-    margin: 0;
-    margin-bottom: 5px; }
-  #bd #new_game label {
-    display: block;
-    padding-bottom: 5px; }
-    #bd #new_game label span {
-      display: block; }
-    #bd #new_game label .score {
-      margin: 0;
-      width: 2em; }
-    #bd #new_game label select {
-      width: 220px; }
-  #bd .columns {
-    clear: both; }
-    #bd .columns .left-column {
-      float: left;
-      width: 49%;
-      padding-right: 1%; }
-    #bd .columns .right-column {
-      float: left;
-      width: 48.9%;
-      padding-left: 1%; }
-  #bd #recent_games .members {
-    width: 40%; }
-  #bd #recent_games .score {
-    width: 20%;
-    text-align: center; }
-  #bd #recent_games .comments {
-    white-space: nowrap; }
-    #bd #recent_games .comments a {
-      text-decoration: none;
-      color: #000000; }
-  #bd #games_per_day .games_played {
-    text-align: right; }
-  #bd img.team, #bd img.winner, #bd img.comments {
-    position: relative;
-    top: 2px; }
-  #bd #sidebar {
-    width: 220px;
-    padding-bottom: 20px; }
-    #bd #sidebar h2 {
-      margin: 0;
-      padding: 0;
-      font-size: 100%;
-      display: block;
-      padding: 3px;
-      background-color: #77BBDD;
-      border-bottom: 1px solid #3399CC;
-      margin-bottom: 5px;
-      color: #FFFFFF; }
-    #bd #sidebar #leader {
-      padding: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-      background-color: #EEEEEE;
-      border: 1px solid #999999; }
-      #bd #sidebar #leader h3 {
-        padding: 0;
-        margin: 0; }
-    #bd #sidebar #counts label {
-      font-weight: bold; }
-    #bd #sidebar #opponents .odd {
-      background-color: #F0F0F0; }
-    #bd #sidebar #opponents .even {
-      background-color: #F9F9F9; }
-    #bd #sidebar #opponents .opponent {
-      padding: 5px; }
-      #bd #sidebar #opponents .opponent label {
-        display: inline;
-        font-weight: bold; }
-  #bd a.rss {
-    text-decoration: none; }
-    #bd a.rss img {
-      position: relative;
-      top: 3px; }
-  #bd tr.user .admin {
-    display: inline; }
-  #bd a.user, #bd a.game {
-    color: #000000;
-    text-decoration: none; }
-    #bd a.user:hover, #bd a.game:hover {
-      text-decoration: underline; }
-  #bd table.teams td, #bd table.teams th {
-    width: 20%; }
-  #bd table.teams .user {
-    width: 0%;
-    white-space: nowrap; }
-  #bd table.teams .ranking {
-    padding-left: 20px; }
-  #bd #graph {
-    margin-top: 1em; }
-    #bd #graph #chart {
-      margin-bottom: 20px; }
-  #bd .user .mugshot {
-    text-align: center;
-    padding-bottom: 1em; }
-  #bd .user p.position {
-    padding: 0;
-    padding-top: 10px;
-    padding-bottom: 4px;
-    margin-bottom: 15px;
-    border-top: 1px solid #999999;
-    border-bottom: 1px solid #999999;
-    font-size: 250%;
-    font-weight: bold;
-    text-align: center; }
-    #bd .user p.position label {
-      font-size: 13px; }
-  #bd .user table.for_against {
+    margin-bottom: 10px; }
+#bd .list {
+  margin-top: 1.5em; }
+  #bd .list table {
     width: 100%; }
-    #bd .user table.for_against td {
+    #bd .list table th {
       border: 0;
-      padding: 0;
-      margin: 0;
-      padding-right: 2px;
+      border-bottom: 1px solid #3399CC;
+      background-color: #77BBDD;
+      padding: 3px;
+      color: #FFFFFF; }
+    #bd .list table td {
+      border: 0;
+      padding: 3px;
+      text-align: left;
+      vertical-align: top; }
+      #bd .list table td img {
+        margin: 0;
+        padding: 0;
+        vertical-align: text-bottom; }
+    #bd .list table tr.even td {
+      background-color: #EEEEEE; }
+#bd #games h3 {
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 5px; }
+#bd #games .score {
+  text-align: center; }
+#bd #games .comments {
+  white-space: nowrap; }
+  #bd #games .comments a {
+    text-decoration: none;
+    color: #000000; }
+#bd #comments {
+  border-top: 1px solid #CCCCCC; }
+  #bd #comments .odd {
+    background-color: #F5F5F5; }
+  #bd #comments .comment {
+    margin: 0;
+    padding: 1em;
+    border-bottom: 1px solid #CCCCCC;
+    padding-bottom: 0; }
+    #bd #comments .comment .mugshot {
+      float: right;
       padding-bottom: 1em; }
-    #bd .user table.for_against td.against {
-      padding-right: 0;
-      padding-left: 2px;
-      text-align: right; }
+    #bd #comments .comment .info {
+      margin-bottom: 1em; }
+      #bd #comments .comment .info div {
+        display: inline; }
+      #bd #comments .comment .info .user {
+        font-weight: bold; }
+    #bd #comments .comment .edit {
+      margin-bottom: 1em; }
+    #bd #comments .comment textarea {
+      height: 5em; }
+  #bd #comments #new_comment {
+    margin-top: 1em; }
+    #bd #comments #new_comment textarea {
+      height: 6em; }
+#bd .edit_comment {
+  margin-bottom: 1em; }
+#bd .filter a.clear {
+  font-size: 85%; }
+#bd .pagination {
+  padding-top: 10px;
+  padding-bottom: 10px; }
+#bd .game {
+  margin-bottom: 20px; }
+  #bd .game label {
+    font-weight: bold; }
+#bd #new_game h3 {
+  display: block;
+  margin: 0;
+  margin-bottom: 5px; }
+#bd #new_game label {
+  display: block;
+  padding-bottom: 5px; }
+  #bd #new_game label span {
+    display: block; }
+  #bd #new_game label .score {
+    margin: 0;
+    width: 2em; }
+  #bd #new_game label select {
+    width: 220px; }
+#bd .columns {
+  clear: both; }
+  #bd .columns .left-column {
+    float: left;
+    width: 49%;
+    padding-right: 1%; }
+  #bd .columns .right-column {
+    float: left;
+    width: 48.9%;
+    padding-left: 1%; }
+#bd #recent_games .members {
+  width: 40%; }
+#bd #recent_games .score {
+  width: 20%;
+  text-align: center; }
+#bd #recent_games .comments {
+  white-space: nowrap; }
+  #bd #recent_games .comments a {
+    text-decoration: none;
+    color: #000000; }
+#bd #games_per_day .games_played {
+  text-align: right; }
+#bd a.rss {
+  text-decoration: none; }
+  #bd a.rss img {
+    position: relative;
+    top: 3px; }
+#bd tr.user .admin {
+  display: inline; }
+#bd a.user, #bd a.game {
+  color: #000000;
+  text-decoration: none; }
+  #bd a.user:hover, #bd a.game:hover {
+    text-decoration: underline; }
+#bd table.teams td, #bd table.teams th {
+  width: 20%; }
+#bd table.teams .user {
+  width: 0%;
+  white-space: nowrap; }
+#bd table.teams .ranking {
+  padding-left: 20px; }
+#bd #graph {
+  margin-top: 1em; }
+  #bd #graph #chart {
+    margin-bottom: 20px; }
+#bd .user .mugshot {
+  text-align: center;
+  padding-bottom: 1em; }
+#bd .user p.position {
+  padding: 0;
+  padding-top: 10px;
+  padding-bottom: 4px;
+  margin-bottom: 15px;
+  border-top: 1px solid #999999;
+  border-bottom: 1px solid #999999;
+  font-size: 250%;
+  font-weight: bold;
+  text-align: center; }
+  #bd .user p.position label {
+    font-size: 13px; }
+#bd .user table.for_against {
+  width: 100%; }
+  #bd .user table.for_against td {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    padding-right: 2px;
+    padding-bottom: 1em; }
+  #bd .user table.for_against td.against {
+    padding-right: 0;
+    padding-left: 2px;
+    text-align: right; }
+
+#sidebar .content {
+  padding-top: 1.5em;
+  padding-left: 1em;
+  padding-bottom: 1.5em; }
+  #sidebar .content h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    display: block;
+    padding: 3px;
+    background-color: #77BBDD;
+    border-bottom: 1px solid #3399CC;
+    margin-bottom: 5px;
+    color: #FFFFFF; }
+  #sidebar .content #leader {
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #EEEEEE;
+    border: 1px solid #999999; }
+    #sidebar .content #leader h3 {
+      padding: 0;
+      margin: 0; }
+  #sidebar .content #counts label {
+    font-weight: bold; }
+  #sidebar .content #opponents .odd {
+    background-color: #F0F0F0; }
+  #sidebar .content #opponents .even {
+    background-color: #F9F9F9; }
+  #sidebar .content #opponents .opponent {
+    padding: 5px; }
+    #sidebar .content #opponents .opponent label {
+      display: inline;
+      font-weight: bold; }
 
 #ft {
   color: #999999;
@@ -318,6 +325,3 @@ input#openid_url {
   clear: both; }
   .clear hr {
     display: none; }
-
-.yui-t5 #yui-main .yui-b {
-  margin-right: 240px; }

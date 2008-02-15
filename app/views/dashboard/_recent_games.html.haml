@@ -1,11 +1,13 @@
-%table.list
-  %tr
-    %th.name= 'Team one'[]
-    %th.score= 'Score'[]
-    %th.name= 'Team two'[]
-    %th &nbsp;
+.list
+  %h3= 'Recent games'[]
+  %table
+    %tr
+      %th.name= 'Team one'[]
+      %th.score= 'Score'[]
+      %th.name= 'Team two'[]
+      %th &nbsp;
 
-  - recent_games.each do |game|
-    %tr{ :class => cycle('odd', 'even') }
-      = render :partial => 'games/game_columns', :locals => { :game => game }
-  - reset_cycle
+    - recent_games.each do |game|
+      %tr{ :class => cycle('odd', 'even') }
+        = render :partial => 'games/game_columns', :locals => { :game => game }
+    - reset_cycle

@@ -11,24 +11,25 @@
       = link_to 'Clear filter', games_path, :class => 'clear'
 
   #games
-    %table.list
-      %tr
-        %th= 'Team one'[]
-        %th.score= 'Score'[]
-        %th= 'Team two'[]
-        %th &nbsp;
-        %th= 'Created'[]
-        %th &nbsp;
+    .list
+      %table
+        %tr
+          %th= 'Team one'[]
+          %th.score= 'Score'[]
+          %th= 'Team two'[]
+          %th &nbsp;
+          %th= 'Created'[]
+          %th &nbsp;
 
-      - @games.each do |game|
-        %tr{ :class => cycle('odd', 'even') }
-          = render :partial => 'game_columns', :locals => { :game => game }
+        - @games.each do |game|
+          %tr{ :class => cycle('odd', 'even') }
+            = render :partial => 'game_columns', :locals => { :game => game }
 
-          %td
-            = game.played_at.to_s :short
-            = ' by {user}'[:by_user, game.creator.login] if game.creator
+            %td
+              = game.played_at.to_s :short
+              = ' by {user}'[:by_user, game.creator.login] if game.creator
 
-          %td= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
+            %td= link_to 'Delete', game_path(game), :method => :delete, :confirm => 'Delete game. Are you sure?'[] if logged_in?
 
   .pagination= will_paginate @games
 

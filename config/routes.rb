@@ -13,7 +13,6 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :sessions
   
-  map.dashboard 'd/:action', :controller => 'dashboard'
   map.resources :games do |game|
     game.resources :comments
   end

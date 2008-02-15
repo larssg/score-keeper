@@ -8,46 +8,45 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.1/build/reset-fonts-grids/reset-fonts-grids.css', :type => 'text/css' }
-    %link{ :rel => 'stylesheet', :href => 'http://yui.yahooapis.com/2.3.1/build/base/base-min.css', :type => 'text/css' }
-    = stylesheet_link_tag 'screen'
+    = stylesheet_link_tag 'screen', :media => 'screen, projection'
     = stylesheet_link_tag 'print', :media => 'print'
+    /[if IE]
+      = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
     = javascript_include_tag :defaults
     = javascript_include_tag 'swfobject'
     = yield :head
 
   %body
-    #doc3{ :class => sidebar.blank? ? 'yui-t7' : 'yui-t5' }
-      #hd
+    .container
+      #hd.column.span-24
         #links
           = render :partial => 'shared/login'
           #languages
             = 'Language'[] + ':'
             = link_to_unless(language == 'en', 'English', :language => 'en')
             = link_to_unless(language == 'da', 'Dansk', :language => 'da')
-    
-        %h1= link_to image_tag('logo.gif'), root_url
+  
+        #logo= link_to image_tag('logo.gif'), root_url
 
         = render :partial => 'shared/menu'
-    
+  
       - unless @page_title.blank?
         %h2#page_title= @page_title
-      #bd
-        #yui-main
-          %div{ :class => sidebar.blank? ? nil : 'yui-b' }
-            #content.yui-g
-              - if flash.keys.length > 0
-                #messages
-                  - flash.keys.each do |key|
-                    %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
-                = javascript_tag "$('#messages').pause(8000).Fade();"
+      .column.span-24
+        #bd.column{ :class => sidebar.blank? ? 'span-24' : 'span-18' }
+          - if flash.keys.length > 0
+            #messages
+              - flash.keys.each do |key|
+                %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
+            = javascript_tag "$('#messages').pause(8000).Fade();"
 
-              = yield
-  
+          = yield
+
         - unless sidebar.blank?
-          #sidebar.yui-b= sidebar
-    
-      #ft
+          #sidebar.column.span-6.last
+            .content= sidebar
+  
+      #ft.column.span-24
         .content
           Copyright 2007 by Lars Sehested
           = '&middot;'

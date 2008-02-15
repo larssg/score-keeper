@@ -1,10 +1,12 @@
-%table.list
-  %tr
-    %th.date= 'Date'[]
-    %th.games_played= 'Games played'[]
+.list
+  %h3= 'Games played per day'[]
+  %table
+    %tr
+      %th.date= 'Date'[]
+      %th.games_played= 'Games played'[]
 
-  - games_per_day.each do |day|
-    %tr{ :class => cycle('odd', 'even') }
-      %td.date= day[0].to_date.to_s :long
-      %td.games_played= day[1]
-  - reset_cycle
+    - games_per_day.each do |day|
+      %tr{ :class => cycle('odd', 'even') }
+        %td.date= day[0].to_date.to_s :long
+        %td.games_played= day[1]
+    - reset_cycle
