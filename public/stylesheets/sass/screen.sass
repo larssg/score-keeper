@@ -3,8 +3,9 @@
 @import lib/grid.css
 @import lib/forms.css
 
-.box
-  :background-color #FFFFFF
+// Show grid background
+  //.container
+    //:background url(lib/grid.png)
 
 th
   :text-align left
@@ -51,10 +52,28 @@ table
       :padding-left 10px 
       :display inline
       :display none
+
+#menu    
+  :background-color #77BBDD
+  
+  
+  #add_game
+    :text-align right
+  
+    a
+      :display block
+      :padding-right 21px
+      :padding-top 9px
+      :color #FFFFFF
+      :text-decoration none
     
-  ul#menu
+      img
+        :margin 0
+        :padding 0
+        :vertical-align text-bottom
+
+  ul
     :display block
-    :background-color #77BBDD
     :margin 0
     :padding 21px
     :padding-top 10px
@@ -62,13 +81,13 @@ table
     :list-style-type none
     :line-height normal
     :height 26px
-    
+  
     li
       :display inline
       :float left
       :background url('../images/tab_right.gif') no-repeat right top
       :margin-right 4px
-      
+    
       &:hover
         :background-image url('../images/tab_active_right.gif')
 
@@ -83,14 +102,14 @@ table
         :float left
         :background url('../images/tab_left.gif') no-repeat left top
         :padding 5px 15px
-        
+      
         &:hover
           :background-image url('../images/tab_active_left.gif')
           :color #7C7C7C
 
     li.current
       :background-image url('../images/tab_active_right.gif')
-      
+    
       a
         :background-image url('../images/tab_active_left.gif')
         :color #7C7C7C
@@ -107,6 +126,20 @@ table
       
     .submit
       :margin-right 0
+      
+#add_game_form
+  :background-color #EEEEEE
+  :padding-top 0.5em
+  :padding-bottom 0.5em
+  :border-bottom 1px solid #CCCCCC
+
+  label
+    :padding-right 0.5em
+    :padding-left 0.5em
+
+  .score
+    :margin-right 0.5em
+    :width 3em
 
 h2#page_title
   :display none
@@ -124,6 +157,7 @@ h3
   #messages
     :border 1px solid #999999
     :background-color #EEEEEE
+    :margin-top 1.5em
     :padding 10px
     :margin-bottom 10px
   

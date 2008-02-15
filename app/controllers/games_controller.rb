@@ -13,7 +13,7 @@ class GamesController < ApplicationController
     
     response_for :create do
       flash[:notice] = 'Game created.'[]
-      redirect_back_or_default dashboard_url
+      redirect_back_or_default root_url
     end
     
     response_for :create_fails do

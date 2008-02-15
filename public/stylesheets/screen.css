@@ -2,9 +2,6 @@
 @import url(lib/typography.css);
 @import url(lib/grid.css);
 @import url(lib/forms.css);
-.box {
-  background-color: #FFFFFF; }
-
 th {
   text-align: left; }
 
@@ -43,9 +40,23 @@ table {
       padding-left: 10px;
       display: inline;
       display: none; }
-  #hd ul#menu {
+
+#menu {
+  background-color: #77BBDD; }
+  #menu #add_game {
+    text-align: right; }
+    #menu #add_game a {
+      display: block;
+      padding-right: 21px;
+      padding-top: 9px;
+      color: #FFFFFF;
+      text-decoration: none; }
+      #menu #add_game a img {
+        margin: 0;
+        padding: 0;
+        vertical-align: text-bottom; }
+  #menu ul {
     display: block;
-    background-color: #77BBDD;
     margin: 0;
     padding: 21px;
     padding-top: 10px;
@@ -53,14 +64,14 @@ table {
     list-style-type: none;
     line-height: normal;
     height: 26px; }
-    #hd ul#menu li {
+    #menu ul li {
       display: inline;
       float: left;
       background: url('../images/tab_right.gif') no-repeat right top;
       margin-right: 4px; }
-      #hd ul#menu li:hover {
+      #menu ul li:hover {
         background-image: url('../images/tab_active_right.gif'); }
-      #hd ul#menu li a {
+      #menu ul li a {
         background-color: #3399CC;
         border-bottom: none;
         text-decoration: none;
@@ -71,23 +82,35 @@ table {
         float: left;
         background: url('../images/tab_left.gif') no-repeat left top;
         padding: 5px 15px; }
-        #hd ul#menu li a:hover {
+        #menu ul li a:hover {
           background-image: url('../images/tab_active_left.gif');
           color: #7C7C7C; }
-    #hd ul#menu li.current {
+    #menu ul li.current {
       background-image: url('../images/tab_active_right.gif'); }
-      #hd ul#menu li.current a {
+      #menu ul li.current a {
         background-image: url('../images/tab_active_left.gif');
         color: #7C7C7C; }
-  #hd #login_form {
+  #menu #login_form {
     display: none;
     font-size: 85%; }
-    #hd #login_form input {
+    #menu #login_form input {
       margin-right: 10px; }
-    #hd #login_form input.login, #hd #login_form input.password {
+    #menu #login_form input.login, #menu #login_form input.password {
       width: 80px; }
-    #hd #login_form .submit {
+    #menu #login_form .submit {
       margin-right: 0; }
+
+#add_game_form {
+  background-color: #EEEEEE;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #CCCCCC; }
+  #add_game_form label {
+    padding-right: 0.5em;
+    padding-left: 0.5em; }
+  #add_game_form .score {
+    margin-right: 0.5em;
+    width: 3em; }
 
 h2#page_title {
   display: none;
@@ -103,6 +126,7 @@ h3 {
 #bd #messages {
   border: 1px solid #999999;
   background-color: #EEEEEE;
+  margin-top: 1.5em;
   padding: 10px;
   margin-bottom: 10px;
   background-color: #CFC;

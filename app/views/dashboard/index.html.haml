@@ -41,6 +41,3 @@
           = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
           = 'by'[]
           = user_link_full @all_time_low.user
-
-  - if logged_in?
-    = render :partial => 'games/form'
