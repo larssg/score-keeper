@@ -9,8 +9,8 @@ class Game < ActiveRecord::Base
   has_many :comments
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
+  before_save :set_played_on_and_at
   before_create :build_teams
-  before_save :set_played_on
   after_create :update_winners
   after_create :update_rankings
   before_destroy :update_after_destroy
@@ -55,10 +55,6 @@ class Game < ActiveRecord::Base
     end
   end
   
-  def set_played_on
-    self.played_on = self.played_at.to_date
-  end
-
   def update_rankings
     return if self.teams.count < 2
     transfer = (0.01 * self.loser.ranking_total).round
@@ -120,8 +116,13 @@ class Game < ActiveRecord::Base
   def self.goals_scored
     User.sum(:goals_for) / 2
   end
-  
+
   protected
+  def set_played_on_and_at
+    self.played_at ||= 5.minutes.ago
+    self.played_on = self.played_at.to_date
+  end
+
   def build_teams
     team1 = teams.build(:score => score1)
     team1.memberships.build(:user_id => user11)

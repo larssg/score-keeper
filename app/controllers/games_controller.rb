@@ -9,7 +9,6 @@ class GamesController < ApplicationController
     before :create do
       current_object.attributes = params[:teams]
       current_object.creator = current_user
-      current_object.played_at ||= 5.minutes.ago
     end
     
     response_for :create do

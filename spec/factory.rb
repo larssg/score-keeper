@@ -1,11 +1,21 @@
 module Factory
-  def self.create_game(attributes = {})
-    default_attributes = {
-      :played_at => 5.minutes.ago
-    }
-    Game.create! default_attributes.merge(attributes)
+  def self.create_game(options = {})
+    people = options[:people] || Factory.create_people(4)
+    team_scores = options[:team_scores] || [10, 4]
+
+    game = Game.new
+    game.score1 = team_scores[0]
+    game.user11 = people[0].id
+    game.user12 = people[1].id
+    
+    game.score2 = team_scores[1]
+    game.user21 = people[2].id
+    game.user22 = people[3].id
+    
+    game.save!
+    game
   end
-  
+
   def self.create_user(attributes = {})
     default_attributes = {
       :first_name => 'Person',
@@ -33,24 +43,5 @@ module Factory
       :email => 'admin@example.com'
     }
     User.create! default_attributes.merge(attributes)
-  end
-  
-  def self.create_default_game(options = {})
-    people = options[:people] || Factory.create_people(4)
-    game = options[:game] || Game.new
-    team_scores = options[:team_scores] || [10, 4]
-    
-    team_one = game.teams.build(:score => team_scores[0])
-    team_one.memberships.build(:user => people[0])
-    team_one.memberships.build(:user => people[1])
-    
-    team_two = game.teams.build(:score => team_scores[1])
-    team_two.memberships.build(:user => people[2])
-    team_two.memberships.build(:user => people[3])
-    
-    game.played_at ||= Time.now
-    
-    game.save!
-    game
   end
 end
