@@ -10,6 +10,11 @@ class ApplicationController < ActionController::Base
     session[:language]
   end
   helper_method :language
+  
+  def all_users
+    @all_users = User.find_all
+  end
+  helper_method :all_users
 
   protected
   def setup_ranking_graph

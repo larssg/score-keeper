@@ -48,7 +48,7 @@ describe GamesController, "creating a game (logged in)" do
     lambda do
       do_post
       response.should be_redirect
-      response.should redirect_to(dashboard_path)
+      response.should redirect_to(root_path)
     end.should change(Game, :count).by(1)
   end
 end

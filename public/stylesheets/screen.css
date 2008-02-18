@@ -296,6 +296,23 @@ h3 {
     padding-right: 0;
     padding-left: 2px;
     text-align: right; }
+#bd #userlist {
+  margin-top: 1.5em; }
+  #bd #userlist .user {
+    padding: 10px;
+    border: 1px solid #CCCCCC;
+    margin-bottom: 10px; }
+    #bd #userlist .user .image {
+      width: 60px;
+      height: 60px;
+      margin-right: 10px;
+      float: left;
+      text-align: center;
+      background-color: #EEEEEE; }
+    #bd #userlist .user .role {
+      float: right; }
+    #bd #userlist .user .name {
+      font-weight: bold; }
 
 #sidebar .content {
   padding-top: 1.5em;

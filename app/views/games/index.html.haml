@@ -37,12 +37,6 @@
     = link_to 'RSS feed (all games)'[] + ' ' + image_tag('rss.gif'), formatted_games_url(:rss), :class => 'rss'
     - unless params[:filter].blank?
       = link_to 'RSS feed (filtered)'[] + ' ' + image_tag('rss.gif'), formatted_games_url(:rss, :filter => params[:filter]), :class => 'rss'
-        
-- content_for :sidebar do
-  - if logged_in?
-    = render :partial => 'games/form'
-  - else
-    = 'Login to add a game.'[]
 
 - content_for :head do
   = auto_discovery_link_tag :atom, formatted_games_url(:atom), :title => 'All games'[]

@@ -1,23 +1,20 @@
 - title 'Users'[]
 
-.list
-  %table
-    %tr
-      %th= '&nbsp';
-      %th= 'Name'[]
-      %th= 'Email'[]
-      %th= 'Administrator'[]
-      %th= 'Created at'[]
-      %th &nbsp;
-
-    - @users.each do |user|
-      %tr{ :class => cycle('odd', 'even') }
-        %td= image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name) if user.mugshot
-        %td= link_to h(user.name), edit_user_path(user)
-        %td= mail_to user.email
-        %td= user.is_admin? ? 'Yes'[] : 'No'[]
-        %td= user.created_at.to_s :long
-        %td= link_to 'Remove'[], user_path(user), :method => :delete, :confirm => 'Are you sure?' if admin?
+#userlist.clear
+  - @users.each_with_index do |user, index|
+    .column.span-9{ :class => index.odd? ? 'last' : nil }
+      .user
+        .image
+          - if user.mugshot
+            = image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name)
+        .role= user.is_admin? ? 'Admin'[] : 'Normal'[]
+        .name= user.name
+        .email= mail_to user.email
+        .created_at= user.created_at.to_s :long
+        - if admin?
+          .admin
+            = link_to 'Edit'[], edit_user_path(user)
+            = link_to 'Remove'[], user_path(user), :method => :delete, :confirm => 'Are you sure?'
 
 - if admin?
   - content_for :sidebar do

@@ -7,7 +7,7 @@ class GamesController < ApplicationController
     build :edit, :create, :update, :destroy
 
     before :create do
-      current_object.attributes = params[:teams]
+      current_object.attributes = params[:game]
       current_object.creator = current_user
     end
     
@@ -65,7 +65,6 @@ class GamesController < ApplicationController
       end
       @games = Game.paginate_recent(:include => { :teams => { :memberships => :user } }, :conditions => conditions, :page => params[:page])
       @game = current_model.new
-      @user_list = User.find_all
     end
   end
   

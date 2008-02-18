@@ -1,16 +1,15 @@
 - form_for :game, nil, :url => games_path do |f|
-  - fields_for :teams do |fi|
-    .team
-      %label= 'Team'[] + ':'
-      = fi.collection_select 'user11', @user_list, :id, :name, { :prompt => 'Attacker'[] }, { :class => 'user' }
-      = fi.collection_select 'user12', @user_list, :id, :name, { :prompt => 'Defender'[] }, { :class => 'user' }
-      %label= 'Score'[] + ':'
-      = fi.text_field 'score1', :class => 'score', :autocomplete => 'off'
-    .team
-      %label= 'Team'[] + ':'
-      = fi.collection_select 'user21', @user_list, :id, :name, { :prompt => 'Attacker'[] }, { :class => 'user' }
-      = fi.collection_select 'user22', @user_list, :id, :name, { :prompt => 'Defender'[] }, { :class => 'user' }
-      %label= 'Score'[] + ':'
-      = fi.text_field 'score2', :class => 'score', :autocomplete => 'off'
-      = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
-      = link_to_function 'Cancel'[], "$('#add_game_form').hide()"
+  .team
+    %label= 'Team'[] + ':'
+    = f.collection_select 'user11', all_users, :id, :name, { :prompt => 'Attack'[] }, { :class => 'user' }
+    = f.collection_select 'user12', all_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
+    %label= 'Score'[] + ':'
+    = f.text_field 'score1', :class => 'score', :autocomplete => 'off'
+  .team
+    %label= 'Team'[] + ':'
+    = f.collection_select 'user21', all_users, :id, :name, { :prompt => 'Attack'[] }, { :class => 'user' }
+    = f.collection_select 'user22', all_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
+    %label= 'Score'[] + ':'
+    = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
+    = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
+    = link_to_function 'Cancel'[], "$('#add_game_form').hide()"
