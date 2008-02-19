@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  include UserOpenidsHelper
-
   before_filter :login_required, :only => [ :index, :edit, :update, :change_password ]
   before_filter :must_be_admin, :only => [ :index ]
   before_filter :must_be_admin_or_self, :only => [ :edit, :update ]
@@ -56,7 +54,6 @@ class UsersController < ApplicationController
   
   def edit
     @user = current_account.users.find(params[:id])
-    @user_openids = @user.user_openids
   end
   
   def update

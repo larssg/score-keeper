@@ -1,6 +1,5 @@
 # This controller handles the login/logout function of the site.  
 class SessionsController < ApplicationController
-  include UserOpenidsHelper
   layout 'public'
 
   # render new.rhtml

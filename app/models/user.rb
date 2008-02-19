@@ -2,16 +2,14 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
-  attr_accessor :identity_url
   
   belongs_to :account
-  has_many :user_openids, :dependent => :destroy
   has_many :memberships
   has_many :comments
   belongs_to :mugshot
   
-  validates_presence_of     :email,                       :if => :not_openid?
-  validates_length_of       :email,    :within => 3..100, :if => :not_openid?
+  validates_presence_of     :email
+  validates_length_of       :email,    :within => 3..100
   validates_presence_of     :login
   validates_length_of       :login,    :within => 2..100
   validates_uniqueness_of   :login,    :scope => :account_id, :case_sensitive => false, :message => 'is already taken; sorry!'
@@ -22,11 +20,10 @@ class User < ActiveRecord::Base
   validates_length_of       :password, :within => 4..40,  :if => :password_required?
   validates_confirmation_of :password,                    :if => :password_required?
   before_save :encrypt_password
-  after_create :make_user_openid
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :name, :identity_url, :display_name
+  attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name
   
   before_destroy :remove_games
 
@@ -125,11 +122,6 @@ class User < ActiveRecord::Base
     save(false)
   end
 
-  def self.find_by_identity_url(openid_url)
-    user_openid = UserOpenid.find_by_openid_url(openid_url, :include => :user)
-    user_openid.nil? ? nil : user_openid.user
-  end
-
   protected
     def remove_games
       self.memberships.each do |membership|
@@ -150,14 +142,6 @@ class User < ActiveRecord::Base
     end
     
     def password_required?
-      not_openid? && (crypted_password.blank? || !password.blank?)
+      crypted_password.blank? || !password.blank?
     end
-  
-    def not_openid?
-      identity_url.blank? && user_openids.count == 0
-    end
-    
-    def make_user_openid
-      self.user_openids.create(:openid_url => identity_url) unless identity_url.blank?
-    end  
 end
