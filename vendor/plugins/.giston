@@ -9,19 +9,19 @@
   rev: 3118
   url: http://svn.techno-weenie.net/projects/plugins/attachment_fu/
 - dir: haml
-  rev: 738
+  rev: 739
   url: svn://hamptoncatlin.com/haml/trunk
 - dir: make_resourceful
   rev: 155
   url: http://svn.hamptoncatlin.com/make_resourceful/tags/make_resourceful/
 - dir: restful_authentication
-  rev: 3120
+  rev: 3138
   url: http://svn.techno-weenie.net/projects/plugins/restful_authentication/
 - dir: will_paginate
   rev: 443
   url: svn://errtheblog.com/svn/plugins/will_paginate
 - dir: exception_notification
-  rev: 8194
+  rev: 8821
   url: http://dev.rubyonrails.org/svn/rails/plugins/exception_notification/
 - dir: jrails
   rev: 21
@@ -33,7 +33,7 @@
   rev: 331
   url: svn://errtheblog.com/svn/plugins/gibberish
 - dir: open_id_authentication
-  rev: 8476
+  rev: 8872
   url: http://dev.rubyonrails.org/svn/rails/plugins/open_id_authentication
 - dir: account_location
   rev: 5250

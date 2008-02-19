@@ -152,7 +152,6 @@ module Haml
     # Gets <tt>count</tt> tabs. Mostly for internal use.
     def tabs(count)
       tabs = count + @tabulation
-      '  ' * tabs
       @@tab_cache[tabs] ||= '  ' * tabs
     end
 
