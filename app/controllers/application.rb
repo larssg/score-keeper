@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include AccountLocation
+
 #  around_filter :set_language
 
   include AuthenticatedSystem
@@ -12,11 +14,15 @@ class ApplicationController < ActionController::Base
   helper_method :language
   
   def all_users
-    @all_users = User.find_all
+    @all_users = current_account.users.find(:all, :order => 'name, display_name')
   end
   helper_method :all_users
 
   protected
+  def current_account
+    @current_account ||= Account.find_by_domain(account_subdomain)
+  end
+  
   def setup_ranking_graph
     chart = FlashChart.new
     chart.title ' '
@@ -29,12 +35,12 @@ class ApplicationController < ActionController::Base
   end
   
   def y_max
-    max = [Membership.all_time_high.current_ranking, 2000].max
+    max = [Membership.all_time_high(current_account).current_ranking, 2000].max
     (max / 100.0).ceil * 100 # Round up to nearest 100
   end
   
   def y_min
-    min = [Membership.all_time_low.current_ranking, 2000].min
+    min = [Membership.all_time_low(current_account).current_ranking, 2000].min
     (min / 100.0).floor * 100 # Round down to nearest 100
   end
   

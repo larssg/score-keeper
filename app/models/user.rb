@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
   attr_accessor :identity_url
   
+  belongs_to :account
   has_many :user_openids, :dependent => :destroy
   has_many :memberships
   has_many :comments
@@ -13,8 +14,8 @@ class User < ActiveRecord::Base
   validates_length_of       :email,    :within => 3..100, :if => :not_openid?
   validates_presence_of     :login
   validates_length_of       :login,    :within => 2..100
-  validates_uniqueness_of   :login,    :case_sensitive => false, :message => 'is already taken; sorry!'
-  validates_uniqueness_of   :email,    :case_sensitive => false, :message => 'is already being used; do you already have an account?'
+  validates_uniqueness_of   :login,    :scope => :account_id, :case_sensitive => false, :message => 'is already taken; sorry!'
+  validates_uniqueness_of   :email,    :scope => :account_id, :case_sensitive => false, :message => 'is already being used; do you already have an account?'
 
   validates_presence_of     :password,                    :if => :password_required?
   validates_presence_of     :password_confirmation,       :if => :password_required?

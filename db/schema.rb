@@ -9,7 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 27) do
+ActiveRecord::Schema.define(:version => 28) do
+
+  create_table "accounts", :force => true do |t|
+    t.string   "name"
+    t.string   "domain"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
@@ -31,6 +38,7 @@ ActiveRecord::Schema.define(:version => 27) do
     t.string   "team_two"
     t.datetime "played_on"
     t.integer  "comments_count", :default => 0
+    t.integer  "account_id"
   end
 
   add_index "games", ["played_on"], :name => "index_games_on_played_on"
@@ -45,6 +53,7 @@ ActiveRecord::Schema.define(:version => 27) do
   end
 
   add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
+  add_index "memberships", ["team_id"], :name => "index_memberships_on_team_id"
 
   create_table "mugshots", :force => true do |t|
     t.integer  "size"
@@ -85,6 +94,7 @@ ActiveRecord::Schema.define(:version => 27) do
     t.string   "team_ids"
     t.boolean  "won",          :default => false
     t.string   "opponent_ids"
+    t.integer  "account_id"
   end
 
   add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
@@ -121,6 +131,7 @@ ActiveRecord::Schema.define(:version => 27) do
     t.integer  "mugshot_id"
     t.integer  "ranking",                                 :default => 2000
     t.integer  "comments_count",                          :default => 0
+    t.integer  "account_id"
   end
 
 end

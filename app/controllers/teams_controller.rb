@@ -4,15 +4,15 @@ class TeamsController < ApplicationController
   def index
     unless read_fragment(teams_path)
       @teams = {}
-      @team_counts = Team.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
-      @team_wins = Team.count(:group => :team_ids, :conditions => { :won => true })
+      @team_counts = current_account.teams.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
+      @team_wins = current_account.teams.count(:group => :team_ids, :conditions => { :won => true })
 
       @team_counts.each do |count|
         @teams[count[0]] = {}
         @teams[count[0]][:team_ids] = count[0]
         @teams[count[0]][:games_played] = count[1]
         @teams[count[0]][:games_won] = 0
-        @teams[count[0]][:players] = User.find(:all, :conditions => { :id => count[0].split(',') })
+        @teams[count[0]][:players] = current_account.users.find(:all, :conditions => { :id => count[0].split(',') })
       end
     
       @team_wins.each do |win|
@@ -36,8 +36,8 @@ class TeamsController < ApplicationController
     @ids = params[:id].split(',').collect { |id| id.to_i }.sort
     respond_to do |format|
       format.html do
-        @team_members = User.find(:all, :conditions => { :id => @ids }, :limit => 2)
-        @opponents = Team.opponents(@ids.join(','))
+        @team_members = current_account.users.find(:all, :conditions => { :id => @ids }, :limit => 2)
+        @opponents = current_account.teams.opponents(@ids.join(','))
       end
       format.graph { render_chart } 
     end
@@ -45,7 +45,7 @@ class TeamsController < ApplicationController
   
   protected
   def render_chart
-    memberships = Membership.find_team(@ids)
+    memberships = Membership.find_team(@ids, current_account)
     
     data = {}
     memberships.each do |membership|
@@ -79,8 +79,8 @@ class TeamsController < ApplicationController
     (0..1).each do |index|
       chart.set_data [2000] + people[index]
     end
-    chart.line 2, '#3399CC', User.find(@ids[0]).name
-    chart.line 2, '#77BBDD', User.find(@ids[1]).name
+    chart.line 2, '#3399CC', current_account.users.find(@ids[0]).name
+    chart.line 2, '#77BBDD', current_account.users.find(@ids[1]).name
     chart.set_x_labels ['Start'[]] + dates.collect { |d| d.to_s :db }
 
     steps = (data.size / 20).to_i

@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
   
   private
   def password_authentication(login, password)
-    self.current_user = User.authenticate(login, password)
+    self.current_user = current_account.users.authenticate(login, password)
     if logged_in?
       if params[:remember_me] == "1"
         self.current_user.remember_me

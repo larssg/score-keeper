@@ -1,30 +1,32 @@
 class UsersController < ApplicationController
   include UserOpenidsHelper
 
-  #layout 'public', :only => 'new'
-  
   before_filter :login_required, :only => [ :index, :edit, :update, :change_password ]
   before_filter :must_be_admin, :only => [ :index ]
   before_filter :must_be_admin_or_self, :only => [ :edit, :update ]
   
   def index
-    @users = User.find(:all, :order => 'login')
-    @user = User.new
+    @users = current_account.users.find(:all, :order => 'login')
+    @user = current_account.users.build
   end
   
   def show
-    @user = User.find(params[:id])
+    @user = current_account.users.find(params[:id])
     @all_time_high = @user.all_time_high
     @all_time_low = @user.all_time_low
   end
   
   def new
     @user = User.new(params[:user])
+    @user.account = current_account
     @user.valid? if params[:user]
+    
+    render :layout => 'public'
   end
   
   def create
     @user = User.new(params[:user])
+    @user.account = current_account
 
     mugshot = Mugshot.create(params[:mugshot])
     @user.mugshot = mugshot unless mugshot.nil?
@@ -53,12 +55,12 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @user = User.find(params[:id])
+    @user = current_account.users.find(params[:id])
     @user_openids = @user.user_openids
   end
   
   def update
-    @user = User.find(params[:id])
+    @user = current_account.users.find(params[:id])
     mugshot = Mugshot.create(params[:mugshot])
     @user.mugshot = mugshot unless mugshot.nil?
     @user.is_admin = params[:user][:is_admin] if current_user.is_admin?
@@ -74,7 +76,7 @@ class UsersController < ApplicationController
   end
   
   def destroy
-    @user = User.find(params[:id])
+    @user = current_account.users.find(params[:id])
     if @user.destroy
       if @user.id == current_user
         self.current_user.forget_me if logged_in?

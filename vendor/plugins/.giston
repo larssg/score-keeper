@@ -35,3 +35,6 @@
 - dir: open_id_authentication
   rev: 8476
   url: http://dev.rubyonrails.org/svn/rails/plugins/open_id_authentication
+- dir: account_location
+  rev: 5250
+  url: http://dev.rubyonrails.org/svn/rails/plugins/account_location/

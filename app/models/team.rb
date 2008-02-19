@@ -1,4 +1,5 @@
 class Team < ActiveRecord::Base
+  belongs_to :account
   has_many :memberships
   belongs_to :game
   before_save :update_cache_values

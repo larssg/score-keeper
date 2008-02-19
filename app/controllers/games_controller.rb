@@ -8,6 +8,7 @@ class GamesController < ApplicationController
 
     before :create do
       current_object.attributes = params[:game]
+      current_object.account = current_account
       current_object.creator = current_user
     end
     
@@ -44,7 +45,7 @@ class GamesController < ApplicationController
   end
   
   def show
-    @game = Game.find(params[:id])
+    @game = current_account.games.find(params[:id])
     @comments = @game.comments.find(:all, :order => 'created_at')
     @comment = @game.comments.build
   end
@@ -52,7 +53,7 @@ class GamesController < ApplicationController
   protected
   def load_data_for_index
     if params[:user_id]
-      @user = User.find(params[:user_id])
+      @user = current_account.users.find(params[:user_id])
     else
       conditions = nil
       if params[:filter]
@@ -63,7 +64,7 @@ class GamesController < ApplicationController
           conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
         end
       end
-      @games = Game.paginate_recent(:include => { :teams => { :memberships => :user } }, :conditions => conditions, :page => params[:page])
+      @games = current_account.games.paginate_recent(:include => { :teams => { :memberships => :user } }, :conditions => conditions, :page => params[:page])
       @game = current_model.new
     end
   end

@@ -5,6 +5,7 @@ class Game < ActiveRecord::Base
   attr_accessor :score1, :user11, :user12
   attr_accessor :score2, :user21, :user22
 
+  belongs_to :account
   has_many :teams
   has_many :comments
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
@@ -124,12 +125,12 @@ class Game < ActiveRecord::Base
   end
 
   def build_teams
-    team1 = teams.build(:score => score1)
+    team1 = teams.build(:score => score1, :account => self.account)
     team1.memberships.build(:user_id => user11)
     team1.memberships.build(:user_id => user12)
     team1.opponent_ids = [user21, user22].collect { |user_id| user_id.to_i }.sort.join(',')
 
-    team2 = teams.build(:score => score2)
+    team2 = teams.build(:score => score2, :account => self.account)
     team2.memberships.build(:user_id => user21)
     team2.memberships.build(:user_id => user22)
     team2.opponent_ids = [user11, user12].collect { |user_id| user_id.to_i }.sort.join(',')
