@@ -13,21 +13,21 @@
     = javascript_include_tag :defaults
     = yield :head
 
-  %body
-    .container
-      #hd.column.span-24
-        #links
-          #languages
-            = 'Language'[] + ':'
-            = link_to_unless(language == 'en', 'English', :language => 'en')
-            = link_to_unless(language == 'da', 'Dansk', :language => 'da')
+  %body.public
+    .border
+      .container
+        #hd
+          #links
+            #languages
+              = 'Language'[] + ':'
+              = link_to_unless(language == 'en', 'English', :language => 'en')
+              = link_to_unless(language == 'da', 'Dansk', :language => 'da')
   
-        #logo= link_to image_tag('logo.gif'), root_url
+          #logo= link_to image_tag('logo.gif'), root_url
   
-      - unless @page_title.blank?
-        %h2#page_title= @page_title
-      .column.span-24
-        #bd.column.span-24
+        - unless @page_title.blank?
+          %h2#page_title= @page_title
+        #bd
           - if flash.keys.length > 0
             #messages
               - flash.keys.each do |key|
@@ -35,8 +35,8 @@
             = javascript_tag "$('#messages').pause(8000).Fade();"
 
           = yield
-  
-      #ft.column.span-24
+
+      #ft
         .content
           Copyright 2007 by Lars Sehested
           = '&middot;'
