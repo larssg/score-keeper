@@ -45,7 +45,6 @@ ActiveRecord::Schema.define(:version => 27) do
   end
 
   add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
-  add_index "memberships", ["team_id"], :name => "index_memberships_on_team_id"
 
   create_table "mugshots", :force => true do |t|
     t.integer  "size"

@@ -2,7 +2,7 @@ class DashboardController < ApplicationController
   before_filter :login_required
 
   def index
-    @recent_games = Game.find_recent(:limit => 8, :include => { :teams => :memberships })
+    @recent_games = Game.find_recent(:limit => 10, :include => { :teams => :memberships })
 
     unless cached?
       @rankings = User.find_ranked

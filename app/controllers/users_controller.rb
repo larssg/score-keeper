@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   include UserOpenidsHelper
+
+  #layout 'public', :only => 'new'
   
   before_filter :login_required, :only => [ :index, :edit, :update, :change_password ]
   before_filter :must_be_admin, :only => [ :index ]
@@ -46,7 +48,7 @@ class UsersController < ApplicationController
       @users = User.find(:all, :order => 'login')
       render :action => 'index'
     else
-      render :action => 'new'
+      render :action => 'new', :layout => 'public'
     end
   end
   

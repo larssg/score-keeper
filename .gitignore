@@ -6,3 +6,7 @@ doc/api
 doc/app
 config/database.yml
 public/mugshots
+.project
+.loadpath
+nbproject
+vendor/plugins/goldspike

@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   validates_presence_of     :email,                       :if => :not_openid?
   validates_length_of       :email,    :within => 3..100, :if => :not_openid?
   validates_presence_of     :login
-  validates_length_of       :login,    :within => 3..100
+  validates_length_of       :login,    :within => 2..100
   validates_uniqueness_of   :login,    :case_sensitive => false, :message => 'is already taken; sorry!'
   validates_uniqueness_of   :email,    :case_sensitive => false, :message => 'is already being used; do you already have an account?'
 

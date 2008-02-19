@@ -11,13 +11,18 @@ class MovePeopleToUsers < ActiveRecord::Migration
     add_column :users, :ranking, :integer, :default => 2000
     
     Person.find(:all).each do |person|
-      login = person.display_name.downcase.gsub(' ', '')
+      login = person.display_name.downcase.gsub(' ', '').gsub('.', '')
       
-      User.create!(
-        :login => login,
+      password = login
+      password = password * 3 if password.length < 4
+      
+      puts "#{login}: #{password}"
+      
+      user = User.find_by_login(login) || User.new(:login => login)
+      user.password = password && user.password_confirmation = password if user.new_record?
+
+      attrs = {
         :email => login + '@example.com',
-        :password => login,
-        :password_confirmation => login,
         :display_name => person.display_name,
         :memberships_count => person.memberships_count,
         :games_won => person.games_won,
@@ -26,7 +31,13 @@ class MovePeopleToUsers < ActiveRecord::Migration
         :mugshot_id => person.mugshot_id,
         :ranking => person.ranking,
         :name => [person.first_name, person.last_name].compact.join(' ')
-      )
+      }
+      
+      attrs.keys.each do |key|
+        user.send("#{key}=", attrs[key])
+      end
+
+      user.save!
     end
     
     drop_table :people
