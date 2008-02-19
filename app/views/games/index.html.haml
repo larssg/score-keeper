@@ -2,7 +2,7 @@
 
 - if @games.length > 0
   - if @filter
-    %p.filter
+    #filter
       - if @filter.length > 1
         = 'Filter by <b>{first}</b> and <b>{second}</b>'[:filter_by_two, h(@filter[0].display_name), h(@filter[1].display_name)]
       - else

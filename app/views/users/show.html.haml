@@ -1,8 +1,9 @@
 - title 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
 
 - if @user.memberships_count > 0
-  %h3= 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
-  #graph= graph(formatted_user_games_url(@user.id, :graph))
+  #graph
+    %h3= 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
+    = graph(formatted_user_games_url(@user.id, :graph))
 
 - content_for :sidebar do
   .user

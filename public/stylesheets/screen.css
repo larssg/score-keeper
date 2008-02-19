@@ -2,10 +2,19 @@
 @import url(lib/typography.css);
 @import url(lib/grid.css);
 @import url(lib/forms.css);
+img {
+  margin: 0;
+  padding: 0; }
+
 th {
   text-align: left; }
 
 table {
+  margin: 0;
+  border-collapse: collapse; }
+
+textarea {
+  padding: 0;
   margin: 0; }
 
 #hd {
@@ -24,8 +33,6 @@ table {
     border-bottom: 1px solid #FFFFFF; }
     #hd #logo a {
       margin: 0; }
-      #hd #logo a img {
-        margin: 0; }
   #hd #links {
     float: right;
     padding: 21px;
@@ -52,8 +59,6 @@ table {
       color: #FFFFFF;
       text-decoration: none; }
       #menu #add_game a img {
-        margin: 0;
-        padding: 0;
         vertical-align: text-bottom; }
   #menu ul {
     display: block;
@@ -118,8 +123,11 @@ h2#page_title {
   padding: 10px; }
 
 h3 {
+  font-size: 13px;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  margin-bottom: 5px;
+  font-weight: bold; }
 
 #bd .bottom_space {
   padding-bottom: 20px; }
@@ -161,11 +169,8 @@ h3 {
         vertical-align: text-bottom; }
     #bd .list table tr.even td {
       background-color: #EEEEEE; }
-#bd #games h3 {
-  font-size: 13px;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 5px; }
+#bd #filter {
+  margin-top: 1.5em; }
 #bd #games .score {
   text-align: center; }
 #bd #games .comments {
@@ -173,6 +178,10 @@ h3 {
   #bd #games .comments a {
     text-decoration: none;
     color: #000000; }
+#bd #game {
+  margin-bottom: 1.5em; }
+  #bd #game h3 {
+    margin-top: 1.5em; }
 #bd #comments {
   border-top: 1px solid #CCCCCC; }
   #bd #comments .odd {
@@ -182,6 +191,8 @@ h3 {
     padding: 1em;
     border-bottom: 1px solid #CCCCCC;
     padding-bottom: 0; }
+    #bd #comments .comment p {
+      margin-bottom: 1em; }
     #bd #comments .comment .mugshot {
       float: right;
       padding-bottom: 1em; }
@@ -266,8 +277,9 @@ h3 {
 #bd table.teams .ranking {
   padding-left: 20px; }
 #bd #graph {
-  margin-top: 1em; }
+  margin-top: 1.5em; }
   #bd #graph #chart {
+    margin-top: 1em;
     margin-bottom: 20px; }
 #bd .user .mugshot {
   text-align: center;
@@ -314,6 +326,9 @@ h3 {
     #bd #userlist .user .name {
       font-weight: bold; }
 
+#sidebar input {
+  display: block;
+  width: 200px; }
 #sidebar .content {
   padding-top: 1.5em;
   padding-left: 1em;

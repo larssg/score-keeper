@@ -1,5 +1,6 @@
-%h3= h(@game.title)
-.game
+#game
+  %h3= h(@game.title)
+  
   %label= 'Played at' + ':'
   = @game.played_at.to_s :long
   
@@ -9,9 +10,9 @@
     .comment{ :class => cycle('odd', 'even') }
       .mugshot= link_to image_tag(comment.user.mugshot.public_filename(:thumb), :alt => comment.user.name), user_path(comment.user) if comment.user.mugshot
       .info
-        .index= '#' + (index + 1).to_s
-        .user= h(comment.user.name)
-        .time= time_ago_in_words(comment.created_at) + ' ago'
+        %span.index= '#' + (index + 1).to_s + '&nbsp;'
+        %span.user= h(comment.user.name) + '&nbsp;'
+        %span.time= time_ago_in_words(comment.created_at) + ' ago'
       .content{ :id => "content_#{comment.id}" }
         = render :partial => 'comments/show', :locals => { :comment => comment }
       .clear

@@ -7,10 +7,19 @@
   //.container
     //:background url(lib/grid.png)
 
+img
+  :margin 0
+  :padding 0
+
 th
   :text-align left
   
 table
+  :margin 0
+  :border-collapse collapse
+  
+textarea
+  :padding 0
   :margin 0
 
 #hd
@@ -31,9 +40,6 @@ table
     
     a
       :margin 0
-      
-      img
-        :margin 0
    
   #links
     :float right
@@ -68,8 +74,6 @@ table
       :text-decoration none
     
       img
-        :margin 0
-        :padding 0
         :vertical-align text-bottom
 
   ul
@@ -147,8 +151,11 @@ h2#page_title
   :padding 10px
 
 h3
+  :font-size 13px
   :margin 0
   :padding 0
+  :margin-bottom 5px
+  :font-weight bold
 
 #bd
   .bottom_space
@@ -207,14 +214,11 @@ h3
       tr.even
         td
           :background-color #EEEEEE
+
+  #filter
+    :margin-top 1.5em
         
   #games
-    h3
-      :font-size 13px
-      :margin 0
-      :padding 0
-      :margin-bottom 5px
-
     .score
       :text-align center
 
@@ -224,6 +228,12 @@ h3
       a
         :text-decoration none
         :color #000000
+        
+  #game
+    h3
+      :margin-top 1.5em
+      
+    :margin-bottom 1.5em
     
   #comments
     :border-top 1px solid #CCCCCC
@@ -236,6 +246,9 @@ h3
       :padding 1em
       :border-bottom 1px solid #CCCCCC
       :padding-bottom 0
+      
+      p
+        :margin-bottom 1em
     
       .mugshot
         :float right
@@ -243,6 +256,7 @@ h3
 
       .info
         :margin-bottom 1em
+
         div
           :display inline
   
@@ -360,9 +374,10 @@ h3
       :padding-left 20px
 
   #graph
-    :margin-top 1em
+    :margin-top 1.5em
 
     #chart
+      :margin-top 1em
       :margin-bottom 20px
 
   .user
@@ -422,6 +437,10 @@ h3
         :font-weight bold
 
 #sidebar
+  input
+    :display block
+    :width 200px
+
   .content
     :padding-top 1.5em
     :padding-left 1em

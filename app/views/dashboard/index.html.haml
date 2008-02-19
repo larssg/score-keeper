@@ -7,11 +7,11 @@
   - if @newbies.size > 0
     = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[] }
 
-#recent_games.column.span-11
+#recent_games.column.span-12
   = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
       
 - cache(root_path + '_games_per_day') do
-  #games_per_day.column.span-7.last
+  #games_per_day.column.span-6.last
     = render :partial => 'games_per_day', :locals => { :games_per_day => @games_per_day }
 
 - content_for :sidebar do

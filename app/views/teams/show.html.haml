@@ -1,7 +1,8 @@
 - title 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
 
-%h3= 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
-#graph= graph(formatted_team_url(params[:id], :graph))
+#graph
+  %h3= 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
+  = graph(formatted_team_url(params[:id], :graph))
 
 - content_for :sidebar do
   %h3= 'Team members'[]
