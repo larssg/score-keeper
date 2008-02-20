@@ -56,4 +56,4 @@
           - @comments.each do |comment|
             .comment
               .user= comment.user.name
-              .body= link_to h(truncate(comment.body.strip, 40)), game_path(comment.game, :anchor => "c#{comment.id}")
+              .body= link_to h(truncate(comment.body.strip, 40)), game_path(comment.game_id, :anchor => "c#{comment.id}")
