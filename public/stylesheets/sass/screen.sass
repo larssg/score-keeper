@@ -7,6 +7,13 @@
   //.container
     //:background url(lib/grid.png)
 
+a
+  :color #000000
+  :text-decoration none
+
+  &:hover
+    :text-decoration underline
+
 img
   :margin 0
   :padding 0
@@ -71,7 +78,6 @@ textarea
       :padding-right 21px
       :padding-top 9px
       :color #FFFFFF
-      :text-decoration none
     
       img
         :vertical-align text-bottom
@@ -98,7 +104,6 @@ textarea
       a
         :background-color #3399CC
         :border-bottom none
-        :text-decoration none
         :color #FFFFFF
         :font-size 13px
         :font-weight bold
@@ -224,10 +229,6 @@ h3
 
     .comments
       :white-space nowrap
-
-      a
-        :text-decoration none
-        :color #000000
         
   #game
     h3
@@ -336,17 +337,11 @@ h3
     .comments
       :white-space nowrap
 
-      a
-        :text-decoration none
-        :color #000000
-
   #games_per_day
     .games_played
       :text-align right
 
   a.rss
-    :text-decoration none
-
     img
       :position relative
       :top 3px
@@ -354,13 +349,6 @@ h3
   tr.user
     .admin
       :display inline
-
-  a.user, a.game
-    :color #000000
-    :text-decoration none
-
-    &:hover
-      :text-decoration underline
 
   table.teams
     td, th
@@ -470,6 +458,7 @@ h3
 
     #counts
       label
+        :display block
         :font-weight bold
 
     #opponents
@@ -488,6 +477,18 @@ h3
         label
           :display inline
           :font-weight bold
+    
+    #recent_comments
+      :margin-top 1.5em
+    
+      .comment
+        :margin-bottom 1em
+    
+        .user
+          :font-weight bold
+          
+    table
+      :width 100%
 
 #ft
   :color #999999

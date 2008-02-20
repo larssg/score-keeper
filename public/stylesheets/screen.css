@@ -2,6 +2,12 @@
 @import url(lib/typography.css);
 @import url(lib/grid.css);
 @import url(lib/forms.css);
+a {
+  color: #000000;
+  text-decoration: none; }
+  a:hover {
+    text-decoration: underline; }
+
 img {
   margin: 0;
   padding: 0; }
@@ -56,8 +62,7 @@ textarea {
       display: block;
       padding-right: 21px;
       padding-top: 9px;
-      color: #FFFFFF;
-      text-decoration: none; }
+      color: #FFFFFF; }
       #menu #add_game a img {
         vertical-align: text-bottom; }
   #menu ul {
@@ -79,7 +84,6 @@ textarea {
       #menu ul li a {
         background-color: #3399CC;
         border-bottom: none;
-        text-decoration: none;
         color: #FFFFFF;
         font-size: 13px;
         font-weight: bold;
@@ -175,9 +179,6 @@ h3 {
   text-align: center; }
 #bd #games .comments {
   white-space: nowrap; }
-  #bd #games .comments a {
-    text-decoration: none;
-    color: #000000; }
 #bd #game {
   margin-bottom: 1.5em; }
   #bd #game h3 {
@@ -252,23 +253,13 @@ h3 {
   text-align: center; }
 #bd #recent_games .comments {
   white-space: nowrap; }
-  #bd #recent_games .comments a {
-    text-decoration: none;
-    color: #000000; }
 #bd #games_per_day .games_played {
   text-align: right; }
-#bd a.rss {
-  text-decoration: none; }
-  #bd a.rss img {
-    position: relative;
-    top: 3px; }
+#bd a.rss img {
+  position: relative;
+  top: 3px; }
 #bd tr.user .admin {
   display: inline; }
-#bd a.user, #bd a.game {
-  color: #000000;
-  text-decoration: none; }
-  #bd a.user:hover, #bd a.game:hover {
-    text-decoration: underline; }
 #bd table.teams td, #bd table.teams th {
   width: 20%; }
 #bd table.teams .user {
@@ -353,6 +344,7 @@ h3 {
       padding: 0;
       margin: 0; }
   #sidebar .content #counts label {
+    display: block;
     font-weight: bold; }
   #sidebar .content #opponents h3 {
     margin-top: 1.5em; }
@@ -365,6 +357,14 @@ h3 {
     #sidebar .content #opponents .opponent label {
       display: inline;
       font-weight: bold; }
+  #sidebar .content #recent_comments {
+    margin-top: 1.5em; }
+    #sidebar .content #recent_comments .comment {
+      margin-bottom: 1em; }
+      #sidebar .content #recent_comments .comment .user {
+        font-weight: bold; }
+  #sidebar .content table {
+    width: 100%; }
 
 #ft {
   color: #999999;

@@ -3,6 +3,7 @@ class DashboardController < ApplicationController
 
   def index
     @recent_games = current_account.games.find_recent(:limit => 10, :include => { :teams => :memberships })
+    @comments = Comment.find(:all, :conditions => { :user_id => current_account.user_ids }, :limit => 5, :order => 'created_at DESC')
 
     unless cached?
       @rankings = current_account.users.find_ranked

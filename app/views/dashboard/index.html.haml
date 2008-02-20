@@ -23,21 +23,37 @@
         = user_link_full @leader
 
     #counts
-      %p
-        %label= 'Games played'[] + ':'
-        = @game_count
-      %p
-        %label= 'Goals scored'[] + ':'
-        = @goals_scored
-      - unless @all_time_high.nil?
-        %p
-          %label= 'All time high'[] + ':'
-          = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
-          = 'by'[]
-          = user_link_full @all_time_high.user
-      - unless @all_time_low.nil?
-        %p
-          %label= 'All time low'[] + ':'
-          = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
-          = 'by'[]
-          = user_link_full @all_time_low.user
+      %h3= 'Totals'[]
+    
+      %table
+        %tr
+          %td
+            %label= 'Games played'[] + ':'
+            = @game_count
+          %td
+            %label= 'Goals scored'[] + ':'
+            = @goals_scored
+        %tr
+          %td
+            - unless @all_time_high.nil?
+              %label= 'All time high'[] + ':'
+              = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
+              = 'by'[]
+              %br
+              = user_link_full @all_time_high.user
+          %td
+            - unless @all_time_low.nil?
+              %label= 'All time low'[] + ':'
+              = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
+              = 'by'[]
+              %br
+              = user_link_full @all_time_low.user   
+         
+      - if @comments && @comments.size > 0
+        #recent_comments
+          %h3= 'Recent comments'[]
+         
+          - @comments.each do |comment|
+            .comment
+              .user= comment.user.name
+              .body= link_to h(truncate(comment.body.strip, 40)), game_path(comment.game, :anchor => "c#{comment.id}")
