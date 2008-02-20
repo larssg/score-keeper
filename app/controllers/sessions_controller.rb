@@ -37,7 +37,8 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
   
-  def failed_login
+  def failed_login(message)
+    flash[:error] = message
     redirect_to login_url
   end
 end
