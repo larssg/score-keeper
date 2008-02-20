@@ -7,8 +7,9 @@
         .image
           - if user.mugshot
             = image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name)
-        .role= user.is_admin? ? 'Admin'[] : 'Normal'[]
+        .login= user.login
         .name= user.name
+        .role= user.is_admin? ? 'Admin'[] : 'Normal'[]
         .email= mail_to user.email
         .created_at= user.created_at.to_s :long
         - if admin?

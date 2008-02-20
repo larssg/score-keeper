@@ -321,7 +321,7 @@ h3 {
       float: left;
       text-align: center;
       background-color: #EEEEEE; }
-    #bd #userlist .user .role {
+    #bd #userlist .user .login, #bd #userlist .user .role {
       float: right; }
     #bd #userlist .user .name {
       font-weight: bold; }

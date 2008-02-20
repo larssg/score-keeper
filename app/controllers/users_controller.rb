@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     @user.account = current_account
 
     mugshot = Mugshot.create(params[:mugshot])
-    @user.mugshot = mugshot unless mugshot.nil?
+    @user.mugshot = mugshot unless mugshot.nil? || !(mugshot.size > 0)
 
     if logged_in? && current_user.is_admin? && params[:user][:is_admin]
       @user.is_admin = true
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
   def update
     @user = current_account.users.find(params[:id])
     mugshot = Mugshot.create(params[:mugshot])
-    @user.mugshot = mugshot unless mugshot.nil?
+    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil?
     @user.is_admin = params[:user][:is_admin] if current_user.is_admin?
     @success = @user.update_attributes(params[:user])
     respond_to do |format|
