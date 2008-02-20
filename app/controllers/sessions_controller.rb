@@ -32,4 +32,12 @@ class SessionsController < ApplicationController
       failed_login('Invalid login or password')
     end
   end
+  
+  def successful_login
+    redirect_to root_url
+  end
+  
+  def failed_login
+    redirect_to login_url
+  end
 end
