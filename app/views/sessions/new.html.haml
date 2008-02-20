@@ -12,13 +12,5 @@
     = check_box_tag 'remember_me'
     
   %p
-    ='...' + 'or use'[] + ':'
-    
-  %p
-    %label
-      = 'OpenID'[] + ':'
-      = text_field_tag 'openid_url'
-    
-  %p
     = submit_tag 'Sign in'[], :disable_with => 'Signing in'[] + '&hellip;'
     = link_to 'Register'[], signup_url

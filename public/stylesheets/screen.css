@@ -354,6 +354,8 @@ h3 {
       margin: 0; }
   #sidebar .content #counts label {
     font-weight: bold; }
+  #sidebar .content #opponents h3 {
+    margin-top: 1.5em; }
   #sidebar .content #opponents .odd {
     background-color: #F0F0F0; }
   #sidebar .content #opponents .even {

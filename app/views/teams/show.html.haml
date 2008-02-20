@@ -12,8 +12,8 @@
         .mugshot= image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name)
       = link_to h(user.name), user
       
-  %h3= 'Opponents'[]
   #opponents
+    %h3= 'Opponents'[]
     - @opponents.each do |opponent|
       .opponent{ :class => cycle('odd', 'even') }
         .members
