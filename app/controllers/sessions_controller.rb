@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   def new
   end
 
-  def normal_create
+  def create
     password_authentication(params[:login], params[:password])
   end
   
