@@ -1,5 +1,7 @@
+- title game_title(@game)
+
 #game
-  %h3= h(@game.title)
+  %h3= h(game_title(@game))
   
   %label= 'Played at' + ':'
   = @game.played_at.to_s :long

@@ -459,11 +459,6 @@ h3
         :padding 0
         :margin 0
 
-    #counts
-      label
-        :display block
-        :font-weight bold
-
     #opponents
       h3
         :margin-top 1.5em
@@ -489,7 +484,32 @@ h3
     
         .user
           :font-weight bold
-          
+
+    .user, .team
+      .gamelink
+        :margin-top 1.5em
+        
+        a
+          :text-decoration none
+        
+          img
+            :vertical-align text-bottom
+        
+      #counts
+        :margin-top 1.5em
+
+        label
+          :display block
+          :font-weight bold
+    
+    .team
+      .mugshot
+        :width 109px
+        :float left
+      
+        a
+          :display block
+
     table
       :width 100%
 

@@ -3,25 +3,28 @@
 #graph
   %h3= 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
   - form_tag team_path(@ids.join(',')), :method => :get do
-    = select_tag('period', options_for_select(time_periods, @time_period))
+    = select_tag('period', options_for_select(time_periods, @time_period), :onclick => 'this.form.submit();')
     = submit_tag 'Update'[]
   = graph(formatted_team_url(params[:id], :graph, :period => @time_period))
 
 - content_for :sidebar do
-  %h3= 'Team members'[]
-  - @team_members.each do |user|
-    %p
-      - if user.mugshot
-        .mugshot= image_tag user.mugshot.public_filename(:thumb), :alt => h(user.name)
-      = link_to h(user.name), user
+  .team
+    .members.clear
+      - @team_members.each do |user|
+        .mugshot
+          - if user.mugshot
+            = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), user
+          = link_to h(user.name), user
+
+    .gamelink= link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's games"[]) + ' ' + 'Show games'[], games_path(:filter => @ids.join(','))
       
-  #opponents
-    %h3= 'Opponents'[]
-    - @opponents.each do |opponent|
-      .opponent{ :class => cycle('odd', 'even') }
-        .members
-          = link_to Team.team_members(opponent.team_ids).collect { |user| h(user.display_name) }.join(', '), team_path(opponent.team_ids)
-        %label= 'Games'[] + ':'
-        = opponent.games
-        %label= 'Won'[] + ':'
-        = opponent.wins
+    #opponents
+      %h3= 'Opponents'[]
+      - @opponents.each do |opponent|
+        .opponent{ :class => cycle('odd', 'even') }
+          .members
+            = link_to Team.team_members(opponent.team_ids).collect { |user| h(user.display_name) }.join(', '), team_path(opponent.team_ids)
+          %label= 'Games'[] + ':'
+          = opponent.games
+          %label= 'Won'[] + ':'
+          = opponent.wins

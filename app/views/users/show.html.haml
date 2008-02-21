@@ -4,7 +4,7 @@
   #graph
     %h3= 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
     - form_tag @user, :method => :get do
-      = select_tag('period', options_for_select(time_periods, @time_period))
+      = select_tag('period', options_for_select(time_periods, @time_period), :onclick => 'this.form.submit();')
       = submit_tag 'Update'[]
     = graph(formatted_user_games_url(@user.id, :graph, :period => @time_period))
 
@@ -12,6 +12,8 @@
   .user
     - if @user.mugshot
       .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
+
+    .gamelink= link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this user's games"[]) + ' ' + 'Show games'[], games_path(:filter => @user.id)
 
     #counts
       %p.position
