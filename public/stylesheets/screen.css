@@ -192,6 +192,8 @@ h3 {
     padding: 1em;
     border-bottom: 1px solid #CCCCCC;
     padding-bottom: 0; }
+    #bd #comments .comment a:hover {
+      text-decoration: none; }
     #bd #comments .comment p {
       margin-bottom: 1em; }
     #bd #comments .comment .mugshot {
