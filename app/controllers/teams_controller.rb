@@ -46,7 +46,8 @@ class TeamsController < ApplicationController
   
   protected
   def render_chart
-    memberships = Membership.find_team(@ids, @time_period, current_account)
+    from = @time_period.days.ago
+    memberships = Membership.find_team(@ids, from, current_account)
     
     data = {}
     memberships.each do |membership|
@@ -75,13 +76,13 @@ class TeamsController < ApplicationController
       end
       dates << data[key][2]
     end
-        
+
     chart = setup_ranking_graph
     (0..1).each do |index|
-      chart.set_data [2000] + people[index]
+      chart.set_data [find_user(@ids[index]).ranking_at(from)] + people[index]
     end
-    chart.line 2, '#3399CC', current_account.users.find(@ids[0]).name
-    chart.line 2, '#77BBDD', current_account.users.find(@ids[1]).name
+    chart.line 2, '#3399CC', find_user(@ids[0]).name
+    chart.line 2, '#77BBDD', find_user(@ids[1]).name
     chart.set_x_labels ['Start'[]] + dates.collect { |d| d.to_s :db }
 
     steps = (data.size / 20).to_i

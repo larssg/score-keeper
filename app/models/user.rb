@@ -69,6 +69,15 @@ class User < ActiveRecord::Base
     end
   end
   
+  def ranking_at(time)
+    membership = self.memberships.find(:first,
+      :conditions => [ 'games.played_at <= ?', time ],
+      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id',
+      :order => 'games.played_at DESC')
+      
+    membership.nil? ? 2000 : membership.current_ranking
+  end
+  
   def self.find_ranked
     User.find(:all, :order => 'ranking DESC, games_won DESC, name', :conditions => 'memberships_count >= 20')
   end

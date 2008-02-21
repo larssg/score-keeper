@@ -70,15 +70,16 @@ class GamesController < ApplicationController
   end
   
   def render_chart
+    time_period = params[:period].to_i
+    from = time_period.days.ago
     chart = setup_ranking_graph
     
-    period = params[:period].to_i
     memberships = @user.memberships.find(:all,
-      :conditions => ['games.played_at >= ?', period.days.ago],
+      :conditions => ['games.played_at >= ?', from],
       :order => 'memberships.id',
       :select => 'memberships.current_ranking, memberships.created_at, games.played_at AS played_at',
       :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id')
-    chart.set_data [2000] + memberships.collect { |m| m.current_ranking }
+    chart.set_data [@user.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
     chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
     chart.line 2, '#3399CC'
 
