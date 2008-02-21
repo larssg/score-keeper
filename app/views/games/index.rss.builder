@@ -7,7 +7,7 @@ xml.rss(:version => '2.0') do
     
     @games.each do |game|
       xml.item do
-        xml.title game.title
+        xml.title game_title(game)
         xml.description game.played_at.to_s(:short), :type => 'html'
         xml.pubDate(game.created_at.strftime('%a, %d %b %Y %H:%M:%S %z'))
         xml.link game_url(game)

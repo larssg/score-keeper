@@ -64,7 +64,7 @@ class GamesController < ApplicationController
           conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
         end
       end
-      @games = current_account.games.paginate_recent(:include => { :teams => { :memberships => :user } }, :conditions => conditions, :page => params[:page])
+      @games = current_account.games.paginate_recent(:include => { :teams => :memberships }, :conditions => conditions, :page => params[:page])
       @game = current_model.new
     end
   end

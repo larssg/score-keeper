@@ -12,7 +12,7 @@ class TeamsController < ApplicationController
         @teams[count[0]][:team_ids] = count[0]
         @teams[count[0]][:games_played] = count[1]
         @teams[count[0]][:games_won] = 0
-        @teams[count[0]][:players] = current_account.users.find(:all, :conditions => { :id => count[0].split(',') })
+        @teams[count[0]][:players] = count[0].split(',').collect { |id| find_user(id) }
       end
     
       @team_wins.each do |win|

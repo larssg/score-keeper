@@ -14,9 +14,15 @@ class ApplicationController < ActionController::Base
   helper_method :language
   
   def all_users
-    @all_users = current_account.users.find(:all, :order => 'name, display_name')
+    current_account.all_users
   end
   helper_method :all_users
+  
+  def find_user(id)
+    @indexed_users ||= all_users.group_by(&:id)
+    @indexed_users[id.to_i].first
+  end
+  helper_method :find_user
 
   protected
   def current_account
