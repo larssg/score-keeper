@@ -29,6 +29,16 @@ class ApplicationController < ActionController::Base
     @current_account ||= Account.find_by_domain(account_subdomain)
   end
   
+  def time_periods
+    [
+      ['30 days'[], 30],
+      ['90 days'[], 90],
+      ['180 days'[], 180],
+      ['360 days'[], 360]
+    ]
+  end
+  helper_method :time_periods
+  
   def setup_ranking_graph
     chart = FlashChart.new
     chart.title ' '

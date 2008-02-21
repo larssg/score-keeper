@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   end
   
   def show
+    @time_period = params[:period] ? params[:period].to_i : 30
     @user = current_account.users.find(params[:id])
     @all_time_high = @user.all_time_high
     @all_time_low = @user.all_time_low

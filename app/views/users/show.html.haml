@@ -3,7 +3,10 @@
 - if @user.memberships_count > 0
   #graph
     %h3= 'Ranking chart for {name}'[:ranking_chart_for, h(@user.name)]
-    = graph(formatted_user_games_url(@user.id, :graph))
+    - form_tag @user, :method => :get do
+      = select_tag('period', options_for_select(time_periods, @time_period))
+      = submit_tag 'Update'[]
+    = graph(formatted_user_games_url(@user.id, :graph, :period => @time_period))
 
 - content_for :sidebar do
   .user
@@ -14,12 +17,16 @@
       %p.position
         %label= 'Position'[] + ':'
         = @user.position
-
-      %p
-        %label= 'Played games'[] + ':'
-        = @user.memberships_count
-  
+        
       %table.for_against
+        %tr
+          %td.for
+            %label= 'Ranking'[] + ':'
+            = @user.ranking
+          %td.against
+            %label= 'Played games'[] + ':'
+            = @user.memberships_count
+
         %tr
           %td.for
             %label= 'Games won'[] + ':'

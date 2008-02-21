@@ -33,6 +33,7 @@ class TeamsController < ApplicationController
   end
   
   def show
+    @time_period = params[:period] ? params[:period].to_i : 30
     @ids = params[:id].split(',').collect { |id| id.to_i }.sort
     respond_to do |format|
       format.html do
@@ -45,7 +46,7 @@ class TeamsController < ApplicationController
   
   protected
   def render_chart
-    memberships = Membership.find_team(@ids, current_account)
+    memberships = Membership.find_team(@ids, @time_period, current_account)
     
     data = {}
     memberships.each do |membership|
