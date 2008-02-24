@@ -1,38 +1,40 @@
 - form_for @account do |f|
-  %p
+  .field
     %label= 'Name'
     = f.text_field :name
     
-  %p
+  .field#subdomain
     %label= 'Subdomain'
+    http://
     = f.text_field :domain
+    = '.' + account_domain
   
   %h3= 'First user'
   
   - fields_for @user do |u|
-    %p
+    .field
       %label= 'Username'
       = u.text_field :login
     
-    %p
+    .field
       %label= 'Email'
       = u.text_field :email
 
-    %p
+    .field
       %label= 'Full name'[]
       = u.text_field :name
 
-    %p
+    .field
       %label= 'Display name'[]
       = u.text_field :display_name
 
-    %p
+    .field
       %label= 'Password'[]
       = u.password_field :password
 
-    %p
+    .field
       %label= 'Confirm Password'[]
       = u.password_field :password_confirmation
   
-  %p
+  .field
     = submit_tag

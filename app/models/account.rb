@@ -3,6 +3,7 @@ class Account < ActiveRecord::Base
   has_many :teams
   has_many :users
   
+  validates_presence_of :name
   validates_uniqueness_of :domain
   validates_format_of :domain, :with => /^[0-9a-z]+$/, :on => :create, :message => "can only contain alphanumeric lowercase characters"
 

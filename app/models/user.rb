@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
   validates_presence_of     :password_confirmation,       :if => :password_required?
   validates_length_of       :password, :within => 4..40,  :if => :password_required?
   validates_confirmation_of :password,                    :if => :password_required?
+  
+  validates_presence_of :name
+  validates_presence_of :display_name
+  
   before_save :encrypt_password
   
   # prevents a user from submitting a crafted form that bypasses activation

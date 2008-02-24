@@ -4,6 +4,13 @@ describe Account do
   before(:each) do
     @account = Account.new
   end
+  
+  it "should require a name" do
+    @account.name = ''
+    @account.domain = 'test'
+    @account.should_not be_valid
+    @account.errors[:name].should == "can't be blank"
+  end
 
   it "should not allow 'a test' as a domain" do
     @account.name = 'A test'

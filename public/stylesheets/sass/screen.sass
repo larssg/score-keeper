@@ -551,6 +551,32 @@ body.login, body.public
 body.login
   .container
     :width 470px
+    
+body.public
+  #new_account
+    h3
+      margin-bottom 1.5em
+
+    .field
+      :margin-bottom 0.5em
+    
+      label
+        :width 10em
+        :display block
+        :float left
+        :font-weight normal
+
+      .fieldWithErrors
+        :display inline
+        
+        input
+          :border 2px solid #FF0000
+
+      #subdomain
+        input
+          :width 10em
+          
+    :margin-bottom 1em
 
 .clear
   :clear both

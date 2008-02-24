@@ -413,6 +413,22 @@ body.login, body.public {
 body.login .container {
   width: 470px; }
 
+body.public #new_account {
+  margin-bottom: 1em; }
+  body.public #new_account .field {
+    margin-bottom: 0.5em; }
+    body.public #new_account .field label {
+      width: 10em;
+      display: block;
+      float: left;
+      font-weight: normal; }
+    body.public #new_account .field .fieldWithErrors {
+      display: inline; }
+      body.public #new_account .field .fieldWithErrors input {
+        border: 2px solid #FF0000; }
+    body.public #new_account .field #subdomain input {
+      width: 10em; }
+
 .clear {
   clear: both; }
   .clear hr {
