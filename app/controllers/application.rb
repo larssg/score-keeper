@@ -25,12 +25,20 @@ class ApplicationController < ActionController::Base
   helper_method :find_user
 
   protected
-  def verify_domain
+  def domain_required
     redirect_to public_root_url if account_subdomain.blank?
+    redirect_to account_url(current_user.account.domain) if logged_in? && current_user.account.domain != account_subdomain
+    true
   end
   
   def current_account
-    @current_account ||= Account.find_by_domain(account_subdomain)
+    if @current_account.nil?
+      unless account_subdomain.nil?
+        @current_account ||= Account.find_by_domain(account_subdomain)
+        redirect_to account_url(current_account.account.domain) if logged_in? && current_user.account.domain != @current_account.domain
+      end
+    end
+    return @current_account
   end
   
   def time_periods

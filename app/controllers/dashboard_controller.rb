@@ -1,5 +1,4 @@
 class DashboardController < ApplicationController
-  before_filter :verify_domain
   before_filter :login_required
 
   def index
