@@ -59,10 +59,11 @@ class TeamsController < ApplicationController
     end
     
     people = {}
+    previous = []
     (0..1).each do |index|
       people[index] = []
+      previous << find_user(@ids[index]).ranking_at(from)
     end
-    previous = [2000] * 2
     dates = []
     
     data.keys.sort.each do |key|
