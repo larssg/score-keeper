@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  before_filter :domain_required
   before_filter :login_required
   cache_sweeper :game_sweeper
   

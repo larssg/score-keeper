@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :domain_required
   before_filter :login_required
   before_filter :must_be_account_admin, :only => [ :index ]
   before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
