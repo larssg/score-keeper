@@ -1,7 +1,7 @@
 # This controller handles the login/logout function of the site.
 class SessionsController < ApplicationController
   layout 'login'
-  before_filter :verify_domain
+  before_filter :domain_required
 
   # render new.rhtml
   def new
