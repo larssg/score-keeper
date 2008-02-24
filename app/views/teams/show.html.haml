@@ -3,7 +3,7 @@
 #graph
   %h3= 'Ranking chart for {first_name} and {second_name}'[:ranking_chart_for, h(@team_members.first.name), h(@team_members.last.name)]
   - form_tag team_path(@ids.join(',')), :method => :get do
-    = select_tag('period', options_for_select(time_periods, @time_period), :onclick => 'this.form.submit();')
+    = select_tag('period', options_for_select(time_periods, @time_period), :onsubmit => 'this.form.submit();')
     = submit_tag 'Update'[]
   = graph(formatted_team_url(params[:id], :graph, :period => @time_period))
 
