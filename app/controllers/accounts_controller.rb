@@ -9,6 +9,7 @@ class AccountsController < ApplicationController
   def create
     @account = Account.new(params[:account])
     @user = @account.users.build(params[:user])
+    @user.is_account_admin = true
     
     if @account.save
       self.current_user = @user

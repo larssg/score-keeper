@@ -9,15 +9,15 @@
             = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), user_path(user)
         .login= user.login
         .name= user.name
-        .role= user.is_admin? ? 'Admin'[] : 'Normal'[]
+        .role= user.is_admin? ? 'Super Admin'[] : (user.is_account_admin? ? 'Admin'[] : 'Normal'[])
         .email= mail_to user.email
         .created_at= user.created_at.to_s :long
-        - if admin?
+        - if account_admin?
           .admin
             = link_to 'Edit'[], edit_user_path(user)
             = link_to 'Remove'[], user_path(user), :method => :delete, :confirm => 'Are you sure?'
 
-- if admin?
+- if account_admin?
   - content_for :sidebar do
     = error_messages_for :user
     - form_for @user, :html => { :multipart => true } do |f|

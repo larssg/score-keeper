@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_filter :login_required
-  before_filter :must_be_admin, :only => [ :index ]
-  before_filter :must_be_admin_or_self, :only => [ :edit, :update ]
+  before_filter :must_be_account_admin, :only => [ :index ]
+  before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
   
   def index
     @users = current_account.users.find(:all, :order => 'login')
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     @user.account = current_account
 
     mugshot = Mugshot.create(params[:mugshot])
-    @user.mugshot = mugshot unless mugshot.nil? || !(mugshot.size > 0)
+    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil? || !(mugshot.size > 0)
 
     if current_user.is_admin? && params[:user][:is_admin]
       @user.is_admin = true
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @success
         flash[:notice] = "User account saved successfully."
-        format.html { redirect_to :action => "edit" }
+        format.html { redirect_to users_url }
       else
         format.html { render :action => "edit" }
       end
@@ -83,8 +83,16 @@ class UsersController < ApplicationController
   end
     
   protected
+  def must_be_account_admin
+    return current_user.is_account_admin? || current_user.is_admin?
+  end
+  
   def must_be_admin
     return current_user.is_admin?
+  end
+  
+  def must_be_account_admin_or_self
+    return current_user.id.to_s == params[:id] || current_user.is_account_admin? || current_user.is_admin?
   end
   
   def must_be_admin_or_self

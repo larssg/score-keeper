@@ -10,10 +10,20 @@ module ApplicationHelper
     end
   end
   
+  def account_admin_area(&block)
+    if account_admin?
+      concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
+    end
+  end
+  
   def admin_area(&block)
     if admin?
       concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
     end
+  end
+  
+  def account_admin?
+    logged_in? && current_user.is_account_admin? || current_user.is_admin?
   end
   
   def admin?
