@@ -1,3 +1,5 @@
+- sidebar = yield :sidebar
+
 !!! Strict
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
@@ -27,14 +29,18 @@
   
         - unless @page_title.blank?
           %h2#page_title= @page_title
-        #bd
+        #bd.column{ :class => sidebar.blank? ? 'span-24' : 'span-18' }
           - if flash.keys.length > 0
             #messages
               - flash.keys.each do |key|
                 %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
             = javascript_tag "$('#messages').pause(8000).Fade();"
 
-          = yield
+          .content= yield
+
+        - unless sidebar.blank?
+          #sidebar.column.span-6.last
+            .content= sidebar
 
       #ft
         .content

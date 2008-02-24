@@ -531,8 +531,15 @@ input#openid_url
 body.login, body.public
   :background-color #E5E5E5
 
+  a
+    :color #6666CC
+    
+    &:hover
+      :text-decoration underline
+
   .container
     :border 10px solid #CCCCCC
+    :background-color #FFFFFF
 
     #hd
       :background-image none
@@ -542,11 +549,11 @@ body.login, body.public
         :border-bottom none
   
     #bd
-      :background-color #FFFFFF
-      :padding-top 15px
-      :padding-bottom 5px
-      :padding-left 20px
-      :padding-right 20px
+      .content
+        :padding-top 15px
+        :padding-bottom 5px
+        :padding-left 20px
+        :padding-right 20px
       
 body.login
   .container

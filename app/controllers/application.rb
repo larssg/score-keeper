@@ -26,9 +26,9 @@ class ApplicationController < ActionController::Base
 
   protected
   def domain_required
-    redirect_to public_root_url if account_subdomain.blank?
-    redirect_to account_url(current_user.account.domain) if logged_in? && current_user.account.domain != account_subdomain
-    redirect_to public_root_url if !logged_in? && Account.find_by_domain(account_subdomain).nil?
+    redirect_to public_root_url and return false if account_subdomain.blank?
+    redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_user.account.domain != account_subdomain
+    redirect_to public_root_url and return false if !logged_in? && Account.find_by_domain(account_subdomain).nil?
     true
   end
   

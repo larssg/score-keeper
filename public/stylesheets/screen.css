@@ -396,15 +396,19 @@ input#openid_url {
 
 body.login, body.public {
   background-color: #E5E5E5; }
+  body.login a, body.public a {
+    color: #6666CC; }
+    body.login a:hover, body.public a:hover {
+      text-decoration: underline; }
   body.login .container, body.public .container {
-    border: 10px solid #CCCCCC; }
+    border: 10px solid #CCCCCC;
+    background-color: #FFFFFF; }
     body.login .container #hd, body.public .container #hd {
       background-image: none; }
       body.login .container #hd #logo, body.public .container #hd #logo {
         background-image: none;
         border-bottom: none; }
-    body.login .container #bd, body.public .container #bd {
-      background-color: #FFFFFF;
+    body.login .container #bd .content, body.public .container #bd .content {
       padding-top: 15px;
       padding-bottom: 5px;
       padding-left: 20px;

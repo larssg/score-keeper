@@ -1,10 +1,17 @@
 %h1 Welcome to Score Keeper
 
 %p
-  Keep track of scores.
+  Finally! Score Keeper is online (though in pre-alpha :-). Score Keeper is a very simple web app for keeping score, rankings, etc. for games. However, in this initial version only Table Soccer, or foosball, is supported.
   
-%h2
-  Create a new account
+%h3
+  Notes
   
 %p
-  = 'To create a new account, fill out <a href="{new_account_url}">this form</a>.'[:to_create_an_account, new_account_path]
+  Please be aware that this site is in a very early alpha stage. Not alpha/beta as Google defines it, but alpha as in not yet deemed ready for launch in any way by its authors.
+  
+- content_for :sidebar do
+  %h2
+    Create a new account
+
+  %p
+    = 'To create a new account, fill out <a href="{new_account_url}">this form</a>.'[:to_create_an_account, new_account_path]
