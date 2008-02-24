@@ -14,12 +14,12 @@ class DashboardController < ApplicationController
       # Sidebar
       @leader = @rankings.size > 0 ? @rankings[0] : @newbies[0]
       @game_count = current_account.games.count
-      @goals_scored = current_account.games.goals_scored
+      @goals_scored = current_account.users.sum(:goals_for) / 2
       @all_time_high = Membership.all_time_high(current_account)
       @all_time_low = Membership.all_time_low(current_account)
     end
   end
-  
+
   protected
   def cached?
     read_fragment(root_path) && read_fragment(root_path + '_sidebar')

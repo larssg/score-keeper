@@ -111,10 +111,6 @@ class Game < ActiveRecord::Base
       self.teams.last.display_names.join(' - ')
     ].join(' ')
   end
-  
-  def self.goals_scored
-    User.sum(:goals_for) / 2
-  end
 
   protected
   def set_played_on_and_at
