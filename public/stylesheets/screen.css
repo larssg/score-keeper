@@ -56,6 +56,8 @@ textarea {
 
 #menu {
   background-color: #77BBDD; }
+  #menu a:hover {
+    text-decoration: none; }
   #menu #add_game {
     text-align: right; }
     #menu #add_game a {
