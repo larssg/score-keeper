@@ -528,26 +528,29 @@ input#openid_url
   :background white url(/images/openid.gif) no-repeat scroll 0pt 50%
   :padding-left 18px
 
-body.public
+body.login, body.public
   :background-color #E5E5E5
 
   .container
     :border 10px solid #CCCCCC
-    :width 470px
 
     #hd
       :background-image none
-  
+
       #logo
         :background-image none
         :border-bottom none
-    
+  
     #bd
       :background-color #FFFFFF
       :padding-top 15px
       :padding-bottom 5px
       :padding-left 20px
       :padding-right 20px
+      
+body.login
+  .container
+    :width 470px
 
 .clear
   :clear both

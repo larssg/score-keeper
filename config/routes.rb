@@ -18,6 +18,11 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :teams
   
+  map.resources :accounts
+  
+  map.connect 'p/:action', :controller => 'pages'
+  map.public_root 'p', :controller => 'pages', :action => 'index'
+  
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action/:id'
 end

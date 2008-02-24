@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :login_required, :only => [ :index, :edit, :update, :change_password ]
+  before_filter :login_required
   before_filter :must_be_admin, :only => [ :index ]
   before_filter :must_be_admin_or_self, :only => [ :edit, :update ]
   
@@ -30,27 +30,17 @@ class UsersController < ApplicationController
     mugshot = Mugshot.create(params[:mugshot])
     @user.mugshot = mugshot unless mugshot.nil? || !(mugshot.size > 0)
 
-    if logged_in? && current_user.is_admin? && params[:user][:is_admin]
+    if current_user.is_admin? && params[:user][:is_admin]
       @user.is_admin = true
     end
 
     @user.save!
 
-    if logged_in?
-      flash[:notice] = 'User created successfully'
-      redirect_to users_path
-    else
-      self.current_user = @user
-      redirect_back_or_default('/')
-      flash[:notice] = "Thanks for signing up!"
-    end
+    flash[:notice] = 'User created successfully'
+    redirect_to users_path
   rescue ActiveRecord::RecordInvalid
-    if logged_in?
-      @users = User.find(:all, :order => 'login')
-      render :action => 'index'
-    else
-      render :action => 'new', :layout => 'public'
-    end
+    @users = User.find(:all, :order => 'login')
+    render :action => 'index'
   end
   
   def edit

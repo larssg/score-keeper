@@ -394,22 +394,24 @@ input#openid_url {
   background: white url(/images/openid.gif) no-repeat scroll 0pt 50%;
   padding-left: 18px; }
 
-body.public {
+body.login, body.public {
   background-color: #E5E5E5; }
-  body.public .container {
-    border: 10px solid #CCCCCC;
-    width: 470px; }
-    body.public .container #hd {
+  body.login .container, body.public .container {
+    border: 10px solid #CCCCCC; }
+    body.login .container #hd, body.public .container #hd {
       background-image: none; }
-      body.public .container #hd #logo {
+      body.login .container #hd #logo, body.public .container #hd #logo {
         background-image: none;
         border-bottom: none; }
-    body.public .container #bd {
+    body.login .container #bd, body.public .container #bd {
       background-color: #FFFFFF;
       padding-top: 15px;
       padding-bottom: 5px;
       padding-left: 20px;
       padding-right: 20px; }
+
+body.login .container {
+  width: 470px; }
 
 .clear {
   clear: both; }

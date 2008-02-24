@@ -25,6 +25,10 @@ class ApplicationController < ActionController::Base
   helper_method :find_user
 
   protected
+  def verify_domain
+    redirect_to public_root_url if account_subdomain.blank?
+  end
+  
   def current_account
     @current_account ||= Account.find_by_domain(account_subdomain)
   end

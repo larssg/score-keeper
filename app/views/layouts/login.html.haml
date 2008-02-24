@@ -1,0 +1,45 @@
+!!! Strict
+%html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
+  %head
+    %title
+      = 'Score Keeper'[]
+      - unless @page_title.blank?
+        = ' - '
+        = @page_title
+    = stylesheet_link_tag 'screen', :media => 'screen, projection'
+    = stylesheet_link_tag 'print', :media => 'print'
+    /[if IE]
+      = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
+    = javascript_include_tag :defaults
+    = yield :head
+
+  %body.login
+    .border
+      .container
+        #hd
+          #links
+            #languages
+              = 'Language'[] + ':'
+              = link_to_unless(language == 'en', 'English', :language => 'en')
+              = link_to_unless(language == 'da', 'Dansk', :language => 'da')
+  
+          #logo= link_to image_tag('logo.gif'), root_url
+  
+        - unless @page_title.blank?
+          %h2#page_title= @page_title
+        #bd
+          - if flash.keys.length > 0
+            #messages
+              - flash.keys.each do |key|
+                %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
+            = javascript_tag "$('#messages').pause(8000).Fade();"
+
+          = yield
+
+      #ft
+        .content
+          Copyright 2007 by Lars Sehested
+          = '&middot;'
+          = link_to 'Project home'[], 'http://code.google.com/p/scorekeeper/', :target => '_blank'
+          = '&middot;'
+          = link_to 'Report issue'[], 'http://code.google.com/p/scorekeeper/issues/entry', :target => '_blank'
