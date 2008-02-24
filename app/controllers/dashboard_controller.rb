@@ -22,6 +22,6 @@ class DashboardController < ApplicationController
 
   protected
   def cached?
-    read_fragment(root_path) && read_fragment(root_path + '_sidebar')
+    read_fragment(root_path + '_' + account_subdomain) && read_fragment(root_path + '_' + account_subdomain + '_sidebar')
   end
 end

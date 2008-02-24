@@ -1,6 +1,6 @@
 - title 'Dashboard'[]
 
-- cache(root_path) do
+- cache(root_path + '_' + account_subdomain) do
   - if @rankings.size > 0
     = render :partial => 'leaderboard', :locals => { :people => @rankings, :start_at => 1, :title => 'Rankings'[] }
 
@@ -10,12 +10,12 @@
 #recent_games.column.span-12
   = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
       
-- cache(root_path + '_games_per_day') do
+- cache(root_path + '_' + account_subdomain + '_games_per_day') do
   #games_per_day.column.span-6.last
     = render :partial => 'games_per_day', :locals => { :games_per_day => @games_per_day }
 
 - content_for :sidebar do
-  - cache(root_path + '_sidebar') do
+  - cache(root_path + '_' + account_subdomain + '_sidebar') do
     - unless @leader.nil?
       #leader
         %h3= 'Leader'[]

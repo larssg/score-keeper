@@ -1,6 +1,6 @@
 - title 'Teams'[]
 
-- cache(teams_path) do
+- cache(teams_path + '_' + account_subdomain) do
   .list
     %table.teams
       %tr
