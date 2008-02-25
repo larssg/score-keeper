@@ -31,12 +31,10 @@
       #menu.clear
         .column.span-16= render :partial => 'shared/menu'
         #add_game.column.span-8.last
-          - if logged_in?
-            = link_to_function image_tag('icons/add.png') + ' ' + 'Add game'[], "$('#add_game_form').toggle()"
+          = link_to_function image_tag('icons/add.png') + ' ' + 'Add game'[], "$('#add_game_form').toggle()"
           
-      - if logged_in?
-        #add_game_form.column.span-24{ :style => 'display: none' }
-          = render :partial => 'shared/add_game_form'
+      #add_game_form.column.span-24{ :style => 'display: none' }
+        = render :partial => 'shared/add_game_form'
   
       - unless @page_title.blank?
         %h2#page_title= @page_title

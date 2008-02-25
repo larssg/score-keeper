@@ -1,16 +1,3 @@
-- if logged_in?
-  #user
-    = link_to current_user.login, edit_user_path(current_user)
-    = link_to 'Logout', logout_path
-- else
-  #user
-    = link_to 'Login', login_path, :id => 'login_link'
-    
-  - form_tag sessions_path, :id => 'login_form' do
-    = 'Username'[]
-    = text_field_tag 'login', nil, :class => 'login'
-    = 'Password'[]
-    = password_field_tag 'password', nil, :class => 'password'
-    = 'Remember?'[]
-    = check_box_tag 'remember_me', nil, nil, :class => 'remember'
-    = submit_tag 'Sign in'[], :disable_with => 'Signing in'[] + '&hellip;', :class => 'submit'
+#user
+  = link_to current_user.login, edit_user_path(current_user)
+  = link_to 'Logout', logout_path
