@@ -34,7 +34,7 @@
                 %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
             = javascript_tag "$('#messages').pause(8000).Fade();"
 
-          = yield
+          .content= yield
 
       #ft
         .content
