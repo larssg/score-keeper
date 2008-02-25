@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include ExceptionNotifiable
   include AccountLocation
 
 #  around_filter :set_language
