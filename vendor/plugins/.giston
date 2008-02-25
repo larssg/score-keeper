@@ -35,6 +35,3 @@
 - dir: account_location
   rev: 5250
   url: http://dev.rubyonrails.org/svn/rails/plugins/account_location/
-- dir: asset_packager
-  rev: 57
-  url: http://sbecker.net/shared/plugins/asset_packager

@@ -10,7 +10,7 @@
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
-    = javascript_include_merged :base
+    = javascript_include_tag :defaults
     = yield :head
 
   %body.login
@@ -34,7 +34,7 @@
                 %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
             = javascript_tag "$('#messages').pause(8000).Fade();"
 
-          .content= yield
+          = yield
 
       #ft
         .content
