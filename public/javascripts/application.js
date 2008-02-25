@@ -8,4 +8,6 @@ $(document).ready(function() {
 		});
 		return false;
 	});
+	
+	$('body.login #login').focus();
 });
