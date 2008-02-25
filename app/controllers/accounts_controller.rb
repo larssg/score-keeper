@@ -1,4 +1,6 @@
 class AccountsController < ApplicationController
+  session :off
+  
   layout 'public'
   
   def new
