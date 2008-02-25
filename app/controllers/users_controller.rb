@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     flash[:notice] = 'User created successfully'
     redirect_to users_path
   rescue ActiveRecord::RecordInvalid
-    @users = User.find(:all, :order => 'login')
+    @users = current_account.users.find(:all, :order => 'login')
     render :action => 'index'
   end
   
