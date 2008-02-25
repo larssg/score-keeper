@@ -1,0 +1,13 @@
+--- 
+javascripts: 
+- base: 
+  - swfobject
+  - jrails
+  - jquery
+  - jquery-ui
+  - jquery-fx
+  - application
+stylesheets: 
+- base: 
+  - print
+  - screen
