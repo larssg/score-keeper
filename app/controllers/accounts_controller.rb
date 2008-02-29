@@ -1,7 +1,13 @@
 class AccountsController < ApplicationController
-  session :off
+  session :off, :only => [ :new, :create ]
+  before_filter :must_be_admin, :except => [ :new, :create ]
   
   layout 'public'
+  
+  def index
+    @accounts = Account.find(:all, :order => 'name')
+    render :layout => 'application'
+  end
   
   def new
     @account = Account.new

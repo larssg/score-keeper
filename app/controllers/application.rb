@@ -78,6 +78,23 @@ class ApplicationController < ActionController::Base
     (max - min) / 100
   end
   
+  protected
+  def must_be_account_admin
+    redirect_to root_url unless current_user.is_account_admin? || current_user.is_admin?
+  end
+  
+  def must_be_admin
+    redirect_to root_url unless current_user.is_admin?
+  end
+  
+  def must_be_account_admin_or_self
+    redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_account_admin? || current_user.is_admin?
+  end
+  
+  def must_be_admin_or_self
+    redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_admin?
+  end
+  
   private
   def set_language
     session[:language] = params[:language] || session[:language]

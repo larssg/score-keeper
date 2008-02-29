@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   before_filter :domain_required
   before_filter :login_required
-  before_filter :must_be_account_admin, :only => [ :index ]
   before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
   
   def index
@@ -81,22 +80,5 @@ class UsersController < ApplicationController
       flash[:error] = "Unable to destroy account"
       render :action => 'edit'
     end
-  end
-    
-  protected
-  def must_be_account_admin
-    return current_user.is_account_admin? || current_user.is_admin?
-  end
-  
-  def must_be_admin
-    return current_user.is_admin?
-  end
-  
-  def must_be_account_admin_or_self
-    return current_user.id.to_s == params[:id] || current_user.is_account_admin? || current_user.is_admin?
-  end
-  
-  def must_be_admin_or_self
-    return current_user.id.to_s == params[:id] || current_user.is_admin?
   end
 end

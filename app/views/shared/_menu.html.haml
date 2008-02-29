@@ -3,3 +3,5 @@
   %li{:class => controller.controller_name == 'games' ? 'current' : nil}= link_to 'Games'[], games_path
   %li{:class => controller.controller_name == 'teams' ? 'current' : nil}= link_to 'Teams'[], teams_path
   %li{:class => controller.controller_name == 'users' ? 'current' : nil}= link_to 'Users'[], users_path
+  - if admin?
+    %li{:class => controller.controller_name == 'accounts' ? 'current' : nil}= link_to 'Accounts'[], accounts_path

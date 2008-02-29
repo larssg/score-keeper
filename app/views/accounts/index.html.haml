@@ -1,0 +1,13 @@
+.list
+  %table
+    %tr
+      %th= 'Name'[]
+      %th= 'Domain'[]
+      %th= 'Users'[]
+      %th= 'Games'[]
+    - @accounts.each do |account|
+      %tr
+        %td= h(account.name)
+        %td= h(account.domain)
+        %td= account.users.count
+        %td= account.games.count
