@@ -3,11 +3,7 @@
 !!! Strict
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
-    %title
-      = 'Score Keeper'[]
-      - unless @page_title.blank?
-        = ' - '
-        = @page_title
+    %title= page_title
     = stylesheet_link_tag 'screen', :media => 'screen, projection'
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]

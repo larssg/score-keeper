@@ -4,6 +4,11 @@ module ApplicationHelper
     @page_title = page_title
   end
   
+  def page_title
+    title = 'Score Keeper'[]
+    title << ' - ' + @page_title unless @page_title.blank?
+  end
+  
   def user_area(&block)
     if logged_in?
       concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
