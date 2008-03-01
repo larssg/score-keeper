@@ -49,9 +49,10 @@ class Game < ActiveRecord::Base
     end
   end
 
-  def self.reset_rankings
-    User.update_all("ranking = 2000")
-    Game.find(:all).each do |game|
+  def self.reset_rankings(account)
+    return if account.nil?
+    account.users.update_all("ranking = 2000")
+    account.games.find(:all).each do |game|
       game.update_rankings
     end
   end
@@ -101,7 +102,7 @@ class Game < ActiveRecord::Base
   end
   
   def reset_rankings_after_destroy
-    Game.reset_rankings unless @postpone_ranking_update
+    Game.reset_rankings(self.account) unless @postpone_ranking_update
   end
   
   def title()

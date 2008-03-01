@@ -18,8 +18,7 @@ module Factory
 
   def self.create_user(attributes = {})
     default_attributes = {
-      :first_name => 'Person',
-      :last_name => 'Personson'
+      :name => 'Person Personson'
     }
     User.create! default_attributes.merge(attributes)
   end
@@ -30,7 +29,8 @@ module Factory
       people << Factory.create_user(
         :login => "user#{number}",
         :email => "user#{number}@example.com",
-        :last_name => "Personson #{number}")
+        :name => "Person Personson #{number}",
+        :display_name => "Person Personson #{number}")
     end
     people
   end

@@ -5,7 +5,9 @@ namespace :tools do
   namespace :fix do
     desc "Update rankings"
     task :rankings => :environment do
-      Game.reset_rankings
+      Account.find(:all).each do |account|
+        Game.reset_rankings(account)
+      end
     end
   end
   

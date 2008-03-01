@@ -6,6 +6,7 @@ quentin:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 5.days.ago.to_s :db %>
   games_won: 0
+  account: champions
 
 aaron:
   id: 2
@@ -15,3 +16,4 @@ aaron:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
   games_won: 0
+  account: champions

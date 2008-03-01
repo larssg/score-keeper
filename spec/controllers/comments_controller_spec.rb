@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe CommentsController do
-  fixtures :users
+  fixtures :users, :accounts
 
   before(:each) do
     login_as :aaron
@@ -10,7 +10,7 @@ describe CommentsController do
   it "should add a comment on a game" do
     lambda do
       @game = Factory.create_game
-      post :create, :game_id => @game.id, :comment => { :body => 'This is a comment' }
+      post :create, { :game_id => @game.id, :comment => { :body => 'This is a comment' } }, { :host => 'champions.test.host' }
       response.should be_redirect
       response.should redirect_to(game_path(@game))
 

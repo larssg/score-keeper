@@ -144,7 +144,7 @@ class User < ActiveRecord::Base
       end
     
       # Fix stats
-      Game.reset_rankings
+      Game.reset_rankings(self.account)
     end
 
     # before filter 
