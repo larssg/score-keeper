@@ -1,7 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SessionsController do
-  fixtures :users
+  fixtures :users, :accounts
+  
+  before(:each) do
+    controller.stub!(:current_account).and_return(accounts(:champions))
+  end
 
   it 'logins and redirects' do
     post :create, :login => 'quentin', :password => 'test'
@@ -12,7 +16,7 @@ describe SessionsController do
   it 'fails login and does not redirect' do
     post :create, :login => 'quentin', :password => 'bad password'
     session[:user_id].should be_nil
-    response.should be_success
+    response.should be_redirect
   end
 
   it 'logs out' do

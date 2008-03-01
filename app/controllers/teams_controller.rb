@@ -3,7 +3,7 @@ class TeamsController < ApplicationController
   before_filter :login_required
 
   def index
-    unless read_fragment(teams_path + '_' + account_subdomain)
+    unless read_fragment(cache_key)
       @teams = {}
       @team_counts = current_account.teams.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
       @team_wins = current_account.teams.count(:group => :team_ids, :conditions => { :won => true })

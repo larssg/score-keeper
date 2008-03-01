@@ -1,14 +1,15 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe GamesController, "logged in" do
-  fixtures :users
+  fixtures :users, :accounts
 
   before(:each) do
+    controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
     @game = mock_model(Game)
     Game.stub!(:find_recent).and_return([@game])
   end
-  
+
   it "should render" do
     get :index
     response.should be_success

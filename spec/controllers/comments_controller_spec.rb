@@ -10,7 +10,7 @@ describe CommentsController do
   it "should add a comment on a game" do
     lambda do
       @game = Factory.create_game
-      post :create, { :game_id => @game.id, :comment => { :body => 'This is a comment' } }, { :host => 'champions.test.host' }
+      post :create, :game_id => @game.id, :comment => { :body => 'This is a comment' }
       response.should be_redirect
       response.should redirect_to(game_path(@game))
 
