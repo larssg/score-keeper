@@ -2,6 +2,8 @@
 class SessionsController < ApplicationController
   layout 'login'
   before_filter :domain_required
+  
+  filter_parameter_logging :password
 
   # render new.rhtml
   def new

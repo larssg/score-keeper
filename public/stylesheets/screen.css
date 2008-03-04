@@ -320,6 +320,8 @@ h3 {
       float: right; }
     #bd #userlist .user .name {
       font-weight: bold; }
+#bd .edit_user {
+  margin-top: 1.5em; }
 
 #sidebar input {
   display: block;

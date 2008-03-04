@@ -27,6 +27,11 @@
     = 'Picture'[]
     = fi.file_field :uploaded_data
 
+- if account_admin?
+  %label
+    = 'Account administrator'[]
+    = f.check_box :is_account_admin
+
 - if admin?
   %label
     = 'Administrator'[]
