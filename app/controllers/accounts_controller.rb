@@ -2,16 +2,18 @@ class AccountsController < ApplicationController
   session :off, :only => [ :new, :create ]
   before_filter :must_be_admin, :except => [ :new, :create ]
   
-  layout 'public'
-  
   def index
     @accounts = Account.find(:all, :order => 'name')
-    render :layout => 'application'
+  end
+  
+  def show
+    @account = Account.find(params[:id])
   end
   
   def new
     @account = Account.new
     @user = User.new
+    render :layout => 'public'
   end
   
   def create
@@ -25,7 +27,7 @@ class AccountsController < ApplicationController
       flash[:notice] = "Thanks for signing up!"
     else
       flash[:notice] = 'An error occured - please try again.'
-      render :action => 'new'
+      render :action => 'new', :layout => 'public'
     end
   end
 end

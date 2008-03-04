@@ -1,3 +1,4 @@
+- title 'Accounts'[]
 .list
   %table
     %tr
@@ -6,8 +7,8 @@
       %th= 'Users'[]
       %th= 'Games'[]
     - @accounts.each do |account|
-      %tr
-        %td= h(account.name)
+      %tr{ :class => cycle('odd', 'even') }
+        %td= link_to h(account.name), account
         %td= h(account.domain)
         %td= account.users.count
         %td= account.games.count
