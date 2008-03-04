@@ -19,8 +19,9 @@ class GamesController < ApplicationController
     end
     
     response_for :create_fails do
-      load_data_for_index
-      render :action => 'index'
+      flash[:warning] = 'The game could not be saved. Please try again.'[]
+      logger.debug { current_object.errors.inspect }
+      redirect_back_or_default root_url
     end
   end
   

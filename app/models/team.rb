@@ -3,7 +3,6 @@ class Team < ActiveRecord::Base
   has_many :memberships
   belongs_to :game
   before_save :update_cache_values
-  before_save :update_team_cache_on_game
   
   def winner?
     self.game.winner == self
@@ -74,14 +73,6 @@ class Team < ActiveRecord::Base
   
   def update_cache_values
     self.team_ids = self.memberships.collect{ |m| m.user_id }.sort.join(',')
-  end
-  
-  def update_team_cache_on_game
-    if self.game.teams.count == 2
-      self.game.team_one = self.game.teams.first.team_ids
-      self.game.team_two = self.game.teams.last.team_ids
-      self.game.save
-    end
   end
   
   def display_names

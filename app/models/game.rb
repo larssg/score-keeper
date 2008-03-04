@@ -11,11 +11,14 @@ class Game < ActiveRecord::Base
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
   
   before_save :set_played_on_and_at
-  before_create :build_teams
+  before_validation_on_create :build_teams
   after_create :update_winners
   after_create :update_rankings
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
+
+  validates_presence_of :team_one
+  validates_presence_of :team_two
 
   def self.per_page
     20
@@ -124,10 +127,12 @@ class Game < ActiveRecord::Base
     team1.memberships.build(:user_id => user11)
     team1.memberships.build(:user_id => user12)
     team1.opponent_ids = [user21, user22].collect { |user_id| user_id.to_i }.sort.join(',')
+    self.team_one = team1
 
     team2 = teams.build(:score => score2, :account => self.account)
     team2.memberships.build(:user_id => user21)
     team2.memberships.build(:user_id => user22)
     team2.opponent_ids = [user11, user12].collect { |user_id| user_id.to_i }.sort.join(',')
+    self.team_two = team2
   end
 end
