@@ -20,7 +20,6 @@ class GamesController < ApplicationController
     
     response_for :create_fails do
       flash[:warning] = 'The game could not be saved. Please try again.'[]
-      logger.debug { current_object.errors.inspect }
       redirect_back_or_default root_url
     end
   end

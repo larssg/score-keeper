@@ -30,19 +30,20 @@ describe GamesController, 'not logged in' do
 end
 
 describe GamesController, "creating a game (logged in)" do
-  fixtures :users
+  fixtures :users, :accounts
 
   before(:each) do
+    controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
     @people = Factory.create_people(4)
-    @params = { :teams => {
-      :score1 => 10, :user11 => @people[0].id, :user12 => @people[1].id,
-      :score2 => 8, :user21 => @people[2].id, :user22 => @people[3].id
-    } }
   end
   
   def do_post
-    post :create, @params
+    params = { :game => {
+      :score1 => 10, :user11 => @people[0].id, :user12 => @people[1].id,
+      :score2 => 8, :user21 => @people[2].id, :user22 => @people[3].id
+    } }
+    post :create, params
   end
   
   it "should redirect to the dashboard" do
@@ -50,6 +51,12 @@ describe GamesController, "creating a game (logged in)" do
       do_post
       response.should be_redirect
       response.should redirect_to(root_path)
+    end
+  end
+  
+  it "should create a game" do
+    lambda do
+      do_post
     end.should change(Game, :count).by(1)
   end
 end
