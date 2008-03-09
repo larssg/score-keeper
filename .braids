@@ -24,6 +24,11 @@ vendor/plugins/haml:
   type: svn
   branch: master
   remote: svn://hamptoncatlin.com/haml/trunk
+vendor/plugins/attachment_fu: 
+  local_branch: braid/svn/vendor/plugins/attachment-fu
+  type: svn
+  branch: master
+  remote: http://svn.techno-weenie.net/projects/plugins/attachment_fu
 vendor/plugins/exception_notification: 
   local_branch: braid/svn/vendor/plugins/exception-notification
   type: svn
