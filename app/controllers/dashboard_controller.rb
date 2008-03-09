@@ -7,8 +7,8 @@ class DashboardController < ApplicationController
     @comments = Comment.find(:all, :conditions => { :user_id => current_account.user_ids }, :limit => 5, :order => 'created_at DESC')
 
     unless cached?
-      @rankings = current_account.users.find_ranked
-      @newbies = current_account.users.find_newbies
+      @rankings = current_account.ranked_users
+      @newbies = current_account.newbie_users
       @games_per_day = current_account.games.count(:group => :played_on, :limit => 10, :order => 'games.played_on DESC')
 
       # Sidebar

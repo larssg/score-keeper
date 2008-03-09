@@ -62,12 +62,12 @@ class User < ActiveRecord::Base
   end
   
   def position
-    ranked = User.find_ranked
+    ranked = self.account.ranked_users
     ranked.each_with_index do |user, index|
       return index + 1 if user.id == self.id
     end
     
-    newbies = User.find_newbies
+    newbies = self.account.newbie_users
     newbies.each_with_index do |user, index|
       return index + 1 + ranked.size if user.id == self.id
     end
@@ -81,14 +81,6 @@ class User < ActiveRecord::Base
       
     membership.nil? ? 2000 : membership.current_ranking
   end
-  
-  def self.find_ranked
-    User.find(:all, :order => 'ranking DESC, games_won DESC, name', :conditions => 'memberships_count >= 20')
-  end
-  
-  def self.find_newbies
-    User.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, name', :conditions => 'memberships_count < 20')
-  end  
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)

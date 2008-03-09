@@ -1,3 +1,6 @@
 #user
-  = link_to current_user.login, edit_user_path(current_user)
-  = link_to 'Logout', logout_path
+  = link_to 'Profile'[], edit_user_path(current_user)
+  |
+  = link_to 'Account'[], edit_account_path(current_account)
+  |
+  = link_to 'Log out'[], logout_path

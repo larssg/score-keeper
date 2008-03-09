@@ -9,13 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 31) do
+ActiveRecord::Schema.define(:version => 32) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
     t.string   "domain"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "newbie_limit", :default => 20
   end
 
   create_table "comments", :force => true do |t|

@@ -1,6 +1,7 @@
 class AccountsController < ApplicationController
   session :off, :only => [ :new, :create ]
-  before_filter :must_be_admin, :except => [ :new, :create ]
+  before_filter :must_be_admin, :except => [ :new, :create, :edit, :update ]
+  before_filter :must_be_account_admin, :only => [ :edit, :update ]
   
   def index
     @accounts = Account.find(:all, :order => 'name')
@@ -29,5 +30,25 @@ class AccountsController < ApplicationController
       flash[:notice] = 'An error occured - please try again.'
       render :action => 'new', :layout => 'public'
     end
+  end
+  
+  def edit
+    @account = current_account
+  end
+  
+  def update
+    if current_account.update_attributes(params[:account])
+      flash[:notice] = 'Account saved.'[]
+      redirect_to root_url
+    else
+      flash[:notice] = 'An error occured. Please try again.'[]
+      @account = current_account
+      render :action => 'edit'
+    end
+  end
+  
+  protected
+  def must_be_account_admin
+    redirect_to root_url unless (current_user.account_id.to_s == params[:id] && current_user.is_account_admin?) || current_user.is_admin?
   end
 end

@@ -51,6 +51,7 @@ class ApplicationController < ActionController::Base
     end
     return @current_account
   end
+  helper_method :current_account
   
   def time_periods
     [
@@ -97,14 +98,6 @@ class ApplicationController < ActionController::Base
   
   def must_be_admin
     redirect_to root_url unless current_user.is_admin?
-  end
-  
-  def must_be_account_admin_or_self
-    redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_account_admin? || current_user.is_admin?
-  end
-  
-  def must_be_admin_or_self
-    redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_admin?
   end
   
   private

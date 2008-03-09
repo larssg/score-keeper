@@ -1,0 +1,9 @@
+= error_messages_for :account
+
+- form_for current_account do |f|
+  %p
+    = 'Newbie limit'[]
+    = f.text_field :newbie_limit, :size => 3
+    
+  %p
+    = submit_tag 'Save account'
