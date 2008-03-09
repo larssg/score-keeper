@@ -4,56 +4,51 @@ vendor/plugins/account_location:
   type: svn
   branch: master
   remote: http://dev.rubyonrails.org/svn/rails/plugins/account_location
-vendor/plugins/mini-magick: 
-  local_branch: braid/svn/vendor/plugins/mini-magick
-  type: svn
-  branch: master
-  remote: http://mini-magick.rubyforge.org/svn/trunk
 vendor/plugins/rspec: 
   local_branch: braid/svn/vendor/plugins/rspec
   type: svn
   branch: master
   remote: http://rspec.rubyforge.org/svn/trunk/rspec
-vendor/plugins/jrails: 
-  local_branch: braid/svn/vendor/plugins/jrails
+vendor/plugins/mini-magick: 
+  local_branch: braid/svn/vendor/plugins/mini-magick
   type: svn
   branch: master
-  remote: http://ennerchi.googlecode.com/svn/trunk/plugins/jrails
+  remote: http://mini-magick.rubyforge.org/svn/trunk
 vendor/plugins/make_resourceful: 
   local_branch: braid/svn/vendor/plugins/make-resourceful
   type: svn
   branch: master
   remote: http://svn.hamptoncatlin.com/make_resourceful/tags/make_resourceful
-vendor/plugins/haml: 
-  local_branch: braid/svn/vendor/plugins/haml
+vendor/plugins/jrails: 
+  local_branch: braid/svn/vendor/plugins/jrails
   type: svn
   branch: master
-  remote: svn://hamptoncatlin.com/haml/trunk
+  remote: http://ennerchi.googlecode.com/svn/trunk/plugins/jrails
 vendor/plugins/attachment_fu: 
   local_branch: braid/svn/vendor/plugins/attachment-fu
   type: svn
   branch: master
   remote: http://svn.techno-weenie.net/projects/plugins/attachment_fu
-vendor/rails: 
-  local_branch: braid/svn/vendor/rails
+vendor/plugins/haml: 
+  local_branch: braid/svn/vendor/plugins/haml
   type: svn
   branch: master
-  remote: http://svn.rubyonrails.org/rails/trunk
+  remote: svn://hamptoncatlin.com/haml/trunk
 vendor/plugins/exception_notification: 
   local_branch: braid/svn/vendor/plugins/exception-notification
   type: svn
   branch: master
   remote: http://dev.rubyonrails.org/svn/rails/plugins/exception_notification
-vendor/plugins/gibberish: 
-  local_branch: braid/svn/vendor/plugins/gibberish
-  type: svn
-  branch: master
-  remote: svn://errtheblog.com/svn/plugins/gibberish
 vendor/plugins/will_paginate: 
   local_branch: braid/svn/vendor/plugins/will-paginate
   type: svn
   branch: master
   remote: svn://errtheblog.com/svn/plugins/will_paginate
+vendor/plugins/gibberish: 
+  local_branch: braid/svn/vendor/plugins/gibberish
+  type: svn
+  branch: master
+  remote: svn://errtheblog.com/svn/plugins/gibberish
 vendor/plugins/restful_authentication: 
   local_branch: braid/svn/vendor/plugins/restful-authentication
   type: svn
