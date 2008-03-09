@@ -24,3 +24,8 @@ vendor/plugins/gibberish:
   type: svn
   branch: master
   remote: svn://errtheblog.com/svn/plugins/gibberish
+vendor/plugins/will_paginate: 
+  local_branch: braid/svn/vendor/plugins/will-paginate
+  type: svn
+  branch: master
+  remote: svn://errtheblog.com/svn/plugins/will_paginate
