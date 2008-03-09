@@ -4,6 +4,11 @@ vendor/plugins/account_location:
   type: svn
   branch: master
   remote: http://dev.rubyonrails.org/svn/rails/plugins/account_location
+vendor/plugins/mini-magick: 
+  local_branch: braid/svn/vendor/plugins/mini-magick
+  type: svn
+  branch: master
+  remote: http://mini-magick.rubyforge.org/svn/trunk
 vendor/plugins/gibberish: 
   local_branch: braid/svn/vendor/plugins/gibberish
   type: svn
