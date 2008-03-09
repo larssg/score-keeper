@@ -14,6 +14,11 @@ vendor/plugins/jrails:
   type: svn
   branch: master
   remote: http://ennerchi.googlecode.com/svn/trunk/plugins/jrails
+vendor/plugins/make_resourceful: 
+  local_branch: braid/svn/vendor/plugins/make-resourceful
+  type: svn
+  branch: master
+  remote: http://svn.hamptoncatlin.com/make_resourceful/tags/make_resourceful
 vendor/plugins/exception_notification: 
   local_branch: braid/svn/vendor/plugins/exception-notification
   type: svn
