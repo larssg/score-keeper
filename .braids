@@ -9,6 +9,11 @@ vendor/plugins/mini-magick:
   type: svn
   branch: master
   remote: http://mini-magick.rubyforge.org/svn/trunk
+vendor/plugins/rspec: 
+  local_branch: braid/svn/vendor/plugins/rspec
+  type: svn
+  branch: master
+  remote: http://rspec.rubyforge.org/svn/trunk/rspec
 vendor/plugins/jrails: 
   local_branch: braid/svn/vendor/plugins/jrails
   type: svn
