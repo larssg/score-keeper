@@ -4,3 +4,8 @@ vendor/plugins/account_location:
   type: svn
   branch: master
   remote: http://dev.rubyonrails.org/svn/rails/plugins/account_location
+vendor/plugins/gibberish: 
+  local_branch: braid/svn/vendor/plugins/gibberish
+  type: svn
+  branch: master
+  remote: svn://errtheblog.com/svn/plugins/gibberish
