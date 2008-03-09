@@ -54,3 +54,8 @@ vendor/plugins/restful_authentication:
   type: svn
   branch: master
   remote: http://svn.techno-weenie.net/projects/plugins/restful_authentication
+vendor/plugins/rspec_on_rails: 
+  local_branch: braid/svn/vendor/plugins/rspec-on-rails
+  type: svn
+  branch: master
+  remote: http://rspec.rubyforge.org/svn/trunk/rspec_on_rails
