@@ -1,0 +1,6 @@
+--- 
+vendor/plugins/account_location: 
+  local_branch: braid/svn/vendor/plugins/account-location
+  type: svn
+  branch: master
+  remote: http://dev.rubyonrails.org/svn/rails/plugins/account_location
