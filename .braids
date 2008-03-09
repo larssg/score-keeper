@@ -19,6 +19,11 @@ vendor/plugins/make_resourceful:
   type: svn
   branch: master
   remote: http://svn.hamptoncatlin.com/make_resourceful/tags/make_resourceful
+vendor/plugins/haml: 
+  local_branch: braid/svn/vendor/plugins/haml
+  type: svn
+  branch: master
+  remote: svn://hamptoncatlin.com/haml/trunk
 vendor/plugins/exception_notification: 
   local_branch: braid/svn/vendor/plugins/exception-notification
   type: svn
