@@ -1,6 +1,7 @@
 #user
   = link_to 'Profile'[], edit_user_path(current_user)
-  |
-  = link_to 'Account'[], edit_account_path(current_account)
+  - if account_admin?
+    |
+    = link_to 'Account'[], edit_account_path(current_account)
   |
   = link_to 'Log out'[], logout_path
