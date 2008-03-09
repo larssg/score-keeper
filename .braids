@@ -14,6 +14,11 @@ vendor/plugins/jrails:
   type: svn
   branch: master
   remote: http://ennerchi.googlecode.com/svn/trunk/plugins/jrails
+vendor/plugins/exception_notification: 
+  local_branch: braid/svn/vendor/plugins/exception-notification
+  type: svn
+  branch: master
+  remote: http://dev.rubyonrails.org/svn/rails/plugins/exception_notification
 vendor/plugins/gibberish: 
   local_branch: braid/svn/vendor/plugins/gibberish
   type: svn
