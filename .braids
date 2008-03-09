@@ -34,6 +34,11 @@ vendor/plugins/attachment_fu:
   type: svn
   branch: master
   remote: http://svn.techno-weenie.net/projects/plugins/attachment_fu
+vendor/rails: 
+  local_branch: braid/svn/vendor/rails
+  type: svn
+  branch: master
+  remote: http://svn.rubyonrails.org/rails/trunk
 vendor/plugins/exception_notification: 
   local_branch: braid/svn/vendor/plugins/exception-notification
   type: svn
