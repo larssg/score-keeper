@@ -18,10 +18,10 @@ class Account < ActiveRecord::Base
   end
   
   def ranked_users
-    User.find(:all, :order => 'ranking DESC, games_won DESC, name', :conditions => ['memberships_count >= ?', self.newbie_limit])
+    self.users.find(:all, :order => 'ranking DESC, games_won DESC, name', :conditions => ['memberships_count >= ?', self.newbie_limit])
   end
   
   def newbie_users
-    User.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, name', :conditions => ['memberships_count < ?', self.newbie_limit])
+    self.users.find(:all, :order => 'memberships_count DESC, ranking DESC, games_won DESC, name', :conditions => ['memberships_count < ?', self.newbie_limit])
   end  
 end
