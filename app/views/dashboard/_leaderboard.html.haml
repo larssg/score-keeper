@@ -1,5 +1,8 @@
 .list
-  %h3= title
+  %h3
+    = title
+    - if details.length > 0
+      %span.details= details
   %table
     %tr
       %th= '&nbsp;'

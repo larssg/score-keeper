@@ -2,10 +2,10 @@
 
 - cache(cache_key) do
   - if @rankings.size > 0
-    = render :partial => 'leaderboard', :locals => { :people => @rankings, :start_at => 1, :title => 'Rankings'[] }
+    = render :partial => 'leaderboard', :locals => { :people => @rankings, :start_at => 1, :title => 'Rankings'[], :details => '' }
 
   - if @newbies.size > 0
-    = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[] }
+    = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} games"[:less_than_games, current_account.newbie_limit] }
 
 #recent_games.column.span-12
   = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }

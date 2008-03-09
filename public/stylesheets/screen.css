@@ -138,6 +138,10 @@ h3 {
   padding: 0;
   margin-bottom: 5px;
   font-weight: bold; }
+  h3 .details {
+    font-size: 11px;
+    color: #999999;
+    font-weight: normal; }
 
 #bd .bottom_space {
   padding-bottom: 20px; }
