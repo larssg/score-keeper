@@ -1,7 +1,7 @@
 - title 'Users'[]
 
 #userlist.clear
-  - @users.each_with_index do |user, index|
+  - all_users.each_with_index do |user, index|
     .column.span-9{ :class => index.odd? ? 'last' : nil }
       .user
         .image

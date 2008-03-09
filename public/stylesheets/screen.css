@@ -67,6 +67,10 @@ textarea {
       color: #FFFFFF; }
       #menu #add_game a img {
         vertical-align: text-bottom; }
+    #menu #add_game #user_minimum {
+      padding-right: 21px;
+      padding-top: 9px;
+      color: #FFFFFF; }
   #menu ul {
     display: block;
     margin: 0;

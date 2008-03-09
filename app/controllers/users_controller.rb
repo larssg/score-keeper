@@ -6,7 +6,6 @@ class UsersController < ApplicationController
   filter_parameter_logging :password
   
   def index
-    @users = current_account.users.find(:all, :order => 'name, display_name, login')
     @user = current_account.users.build
   end
   
