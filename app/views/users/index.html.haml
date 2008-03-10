@@ -15,6 +15,7 @@
         - if account_admin?
           .admin
             = link_to 'Edit'[], edit_user_path(user)
+            = link_to user.enabled? ? 'Disable'[] : 'Enable'[], user_path(user, :user => { :enabled => !user.enabled? }), :method => :put
             = link_to 'Remove'[], user_path(user), :method => :delete, :confirm => 'Are you sure?'
 
 - if account_admin?

@@ -20,6 +20,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :all_users
   
+  def enabled_users
+    current_account.enabled_users
+  end
+  helper_method :enabled_users
+  
   def find_user(id)
     @indexed_users ||= all_users.group_by(&:id)
     @indexed_users[id.to_i].first

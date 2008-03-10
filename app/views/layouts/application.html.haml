@@ -27,7 +27,7 @@
       #menu.clear
         .column.span-16= render :partial => 'shared/menu'
         #add_game.column.span-8.last
-          - if all_users.size >= 4
+          - if enabled_users.size >= 4
             = link_to_function image_tag('icons/add.png') + ' ' + 'Add game'[], "$('#add_game_form').toggle()"
           - else
             #user_minimum= 'You need at least 4 users'[]

@@ -52,12 +52,13 @@ class UsersController < ApplicationController
     @user = current_account.users.find(params[:id])
     mugshot = Mugshot.create(params[:mugshot])
     @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil?
-    @user.is_account_admin = params[:user][:is_account_admin] if current_user.is_account_admin? || current_user.is_admin?
-    @user.is_admin = params[:user][:is_admin] if current_user.is_admin?
+    @user.is_account_admin = params[:user][:is_account_admin] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:is_account_admin].nil?
+    @user.is_admin = params[:user][:is_admin] if current_user.is_admin? && !params[:user][:is_admin].nil?
+    @user.enabled = params[:user][:enabled] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:enabled].nil?
     @success = @user.update_attributes(params[:user])
     respond_to do |format|
       if @success
-        flash[:notice] = "User account saved successfully."
+        flash[:notice] = "User saved successfully."
         format.html { redirect_to users_url }
       else
         format.html { render :action => "edit" }

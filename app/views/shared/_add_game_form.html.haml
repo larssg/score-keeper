@@ -1,14 +1,14 @@
 - form_for :game, nil, :url => games_path do |f|
   .team
     %label= 'Team'[] + ':'
-    = f.collection_select 'user11', all_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
-    = f.collection_select 'user12', all_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
+    = f.collection_select 'user11', enabled_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
+    = f.collection_select 'user12', enabled_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
     %label= 'Score'[] + ':'
     = f.text_field 'score1', :class => 'score', :autocomplete => 'off'
   .team
     %label= 'Team'[] + ':'
-    = f.collection_select 'user21', all_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
-    = f.collection_select 'user22', all_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
+    = f.collection_select 'user21', enabled_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
+    = f.collection_select 'user22', enabled_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
     %label= 'Score'[] + ':'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
     = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'

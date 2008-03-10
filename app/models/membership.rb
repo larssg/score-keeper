@@ -3,11 +3,11 @@ class Membership < ActiveRecord::Base
   belongs_to :user
 
   def self.all_time_high(account)
-    Membership.find(:first, :order => 'memberships.current_ranking DESC', :conditions => { :user_id => account.user_ids })
+    Membership.find(:first, :order => 'memberships.current_ranking DESC', :conditions => { :user_id => account.enabled_user_ids })
   end
   
   def self.all_time_low(account)
-    Membership.find(:first, :order => 'memberships.current_ranking', :conditions => { :user_id => account.user_ids })
+    Membership.find(:first, :order => 'memberships.current_ranking', :conditions => { :user_id => account.enabled_user_ids })
   end
   
   def self.find_team(user_ids, from, account)

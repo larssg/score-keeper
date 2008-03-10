@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 32) do
+ActiveRecord::Schema.define(:version => 33) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(:version => 32) do
     t.integer  "comments_count",                          :default => 0
     t.integer  "account_id"
     t.boolean  "is_account_admin",                        :default => false
+    t.boolean  "enabled",                                 :default => true
   end
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"
