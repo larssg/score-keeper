@@ -1,0 +1,18 @@
+#user.panel{ :title => h(@user.name) }
+  %h2= 'Games'[]
+  %fieldset
+    .row
+      %label= 'Played'[]
+      %input{ :type => 'text', :value => @user.memberships_count }
+    .row
+      %label= 'Won'[]
+      %input{ :type => 'text', :value => @user.games_won }
+
+  %h2= 'Goals'[]
+  %fieldset
+    .row
+      %label= 'For'[]
+      %input{ :type => 'text', :value => @user.goals_for }
+    .row
+      %label= 'Against'[]
+      %input{ :type => 'text', :value => @user.goals_against }

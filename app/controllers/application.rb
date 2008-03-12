@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include ExceptionNotifiable
   include AccountLocation
+  before_filter :adjust_format_for_iphone
 
 #  around_filter :set_language
 
@@ -10,6 +11,15 @@ class ApplicationController < ActionController::Base
 #  protect_from_forgery :secret => 'f22c29e38d18cebc96d57d166b462fe45c52f25c14487e8fe75fd2989f5795997db0bb1178a453bfc9f83b12a54bc61210a06d7bbc82393bc317961a2b635675'
 
   protected
+  # Set iPhone format if request to iphone.trawlr.com
+  def adjust_format_for_iphone    
+    request.format = :iphone if iphone_user_agent?
+  end
+
+  def iphone_user_agent?
+    request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/]
+  end
+
   def language
     session[:language]
   end

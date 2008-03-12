@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   
   def index
     @user = current_account.users.build
+    render :layout => false if iphone_user_agent?
   end
   
   def show
@@ -14,6 +15,7 @@ class UsersController < ApplicationController
     @user = current_account.users.find(params[:id])
     @all_time_high = @user.all_time_high
     @all_time_low = @user.all_time_low
+    render :layout => false if iphone_user_agent?
   end
   
   def new
