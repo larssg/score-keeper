@@ -1,6 +1,0 @@
---- 
-iui: 
-  local_branch: braid/svn/iui
-  type: svn
-  branch: master
-  remote: http://iui.googlecode.com/svn/trunk/iui
