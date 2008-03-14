@@ -3,7 +3,7 @@ require 'life'
 describe Matches do
   it 'should have a grid' do
     # given
-    game = Matche.new(5, 5)
+    game = Match.new(5, 5)
     
     # then
     game.grid.should be_kind_of(Grid)
@@ -11,7 +11,7 @@ describe Matches do
   
   it 'should create a cell' do
     # given
-    game = Matche.new(2, 2)
+    game = Match.new(2, 2)
     expected_grid = Grid.from_string( 'X. ..' )
     
     # when
@@ -23,7 +23,7 @@ describe Matches do
   
   it 'should destroy a cell' do
     # given
-    game = Matche.new(2,2)
+    game = Match.new(2,2)
     game.grid = Grid.from_string('X. ..')
     
     # when

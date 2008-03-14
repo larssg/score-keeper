@@ -105,7 +105,7 @@ class Match < ActiveRecord::Base
   end
   
   def reset_rankings_after_destroy
-    Matche.reset_rankings(self.account) unless @postpone_ranking_update
+    Match.reset_rankings(self.account) unless @postpone_ranking_update
   end
   
   def title()

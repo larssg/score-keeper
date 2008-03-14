@@ -6,7 +6,7 @@ describe MatchesController, "logged in" do
   before(:each) do
     controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
-    @game = mock_model(Matche)
+    @game = mock_model(Match)
     Matche.stub!(:find_recent).and_return([@game])
   end
 
@@ -17,7 +17,7 @@ describe MatchesController, "logged in" do
   
   it "should load games" do
     get :index
-    assigns('games').first.should be_an_instance_of(Matche)
+    assigns('games').first.should be_an_instance_of(Match)
   end
 end
 
@@ -57,6 +57,6 @@ describe MatchesController, "creating a game (logged in)" do
   it "should create a game" do
     lambda do
       do_post
-    end.should change(Matche, :count).by(1)
+    end.should change(Match, :count).by(1)
   end
 end

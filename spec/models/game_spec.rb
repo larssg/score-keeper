@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Matche, 'created by Factory' do
+describe Match, 'created by Factory' do
   before(:each) do
     @game = Matche.new
   end
@@ -17,7 +17,7 @@ describe Matche, 'created by Factory' do
   end
 end
 
-describe Matche, "with people" do
+describe Match, "with people" do
   before(:each) do
     @people = Factory.create_people(4)
   end

@@ -1,5 +1,5 @@
 class MatcheSweeper < ActionController::Caching::Sweeper
-  observe Matche
+  observe Match
 
   def after_create(match)
     expire_cache_for(match)
