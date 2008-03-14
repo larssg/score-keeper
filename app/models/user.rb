@@ -29,19 +29,19 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name
   
-  before_destroy :remove_games
+  before_destroy :remove_matches
 
   def self.find_all
     find(:all, :order => 'name, display_name')
   end
   
-  def games_lost
-    memberships_count - games_won
+  def matches_lost
+    memberships_count - matches_won
   end
 
   def winning_percentage
     return 0.0 if memberships_count == 0
-    ((games_won.to_f / memberships_count.to_f) * 1000).to_i / 10.to_f
+    ((matches_won.to_f / memberships_count.to_f) * 1000).to_i / 10.to_f
   end
   
   def difference
@@ -75,9 +75,9 @@ class User < ActiveRecord::Base
   
   def ranking_at(time)
     membership = self.memberships.find(:first,
-      :conditions => [ 'games.played_at <= ?', time ],
-      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id',
-      :order => 'games.played_at DESC')
+      :conditions => [ 'matches.played_at <= ?', time ],
+      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',
+      :order => 'matches.played_at DESC')
       
     membership.nil? ? 2000 : membership.current_ranking
   end
@@ -128,15 +128,15 @@ class User < ActiveRecord::Base
   end
 
   protected
-    def remove_games
+    def remove_matches
       self.memberships.each do |membership|
-        game = membership.team.game
-        game.postpone_ranking_update = true
-        game.destroy
+        match = membership.team.match
+        match.postpone_ranking_update = true
+        match.destroy
       end
     
       # Fix stats
-      Game.reset_rankings(self.account)
+      Matche.reset_rankings(self.account)
     end
 
     # before filter 

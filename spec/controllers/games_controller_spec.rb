@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe GamesController, "logged in" do
+describe MatchesController, "logged in" do
   fixtures :users, :accounts
 
   before(:each) do
     controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
-    @game = mock_model(Game)
-    Game.stub!(:find_recent).and_return([@game])
+    @game = mock_model(Matche)
+    Matche.stub!(:find_recent).and_return([@game])
   end
 
   it "should render" do
@@ -17,11 +17,11 @@ describe GamesController, "logged in" do
   
   it "should load games" do
     get :index
-    assigns('games').first.should be_an_instance_of(Game)
+    assigns('games').first.should be_an_instance_of(Matche)
   end
 end
 
-describe GamesController, 'not logged in' do
+describe MatchesController, 'not logged in' do
   it "should require login when trying to create a game" do
     post :create
     response.should be_redirect
@@ -29,7 +29,7 @@ describe GamesController, 'not logged in' do
   end
 end
 
-describe GamesController, "creating a game (logged in)" do
+describe MatchesController, "creating a game (logged in)" do
   fixtures :users, :accounts
 
   before(:each) do
@@ -57,6 +57,6 @@ describe GamesController, "creating a game (logged in)" do
   it "should create a game" do
     lambda do
       do_post
-    end.should change(Game, :count).by(1)
+    end.should change(Matche, :count).by(1)
   end
 end

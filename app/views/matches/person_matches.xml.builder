@@ -2,13 +2,13 @@ xml.user do
   xml.name @user.name
   @memberships.each do |membership|
     xml.match do
-      game = membership.team.game
-      xml.time game.played_at.to_s :db
+      match = membership.team.match
+      xml.time match.played_at.to_s :db
       xml.teams do
-        game.teams.each do |team|
+        match.teams.each do |team|
           xml.team do
-            team.memberships.each do |game_membership|
-              user = game_membership.user
+            team.memberships.each do |match_membership|
+              user = match_membership.user
               xml.player do
                 xml.id user.id
                 xml.name user.name

@@ -1,5 +1,5 @@
 .list
-  %h3= 'Recent games'[]
+  %h3= 'Recent matches'[]
   %table
     %tr
       %th.name= 'Team one'[]
@@ -7,7 +7,7 @@
       %th.name= 'Team two'[]
       %th &nbsp;
 
-    - recent_games.each do |game|
+    - recent_matches.each do |match|
       %tr{ :class => cycle('odd', 'even') }
-        = render :partial => 'games/game_columns', :locals => { :game => game }
+        = render :partial => 'matches/match_columns', :locals => { :match => match }
     - reset_cycle

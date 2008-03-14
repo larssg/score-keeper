@@ -11,17 +11,17 @@ class TeamsController < ApplicationController
       @team_counts.each do |count|
         @teams[count[0]] = {}
         @teams[count[0]][:team_ids] = count[0]
-        @teams[count[0]][:games_played] = count[1]
-        @teams[count[0]][:games_won] = 0
+        @teams[count[0]][:matches_played] = count[1]
+        @teams[count[0]][:matches_won] = 0
         @teams[count[0]][:players] = count[0].split(',').collect { |id| find_user(id) }
       end
     
       @team_wins.each do |win|
-        @teams[win[0]][:games_won] = win[1]
+        @teams[win[0]][:matches_won] = win[1]
       end
     
       @teams.keys.each do |team_key|
-        @teams[team_key][:percentage] = ((@teams[team_key][:games_won].to_f / @teams[team_key][:games_played].to_f) * 1000).to_i / 10.to_f
+        @teams[team_key][:percentage] = ((@teams[team_key][:matches_won].to_f / @teams[team_key][:matches_played].to_f) * 1000).to_i / 10.to_f
       end
     
       @teams.keys.each do |team_key|
@@ -52,10 +52,10 @@ class TeamsController < ApplicationController
     
     data = {}
     memberships.each do |membership|
-      game_id = membership.game_id.to_i
-      data[game_id] = ['null', 'null', nil] unless data.has_key?(game_id)
-      data[game_id][@ids.index(membership.user_id)] = membership.current_ranking
-      data[game_id][2] = membership.played_at.to_time
+      match_id = membership.match_id.to_i
+      data[match_id] = ['null', 'null', nil] unless data.has_key?(match_id)
+      data[match_id][@ids.index(membership.user_id)] = membership.current_ranking
+      data[match_id][2] = membership.played_at.to_time
     end
     
     people = {}

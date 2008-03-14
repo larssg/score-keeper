@@ -1,7 +1,7 @@
-class Game < ActiveRecord::Base
+class Match < ActiveRecord::Base
   attr_accessor :postpone_ranking_update
 
-  # Virtual attributes for game info
+  # Virtual attributes for match info
   attr_accessor :score1, :user11, :user12
   attr_accessor :score2, :user21, :user22
 
@@ -55,8 +55,8 @@ class Game < ActiveRecord::Base
   def self.reset_rankings(account)
     return if account.nil?
     account.users.update_all("ranking = 2000")
-    account.games.find(:all).each do |game|
-      game.update_rankings
+    account.matches.find(:all).each do |match|
+      match.update_rankings
     end
   end
   
@@ -72,7 +72,7 @@ class Game < ActiveRecord::Base
       team.memberships.each do |membership|
         user = membership.user
 
-        user.increment(:games_won) if team == self.winner
+        user.increment(:matches_won) if team == self.winner
         user.goals_for += team.score
         user.goals_against += team.other.score
         user.memberships_count = Membership.count(:conditions => { :user_id => user.id })
@@ -89,7 +89,7 @@ class Game < ActiveRecord::Base
       team.memberships.each do |membership|
         user = membership.user
         
-        user.decrement(:games_won) if team == self.winner
+        user.decrement(:matches_won) if team == self.winner
         user.goals_for -= team.score
         user.goals_against -= team.other.score
         user.decrement(:memberships_count)
@@ -105,7 +105,7 @@ class Game < ActiveRecord::Base
   end
   
   def reset_rankings_after_destroy
-    Game.reset_rankings(self.account) unless @postpone_ranking_update
+    Matche.reset_rankings(self.account) unless @postpone_ranking_update
   end
   
   def title()

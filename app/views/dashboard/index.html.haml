@@ -5,14 +5,14 @@
     = render :partial => 'leaderboard', :locals => { :people => @rankings, :start_at => 1, :title => 'Rankings'[], :details => '' }
 
   - if @newbies.size > 0
-    = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} games"[:less_than_games, current_account.newbie_limit] }
+    = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} matches"[:less_than_matches, current_account.newbie_limit] }
 
-#recent_games.column.span-12
-  = render :partial => 'recent_games', :locals => { :recent_games => @recent_games }
+#recent_matches.column.span-12
+  = render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
       
-- cache(cache_key('games_per_day')) do
-  #games_per_day.column.span-6.last
-    = render :partial => 'games_per_day', :locals => { :games_per_day => @games_per_day }
+- cache(cache_key('matches_per_day')) do
+  #matches_per_day.column.span-6.last
+    = render :partial => 'matches_per_day', :locals => { :matches_per_day => @matches_per_day }
 
 - content_for :sidebar do
   - cache(cache_key('sidebar')) do
@@ -28,8 +28,8 @@
       %table
         %tr
           %td
-            %label= 'Games played'[] + ':'
-            = @game_count
+            %label= 'Matches played'[] + ':'
+            = @match_count
           %td
             %label= 'Goals scored'[] + ':'
             = @goals_scored
@@ -38,14 +38,14 @@
             %td
               - unless @all_time_high.nil?
                 %label= 'All time high'[] + ':'
-                = link_to @all_time_high.current_ranking, game_path(@all_time_high.team.game), :class => 'game'
+                = link_to @all_time_high.current_ranking, match_path(@all_time_high.team.match), :class => 'match'
                 = 'by'[]
                 %br
                 = user_link_full find_user(@all_time_high.user_id)
             %td
               - unless @all_time_low.nil?
                 %label= 'All time low'[] + ':'
-                = link_to @all_time_low.current_ranking, game_path(@all_time_low.team.game), :class => 'game'
+                = link_to @all_time_low.current_ranking, match_path(@all_time_low.team.match), :class => 'match'
                 = 'by'[]
                 %br
                 = user_link_full find_user(@all_time_low.user_id)
@@ -57,4 +57,4 @@
       - @comments.each do |comment|
         .comment
           .user= find_user(comment.user_id).name
-          .body= link_to h(truncate(comment.body.strip, 40)), game_path(comment.game_id, :anchor => "c#{comment.id}")
+          .body= link_to h(truncate(comment.body.strip, 40)), match_path(comment.match_id, :anchor => "c#{comment.id}")

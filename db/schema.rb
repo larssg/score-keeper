@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 34) do
+ActiveRecord::Schema.define(:version => 36) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -21,16 +21,16 @@ ActiveRecord::Schema.define(:version => 34) do
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "game_id"
+    t.integer  "match_id"
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
-  add_index "comments", ["game_id"], :name => "index_comments_on_game_id"
+  add_index "comments", ["match_id"], :name => "index_comments_on_game_id"
 
-  create_table "games", :force => true do |t|
+  create_table "matches", :force => true do |t|
     t.datetime "played_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(:version => 34) do
     t.integer  "account_id"
   end
 
-  add_index "games", ["played_on"], :name => "index_games_on_played_on"
-  add_index "games", ["account_id"], :name => "index_games_on_account_id"
+  add_index "matches", ["played_on"], :name => "index_games_on_played_on"
+  add_index "matches", ["account_id"], :name => "index_games_on_account_id"
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(:version => 34) do
   end
 
   create_table "teams", :force => true do |t|
-    t.integer  "game_id"
+    t.integer  "match_id"
     t.integer  "score"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(:version => 34) do
     t.string   "name"
     t.string   "display_name"
     t.integer  "memberships_count",                       :default => 0
-    t.integer  "games_won",                               :default => 0
+    t.integer  "matches_won"
     t.integer  "goals_for",                               :default => 0
     t.integer  "goals_against",                           :default => 0
     t.integer  "mugshot_id"

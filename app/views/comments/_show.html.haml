@@ -1,4 +1,4 @@
 %a{ :name => "c#{comment.id}" }
   .body= simple_format(h(comment.body.strip))
   - if comment.user_id == current_user.id
-    .edit= link_to_remote 'Edit', :update => "content_#{comment.id}", :url => edit_game_comment_path(comment.game, comment)
+    .edit= link_to_remote 'Edit', :update => "content_#{comment.id}", :url => edit_match_comment_path(comment.match, comment)

@@ -1,12 +1,12 @@
 #user.panel{ :title => h(@user.name) }
-  %h2= 'Games'[]
+  %h2= 'Matches'[]
   %fieldset
     .row
       %label= 'Played'[]
       %input{ :type => 'text', :value => @user.memberships_count }
     .row
       %label= 'Won'[]
-      %input{ :type => 'text', :value => @user.games_won }
+      %input{ :type => 'text', :value => @user.matches_won }
 
   %h2= 'Goals'[]
   %fieldset

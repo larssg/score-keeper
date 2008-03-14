@@ -1,25 +1,25 @@
-class GamesController < ApplicationController
+class MatchesController < ApplicationController
   before_filter :domain_required
   before_filter :login_required
-  cache_sweeper :game_sweeper
+  cache_sweeper :match_sweeper
   
   make_resourceful do
     publish :xml, :json, :csv, :attributes => [ { :teams => [ :score ] } ]
     build :edit, :create, :update, :destroy
 
     before :create do
-      current_object.attributes = params[:game]
+      current_object.attributes = params[:match]
       current_object.account = current_account
       current_object.creator = current_user
     end
     
     response_for :create do
-      flash[:notice] = 'Game created.'[]
+      flash[:notice] = 'Matches created.'[]
       redirect_back_or_default root_url
     end
     
     response_for :create_fails do
-      flash[:warning] = 'The game could not be saved. Please try again.'[]
+      flash[:warning] = 'The match could not be saved. Please try again.'[]
       redirect_back_or_default root_url
     end
   end
@@ -34,9 +34,9 @@ class GamesController < ApplicationController
       format.xml do
         if params[:user_id]
           @memberships = @user.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
-          render :action => 'user_games'
+          render :action => 'user_matches'
         else
-          render :xml => @games.to_xml
+          render :xml => @matches.to_xml
         end
       end
       format.graph do
@@ -46,9 +46,9 @@ class GamesController < ApplicationController
   end
   
   def show
-    @game = current_account.games.find(params[:id])
-    @comments = @game.comments.find(:all, :order => 'created_at')
-    @comment = @game.comments.build
+    @match = current_account.matches.find(params[:id])
+    @comments = @match.comments.find(:all, :order => 'created_at')
+    @comment = @match.comments.build
   end
   
   protected
@@ -65,8 +65,8 @@ class GamesController < ApplicationController
           conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
         end
       end
-      @games = current_account.games.paginate_recent(:include => { :teams => :memberships }, :conditions => conditions, :page => params[:page])
-      @game = current_model.new
+      @matches = current_account.matches.paginate_recent(:include => { :teams => :memberships }, :conditions => conditions, :page => params[:page])
+      @match = current_model.new
     end
   end
   
@@ -76,10 +76,10 @@ class GamesController < ApplicationController
     chart = setup_ranking_graph
     
     memberships = @user.memberships.find(:all,
-      :conditions => ['games.played_at >= ?', from],
+      :conditions => ['matches.played_at >= ?', from],
       :order => 'memberships.id',
-      :select => 'memberships.current_ranking, memberships.created_at, games.played_at AS played_at',
-      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN games ON teams.game_id = games.id')
+      :select => 'memberships.current_ranking, memberships.created_at, matches.played_at AS played_at',
+      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
     chart.set_data [@user.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
     chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
     chart.line 2, '#3399CC'

@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Game, 'created by Factory' do
+describe Matche, 'created by Factory' do
   before(:each) do
-    @game = Game.new
+    @game = Matche.new
   end
 
   it "should save successfully and be valid" do
@@ -17,7 +17,7 @@ describe Game, 'created by Factory' do
   end
 end
 
-describe Game, "with people" do
+describe Matche, "with people" do
   before(:each) do
     @people = Factory.create_people(4)
   end

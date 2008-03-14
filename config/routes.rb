@@ -6,12 +6,12 @@ ActionController::Routing::Routes.draw do |map|
   map.logout 'logout', :controller => 'sessions', :action => 'destroy'
   
   map.resources :users do |user|
-    user.resources :games
+    user.resources :matches
   end
   map.resources :sessions
   
-  map.resources :games do |game|
-    game.resources :comments
+  map.resources :matches do |match|
+    match.resources :comments
   end
   map.resources :teams
   

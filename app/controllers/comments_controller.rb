@@ -8,16 +8,16 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @game = Game.find(params[:game_id])
-    if @game
-      @comment = @game.comments.build(params[:comment])
+    @match = current_account.matches.find(params[:match_id])
+    if @match
+      @comment = @match.comments.build(params[:comment])
       @comment.user = current_user
       if @comment.save
         flash[:notice] = 'Comment added successfully.'[]
-        redirect_to @game
+        redirect_to @match
       else
         flash[:notice] = 'Unable to save comment.'[]
-        redirect_to @game
+        redirect_to @match
       end
     end
   end
@@ -34,7 +34,7 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.find(params[:id])
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Changes saved successfully.'[]
-      redirect_to @comment.game
+      redirect_to @comment.match
     end
   end
 end

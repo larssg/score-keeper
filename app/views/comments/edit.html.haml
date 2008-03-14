@@ -1,4 +1,4 @@
 %h3= 'Edit comment'[]
-- form_for @comment, :url => game_comment_path(@comment.game_id, @comment.id) do |f|
+- form_for @comment, :url => match_comment_path(@comment.match_id, @comment.id) do |f|
   = render :partial => 'comments/form', :locals => { :f => f }
   = submit_tag 'Save changes'[]

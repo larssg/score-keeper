@@ -1,4 +1,4 @@
-- form_for :game, nil, :url => games_path do |f|
+- form_for :match, nil, :url => matches_path do |f|
   .team
     %label= 'Team'[] + ':'
     = f.collection_select 'user11', enabled_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
@@ -12,4 +12,4 @@
     %label= 'Score'[] + ':'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
     = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
-    = link_to_function 'Cancel'[], "$('#add_game_form').hide()"
+    = link_to_function 'Cancel'[], "$('#add_match_form').hide()"

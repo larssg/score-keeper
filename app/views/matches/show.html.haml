@@ -1,10 +1,10 @@
-- title game_title(@game)
+- title match_title(@match)
 
-#game
-  %h3= h(game_title(@game))
+#match
+  %h3= h(match_title(@match))
   
   %label= 'Played at' + ':'
-  = @game.played_at.to_s :long
+  = @match.played_at.to_s :long
   
 %h3= 'Comments'
 #comments
@@ -20,7 +20,7 @@
       .clear
         %hd
 
-  - form_for @comment, :url => game_comments_path(@game) do |f|
+  - form_for @comment, :url => match_comments_path(@match) do |f|
     = render :partial => 'comments/form', :locals => { :f => f }
       
     %p

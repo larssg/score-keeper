@@ -1,15 +1,15 @@
 class Team < ActiveRecord::Base
   belongs_to :account
   has_many :memberships
-  belongs_to :game
+  belongs_to :match
   before_save :update_cache_values
   
   def winner?
-    self.game.winner == self
+    self.match.winner == self
   end
   
   def other
-    self.game.teams.select { |team| team.id != self.id }.first
+    self.match.teams.select { |team| team.id != self.id }.first
   end
   
   def ranking_total
@@ -20,7 +20,7 @@ class Team < ActiveRecord::Base
     Team.find(:all,
       :conditions => { :team_ids => team_ids },
       :group => 'opponent_ids',
-      :select => 'SUM(won) AS wins, COUNT(*) AS games, opponent_ids AS team_ids')
+      :select => 'SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids')
   end
   
   def self.team_members(user_ids)
@@ -42,7 +42,7 @@ class Team < ActiveRecord::Base
       award_to_lead -= 1
     end
 
-    # If game was lost, deduct most points from lead
+    # If match was lost, deduct most points from lead
     if amount < 0
       temp = award_to_lead
       award_to_lead = award_to_trail

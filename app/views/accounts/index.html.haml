@@ -5,10 +5,10 @@
       %th= 'Name'[]
       %th= 'Domain'[]
       %th= 'Users'[]
-      %th= 'Games'[]
+      %th= 'Matches'[]
     - @accounts.each do |account|
       %tr{ :class => cycle('odd', 'even') }
         %td= link_to h(account.name), account
         %td= h(account.domain)
         %td= account.users.count
-        %td= account.games.count
+        %td= account.matches.count
