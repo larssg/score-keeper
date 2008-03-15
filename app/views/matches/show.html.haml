@@ -16,7 +16,7 @@
         %span.user= h(comment.user.name) + '&nbsp;'
         %span.time= time_ago_in_words(comment.created_at) + ' ago'
       .content{ :id => "content_#{comment.id}" }
-        = render :partial => 'comments/show', :locals => { :comment => comment }
+        = render :partial => 'comments/comment', :object => comment
       .clear
         %hd
 
