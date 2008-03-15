@@ -2,18 +2,18 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Match, 'created by Factory' do
   before(:each) do
-    @game = Matche.new
+    @match = Match.new
   end
 
   it "should save successfully and be valid" do
-    game = Factory.create_game
-    game.should_not be_new_record
-    game.should be_valid
+    match = Factory.create_match
+    match.should_not be_new_record
+    match.should be_valid
   end
   
   it "should correctly determine the winner" do
-    game = Factory.create_game
-    game.winner.score.should == 10
+    match = Factory.create_match
+    match.winner.score.should == 10
   end
 end
 
@@ -22,27 +22,27 @@ describe Match, "with people" do
     @people = Factory.create_people(4)
   end
   
-  it "should update games_won for users" do
+  it "should update matches_won for users" do
     @people.each do |user|
-      user.games_won.should == 0
+      user.matches_won.should == 0
     end
     
-    Factory.create_game(:people => @people, :team_scores => [10, 4])
+    Factory.create_match(:people => @people, :team_scores => [10, 4])
     
     @people.each { |user| user.reload }
-    @people[0].games_won.should == 1
-    @people[1].games_won.should == 1
-    @people[2].games_won.should == 0
-    @people[3].games_won.should == 0
+    @people[0].matches_won.should == 1
+    @people[1].matches_won.should == 1
+    @people[2].matches_won.should == 0
+    @people[3].matches_won.should == 0
   end
   
-  it "should update games_won when destroyed" do
-    game = Factory.create_game(:people => @people, :team_scores => [10, 4])
-    game.destroy
+  it "should update matches_won when destroyed" do
+    match = Factory.create_match(:people => @people, :team_scores => [10, 4])
+    match.destroy
     
     @people.each { |user| user.reload }
     @people.each do |user|
-      user.games_won.should == 0
+      user.matches_won.should == 0
     end
   end
   
@@ -52,7 +52,7 @@ describe Match, "with people" do
       user.goals_against.should == 0
     end
     
-    game = Factory.create_game(:people => @people, :team_scores => [10, 4])
+    game = Factory.create_match(:people => @people, :team_scores => [10, 4])
     
     @people.each { |user| user.reload }
     @people[0].goals_for.should == 10
@@ -66,7 +66,7 @@ describe Match, "with people" do
   end
   
   it "should update goals_for and goals_against when destroyed" do
-    game = Factory.create_game(:people => @people, :team_scores => [10, 4])
+    game = Factory.create_match(:people => @people, :team_scores => [10, 4])
     game.destroy
     
     @people.each do |user|

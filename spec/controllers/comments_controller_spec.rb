@@ -4,18 +4,19 @@ describe CommentsController do
   fixtures :users, :accounts
 
   before(:each) do
+    controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
   end
 
-  it "should add a comment on a game" do
+  it "should add a comment on a match" do
     lambda do
-      @game = Factory.create_game
-      post :create, :game_id => @game.id, :comment => { :body => 'This is a comment' }
+      @match = Factory.create_match(:account => controller.current_account)
+      post :create, :match_id => @match.id, :comment => { :body => 'This is a comment' }
       response.should be_redirect
-      response.should redirect_to(game_path(@game))
+      response.should redirect_to(match_path(@match))
 
-      @game.reload
-      @game.comments.first.body.should == 'This is a comment'
+      @match.reload
+      @match.comments.first.body.should == 'This is a comment'
     end.should change(Comment, :count).by(1)
   end
 end

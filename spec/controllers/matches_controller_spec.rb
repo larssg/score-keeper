@@ -6,8 +6,8 @@ describe MatchesController, "logged in" do
   before(:each) do
     controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
-    @game = mock_model(Match)
-    Matche.stub!(:find_recent).and_return([@game])
+    @match = mock_model(Match)
+    Match.stub!(:find_recent).and_return([@match])
   end
 
   it "should render" do
@@ -17,7 +17,7 @@ describe MatchesController, "logged in" do
   
   it "should load games" do
     get :index
-    assigns('games').first.should be_an_instance_of(Match)
+    assigns('matches').first.should be_an_instance_of(Match)
   end
 end
 
@@ -29,7 +29,7 @@ describe MatchesController, 'not logged in' do
   end
 end
 
-describe MatchesController, "creating a game (logged in)" do
+describe MatchesController, "creating a match (logged in)" do
   fixtures :users, :accounts
 
   before(:each) do
@@ -39,7 +39,7 @@ describe MatchesController, "creating a game (logged in)" do
   end
   
   def do_post
-    params = { :game => {
+    params = { :match => {
       :score1 => 10, :user11 => @people[0].id, :user12 => @people[1].id,
       :score2 => 8, :user21 => @people[2].id, :user22 => @people[3].id
     } }
@@ -54,7 +54,7 @@ describe MatchesController, "creating a game (logged in)" do
     end
   end
   
-  it "should create a game" do
+  it "should create a match" do
     lambda do
       do_post
     end.should change(Match, :count).by(1)

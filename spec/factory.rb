@@ -1,19 +1,19 @@
 module Factory
-  def self.create_game(options = {})
-    people = options[:people] || Factory.create_people(4)
-    team_scores = options[:team_scores] || [10, 4]
+  def self.create_match(options = {})
+    people = options.delete(:people) || Factory.create_people(4)
+    team_scores = options.delete(:team_scores) || [10, 4]
 
-    game = Match.new
-    game.score1 = team_scores[0]
-    game.user11 = people[0].id
-    game.user12 = people[1].id
+    match = Match.new(options)
+    match.score1 = team_scores[0]
+    match.user11 = people[0].id
+    match.user12 = people[1].id
     
-    game.score2 = team_scores[1]
-    game.user21 = people[2].id
-    game.user22 = people[3].id
+    match.score2 = team_scores[1]
+    match.user21 = people[2].id
+    match.user22 = people[3].id
     
-    game.save!
-    game
+    match.save!
+    match
   end
 
   def self.create_user(attributes = {})
