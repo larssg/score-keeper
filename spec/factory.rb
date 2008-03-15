@@ -3,7 +3,7 @@ module Factory
     people = options[:people] || Factory.create_people(4)
     team_scores = options[:team_scores] || [10, 4]
 
-    game = Matche.new
+    game = Match.new
     game.score1 = team_scores[0]
     game.user11 = people[0].id
     game.user12 = people[1].id

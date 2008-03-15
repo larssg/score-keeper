@@ -6,7 +6,7 @@ namespace :tools do
     desc "Update rankings"
     task :rankings => :environment do
       Account.find(:all).each do |account|
-        Matche.reset_rankings(account)
+        Match.reset_rankings(account)
       end
     end
   end
@@ -31,7 +31,7 @@ namespace :tools do
         score[0] = score[1] + 2 if score[1] >= 9
         score = score.sort_by{ rand }
 
-        game = Matche.new
+        game = Match.new
         game.teams_from_params([
           { :score => score[0], :members => [ players[0].id, players[1].id ] },
           { :score => score[1], :members => [ players[2].id, players[3].id ] }])
