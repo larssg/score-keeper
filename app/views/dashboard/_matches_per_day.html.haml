@@ -10,3 +10,5 @@
         %td.date= day[0].to_date.to_s :long
         %td.matches_played= day[1]
     - reset_cycle
+    
+= image_tag matches_per_day_chart(matches_per_day), :class => 'chart'

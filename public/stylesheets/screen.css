@@ -267,6 +267,8 @@ h3 {
   white-space: nowrap; }
 #bd #matches_per_day .matches_played {
   text-align: right; }
+#bd #matches_per_day .chart {
+  margin-top: 1em; }
 #bd a.rss img {
   position: relative;
   top: 3px; }
