@@ -3,34 +3,26 @@ class MatchesController < ApplicationController
   before_filter :login_required
   cache_sweeper :match_sweeper
   
-  make_resourceful do
-    publish :xml, :json, :csv, :attributes => [ { :teams => [ :score ] } ]
-    build :edit, :create, :update, :destroy
-
-    before :create do
-      current_object.attributes = params[:match]
-      current_object.account = current_account
-      current_object.creator = current_user
-    end
-    
-    response_for :create do
-      flash[:notice] = 'Matches created.'[]
-      redirect_back_or_default root_url
-    end
-    
-    response_for :create_fails do
-      flash[:warning] = 'The match could not be saved. Please try again.'[]
-      redirect_back_or_default root_url
-    end
-  end
-  
   def index
-    load_data_for_index
+    if params[:user_id]
+      @user = current_account.users.find(params[:user_id])
+    else
+      conditions = nil
+      if params[:filter]
+        @filter = User.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
+        if params[:filter].index(',')
+          conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
+        else
+          conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
+        end
+      end
+      @matches = current_account.matches.paginate_recent(:include => { :teams => :memberships }, :conditions => conditions, :page => params[:page])
+      @match = current_account.matches.build
+    end
     
     respond_to do |format|
       format.html # index.haml
       format.atom { render :layout => false } # index.atom.builder
-      format.rss { render :layout => false } # index.rss.builder
       format.xml do
         if params[:user_id]
           @memberships = @user.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
@@ -51,25 +43,37 @@ class MatchesController < ApplicationController
     @comment = @match.comments.build
   end
   
-  protected
-  def load_data_for_index
-    if params[:user_id]
-      @user = current_account.users.find(params[:user_id])
+  def new
+    @match = current_account.matches.build
+  end
+  
+  def create
+    @match = current_account.matches.build(params[:match])
+    @match.creator = current_user
+    if @match.save
+      flash[:notice] = 'Match added successfully.'[]
+      redirect_back_or_default root_url
     else
-      conditions = nil
-      if params[:filter]
-        @filter = User.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
-        if params[:filter].index(',')
-          conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
-        else
-          conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
-        end
-      end
-      @matches = current_account.matches.paginate_recent(:include => { :teams => :memberships }, :conditions => conditions, :page => params[:page])
-      @match = current_model.new
+      flash[:warning] = 'The match could not be saved. Please try again.'[]
+      redirect_back_or_default root_url
     end
   end
   
+  def edit
+    @match = current_account.matches.find(params[:id])
+  end
+  
+  def update
+    @match = current_account.matches.find(params[:id])
+    if @match.update_attributes(params[:match])
+      flash[:notice] = 'Match updated.'
+      redirect_to matches_url
+    else
+      render :action => 'edit'
+    end
+  end
+  
+  protected
   def render_chart
     time_period = params[:period].to_i
     from = time_period.days.ago
