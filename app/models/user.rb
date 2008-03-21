@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   validates_presence_of :display_name
   
   before_save :encrypt_password
+  after_create :set_feed_token
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -125,6 +126,10 @@ class User < ActiveRecord::Base
     self.remember_token_expires_at = nil
     self.remember_token            = nil
     save(false)
+  end
+  
+  def set_feed_token
+    self.update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s :db}")
   end
 
   protected

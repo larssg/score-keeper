@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 37) do
+ActiveRecord::Schema.define(:version => 38) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(:version => 37) do
     t.boolean  "is_account_admin",                        :default => false
     t.boolean  "enabled",                                 :default => true
     t.integer  "matches_won",                             :default => 0
+    t.string   "feed_token"
   end
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"

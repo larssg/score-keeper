@@ -1,4 +1,5 @@
 class MatchesController < ApplicationController
+  around_filter :login_from_feed_token, :only => [ :index ]
   before_filter :domain_required
   before_filter :login_required
   cache_sweeper :match_sweeper

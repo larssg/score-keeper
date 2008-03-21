@@ -19,6 +19,16 @@ class ApplicationController < ActionController::Base
   def iphone_user_agent?
     request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/]
   end
+  
+  def login_from_feed_token
+    if params[:feed_token] && !logged_in?
+      self.current_user = User.find(params[:feed_token])
+      yield
+      self.current_user = :false
+    else
+      yield
+    end
+  end
 
   def language
     session[:language]
