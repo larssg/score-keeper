@@ -4,7 +4,8 @@ class MatchesController < ApplicationController
   cache_sweeper :match_sweeper
   
   def index
-    if params[:user_id]
+    if params[:user_id] 
+      # used for /users/xxx/matches.graph
       @user = current_account.users.find(params[:user_id])
     else
       @matches = current_account.matches.paginate_recent(params[:filter], :include => { :teams => :memberships }, :page => params[:page])
