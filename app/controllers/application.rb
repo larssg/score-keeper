@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   
   def login_from_feed_token
     if params[:feed_token] && !logged_in?
-      self.current_user = User.find(params[:feed_token])
+      self.current_user = User.find_by_feed_token(params[:feed_token])
       yield
       self.current_user = :false
     else
