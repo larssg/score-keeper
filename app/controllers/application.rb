@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
   
   def login_from_feed_token
-    if params[:feed_token] && !logged_in?
+    if params[:feed_token] && !logged_in? && request.format.to_s == 'application/atom+xml'
       self.current_user = User.find_by_feed_token(params[:feed_token])
       yield
       self.current_user = :false

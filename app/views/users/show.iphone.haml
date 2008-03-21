@@ -1,4 +1,13 @@
 #user.panel{ :title => h(@user.name) }
+  %h2= 'Ranking'[]
+  %fieldset
+    .row
+      %label= 'Points'[]
+      %input{ :type => 'text', :value => @user.ranking }
+    .row
+      %label= 'Position'[]
+      %input{ :type => 'text', :value => @user.position }
+
   %h2= 'Matches'[]
   %fieldset
     .row
