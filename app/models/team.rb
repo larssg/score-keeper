@@ -4,6 +4,15 @@ class Team < ActiveRecord::Base
   belongs_to :match
   before_save :update_cache_values
   
+  def matches_filter(filter)
+    if filter.index(',')
+      return 1 if self.team_ids == filter
+    else
+      return 1 if self.team_ids.index(filter + ',') || self.team_ids.index(',' + filter)
+    end
+    0
+  end
+  
   def winner?
     self.match.winner == self
   end

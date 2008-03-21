@@ -5,6 +5,8 @@ class Match < ActiveRecord::Base
   attr_accessor :score1, :user11, :user12
   attr_accessor :score2, :user21, :user22
 
+  attr_accessor :filter
+
   belongs_to :account
   has_many :teams
   has_many :comments
@@ -36,12 +38,17 @@ class Match < ActiveRecord::Base
     end
     options[:conditions] = conditions if conditions
 
-    find(:all, default_options.merge(options))
+    matches = find(:all, default_options.merge(options))
   end
   
   def self.find_filter_users(filter)
     return unless filter
     User.find(:all, :conditions => ['id IN (?)', filter.split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
+  end
+  
+  def sort_teams_by_filter(filter)
+    return self.teams if filter.blank?
+    self.teams.sort_by { |t| t.matches_filter(filter) }.reverse
   end
   
   def winner

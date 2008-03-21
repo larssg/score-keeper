@@ -1,4 +1,4 @@
-- team.memberships.sort_by(&:id).each_with_index do |membership, index|
+- team.memberships.sort_by { |m| m.user_id }.each_with_index do |membership, index|
   = ' - ' if index == 1
   %span{ :title => membership.points_awarded }
     = user_link(find_user(membership.user_id))

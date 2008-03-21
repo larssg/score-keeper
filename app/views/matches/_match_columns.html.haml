@@ -1,22 +1,22 @@
 %td.members
-  = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => match.teams.first.team_ids)
-  = render :partial => 'matches/members', :locals => { :team => match.teams.first }
+  = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => match.sort_teams_by_filter(params[:filter]).first.team_ids)
+  = render :partial => 'matches/members', :locals => { :team => match.sort_teams_by_filter(params[:filter]).first }
 
 %td.score{ :nowrap => 'nowrap' }
-  - if match.teams.first.score > match.teams.last.score
+  - if match.sort_teams_by_filter(params[:filter]).first.score > match.sort_teams_by_filter(params[:filter]).last.score
     = image_tag('icons/medal_gold_2.png', :class => 'winner')
   - else
     = image_tag('icons/blank.gif', :width => 16, :height => 16, :class => 'loser')
   
-  = match.teams.collect(&:score).join(' - ')
-  - if match.teams.last.score > match.teams.first.score
+  = match.sort_teams_by_filter(params[:filter]).collect(&:score).join(' - ')
+  - if match.sort_teams_by_filter(params[:filter]).last.score > match.sort_teams_by_filter(params[:filter]).first.score
     = image_tag('icons/medal_gold_2.png', :class => 'winner')
   - else
     = image_tag('icons/blank.gif', :width => 16, :height => 16, :class => 'loser')
 
 %td.members
-  = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => match.teams.last.team_ids)
-  = render :partial => 'matches/members', :locals => { :team => match.teams.last }
+  = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => match.sort_teams_by_filter(params[:filter]).last.team_ids)
+  = render :partial => 'matches/members', :locals => { :team => match.sort_teams_by_filter(params[:filter]).last }
   
 %td.comments
   = link_to image_tag('icons/comments.png', :class => 'comments', :alt => 'Comment on this match'[]) + " (#{match.comments_count})", match_path(match)
