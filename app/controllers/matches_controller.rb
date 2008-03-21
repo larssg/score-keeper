@@ -7,16 +7,8 @@ class MatchesController < ApplicationController
     if params[:user_id]
       @user = current_account.users.find(params[:user_id])
     else
-      conditions = nil
-      if params[:filter]
-        @filter = User.find(:all, :conditions => ['id IN (?)', params[:filter].split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
-        if params[:filter].index(',')
-          conditions = ['team_one = ? OR team_two = ?', params[:filter], params[:filter]]
-        else
-          conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", params[:filter] + ',%', '%,' + params[:filter], params[:filter] + ',%', '%,' + params[:filter]]
-        end
-      end
-      @matches = current_account.matches.paginate_recent(:include => { :teams => :memberships }, :conditions => conditions, :page => params[:page])
+      @matches = current_account.matches.paginate_recent(params[:filter], :include => { :teams => :memberships }, :page => params[:page])
+      @filter = current_account.matches.find_filter_users(params[:filter])
       @match = current_account.matches.build
     end
     

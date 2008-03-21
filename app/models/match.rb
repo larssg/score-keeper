@@ -24,9 +24,24 @@ class Match < ActiveRecord::Base
     20
   end
   
-  def self.find_recent(options = {})
+  def self.find_recent(filter, options = {})
     default_options = { :order => 'played_at DESC' }
+
+    if filter
+      if filter.index(',')
+        conditions = ['team_one = ? OR team_two = ?', filter, filter]
+      else
+        conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", filter + ',%', '%,' + filter, filter + ',%', '%,' + filter]
+      end
+    end
+    options[:conditions] = conditions if conditions
+
     find(:all, default_options.merge(options))
+  end
+  
+  def self.find_filter_users(filter)
+    return unless filter
+    User.find(:all, :conditions => ['id IN (?)', filter.split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
   end
   
   def winner
