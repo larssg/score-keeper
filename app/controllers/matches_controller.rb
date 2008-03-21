@@ -15,14 +15,6 @@ class MatchesController < ApplicationController
     respond_to do |format|
       format.html # index.haml
       format.atom { render :layout => false } # index.atom.builder
-      format.xml do
-        if params[:user_id]
-          @memberships = @user.memberships.find(:all, :order => 'memberships.id DESC', :include => :team)
-          render :action => 'user_matches'
-        else
-          render :xml => @matches.to_xml
-        end
-      end
       format.graph do
         render_chart if params[:user_id]
       end
