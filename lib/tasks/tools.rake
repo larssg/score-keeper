@@ -16,8 +16,7 @@ namespace :tools do
     task :people => :environment do
       names = ['Al Pine', 'Barry Tone', 'Bill Board', 'Ed Cetera', 'Gene Ohme', 'Justin Case', 'Norm Al', 'Sal Uthe', 'Tim Berr', 'Wall Russ']
       names.each do |name|
-        first_name, last_name = name.split
-        User.create(:first_name => first_name, :last_name => last_name, :display_name => first_name)
+        User.create(:name => name, :display_name => name.split(' ').first)
       end
     end
     
