@@ -89,8 +89,8 @@ class UsersController < ApplicationController
   
   def forgot_password
     if params[:username] || params[:email]
-      user = User.find_by_login(params[:username]) if params[:username]
-      user ||= User.find_by_email(params[:email]) if params[:email]
+      user = current_account.users.find_by_login(params[:username]) if params[:username]
+      user ||= current_account.users.find_by_email(params[:email]) if params[:email]
       
       unless user.blank?
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
