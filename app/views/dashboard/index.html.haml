@@ -10,13 +10,8 @@
   - if @newbies.size > 0
     = render :partial => 'leaderboard', :locals => { :people => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} matches"[:less_than_matches, current_account.newbie_limit] }
 
-#recent_matches.column.span-12
-  = render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
+= render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
       
-- cache(cache_key('matches_per_day')) do
-  #matches_per_day.column.span-6.last
-    = render :partial => 'matches_per_day', :locals => { :matches_per_day => @matches_per_day }
-
 - content_for :sidebar do
   - cache(cache_key('sidebar')) do
     - unless @leader.nil?
@@ -53,11 +48,5 @@
                 %br
                 = user_link_full find_user(@all_time_low.user_id)
 
-  - if @comments && @comments.size > 0
-    #recent_comments
-      %h3= 'Recent comments'[]
-     
-      - @comments.each do |comment|
-        .comment
-          .user= find_user(comment.user_id).name
-          .body= link_to h(truncate(comment.body.strip, 40)), match_path(comment.match_id, :anchor => "c#{comment.id}")
+    #matches_per_day
+      = render :partial => 'matches_per_day', :locals => { :matches_per_day => @matches_per_day }

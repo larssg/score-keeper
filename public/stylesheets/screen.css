@@ -143,6 +143,28 @@ h3 {
     color: #999999;
     font-weight: normal; }
 
+.list {
+  margin-top: 1.5em; }
+  .list table {
+    width: 100%; }
+    .list table th {
+      border: 0;
+      border-bottom: 1px solid #3399CC;
+      background-color: #77BBDD;
+      padding: 3px;
+      color: #FFFFFF; }
+    .list table td {
+      border: 0;
+      padding: 3px;
+      text-align: left;
+      vertical-align: top; }
+      .list table td img {
+        margin: 0;
+        padding: 0;
+        vertical-align: text-bottom; }
+    .list table tr.even td {
+      background-color: #EEEEEE; }
+
 #bd .bottom_space {
   padding-bottom: 20px; }
 #bd #messages {
@@ -162,27 +184,6 @@ h3 {
   #bd label input {
     display: block;
     margin-bottom: 10px; }
-#bd .list {
-  margin-top: 1.5em; }
-  #bd .list table {
-    width: 100%; }
-    #bd .list table th {
-      border: 0;
-      border-bottom: 1px solid #3399CC;
-      background-color: #77BBDD;
-      padding: 3px;
-      color: #FFFFFF; }
-    #bd .list table td {
-      border: 0;
-      padding: 3px;
-      text-align: left;
-      vertical-align: top; }
-      #bd .list table td img {
-        margin: 0;
-        padding: 0;
-        vertical-align: text-bottom; }
-    #bd .list table tr.even td {
-      background-color: #EEEEEE; }
 #bd #filter {
   margin-top: 1.5em; }
 #bd #matches .score {
@@ -267,10 +268,6 @@ h3 {
   text-align: center; }
 #bd #recent_matches .comments {
   white-space: nowrap; }
-#bd #matches_per_day .matches_played {
-  text-align: right; }
-#bd #matches_per_day .chart {
-  margin-top: 1em; }
 #bd a.rss img {
   position: relative;
   top: 3px; }
@@ -365,6 +362,12 @@ h3 {
     #sidebar .content #leader h3 {
       padding: 0;
       margin: 0; }
+  #sidebar .content #matches_per_day h3 {
+    margin-top: 1.5em; }
+  #sidebar .content #matches_per_day .matches_played {
+    text-align: right; }
+  #sidebar .content #matches_per_day img.chart {
+    margin-top: 1em; }
   #sidebar .content #opponents h3 {
     margin-top: 1.5em; }
   #sidebar .content #opponents .odd {
