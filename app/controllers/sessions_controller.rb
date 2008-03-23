@@ -21,6 +21,19 @@ class SessionsController < ApplicationController
     redirect_back_or_default('/')
   end
   
+  def token_login
+    user = User.find_by_login_token(params[:token])
+    unless user.blank?
+      self.current_user = user
+      user.update_attribute :login_token, nil
+      flash[:notice] = 'You have logged in using a one time login. Please change your password to something you can remember.'
+      redirect_to edit_user_url(user)
+    else
+      flash[:error] = 'The link you tried to use is either wrong or has already been used.'
+      redirect_to login_url
+    end
+  end
+  
   private
   def password_authentication(login, password)
     self.current_user = current_account.users.authenticate(login, password)

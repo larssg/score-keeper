@@ -11,6 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sessions
   
   map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
+  map.token_login 'token_login/:token', :controller => 'sessions', :action => 'token_login'
   
   map.resources :matches do |match|
     match.resources :comments

@@ -89,11 +89,18 @@ class UsersController < ApplicationController
   
   def forgot_password
     if params[:username] || params[:email]
-      flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
-      redirect_to login_url
-    else
-      render :layout => 'public'
+      user = User.find_by_login(params[:username]) if params[:username]
+      user ||= User.find_by_email(params[:email]) if params[:email]
+      
+      unless user.blank?
+        flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
+        user.set_login_token
+        UserNotifier.deliver_forgot_password(user)
+        redirect_to login_url
+        return
+      end
     end
+    render :layout => 'login'
   end
   
   protected
