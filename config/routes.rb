@@ -10,6 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :sessions
   
+  map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
+  
   map.resources :matches do |match|
     match.resources :comments
   end

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :domain_required
-  before_filter :login_required
+  before_filter :login_required, :except => [ :forgot_password ]
   before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
   
   filter_parameter_logging :password
@@ -84,6 +84,15 @@ class UsersController < ApplicationController
     else
       flash[:error] = "Unable to destroy account"
       render :action => 'edit'
+    end
+  end
+  
+  def forgot_password
+    if params[:username] || params[:email]
+      flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
+      redirect_to login_url
+    else
+      render :layout => 'public'
     end
   end
   
