@@ -2,6 +2,7 @@ module Factory
   def self.create_match(options = {})
     people = options.delete(:people) || Factory.create_people(4)
     team_scores = options.delete(:team_scores) || [10, 4]
+    account = options.delete(:account) || self.create_account
 
     match = Match.new(options)
     match.score1 = team_scores[0]
@@ -12,6 +13,7 @@ module Factory
     match.user21 = people[2].id
     match.user22 = people[3].id
     
+    match.account = account
     match.save!
     match
   end
@@ -43,5 +45,13 @@ module Factory
       :email => 'admin@example.com'
     }
     User.create! default_attributes.merge(attributes)
+  end
+  
+  def self.create_account(attributes = {})
+    default_attributes = {
+      :name => 'Account',
+      :domain => 'account'
+    }
+    Account.create! default_attributes.merge(attributes)
   end
 end
