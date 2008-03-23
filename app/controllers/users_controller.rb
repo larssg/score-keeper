@@ -98,6 +98,8 @@ class UsersController < ApplicationController
         UserNotifier.deliver_forgot_password(user)
         redirect_to login_url
         return
+      else
+        flash.now[:error] = 'No user was found with the specified username or e-mail.'
       end
     end
     render :layout => 'login'
