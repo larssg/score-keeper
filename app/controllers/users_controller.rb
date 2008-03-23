@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :domain_required
-  before_filter :login_required
+  before_filter :login_required, :except => [ :forgot_password ]
   before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
   
   filter_parameter_logging :password
@@ -85,6 +85,24 @@ class UsersController < ApplicationController
       flash[:error] = "Unable to destroy account"
       render :action => 'edit'
     end
+  end
+  
+  def forgot_password
+    if params[:username] || params[:email]
+      user = User.find_by_login(params[:username]) if params[:username]
+      user ||= User.find_by_email(params[:email]) if params[:email]
+      
+      unless user.blank?
+        flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
+        user.set_login_token
+        UserNotifier.deliver_forgot_password(user)
+        redirect_to login_url
+        return
+      else
+        flash.now[:error] = 'No user was found with the specified username or e-mail.'
+      end
+    end
+    render :layout => 'login'
   end
   
   protected
