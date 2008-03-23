@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :memberships
   has_many :comments
   belongs_to :mugshot
+  has_many :logs
   
   validates_presence_of     :email
   validates_length_of       :email,    :within => 3..100

@@ -16,6 +16,7 @@ class Match < ActiveRecord::Base
   before_validation_on_create :build_teams
   after_create :update_winners
   after_create :update_rankings
+  after_create :log
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
 
@@ -139,6 +140,14 @@ class Match < ActiveRecord::Base
   end
 
   protected
+  def log
+    self.account.logs.create(:linked_model => self.class.class_name,
+      :linked_id => self.id,
+      :user => self.creator,
+      :message => "#{self.winner.memberships.collect { |m| m.user.name }.join(' and ')} won #{self.winner.score} to #{self.loser.score} over #{self.loser.memberships.collect { |m| m.user.name }.join(' and ')}",
+      :published_at => self.played_at)
+  end
+  
   def set_played_on_and_at
     self.played_at ||= 5.minutes.ago
     self.played_on = self.played_at.to_date

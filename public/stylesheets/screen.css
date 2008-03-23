@@ -258,6 +258,8 @@ h3 {
     float: left;
     width: 48.9%;
     padding-left: 1%; }
+#bd #logs {
+  margin-top: 1.5em; }
 #bd #recent_matches .members {
   width: 40%; }
 #bd #recent_matches .score {

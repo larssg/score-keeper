@@ -1,5 +1,8 @@
 - title 'Dashboard'[]
 
+- if @logs.size > 0
+  = render :partial => 'logs', :locals => { :logs => @logs }
+
 - cache(cache_key) do
   - if @rankings.size > 0
     = render :partial => 'leaderboard', :locals => { :people => @rankings, :start_at => 1, :title => 'Rankings'[], :details => '' }

@@ -44,6 +44,16 @@ module ApplicationHelper
   def user_link_full(user)
     link_to h(user.name), user_path(user), :class => 'user'
   end
+
+  def log_link(log)
+    if log.linked_model == 'Match'
+      link_to h(log.message), match_path(log.linked_id)
+    elsif log.linked_model == 'Comment'
+      link_to h(log.message), match_path(Comment.find(log.linked_id).match_id)
+    else
+      h(log.message)
+    end
+  end
   
   def graph(url)
     out = ''

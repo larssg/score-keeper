@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 39) do
+ActiveRecord::Schema.define(:version => 40) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -29,6 +29,20 @@ ActiveRecord::Schema.define(:version => 39) do
 
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
   add_index "comments", ["match_id"], :name => "index_comments_on_game_id"
+
+  create_table "logs", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "user_id"
+    t.string   "linked_model"
+    t.integer  "linked_id"
+    t.text     "message"
+    t.datetime "published_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "logs", ["account_id"], :name => "index_logs_on_account_id"
+  add_index "logs", ["published_at"], :name => "index_logs_on_published_at"
 
   create_table "matches", :force => true do |t|
     t.datetime "played_at"

@@ -3,6 +3,7 @@ class DashboardController < ApplicationController
   before_filter :login_required
 
   def index
+    @logs = current_account.logs.find(:all, :order => 'published_at DESC', :limit => 5)
     @recent_matches = current_account.matches.find_recent(nil, :limit => 10, :include => { :teams => :memberships })
     @comments = Comment.find(:all, :conditions => { :user_id => current_account.user_ids }, :limit => 5, :order => 'created_at DESC')
 
