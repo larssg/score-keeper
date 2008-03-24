@@ -17,7 +17,7 @@
           %td.user -
           %td.user= user_link_full(team[:players].last)
           %td.user
-            = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => team[:team_ids])
+            = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => team[:team_ids])
           %td.user
             = link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team_ids])
           %td.ranking= team[:total_ranking]

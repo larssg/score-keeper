@@ -13,7 +13,7 @@
     - if @user.mugshot
       .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
 
-    .matchlink= link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], matches_path(:filter => @user.id)
+    .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], matches_path(:filter => @user.id)
 
     #counts
       %p.position

@@ -16,7 +16,7 @@
             = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), user
           = link_to h(user.name), user
 
-    .matchlink= link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this team's matches"[]) + ' ' + 'Show matches'[], matches_path(:filter => @ids.join(','))
+    .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]) + ' ' + 'Show matches'[], matches_path(:filter => @ids.join(','))
       
     #opponents
       %h3= 'Opponents'[]

@@ -8,9 +8,11 @@ class Comment < ActiveRecord::Base
   
   protected
   def log
+    return if self.match.blank? || self.match.account.blank?
     self.match.account.logs.create(:linked_model => self.class.class_name,
       :linked_id => self.id,
       :user => self.user,
-      :message => "#{self.user.name} said: #{self.body}")
+      :message => "#{self.user.name} said: #{self.body}",
+      :published_at => self.created_at)
   end
 end

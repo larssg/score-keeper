@@ -141,6 +141,7 @@ class Match < ActiveRecord::Base
 
   protected
   def log
+    return if self.account.blank?
     self.account.logs.create(:linked_model => self.class.class_name,
       :linked_id => self.id,
       :user => self.creator,
@@ -149,7 +150,7 @@ class Match < ActiveRecord::Base
   end
   
   def set_played_on_and_at
-    self.played_at ||= 5.minutes.ago
+    self.played_at ||= 5.minutes.ago.utc
     self.played_on = self.played_at.to_date
   end
 

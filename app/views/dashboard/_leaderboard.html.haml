@@ -21,7 +21,7 @@
       %tr{ :class => cycle('odd', 'even') }
         %td= index + start_at
         %td
-          = link_to image_tag('icons/sport_soccer.png', :class => 'team', :alt => "Show this user's matches"[]), matches_path(:filter => user.id)
+          = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), matches_path(:filter => user.id)
           = user_link_full(user)
         %td= user.ranking
         %td= user.memberships_count
