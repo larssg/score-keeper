@@ -1,5 +1,5 @@
 atom_feed(:url => formatted_logs_url(:atom)) do |feed|
-  feed.title('Events'[])
+  feed.title('Events for {account}'[:event_for_account, current_account.name])
   feed.updated(@logs.first ? @logs.first.created_at : Time.now.utc)
 
   @logs.each do |log|
