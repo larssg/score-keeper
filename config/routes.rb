@@ -18,6 +18,8 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :teams
   
+  map.resources :logs
+  
   map.resources :accounts
   
   map.connect 'p/:action', :controller => 'pages'

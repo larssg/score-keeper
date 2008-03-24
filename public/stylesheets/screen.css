@@ -179,6 +179,18 @@ h3 {
   border: solid 1px #DD9A24;
   background-color: #FCC;
   border: solid 1px #C66; }
+#bd #logs a.rss {
+  float: right;
+  margin: 0;
+  padding: 0;
+  vertical-align: text-bottom;
+  position: relative;
+  top: -4px; }
+#bd #logs .list {
+  margin: 0;
+  padding: 5px;
+  border-top: 1px solid #999999;
+  border-bottom: 1px solid #999999; }
 #bd #logs a:hover {
   text-decoration: none; }
 #bd #logs img {

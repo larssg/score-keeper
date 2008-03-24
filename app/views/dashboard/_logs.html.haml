@@ -1,4 +1,8 @@
 #logs
-  - @logs.each do |log|
-    .log
-      = log_link log
+  = link_to image_tag('rss.gif'), log_feed_url, :class => 'rss'
+  
+  %h3= 'Events'[]
+  .list
+    - @logs.each do |log|
+      .log
+        = log_link log
