@@ -6,3 +6,6 @@
     - @logs.each do |log|
       .log
         = log_link log
+        
+- content_for :head do
+  = auto_discovery_link_tag :atom, log_feed_url, :title => 'Events for {account}'[:event_for_account, current_account.name]
