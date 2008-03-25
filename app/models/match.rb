@@ -19,6 +19,7 @@ class Match < ActiveRecord::Base
   after_create :log
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
+  after_destroy :remove_log
 
   validates_presence_of :team_one
   validates_presence_of :team_two
@@ -147,6 +148,10 @@ class Match < ActiveRecord::Base
       :user => self.creator,
       :message => "#{self.winner.memberships.collect { |m| m.user.name }.join(' and ')} won #{self.winner.score} to #{self.loser.score} over #{self.loser.memberships.collect { |m| m.user.name }.join(' and ')}",
       :published_at => self.played_at)
+  end
+  
+  def remove_log
+    Log.clear_item_log(self.account, self)
   end
   
   def set_played_on_and_at

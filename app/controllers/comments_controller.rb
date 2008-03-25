@@ -16,7 +16,7 @@ class CommentsController < ApplicationController
         flash[:notice] = 'Comment added successfully.'[]
         redirect_to @match
       else
-        flash[:notice] = 'Unable to save comment.'[]
+        flash[:error] = 'Unable to save comment.'[]
         redirect_to @match
       end
     end
@@ -34,7 +34,11 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.find(params[:id])
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Changes saved successfully.'[]
-      redirect_to @comment.match
+    elsif @comment.body.blank?
+      flash[:warning] = 'Please enter a comment.'[]
+    else
+      flash[:error] = 'An error occured while saving the comment. Please try again.'[]
     end
+    redirect_to @comment.match
   end
 end
