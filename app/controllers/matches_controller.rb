@@ -57,6 +57,18 @@ class MatchesController < ApplicationController
     end
   end
   
+  def destroy
+    @match = current_account.matches.find(params[:id])
+    if !@match.nil? && @match.destroy
+      flash[:notice] = 'Match deleted.'
+      redirect_back_or_default matches_url
+    else
+      flash[:notice] = 'Unable to delete match.'
+      redirect_back_or_default matches_url
+    end
+  end
+  
+  
   protected
   def render_chart
     time_period = params[:period].to_i
