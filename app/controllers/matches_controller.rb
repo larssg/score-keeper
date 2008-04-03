@@ -68,7 +68,6 @@ class MatchesController < ApplicationController
     end
   end
   
-  
   protected
   def render_chart
     time_period = params[:period].to_i
