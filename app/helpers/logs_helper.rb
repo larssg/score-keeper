@@ -14,9 +14,9 @@ module LogsHelper
 
   def log_uri(log)
     if log.linked_model == 'Match'
-      match_path(log.linked_id)
+      match_url(log.linked_id)
     elsif log.linked_model == 'Comment'
-      match_path(Comment.find(log.linked_id).match_id, :anchor => "c#{log.linked_id}")
+      match_url(Comment.find(log.linked_id).match_id, :anchor => "c#{log.linked_id}")
     end
   end
   
