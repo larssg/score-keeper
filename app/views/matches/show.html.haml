@@ -13,7 +13,7 @@
       .mugshot= link_to image_tag(comment.user.mugshot.public_filename(:thumb), :alt => comment.user.name), user_path(comment.user) if comment.user.mugshot
       .info
         %span.index= '#' + (index + 1).to_s + '&nbsp;'
-        %span.user= h(comment.user.name) + '&nbsp;'
+        %span.user= link_to(h(comment.user.name), comment.user) + '&nbsp;'
         %span.time= time_ago_in_words(comment.created_at) + ' ago'
       .content{ :id => "content_#{comment.id}" }
         = render :partial => 'comments/comment', :object => comment
