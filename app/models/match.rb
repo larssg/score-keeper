@@ -49,7 +49,7 @@ class Match < ActiveRecord::Base
   end
   
   def sort_teams_by_filter(filter)
-    return self.teams.sort_by(&:team_ids) if filter.blank?
+    return self.teams.sort_by { |t| t.winner? ? 0 : 1 } if filter.blank?
     self.teams.sort_by { |t| t.matches_filter(filter) }.reverse
   end
   
