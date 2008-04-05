@@ -2,22 +2,22 @@
 %table.form
   %tr
     %td.label= f.label :login
-    %td.field= f.text_field :login
+    %td.field= f.text_field :login, :class => 'text'
     
   %tr
     %td.label= f.label :name, 'Full name'[]
-    %td.field= f.text_field :name
+    %td.field= f.text_field :name, :class => 'text'
 
   %tr
     %td.label= f.label :display_name, 'Display name'[]
     %td.field
-      = f.text_field :display_name
+      = f.text_field :display_name, :class => 'text'
       .notes= "A short version of the user's name, such as first name or nick name."[]
       
   %tr
     %td.label= f.label :email, 'Email'[]
     %td.field
-      = f.text_field :email
+      = f.text_field :email, :class => 'text'
       
   - unless @user.new_record?
     %tr
@@ -29,13 +29,13 @@
   %tr
     %td.label= f.label :password
     %td.field
-      = f.password_field :password
+      = f.password_field :password, :class => 'password'
       - unless @user.new_record?
         .notes= 'Fill out the password fields to change password.'[]
     
   %tr
     %td.label= f.label :password_confirmation, 'Confirm password'[]
-    %td.field= f.password_field :password_confirmation
+    %td.field= f.password_field :password_confirmation, :class => 'password'
 
   - unless @user.new_record?
     %tr

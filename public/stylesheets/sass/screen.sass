@@ -202,8 +202,18 @@ table.form
       :font-size 11px
       :padding 3px 0px
       
-    input
+    input.text, input.password, textarea, select
       :color #555555
+      :border-color #666666 rgb(204, 204, 204) rgb(204, 204, 204)
+      :border-style solid
+      :border-width 1px
+      
+    input.small
+      :width 4em
+    
+    .fieldWithErrors
+      input
+        :background-color #FFFF80
     
   td.label
     :color #66666E
@@ -254,6 +264,34 @@ table.form
       :margin-top 1em
       :padding-bottom 5px
       :border-bottom 1px solid #333333
+
+  #errorExplanation
+    :margin-top 1em
+    :border 1px solid #999999
+  
+    h2
+      :display block
+      :background-color #FF0000
+      :line-height normal
+      :font-size 15px
+      :font-weight bold
+      :padding 6px
+      :margin 0
+      :color #FFFFFF
+
+    p
+      :font-weight bold
+      :margin 0
+      :padding 6px
+      
+    ul
+      :padding 0
+      :padding-left 6px
+      :margin-bottom 0
+      :margin-top 0
+      
+      li
+        :padding-bottom 6px
 
   .bottom_space
     :padding-bottom 20px

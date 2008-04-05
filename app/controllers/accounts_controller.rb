@@ -41,7 +41,6 @@ class AccountsController < ApplicationController
       flash[:notice] = 'Account saved.'[]
       redirect_to root_url
     else
-      flash[:notice] = 'An error occured. Please try again.'[]
       @account = current_account
       render :action => 'edit'
     end

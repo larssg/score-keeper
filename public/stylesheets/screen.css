@@ -166,8 +166,15 @@ table.form {
       color: #66666E;
       font-size: 11px;
       padding: 3px 0px; }
-    table.form td input {
-      color: #555555; }
+    table.form td input.text, table.form td input.password, table.form td textarea, table.form td select {
+      color: #555555;
+      border-color: #666666 rgb(204, 204, 204) rgb(204, 204, 204);
+      border-style: solid;
+      border-width: 1px; }
+    table.form td input.small {
+      width: 4em; }
+    table.form td .fieldWithErrors input {
+      background-color: #FFFF80; }
   table.form td.label {
     color: #66666E;
     font-weight: bold;
@@ -208,6 +215,29 @@ table.form {
   margin-top: 1em;
   padding-bottom: 5px;
   border-bottom: 1px solid #333333; }
+#bd #errorExplanation {
+  margin-top: 1em;
+  border: 1px solid #999999; }
+  #bd #errorExplanation h2 {
+    display: block;
+    background-color: #FF0000;
+    line-height: normal;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px;
+    margin: 0;
+    color: #FFFFFF; }
+  #bd #errorExplanation p {
+    font-weight: bold;
+    margin: 0;
+    padding: 6px; }
+  #bd #errorExplanation ul {
+    padding: 0;
+    padding-left: 6px;
+    margin-bottom: 0;
+    margin-top: 0; }
+    #bd #errorExplanation ul li {
+      padding-bottom: 6px; }
 #bd .bottom_space {
   padding-bottom: 20px; }
 #bd #messages {
