@@ -28,7 +28,10 @@
 %table.form
   %tr
     %td.label= f.label :password
-    %td.field= f.password_field :password
+    %td.field
+      = f.password_field :password
+      - unless @user.new_record?
+        .notes= 'Fill out the password fields to change password.'[]
     
   %tr
     %td.label= f.label :password_confirmation, 'Confirm password'[]

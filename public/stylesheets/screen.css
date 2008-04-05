@@ -166,6 +166,8 @@ table.form {
       color: #66666E;
       font-size: 11px;
       padding: 3px 0px; }
+    table.form td input {
+      color: #555555; }
   table.form td.label {
     color: #66666E;
     font-weight: bold;
