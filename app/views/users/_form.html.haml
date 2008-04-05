@@ -1,38 +1,80 @@
-%label
-  = 'Login'[]
-  = f.text_field :login
+%h3= 'Basics'[]
+%table.form
+  %tr
+    %td.label= f.label :login
+    %td.field= f.text_field :login
+    
+  %tr
+    %td.label= f.label :name, 'Full name'[]
+    %td.field= f.text_field :name
 
-%label
-  = 'Full name'[]
-  = f.text_field :name
+  %tr
+    %td.label= f.label :display_name, 'Display name'[]
+    %td.field
+      = f.text_field :display_name
+      .notes= "A short version of the user's name, such as first name or nick name."[]
+      
+  %tr
+    %td.label= f.label :email, 'Email'[]
+    %td.field
+      = f.text_field :email
+      
+  - unless @user.new_record?
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
 
-%label
-  = 'Display name'[]
-  = f.text_field :display_name
+%h3= 'Password'[]
+%table.form
+  %tr
+    %td.label= f.label :password
+    %td.field= f.password_field :password
+    
+  %tr
+    %td.label= f.label :password_confirmation, 'Confirm password'[]
+    %td.field= f.password_field :password_confirmation
 
-%label
-  = 'Email'[]
-  = f.text_field :email
-
-%label
-  = 'Password'[]
-  = f.password_field :password
-  
-%label
-  = 'Confirm Password'[]
-  = f.password_field :password_confirmation
+  - unless @user.new_record?
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
 
 - fields_for :mugshot do |fi|
-  %label
-    = 'Picture'[]
-    = fi.file_field :uploaded_data
+  %h3= 'Picture'[]
+  %table.form
+    %tr
+      %td.label= f.label :uploaded_data, 'Picture'
+      %td.field
+        = fi.file_field :uploaded_data
+        .notes= 'This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.'[]
+
+    - unless @user.new_record?
+      %tr
+        %td.label &nbsp;
+        %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
 
 - if account_admin?
-  %label
-    = 'Account administrator'[]
-    = f.check_box :is_account_admin
+  %h3= 'Advanced'[]
+  %table.form
+    %tr
+      %td.label= f.label :is_account_admin, 'Account administrator'[]
+      %td.field
+        = f.check_box :is_account_admin
+        .notes= 'Allow the user to edit users and account settings.'[]
 
-- if admin?
-  %label
-    = 'Administrator'[]
-    = f.check_box :is_admin
+    - if admin?
+      %tr
+        %td.label= f.label :is_admin, 'Super administrator'[]
+        %td.field= f.check_box :is_admin
+        
+    - unless @user.new_record?
+      %tr
+        %td.label &nbsp;
+        %td.submit= submit_tag 'Update'[], :disable_with => 'Updating'[] + '&hellip;'
+        
+- if @user.new_record?
+  %h3= 'Create user'[]
+  %table.form
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Create user'[], :disable_with => 'Creating user'[] + '&hellip;'

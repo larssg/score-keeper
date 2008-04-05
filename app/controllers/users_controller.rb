@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     @user.account = current_account
     @user.valid? if params[:user]
     
-    render :layout => 'public'
+    render :layout => 'public' unless logged_in?
   end
   
   def create
