@@ -44,6 +44,15 @@
           %td.against
             %label= 'Goals against'[] + ':'
             = @user.goals_against
+            
+        %tr
+          %td.for
+            %label= 'Goal diff.'[] + ':'
+            = @user.difference
+            
+          %td.against
+            %label= 'Average diff.'[] + ':'
+            = @user.difference_average
 
         - if @all_time_high && @all_time_low
           %tr

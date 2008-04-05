@@ -12,10 +12,7 @@
       %th= 'Won'[]
       %th= 'Lost'[]
       %th= 'Win %'[]
-      %th{ :title => 'Goals for'[] }= 'GF'[]
-      %th{ :title => 'Goals against'[] }= 'GA'[]
-      %th{ :title => 'Goals for - goals against'[] }= '+/-'
-      %th= '+/- ' + 'Average'[]
+      %th{ :title => 'Goal difference average' }= 'Diff. avg.'[]
 
     - people.each_with_index do |user, index|
       %tr{ :class => cycle('odd', 'even') }
@@ -28,8 +25,5 @@
         %td= user.matches_won
         %td= user.matches_lost
         %td= user.winning_percentage.to_s + '%'
-        %td= user.goals_for
-        %td= user.goals_against
-        %td= user.difference
         %td= user.difference_average
     - reset_cycle
