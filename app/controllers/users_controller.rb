@@ -11,11 +11,29 @@ class UsersController < ApplicationController
   end
   
   def show
-    @time_period = params[:period] ? params[:period].to_i : 30
     @user = current_account.users.find(params[:id])
+    @time_period = params[:period] ? params[:period].to_i : 30
     @all_time_high = @user.all_time_high
     @all_time_low = @user.all_time_low
     @matches_per_day = @user.memberships.count(:group => 'matches.played_on', :limit => 10, :order => 'matches.played_on DESC', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
+
+    @team_counts = @user.teams.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
+    @team_wins = @user.teams.count(:group => :team_ids, :conditions => { :won => true })
+    @teams = current_account.teams.find(:all, :group => :team_ids, :conditions => { :team_ids => @team_counts.collect { |tc| tc[0] } })
+    
+    @teams = @teams.collect do |t|
+      { :team => t,
+      :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
+      :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0] }
+    end.sort_by { |t| t[:team].ranking_total }.reverse
+
+    @teams.each do |team|
+      team[:team_mate] = team[:team].team_mate_for(@user)
+      team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
+      team[:wins] = team[:wins].blank? ? 0 : team[:wins][1].blank? ? 0 : team[:wins][1].to_i
+      team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
+    end
+
     render :layout => false if iphone_user_agent?
   end
   

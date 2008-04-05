@@ -7,6 +7,25 @@
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'[]
     = graph(formatted_user_matches_url(@user.id, :graph, :period => @time_period))
+    
+.list
+  %h3= 'Team mates'[]
+
+  %table
+    %tr
+      %th= 'Team mate'[]
+      %th= 'Total ranking'[]
+      %th= 'Matches played'[]
+      %th= 'Matches won'[]
+      %th= 'Percentage won'[]
+      
+    - @teams.each do |team|
+      %tr
+        %td= link_to team[:team_mate].name, team[:team_mate]
+        %td= team[:team].ranking_total.to_i
+        %td= team[:played]
+        %td= team[:wins]
+        %td= team[:win_percentage] + ' %'
 
 - content_for :sidebar do
   .user

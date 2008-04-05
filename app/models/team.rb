@@ -13,6 +13,10 @@ class Team < ActiveRecord::Base
     0
   end
   
+  def team_mate_for(user)
+    team_mate = self.memberships.select { |m| m.user_id != user.id }.first.user
+  end
+  
   def winner?
     self.match.winner == self
   end
