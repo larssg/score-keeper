@@ -130,7 +130,19 @@ textarea {
 h2#page_title {
   display: none;
   margin: 0;
-  padding: 10px; }
+  padding: 0;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0;
+  background: transparent url(/images/h2_bg.gif) repeat-x scroll 0px 4px; }
+  h2#page_title span {
+    background: #FFFFFF none repeat scroll 0% 0%;
+    padding-right: 20px;
+    padding-bottom: 5px; }
+
+.visible h2#page_title {
+  display: block; }
 
 h3 {
   font-size: 13px;
@@ -142,6 +154,36 @@ h3 {
     font-size: 11px;
     color: #999999;
     font-weight: normal; }
+
+form h3 {
+  font-size: 19px;
+  font-weight: normal;
+  margin: 0;
+  margin-bottom: 5px;
+  margin-top: 1em;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #333333; }
+
+table.form {
+  border: 1px solid #CCCCCC;
+  width: 100%; }
+  table.form td {
+    border: 0;
+    background: #F6FBFB none repeat scroll 0% 0%;
+    padding: 6px; }
+    table.form td .notes {
+      color: #66666E;
+      font-size: 11px;
+      padding: 3px 0px; }
+  table.form td.label {
+    color: #66666E;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 20px;
+    text-align: right;
+    width: 25%; }
+  table.form td.field {
+    width: 75%; }
 
 .list {
   margin-top: 1.5em; }

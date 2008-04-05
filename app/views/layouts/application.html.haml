@@ -36,7 +36,13 @@
         = render :partial => 'shared/add_match_form'
   
       - unless @page_title.blank?
-        %h2#page_title= @page_title
+        - if @page_title_options[:show]
+          .visible
+            %h2#page_title
+              %span= @page_title
+        - else
+          %h2#page_title= @page_title
+
       .column.span-24
         #bd.column{ :class => sidebar.blank? ? 'span-24' : 'span-18' }
           - if flash.keys.length > 0

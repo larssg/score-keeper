@@ -1,9 +1,17 @@
+- title 'Account settings', :show => true
+
+
 = error_messages_for :account
 
 - form_for current_account do |f|
-  %p
-    = 'Newbie limit'[]
-    = f.text_field :newbie_limit, :size => 3
+  %h3= 'Basics'
+  %table.form
+    %tr
+      %td.label= 'Newbie limit'[]
+      %td.field
+        = f.text_field :newbie_limit, :size => 3
+        .notes= 'This limit is used to distinguish between newbies and players in normal rankings.'
     
-  %p
-    = submit_tag 'Save account'
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Update'
