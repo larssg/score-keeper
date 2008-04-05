@@ -2,11 +2,11 @@
 %table.form
   %tr
     %td.label= f.label :login
-    %td.field= f.text_field :login, :class => 'text'
+    %td.field= f.text_field :login, :class => 'text required'
     
   %tr
     %td.label= f.label :name, 'Full name'[]
-    %td.field= f.text_field :name, :class => 'text'
+    %td.field= f.text_field :name, :class => 'text required'
 
   %tr
     %td.label= f.label :display_name, 'Display name'[]
@@ -17,7 +17,7 @@
   %tr
     %td.label= f.label :email, 'Email'[]
     %td.field
-      = f.text_field :email, :class => 'text'
+      = f.text_field :email, :class => 'text required'
       
   - unless @user.new_record?
     %tr

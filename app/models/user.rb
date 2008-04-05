@@ -22,7 +22,6 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                    :if => :password_required?
   
   validates_presence_of :name
-  validates_presence_of :display_name
   
   before_save :encrypt_password
   after_create :set_feed_token
@@ -32,6 +31,12 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name
   
   before_destroy :remove_matches
+  before_save :set_display_name
+  
+  def set_display_name
+    return if self.name.blank?
+    self.display_name = self.name.split[0] if self.display_name.blank?
+  end
 
   def self.find_all
     find(:all, :order => 'name, display_name')

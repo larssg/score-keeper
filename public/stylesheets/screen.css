@@ -135,7 +135,7 @@ h2#page_title {
   font-weight: bold;
   margin-top: 1em;
   margin-bottom: 0;
-  background: transparent url(/images/h2_bg.gif) repeat-x scroll 0px 4px; }
+  background: transparent url(../images/h2_bg.gif) repeat-x scroll 0px 4px; }
   h2#page_title span {
     background: #FFFFFF none repeat scroll 0% 0%;
     padding-right: 20px;
@@ -173,6 +173,10 @@ table.form {
       border-width: 1px;
       padding: 2px;
       font-size: 12px; }
+    table.form td input.required {
+      background-image: url(../images/required_bg.gif);
+      background-repeat: no-repeat;
+      background-position: top right; }
     table.form td input.small {
       width: 4em; }
     table.form td .fieldWithErrors input {
