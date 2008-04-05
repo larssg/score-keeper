@@ -155,15 +155,6 @@ h3 {
     color: #999999;
     font-weight: normal; }
 
-form h3 {
-  font-size: 19px;
-  font-weight: normal;
-  margin: 0;
-  margin-bottom: 5px;
-  margin-top: 1em;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #333333; }
-
 table.form {
   border: 1px solid #CCCCCC;
   width: 100%; }
@@ -207,6 +198,14 @@ table.form {
     .list table tr.even td {
       background-color: #EEEEEE; }
 
+#bd form h3 {
+  font-size: 19px;
+  font-weight: normal;
+  margin: 0;
+  margin-bottom: 5px;
+  margin-top: 1em;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #333333; }
 #bd .bottom_space {
   padding-bottom: 20px; }
 #bd #messages {
