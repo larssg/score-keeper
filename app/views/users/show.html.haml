@@ -21,7 +21,7 @@
       %th= 'Percentage won'[]
       
     - @teams.each do |team|
-      %tr
+      %tr{ :class => cycle('odd', 'even') }
         %td= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => team[:team].team_ids)
         %td= link_to team[:team_mate].name, team[:team_mate]
         %td= team[:team].ranking_total.to_i
