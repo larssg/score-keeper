@@ -48,5 +48,4 @@
                 %br
                 = user_link_full find_user(@all_time_low.user_id)
 
-    #matches_per_day
-      = render :partial => 'matches_per_day', :locals => { :matches_per_day => @matches_per_day }
+    = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }

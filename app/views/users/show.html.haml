@@ -63,6 +63,8 @@
               %label= 'Worst ranking'[] + ':'
               = link_to @all_time_low.current_ranking, match_path(@all_time_low.team.match), :class => 'match'
 
+      = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
+
       - admin_area do
         %p
           = link_to 'Edit'[], edit_user_path(@user)

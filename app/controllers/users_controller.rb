@@ -15,6 +15,7 @@ class UsersController < ApplicationController
     @user = current_account.users.find(params[:id])
     @all_time_high = @user.all_time_high
     @all_time_low = @user.all_time_low
+    @matches_per_day = @user.memberships.count(:group => 'matches.played_on', :limit => 10, :order => 'matches.played_on DESC', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
     render :layout => false if iphone_user_agent?
   end
   
