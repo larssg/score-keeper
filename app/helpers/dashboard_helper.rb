@@ -14,11 +14,11 @@ module DashboardHelper
     now = position[:now].to_i
     before = position[:then].to_i
     
-    if now > before
+    if now < before
       return image_tag 'arrow_up.png'
     elsif now == before
       return image_tag 'arrow_right.png'
-    elsif now < before
+    elsif now > before
       return image_tag 'arrow_down.png'
     end
     ''
