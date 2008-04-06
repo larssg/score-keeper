@@ -9,7 +9,7 @@ class MatchesController < ApplicationController
       # used for /users/xxx/matches.graph
       @user = current_account.users.find(params[:user_id])
     else
-      @matches = current_account.matches.paginate(:all,
+      @matches = current_account.matches.paginate(
         Match.recent_options(params[:filter],
           :include => { :teams => :memberships }, 
           :page => params[:page]))
