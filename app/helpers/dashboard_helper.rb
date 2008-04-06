@@ -11,6 +11,7 @@ module DashboardHelper
   end
   
   def position_icon(position)
+    return '' if position.blank?
     if position[:now] > position[:then]
       image_tag 'arrow_up.png'
     elsif position[:now] == position[:then]
