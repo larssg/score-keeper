@@ -25,7 +25,7 @@ class UsersController < ApplicationController
       { :team => t,
       :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
       :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0] }
-    end.sort_by { |t| t[:team].ranking_total }.reverse
+    end
 
     @teams.each do |team|
       team[:team_mate] = team[:team].team_mate_for(@user)
@@ -33,6 +33,8 @@ class UsersController < ApplicationController
       team[:wins] = team[:wins].blank? ? 0 : team[:wins][1].blank? ? 0 : team[:wins][1].to_i
       team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
     end
+    
+    @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
 
     render :layout => false if iphone_user_agent?
   end
