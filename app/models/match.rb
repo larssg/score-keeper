@@ -29,7 +29,7 @@ class Match < ActiveRecord::Base
     20
   end
   
-  def self.find_recent(filter, options = {})
+  def self.recent_options(filter, options = {})
     default_options = { :order => 'played_at DESC' }
 
     if filter
@@ -40,8 +40,12 @@ class Match < ActiveRecord::Base
       end
     end
     options[:conditions] = conditions if conditions
-
-    matches = find(:all, default_options.merge(options))
+    
+    default_options.merge(options)
+  end
+  
+  def self.find_recent(filter, options = {})
+    matches = find(:all, recent_options(filter, options))
   end
   
   def self.find_filter_users(filter)
