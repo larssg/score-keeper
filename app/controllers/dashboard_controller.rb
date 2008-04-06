@@ -25,7 +25,7 @@ class DashboardController < ApplicationController
         last_month.positions.each_with_index do |user_id, index|
           @positions[user_id] = {}
           @positions[user_id][:now] = find_user(user_id).position
-          @positions[user_id][:then] = index + 1 if find_user(user_id).created_at <= last_month.played_at
+          @positions[user_id][:then] = index + 1
         end
       end
     end

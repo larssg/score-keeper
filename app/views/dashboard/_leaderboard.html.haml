@@ -19,8 +19,11 @@
       %tr{ :class => cycle('odd', 'even') }
         %td= index + start_at
         %td
-          = position_icon(@positions[user.id])
-          = '(' + @positions[user.id][:then].to_s + ')'
+          - if user.created_at <= 30.days.ago
+            = position_icon(@positions[user.id])
+            = '(' + @positions[user.id][:then].to_s + ')'
+          - else
+            &nbsp;
         %td
           = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), matches_path(:filter => user.id)
           = user_link_full(user)
