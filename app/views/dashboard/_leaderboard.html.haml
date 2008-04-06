@@ -21,7 +21,7 @@
         %td= index + start_at
         - if start_at == 1
           %td
-            - if user.created_at <= 30.days.ago
+            - if user.created_at <= 7.days.ago
               = position_icon(@positions[user.id])
               = '(' + @positions[user.id][:then].to_s + ')' unless @positions[user.id].blank?
             - else
@@ -38,4 +38,4 @@
     - reset_cycle
     
   - if start_at == 1
-    .notes= "Numbers in parenthesis: user's position 30 days ago. The arrow indicates position movement."[]
+    .notes= "Numbers in parenthesis: user's position 7 days ago. The arrow indicates position movement."[]

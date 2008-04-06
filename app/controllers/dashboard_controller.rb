@@ -18,10 +18,10 @@ class DashboardController < ApplicationController
       @all_time_high = Membership.all_time_high(current_account)
       @all_time_low = Membership.all_time_low(current_account)
 
-      # Get positions a month ago
+      # Get positions 7 days ago
       # FIXME: Newbies...
       @positions = {}
-      last_month = current_account.matches.find(:first, :order => 'played_at ASC', :conditions => ['played_at >= ?', 1.month.ago])
+      last_month = current_account.matches.find(:first, :order => 'played_at ASC', :conditions => ['played_at >= ?', 7.days.ago])
       unless last_month.blank?
         last_month.positions.each_with_index do |user_id, index|
           @positions[user_id] = {}
