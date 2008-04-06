@@ -11,14 +11,16 @@ module DashboardHelper
   end
   
   def position_icon(position)
-    if position[:now] > position[:then]
+    now = position[:now].to_i
+    before = position[:then].to_i
+    
+    if now > before
       image_tag 'arrow_up.png'
-    elsif position[:now] == position[:then]
+    elsif now == before
       image_tag 'arrow_right.png'
-    elsif position[:now] < position[:then]
+    elsif now < before
       image_tag 'arrow_down.png'
-    else
-      ''
     end
+    ''
   end
 end
