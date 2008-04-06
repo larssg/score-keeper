@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 41) do
+ActiveRecord::Schema.define(:version => 43) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 41) do
     t.datetime "played_on"
     t.integer  "comments_count", :default => 0
     t.integer  "account_id"
+    t.string   "position_ids"
   end
 
   add_index "matches", ["played_on"], :name => "index_games_on_played_on"

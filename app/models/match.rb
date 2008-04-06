@@ -16,6 +16,7 @@ class Match < ActiveRecord::Base
   before_validation_on_create :build_teams
   after_create :update_winners
   after_create :update_rankings
+  after_create :update_positions
   after_create :log
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
@@ -60,6 +61,14 @@ class Match < ActiveRecord::Base
   def loser
     @loser ||= self.winner.other
   end
+  
+  def positions
+    self.position_ids.blank? ? nil : self.position_ids.split(',')
+  end
+  
+  def positions=(users)
+    self.position_ids = users.collect(&:id).join(',')
+  end
 
   def validate
     user_ids = []
@@ -81,6 +90,7 @@ class Match < ActiveRecord::Base
     account.users.update_all("ranking = 2000")
     account.matches.find(:all).each do |match|
       match.update_rankings
+      match.update_positions
     end
   end
   
@@ -106,6 +116,12 @@ class Match < ActiveRecord::Base
       
       team.update_attribute :won, team == self.winner
     end
+  end
+  
+  def update_positions
+    self.positions = self.account.user_positions
+    # Using update_all to avoid callbacks being called
+    Match.update_all("position_ids = '#{self.position_ids}'", "matches.id = #{self.id}")
   end
   
   def update_after_destroy

@@ -70,14 +70,8 @@ class User < ActiveRecord::Base
   end
   
   def position
-    ranked = self.account.ranked_users
-    ranked.each_with_index do |user, index|
+    self.account.user_positions.each_with_index do |user, index|
       return index + 1 if user.id == self.id
-    end
-    
-    newbies = self.account.newbie_users
-    newbies.each_with_index do |user, index|
-      return index + 1 + ranked.size if user.id == self.id
     end
   end
   
