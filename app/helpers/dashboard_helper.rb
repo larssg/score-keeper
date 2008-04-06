@@ -11,6 +11,8 @@ module DashboardHelper
   end
   
   def position_icon(position)
+    return '' if position.blank?
+    
     now = position[:now].to_i
     before = position[:then].to_i
     

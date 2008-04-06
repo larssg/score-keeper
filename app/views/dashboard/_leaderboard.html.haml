@@ -21,7 +21,7 @@
         %td
           - if user.created_at <= 30.days.ago
             = position_icon(@positions[user.id])
-            = '(' + @positions[user.id][:then].to_s + ')'
+            = '(' + @positions[user.id][:then].to_s + ')' unless @positions[user.id].blank?
           - else
             &nbsp;
         %td

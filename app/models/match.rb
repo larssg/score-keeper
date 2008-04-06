@@ -87,9 +87,14 @@ class Match < ActiveRecord::Base
 
   def self.reset_rankings(account)
     return if account.nil?
-    account.users.update_all("ranking = 2000")
+    account.users.update_all("users.ranking = 2000, users.memberships_count = 0")
     account.matches.find(:all).each do |match|
       match.update_rankings
+      match.teams.each do |team|
+        team.memberships.each do |membership|
+          User.update_all("users.memberships_count = users.memberships_count + 1", "id = #{membership.user_id}")
+        end
+      end
       match.update_positions
     end
   end
@@ -119,10 +124,9 @@ class Match < ActiveRecord::Base
   end
   
   def update_positions
-    self.account.reset_positions!
-    self.positions = self.account.user_positions
+    self.positions = self.account.ranked_users
     # Using update_all to avoid callbacks being called
-    Match.update_all("position_ids = '#{self.position_ids}'", "matches.id = #{self.id}")
+    Match.update_all("matches.position_ids = '#{self.position_ids}'", "matches.id = #{self.id}")
   end
   
   def update_after_destroy

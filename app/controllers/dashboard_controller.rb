@@ -19,6 +19,7 @@ class DashboardController < ApplicationController
       @all_time_low = Membership.all_time_low(current_account)
 
       # Get positions a month ago
+      # FIXME: Newbies...
       @positions = {}
       last_month = current_account.matches.find(:first, :order => 'played_at ASC', :conditions => ['played_at >= ?', 1.month.ago])
       unless last_month.blank?
