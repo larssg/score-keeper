@@ -96,7 +96,7 @@ class Match < ActiveRecord::Base
       match.update_rankings
       match.teams.each do |team|
         team.memberships.each do |membership|
-          User.update_all("users.memberships_count = users.memberships_count + 1", "id = #{membership.user_id}")
+          User.update_all("users.memberships_count = users.memberships_count + 1", "users.id = #{membership.user_id}")
         end
       end
       match.update_positions
