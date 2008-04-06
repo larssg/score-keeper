@@ -33,9 +33,12 @@
 
 - content_for :sidebar do
   .user
+    - if account_admin?
+      .edit_user_link= link_to 'Edit'[], edit_user_path(@user)
+
     - if @user.mugshot
       .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
-
+    
     .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], matches_path(:filter => @user.id)
 
     #counts
@@ -87,7 +90,3 @@
               = link_to @all_time_low.current_ranking, match_path(@all_time_low.team.match), :class => 'match'
 
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
-
-      - admin_area do
-        %p
-          = link_to 'Edit'[], edit_user_path(@user)

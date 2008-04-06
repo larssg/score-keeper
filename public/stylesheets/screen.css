@@ -481,6 +481,8 @@ table.form {
       margin-bottom: 1em; }
       #sidebar .content #recent_comments .comment .user {
         font-weight: bold; }
+  #sidebar .content .user .edit_user_link, #sidebar .content .team .edit_user_link {
+    float: right; }
   #sidebar .content .user .matchlink, #sidebar .content .team .matchlink {
     margin-top: 1.5em; }
     #sidebar .content .user .matchlink a, #sidebar .content .team .matchlink a {
