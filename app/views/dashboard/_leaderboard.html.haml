@@ -6,7 +6,8 @@
   %table
     %tr
       %th= '&nbsp;'
-      %th= '&nbsp;'
+      - if start_at == 1
+        %th= '&nbsp;'
       %th= 'Person'[]
       %th= 'Ranking'[]
       %th= 'Played'[]
@@ -18,12 +19,13 @@
     - people.each_with_index do |user, index|
       %tr{ :class => cycle('odd', 'even') }
         %td= index + start_at
-        %td
-          - if user.created_at <= 30.days.ago
-            = position_icon(@positions[user.id])
-            = '(' + @positions[user.id][:then].to_s + ')' unless @positions[user.id].blank?
-          - else
-            &nbsp;
+        - if start_at == 1
+          %td
+            - if user.created_at <= 30.days.ago
+              = position_icon(@positions[user.id])
+              = '(' + @positions[user.id][:then].to_s + ')' unless @positions[user.id].blank?
+            - else
+              &nbsp;
         %td
           = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), matches_path(:filter => user.id)
           = user_link_full(user)
