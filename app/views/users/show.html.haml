@@ -17,7 +17,6 @@
       %th &nbsp;
       %th= 'Team mate'[]
       %th= 'Ranking'[]
-      %th= 'Team ranking'[]
       %th= 'Matches played'[]
       %th= 'Matches won'[]
       %th= 'Percentage won'[]
@@ -28,7 +27,6 @@
         %td= link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team].team_ids)
         %td= link_to team[:team_mate].name, team[:team_mate]
         %td= team[:team_mate].ranking.to_i
-        %td= team[:team].ranking_total.to_i
         %td= team[:played]
         %td= team[:wins]
         %td= team[:win_percentage] + ' %'
