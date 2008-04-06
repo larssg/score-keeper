@@ -17,7 +17,7 @@ module DashboardHelper
       image_tag 'arrow_right.png'
     elsif position[:now] < position[:then]
       image_tag 'arrow_down.png'
-    else position[:then].blank?
+    else
       ''
     end
   end
