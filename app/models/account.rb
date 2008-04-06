@@ -26,6 +26,12 @@ class Account < ActiveRecord::Base
     @enabled_user_ids ||= self.enabled_users.collect { |u| u.id }
   end
   
+  def reset_positions!
+    @ranked_users = nil
+    @newbie_limit = nil
+    @user_positions = nil
+  end
+  
   def ranked_users
     @ranked_users ||= self.users.find(:all, :order => 'ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count >= ?', true, self.newbie_limit])
   end

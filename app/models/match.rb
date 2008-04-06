@@ -119,6 +119,7 @@ class Match < ActiveRecord::Base
   end
   
   def update_positions
+    self.account.reset_positions!
     self.positions = self.account.user_positions
     # Using update_all to avoid callbacks being called
     Match.update_all("position_ids = '#{self.position_ids}'", "matches.id = #{self.id}")
