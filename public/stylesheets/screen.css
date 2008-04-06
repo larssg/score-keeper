@@ -212,6 +212,10 @@ table.form {
         vertical-align: text-bottom; }
     .list table tr.even td {
       background-color: #EEEEEE; }
+  .list .notes {
+    font-size: 11px;
+    color: #999999;
+    font-weight: normal; }
 
 #bd form h3 {
   font-size: 19px;

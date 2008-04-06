@@ -27,14 +27,14 @@ class Account < ActiveRecord::Base
   end
   
   def ranked_users
-    self.users.find(:all, :order => 'ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count >= ?', true, self.newbie_limit])
+    @ranked_users ||= self.users.find(:all, :order => 'ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count >= ?', true, self.newbie_limit])
   end
   
   def newbie_users
-    self.users.find(:all, :order => 'memberships_count DESC, ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count < ?', true, self.newbie_limit])
+    @newbie_users ||= self.users.find(:all, :order => 'memberships_count DESC, ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count < ?', true, self.newbie_limit])
   end  
   
   def user_positions
-    self.ranked_users + self.newbie_users
+    @user_positions ||= self.ranked_users + self.newbie_users
   end
 end

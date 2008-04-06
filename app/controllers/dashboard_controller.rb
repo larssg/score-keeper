@@ -17,6 +17,15 @@ class DashboardController < ApplicationController
       @goals_scored = current_account.users.sum(:goals_for) / 2
       @all_time_high = Membership.all_time_high(current_account)
       @all_time_low = Membership.all_time_low(current_account)
+
+      # Get positions a month ago
+      @positions = {}
+      last_month = current_account.matches.find(:first, :order => 'played_at ASC', :conditions => ['played_at >= ?', 1.month.ago])
+      last_month.positions.each_with_index do |user_id, index|
+        @positions[user_id] = {}
+        @positions[user_id][:now] = find_user(user_id).position
+        @positions[user_id][:then] = index + 1 if find_user(user_id).created_at <= last_month.played_at
+      end
     end
   end
 

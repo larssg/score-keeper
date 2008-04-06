@@ -9,4 +9,16 @@ module DashboardHelper
       return lc.to_url
     end
   end
+  
+  def position_icon(position)
+    if position[:now] > position[:then]
+      image_tag 'arrow_up.png'
+    elsif position[:now] == position[:then]
+      image_tag 'arrow_right.png'
+    elsif position[:now] < position[:then]
+      image_tag 'arrow_down.png'
+    else position[:then].blank?
+      ''
+    end
+  end
 end

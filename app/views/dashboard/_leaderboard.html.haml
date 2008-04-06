@@ -6,17 +6,21 @@
   %table
     %tr
       %th= '&nbsp;'
+      %th= '&nbsp;'
       %th= 'Person'[]
       %th= 'Ranking'[]
       %th= 'Played'[]
       %th= 'Won'[]
       %th= 'Lost'[]
       %th= 'Win %'[]
-      %th{ :title => 'Goal difference average' }= 'Diff. avg.'[]
+      %th{ :title => 'Goal difference average'[] }= 'Diff. avg.'[]
 
     - people.each_with_index do |user, index|
       %tr{ :class => cycle('odd', 'even') }
         %td= index + start_at
+        %td
+          = position_icon(@positions[user.id])
+          = '(' + @positions[user.id][:then].to_s + ')'
         %td
           = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), matches_path(:filter => user.id)
           = user_link_full(user)
@@ -27,3 +31,5 @@
         %td= user.winning_percentage.to_s + '%'
         %td= user.difference_average
     - reset_cycle
+    
+  .notes= "Numbers in parenthesis: user's position 30 days ago. The arrow indicates position movement."[]

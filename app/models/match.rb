@@ -63,7 +63,7 @@ class Match < ActiveRecord::Base
   end
   
   def positions
-    self.position_ids.blank? ? nil : self.position_ids.split(',')
+    self.position_ids.blank? ? nil : self.position_ids.split(',').collect(&:to_i)
   end
   
   def positions=(users)
