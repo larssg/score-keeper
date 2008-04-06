@@ -288,9 +288,8 @@ table.form {
 #bd #matches .comments {
   white-space: nowrap; }
 #bd #match {
+  margin-top: 1.5em;
   margin-bottom: 1.5em; }
-  #bd #match h3 {
-    margin-top: 1.5em; }
 #bd #comments {
   border-top: 1px solid #CCCCCC; }
   #bd #comments .odd {

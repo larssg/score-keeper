@@ -1,8 +1,6 @@
-- title match_title(@match)
+- title match_title(@match), :show => true
 
 #match
-  %h3= h(match_title(@match))
-  
   %label= 'Played at' + ':'
   = @match.played_at.to_s :long
   
