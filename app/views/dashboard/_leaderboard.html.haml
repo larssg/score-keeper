@@ -35,4 +35,5 @@
         %td= user.difference_average
     - reset_cycle
     
-  .notes= "Numbers in parenthesis: user's position 30 days ago. The arrow indicates position movement."[]
+  - if start_at == 1
+    .notes= "Numbers in parenthesis: user's position 30 days ago. The arrow indicates position movement."[]
