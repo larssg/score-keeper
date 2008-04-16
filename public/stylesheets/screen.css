@@ -541,6 +541,12 @@ body.login, body.public {
 body.login .container {
   width: 470px; }
 
+body.public h1 {
+  font-size: 19px; }
+body.public h2 {
+  font-size: 17px; }
+body.public h3 {
+  font-size: 15px; }
 body.public #new_account {
   margin-bottom: 1em; }
   body.public #new_account .field {
