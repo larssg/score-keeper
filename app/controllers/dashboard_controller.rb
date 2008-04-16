@@ -22,7 +22,7 @@ class DashboardController < ApplicationController
       # FIXME: Newbies...
       @positions = {}
       last_month = current_account.matches.find(:first, :order => 'played_at ASC', :conditions => ['played_at >= ?', 7.days.ago])
-      unless last_month.blank?
+      unless last_month.blank? || last_month.positions.blank?
         last_month.positions.each_with_index do |user_id, index|
           @positions[user_id] = {}
           @positions[user_id][:now] = find_user(user_id).position
