@@ -7,7 +7,7 @@
       %th= 'E-mail'
       %th= 'Matches'
       %th= 'Actions'
-    - @account.users.each do |user|
+    - @account_users.each do |user|
       %tr{ :class => cycle('odd', 'even') }
         %td= h(user.name)
         %td= user.display_name

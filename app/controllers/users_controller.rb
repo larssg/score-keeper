@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   
   def show
     @user = current_account.users.find(params[:id])
+
     @time_period = params[:period] ? params[:period].to_i : 30
     @all_time_high = @user.all_time_high
     @all_time_low = @user.all_time_low
@@ -37,6 +38,9 @@ class UsersController < ApplicationController
     @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
 
     render :layout => false if iphone_user_agent?
+  rescue ActiveRecord::RecordNotFound
+    flash[:warning] = "No user was found with that ID (#{params[:id]})."
+    redirect_to root_url
   end
   
   def new
@@ -69,6 +73,9 @@ class UsersController < ApplicationController
   
   def edit
     @user = current_account.users.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:warning] = "No user was found with that ID (#{params[:id]})."
+    redirect_to root_url
   end
   
   def update

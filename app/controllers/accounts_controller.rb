@@ -9,6 +9,7 @@ class AccountsController < ApplicationController
   
   def show
     @account = Account.find(params[:id])
+    @account_users = @account.users.find(:all, :order => 'name')
   end
   
   def new
