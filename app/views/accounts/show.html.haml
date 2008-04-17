@@ -11,6 +11,6 @@
       %tr{ :class => cycle('odd', 'even') }
         %td= h(user.name)
         %td= user.display_name
-        %td= user.email
+        %td= mail_to user.email
         %td= user.memberships_count
         %td= link_to 'Impersonate', impersonate_session_path(user), :method => :put
