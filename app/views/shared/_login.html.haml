@@ -1,4 +1,6 @@
 #user
+  %span.current_user= current_user.login
+  |
   - unless session[:real_user_id].blank?
     = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
     |

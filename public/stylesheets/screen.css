@@ -47,6 +47,8 @@ textarea {
     color: #FFFFFF; }
     #hd #links a {
       color: #FFFFFF; }
+    #hd #links .current_user {
+      font-weight: bold; }
     #hd #links #user {
       display: inline; }
     #hd #links #languages {
