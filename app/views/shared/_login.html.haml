@@ -1,4 +1,7 @@
 #user
+  - unless session[:real_user_id].blank?
+    = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
+    |
   = link_to 'Profile'[], edit_user_path(current_user)
   - if account_admin?
     |

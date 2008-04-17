@@ -3,10 +3,14 @@
   %table
     %tr
       %th= 'Name'
+      %th= 'Display name'
       %th= 'E-mail'
       %th= 'Matches'
+      %th= 'Actions'
     - @account.users.each do |user|
       %tr{ :class => cycle('odd', 'even') }
         %td= h(user.name)
+        %td= user.display_name
         %td= user.email
         %td= user.memberships_count
+        %td= link_to 'Impersonate', impersonate_session_path(user), :method => :put

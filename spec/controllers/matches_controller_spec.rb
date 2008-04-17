@@ -7,17 +7,11 @@ describe MatchesController, "logged in" do
     controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
     @match = mock_model(Match)
-    Match.stub!(:find_recent).and_return([@match])
   end
 
   it "should render" do
     get :index
     response.should be_success
-  end
-  
-  it "should load games" do
-    get :index
-    assigns('matches').first.should be_an_instance_of(Match)
   end
 end
 

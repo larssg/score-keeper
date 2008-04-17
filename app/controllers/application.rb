@@ -60,6 +60,7 @@ class ApplicationController < ActionController::Base
   helper_method :cache_key
   
   def domain_required
+    return unless session[:real_user_id].nil? # Impersonating a user
     return true if disable_subdomains?
     redirect_to public_root_url and return false if account_subdomain.blank?
     redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_user.account.domain != account_subdomain
@@ -69,9 +70,13 @@ class ApplicationController < ActionController::Base
   
   def current_account
     if @current_account.nil?
-      unless account_subdomain.nil?
-        @current_account ||= Account.find_by_domain(account_subdomain)
-        redirect_to account_url(current_account.account.domain) if logged_in? && current_user.account.domain != @current_account.domain
+      if session[:real_user_id].nil?
+        unless account_subdomain.nil?
+          @current_account ||= Account.find_by_domain(account_subdomain)
+          redirect_to account_url(current_account.account.domain) if logged_in? && current_user.account.domain != @current_account.domain
+        end
+      else
+        @current_account ||= current_user.account
       end
     end
     return @current_account
@@ -123,6 +128,10 @@ class ApplicationController < ActionController::Base
   
   def must_be_admin
     redirect_to root_url unless logged_in? && current_user.is_admin?
+  end
+  
+  def must_be_impersonating
+    redirect_to root_url if session[:real_user_id].blank?
   end
   
   private

@@ -2,6 +2,8 @@
 class SessionsController < ApplicationController
   layout 'login'
   before_filter :domain_required
+  before_filter :must_be_admin, :only => [ :impersonate ]
+  before_filter :must_be_impersonating, :only => [ :unimpersonate ]
   
   filter_parameter_logging :password
 
@@ -32,6 +34,23 @@ class SessionsController < ApplicationController
       flash[:error] = 'The link you tried to use is either wrong or has already been used.'
       redirect_to login_url
     end
+  end
+  
+  def impersonate
+    session[:real_user_id] ||= current_user.id
+    user = User.find(params[:id])
+    unless user.nil?
+      self.current_user = user
+      flash[:notice] = "Impersonating #{user.name} from #{user.account.name}"
+      redirect_to root_url
+    end
+  end
+  
+  def unimpersonate
+    self.current_user = User.find(session[:real_user_id])
+    session[:real_user_id] = nil
+    flash[:notice] = 'You are now yourself!'
+    redirect_to root_url
   end
   
   private

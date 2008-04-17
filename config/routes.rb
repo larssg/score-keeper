@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users do |user|
     user.resources :matches
   end
-  map.resources :sessions
+  map.resources :sessions, :member => { :impersonate => :put }, :collection => { :unimpersonate => :put }
   
   map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
   map.token_login 'token_login/:token', :controller => 'sessions', :action => 'token_login'
