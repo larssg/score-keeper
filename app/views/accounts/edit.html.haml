@@ -6,6 +6,11 @@
   %h3= 'Basics'[]
   %table.form
     %tr
+      %td.label= 'Name'[]
+      %td.field
+        = f.text_field :name, :class => 'text required'
+
+    %tr
       %td.label= 'Newbie limit'[]
       %td.field
         = f.text_field :newbie_limit, :class => 'text required small'
