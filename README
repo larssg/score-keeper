@@ -2,10 +2,6 @@
 
 Score Keeper is a very simple web app for keeping score, rankings, etc. for games.
 
-== Required gems
-
-* gchartrb
-
 == Credits
 
 Score Keeper is created and maintained by Lars Sehested (www.larssehested.com)
