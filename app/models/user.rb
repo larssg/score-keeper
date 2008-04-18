@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   attr_accessor :password
   
   belongs_to :account
+  has_many :game_participations
+  has_many :games, :through => :game_participations
   has_many :memberships
   has_many :comments
   belongs_to :mugshot
@@ -43,24 +45,6 @@ class User < ActiveRecord::Base
 
   def self.find_all
     find(:all, :order => 'name, display_name')
-  end
-  
-  def matches_lost
-    memberships_count - matches_won
-  end
-
-  def winning_percentage
-    return 0.0 if memberships_count == 0
-    ((matches_won.to_f / memberships_count.to_f) * 1000).to_i / 10.to_f
-  end
-  
-  def difference
-    goals_for - goals_against
-  end
-  
-  def difference_average
-    return 0.0 if memberships_count == 0
-    ((10 * difference) / memberships_count) / 10.0
   end
 
   def all_time_high

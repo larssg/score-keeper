@@ -1,6 +1,6 @@
 - title h(@user.name), :show => true
 
-- if @user.memberships_count > 0
+- if @user.matches_played > 0
   #graph
     %h3= 'Ranking chart'[]
     - form_tag @user, :method => :get do
@@ -53,7 +53,7 @@
             = @user.ranking
           %td.against
             %label= 'Played matches'[] + ':'
-            = @user.memberships_count
+            = @user.matches_played
 
         %tr
           %td.for

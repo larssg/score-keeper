@@ -1,0 +1,12 @@
+.list
+  %table
+    %tr
+      %th= 'Name'[]
+      %th= 'Team size'[]
+      %th= 'Actions'[]
+      
+    - @games.each do |game|
+      %tr
+        %td= h(game.name)
+        %td= game.team_size
+        %td= link_to 'Edit', edit_game_path(game)

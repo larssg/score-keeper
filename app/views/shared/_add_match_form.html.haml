@@ -1,4 +1,4 @@
-- form_for :match, nil, :url => matches_path do |f|
+- form_for :match, nil, :url => game_matches_path(current_game) do |f|
   .team
     %label= 'Team'[] + ':'
     = f.collection_select 'user11', enabled_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }

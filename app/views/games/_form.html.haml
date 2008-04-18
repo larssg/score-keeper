@@ -1,0 +1,36 @@
+%h3= 'Basics'[]
+%table.form
+  %tr
+    %td.label= f.label :name
+    %td.field= f.text_field :name, :class => 'text required'
+    
+  %tr
+    %td.label= f.label :team_size
+    %td.field
+      - if @game.matches.size > 0
+        = @game.team_size
+      - else
+        = f.text_field :team_size, :class => 'text required small'
+
+  - unless @game.new_record?
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
+    
+%h3= 'Details'[]
+%table.form
+  %tr
+    %td.label= 'Rules'[]
+    %td.field
+      = f.text_area :rules, :class => 'text'
+
+  %tr
+    %td.label= 'Newbie limit'[]
+    %td.field
+      = f.text_field :newbie_limit, :class => 'text required small'
+      .notes= 'Number of matches a user must play to be part of normal rankings.'[]
+
+  - unless @game.new_record?
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'

@@ -8,6 +8,7 @@ class Match < ActiveRecord::Base
   attr_accessor :filter
 
   belongs_to :account
+  belongs_to :game
   has_many :teams
   has_many :comments
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
@@ -95,12 +96,12 @@ class Match < ActiveRecord::Base
 
   def self.reset_rankings(account)
     return if account.nil?
-    account.users.update_all("users.ranking = 2000, users.memberships_count = 0")
+    account.users.update_all("users.ranking = 2000, users.matches_played = 0")
     account.matches.find(:all).each do |match|
       match.update_rankings
       match.teams.each do |team|
         team.memberships.each do |membership|
-          User.update_all("users.memberships_count = users.memberships_count + 1", "users.id = #{membership.user_id}")
+          User.update_all("users.matches_played = users.matches_played + 1", "users.id = #{membership.user_id}")
         end
       end
       match.update_positions
@@ -122,7 +123,7 @@ class Match < ActiveRecord::Base
         user.increment(:matches_won) if team == self.winner
         user.goals_for += team.score
         user.goals_against += team.other.score
-        user.memberships_count = Membership.count(:conditions => { :user_id => user.id })
+        user.matches_played = Membership.count(:conditions => { :user_id => user.id })
         
         user.save
       end
@@ -145,7 +146,7 @@ class Match < ActiveRecord::Base
         user.decrement(:matches_won) if team == self.winner
         user.goals_for -= team.score
         user.goals_against -= team.other.score
-        user.decrement(:memberships_count)
+        user.decrement(:matches_played)
         
         user.save
       end

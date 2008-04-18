@@ -7,7 +7,7 @@ module MatchesHelper
     ].join(' ')
   end
   
-  def match_feed_url(options = {})
-    formatted_matches_url(:atom, {:feed_token => current_user.feed_token}.merge(options))
+  def match_feed_url(game, options = {})
+    formatted_game_matches_url(game, :atom, {:feed_token => current_user.feed_token}.merge(options))
   end
 end

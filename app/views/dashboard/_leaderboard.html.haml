@@ -16,25 +16,25 @@
       %th= 'Win %'[]
       %th{ :title => 'Goal difference average'[] }= 'Diff. avg.'[]
 
-    - people.each_with_index do |user, index|
+    - game_participations.each_with_index do |game_participation, index|
       %tr{ :class => cycle('odd', 'even') }
         %td= index + start_at
         - if start_at == 1
           %td
-            - if user.created_at <= 7.days.ago
-              = position_icon(@positions[user.id])
-              = '(' + @positions[user.id][:then].to_s + ')' unless @positions[user.id].blank?
+            - if game_participation.user.created_at <= 7.days.ago
+              = position_icon(@positions[game_participation.user_id])
+              = '(' + @positions[game_participation.user_id][:then].to_s + ')' unless @positions[game_participation.user_id].blank?
             - else
               &nbsp;
         %td
-          = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), matches_path(:filter => user.id)
-          = user_link_full(user)
-        %td= user.ranking
-        %td= user.memberships_count
-        %td= user.matches_won
-        %td= user.matches_lost
-        %td= user.winning_percentage.to_s + '%'
-        %td= user.difference_average
+          = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), game_matches_path(current_game, :filter => game_participation.user_id)
+          = user_link_full(game_participation.user)
+        %td= game_participation.ranking
+        %td= game_participation.matches_played
+        %td= game_participation.matches_won
+        %td= game_participation.matches_lost
+        %td= game_participation.winning_percentage.to_s + '%'
+        %td= game_participation.difference_average
     - reset_cycle
     
   - if start_at == 1

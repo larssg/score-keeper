@@ -18,7 +18,7 @@
       .clear
         %hd
 
-  - form_for @comment, :url => match_comments_path(@match) do |f|
+  - form_for @comment, :url => game_match_comments_path(@match.game_id, @match) do |f|
     = render :partial => 'comments/form', :locals => { :f => f }
       
     %p

@@ -69,6 +69,12 @@ class ApplicationController < ActionController::Base
     true
   end
   
+  def current_game
+    @current_game ||= current_account.games.find(session[:current_game_id]) if session[:current_game_id]
+    @current_game ||= current_account.games.first
+  end
+  helper_method :current_game
+  
   def current_account
     if @current_account.nil?
       if session[:real_user_id].nil?
@@ -80,7 +86,7 @@ class ApplicationController < ActionController::Base
         @current_account ||= current_user.account
       end
     end
-    return @current_account
+    @current_account
   end
   helper_method :current_account
   

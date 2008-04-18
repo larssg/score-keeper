@@ -11,12 +11,6 @@
         = f.text_field :name, :class => 'text required'
 
     %tr
-      %td.label= 'Newbie limit'[]
-      %td.field
-        = f.text_field :newbie_limit, :class => 'text required small'
-        .notes= 'Number of matches a user must play to be part of normal rankings.'[]
-
-    %tr
       %td.label= 'Time zone'[]
       %td.field
         = f.time_zone_select :time_zone, nil, :class => 'required'

@@ -1,4 +1,5 @@
 class Account < ActiveRecord::Base
+  has_many :games
   has_many :matches
   has_many :teams
   has_many :users
@@ -32,17 +33,5 @@ class Account < ActiveRecord::Base
     @ranked_users = nil
     @newbie_limit = nil
     @user_positions = nil
-  end
-  
-  def ranked_users
-    @ranked_users ||= self.users.find(:all, :order => 'ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count >= ?', true, self.newbie_limit])
-  end
-  
-  def newbie_users
-    @newbie_users ||= self.users.find(:all, :order => 'memberships_count DESC, ranking DESC, matches_won DESC, name', :conditions => ['enabled = ? AND memberships_count < ?', true, self.newbie_limit])
-  end  
-  
-  def user_positions
-    @user_positions ||= self.ranked_users + self.newbie_users
   end
 end

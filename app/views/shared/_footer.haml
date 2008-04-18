@@ -8,4 +8,4 @@
     = '&middot;'
     = link_to 'Source code'[], 'http://github.com/larssg/score-keeper/tree/master', :target => '_blank'
 
-= render :partial => 'shared/google_analytics' unless RAILS_ENV == 'development'
+= render :partial => 'shared/google_analytics' unless Rails.env == 'development'

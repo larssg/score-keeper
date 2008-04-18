@@ -13,10 +13,13 @@ ActionController::Routing::Routes.draw do |map|
   map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
   map.token_login 'token_login/:token', :controller => 'sessions', :action => 'token_login'
   
-  map.resources :matches do |match|
-    match.resources :comments
+  map.resources :games do |games|
+    games.resources :matches do |matches|
+      matches.resources :comments
+    end
+    
+    games.resources :teams
   end
-  map.resources :teams
   
   map.resources :logs
   

@@ -26,4 +26,4 @@
           %td= team[:percentage].to_s + '%'
           - team[:players].each do |player|
             %td
-              = (((team[:matches_played].to_f / player.memberships_count.to_f) * 1000).to_i / 10.0).to_s + '%'
+              = (((team[:matches_played].to_f / player.matches_played.to_f) * 1000).to_i / 10.0).to_s + '%'

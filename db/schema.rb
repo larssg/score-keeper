@@ -9,15 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080418192105) do
+ActiveRecord::Schema.define(:version => 20080418230419) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
     t.string   "domain"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "newbie_limit", :default => 20
-    t.string   "time_zone",    :default => "Copenhagen"
+    t.string   "time_zone",  :default => "Copenhagen"
   end
 
   create_table "comments", :force => true do |t|
@@ -30,6 +29,30 @@ ActiveRecord::Schema.define(:version => 20080418192105) do
 
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
   add_index "comments", ["match_id"], :name => "index_comments_on_game_id"
+
+  create_table "game_participations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "game_id"
+    t.integer  "ranking",        :default => 2000
+    t.integer  "points_for",     :default => 0
+    t.integer  "points_against", :default => 0
+    t.integer  "matches_won",    :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "matches_played"
+  end
+
+  create_table "games", :force => true do |t|
+    t.integer  "account_id"
+    t.string   "name"
+    t.integer  "team_size",    :default => 1
+    t.text     "rules"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "newbie_limit", :default => 20
+  end
+
+  add_index "games", ["account_id"], :name => "index_games_on_account_id"
 
   create_table "logs", :force => true do |t|
     t.integer  "account_id"
@@ -56,10 +79,13 @@ ActiveRecord::Schema.define(:version => 20080418192105) do
     t.integer  "comments_count", :default => 0
     t.integer  "account_id"
     t.string   "position_ids"
+    t.integer  "game_id"
   end
 
   add_index "matches", ["played_on"], :name => "index_games_on_played_on"
   add_index "matches", ["account_id"], :name => "index_games_on_account_id"
+  add_index "matches", ["game_id"], :name => "index_matches_on_game_id"
+  add_index "matches", ["played_at"], :name => "index_matches_on_played_at"
 
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
@@ -113,16 +139,11 @@ ActiveRecord::Schema.define(:version => 20080418192105) do
     t.boolean  "is_admin",                                :default => false
     t.string   "name"
     t.string   "display_name"
-    t.integer  "memberships_count",                       :default => 0
-    t.integer  "goals_for",                               :default => 0
-    t.integer  "goals_against",                           :default => 0
     t.integer  "mugshot_id"
-    t.integer  "ranking",                                 :default => 2000
     t.integer  "comments_count",                          :default => 0
     t.integer  "account_id"
     t.boolean  "is_account_admin",                        :default => false
     t.boolean  "enabled",                                 :default => true
-    t.integer  "matches_won",                             :default => 0
     t.string   "feed_token"
     t.string   "login_token"
     t.string   "time_zone"

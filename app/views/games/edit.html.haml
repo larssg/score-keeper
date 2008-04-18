@@ -1,0 +1,6 @@
+- title 'Edit game', :show => true
+
+= error_messages_for :game
+
+- form_for @game do |f|
+  = render :partial => 'form', :locals => { :f => f }
