@@ -53,9 +53,13 @@ class Match < ActiveRecord::Base
     User.find(:all, :conditions => ['id IN (?)', filter.split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
   end
   
-  def sort_teams_by_filter(filter)
-    return self.teams.sort_by { |t| t.winner? ? 0 : 1 } if filter.blank?
-    self.teams.sort_by { |t| t.matches_filter(filter) }.reverse
+  def self.sort_teams_by_filter(teams, filter)
+    return teams if teams.size < 2
+    if filter.blank?
+      return (teams.first.score > teams.last.score) ? teams : teams.reverse
+    else
+      return (teams.first.matches_filter(filter)) ? teams : teams.reverse
+    end
   end
   
   def winner

@@ -6,11 +6,11 @@ class Team < ActiveRecord::Base
   
   def matches_filter(filter)
     if filter.index(',')
-      return 1 if self.team_ids == filter
+      return true if self.team_ids == filter
     else
-      return 1 if self.team_ids.index(filter + ',') || self.team_ids.index(',' + filter)
+      return true if self.team_ids.index(filter + ',') || self.team_ids.index(',' + filter)
     end
-    0
+    false
   end
   
   def team_mate_for(user)
