@@ -5,7 +5,7 @@ namespace :tools do
   namespace :fix do
     desc "Update rankings"
     task :rankings => :environment do
-      Account.find(:all).each do |account|
+      Account.all.each do |account|
         Match.reset_rankings(account)
       end
     end
@@ -22,7 +22,7 @@ namespace :tools do
     
     desc "Insert 500 fake games"
     task :games => :environment do
-      people = User.find(:all)
+      people = User.all
       
       500.times do |index|
         players = people.sort_by{ rand }.slice(0...4)

@@ -120,7 +120,7 @@ class ApplicationController < ActionController::Base
   end
 
   def disable_subdomains?
-    RAILS_ENV == 'test'
+    Rails.env == 'test'
   end
   
   def must_be_account_admin
