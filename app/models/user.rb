@@ -23,13 +23,15 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                    :if => :password_required?
   
   validates_presence_of :name
+  validates_presence_of :time_zone
   
   before_save :encrypt_password
+  before_create :set_time_zone
   after_create :set_feed_token
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name
+  attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone
   
   before_destroy :remove_matches
   before_save :set_display_name
@@ -127,6 +129,10 @@ class User < ActiveRecord::Base
     self.remember_token_expires_at = nil
     self.remember_token            = nil
     save(false)
+  end
+  
+  def set_time_zone
+    self.time_zone = self.account.time_zone unless self.account.nil?
   end
   
   def set_feed_token

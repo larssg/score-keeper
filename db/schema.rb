@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 43) do
+ActiveRecord::Schema.define(:version => 20080418192105) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 43) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "newbie_limit", :default => 20
+    t.string   "time_zone",    :default => "Copenhagen"
   end
 
   create_table "comments", :force => true do |t|
@@ -124,6 +125,7 @@ ActiveRecord::Schema.define(:version => 43) do
     t.integer  "matches_won",                             :default => 0
     t.string   "feed_token"
     t.string   "login_token"
+    t.string   "time_zone"
   end
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"

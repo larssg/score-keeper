@@ -9,6 +9,7 @@ quentin:
   name: Quentin
   display_name: Quentin
   account: champions
+  time_zone: Copenhagen
 
 aaron:
   id: 2
@@ -21,3 +22,4 @@ aaron:
   name: Aaron
   display_name: Aaron
   account: champions
+  time_zone: Riga

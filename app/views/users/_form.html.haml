@@ -18,6 +18,11 @@
     %td.label= f.label :email, 'Email'[]
     %td.field
       = f.text_field :email, :class => 'text required'
+
+  %tr
+    %td.label= 'Time zone'[]
+    %td.field
+      = f.time_zone_select :time_zone, nil, :class => 'required'
       
   - unless @user.new_record?
     %tr

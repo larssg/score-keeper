@@ -17,13 +17,6 @@ module Factory
     match.save!
     match
   end
-
-  def self.create_user(attributes = {})
-    default_attributes = {
-      :name => 'Person Personson'
-    }
-    User.create! default_attributes.merge(attributes)
-  end
   
   def self.create_people(amount)
     people = []
@@ -42,7 +35,8 @@ module Factory
       :login => 'admin',
       :password => 'admin',
       :password_confirmation => 'admin',
-      :email => 'admin@example.com'
+      :email => 'admin@example.com',
+      :time_zone => 'Copenhagen'
     }
     User.create! default_attributes.merge(attributes)
   end
@@ -50,7 +44,8 @@ module Factory
   def self.create_account(attributes = {})
     default_attributes = {
       :name => 'Account',
-      :domain => 'account'
+      :domain => 'account',
+      :time_zone => 'Copenhagen'
     }
     Account.create! default_attributes.merge(attributes)
   end

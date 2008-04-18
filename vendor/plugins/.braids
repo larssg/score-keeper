@@ -1,0 +1,6 @@
+--- 
+vendor/plugins/haml: 
+  local_branch: braid/git/vendor/plugins/haml/master
+  type: git
+  branch: master
+  remote: git://github.com/mislav/haml.git
