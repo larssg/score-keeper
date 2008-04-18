@@ -1,6 +1,7 @@
 class Game < ActiveRecord::Base
   belongs_to :account
   has_many :matches
+  has_many :logs
   has_many :game_participations
   has_many :users, :through => :game_participations
   

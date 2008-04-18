@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080418230419) do
+ActiveRecord::Schema.define(:version => 20080418235006) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -63,10 +63,12 @@ ActiveRecord::Schema.define(:version => 20080418230419) do
     t.datetime "published_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "game_id"
   end
 
   add_index "logs", ["account_id"], :name => "index_logs_on_account_id"
   add_index "logs", ["published_at"], :name => "index_logs_on_published_at"
+  add_index "logs", ["game_id"], :name => "index_logs_on_game_id"
 
   create_table "matches", :force => true do |t|
     t.datetime "played_at"

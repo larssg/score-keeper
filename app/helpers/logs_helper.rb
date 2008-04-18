@@ -14,9 +14,9 @@ module LogsHelper
 
   def log_uri(log)
     if log.linked_model == 'Match'
-      game_match_url(current_game, log.linked_id)
+      game_match_url(log.game_id, log.linked_id)
     elsif log.linked_model == 'Comment'
-      game_match_url(current_game, Comment.find(log.linked_id).match_id, :anchor => "c#{log.linked_id}")
+      game_match_url(log.game_id, Comment.find(log.linked_id).match_id, :anchor => "c#{log.linked_id}")
     end
   end
   

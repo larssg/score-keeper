@@ -3,7 +3,7 @@ class DashboardController < ApplicationController
   before_filter :login_required
 
   def index
-    @logs = current_account.logs.find(:all, :order => 'published_at DESC', :limit => 5)
+    @logs = current_game.logs.find(:all, :order => 'published_at DESC', :limit => 5)
     @recent_matches = current_game.matches.find_recent(nil, :limit => 10, :include => { :teams => :memberships })
 
     unless cached?

@@ -1,5 +1,6 @@
 class Log < ActiveRecord::Base
   belongs_to :account
+  belongs_to :game
   belongs_to :user
   
   before_save :set_published_at
