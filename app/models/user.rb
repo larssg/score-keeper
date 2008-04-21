@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   validates_presence_of :time_zone
   
   before_save :encrypt_password
-  before_create :set_time_zone
+  before_validation :set_time_zone
   after_create :set_feed_token
   
   # prevents a user from submitting a crafted form that bypasses activation
