@@ -132,7 +132,10 @@ class User < ActiveRecord::Base
   end
   
   def set_time_zone
-    self.time_zone = self.account.time_zone unless self.account.nil?
+    if self.time_zone.blank?
+      self.time_zone = self.account.time_zone unless self.account.nil?
+      self.time_zone ||= 'Copenhagen'
+    end
   end
   
   def set_feed_token
