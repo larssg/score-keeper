@@ -19,9 +19,9 @@ ActionController::Routing::Routes.draw do |map|
     end
     
     games.resources :teams
-  end
   
-  map.resources :logs
+    games.resources :logs
+  end
   
   map.resources :accounts
   

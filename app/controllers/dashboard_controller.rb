@@ -14,9 +14,12 @@ class DashboardController < ApplicationController
       # Sidebar
       @leader = @rankings.size > 0 ? @rankings[0] : @newbies[0]
       @match_count = current_game.matches.count
-      @goals_scored = current_game.game_participations.sum(:points_for) / 2
-      @all_time_high = Membership.all_time_high(current_account)
-      @all_time_low = Membership.all_time_low(current_account)
+      
+      total_points_for = current_game.game_participations.sum(:points_for)
+      @goals_scored = total_points_for.nil? ? 0 : total_points_for / 2
+
+      @all_time_high = Membership.all_time_high(current_game)
+      @all_time_low = Membership.all_time_low(current_game)
 
       # Get positions 7 days ago
       # FIXME: Newbies...

@@ -20,8 +20,8 @@ module LogsHelper
     end
   end
   
-  def log_feed_url(options = {})
-    formatted_logs_url(:atom, {:feed_token => current_user.feed_token}.merge(options))
+  def log_feed_url(game, options = {})
+    formatted_game_logs_url(game, :atom, {:feed_token => current_user.feed_token}.merge(options))
   end
   
   protected

@@ -1,14 +1,14 @@
 - form_for :match, nil, :url => game_matches_path(current_game) do |f|
   .team
     %label= 'Team'[] + ':'
-    = f.collection_select 'user11', enabled_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
-    = f.collection_select 'user12', enabled_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
+    - (0...current_game.team_size).each do |position|
+      = f.collection_select 'user1[]', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user' }
     %label= 'Score'[] + ':'
     = f.text_field 'score1', :class => 'score', :autocomplete => 'off'
   .team
     %label= 'Team'[] + ':'
-    = f.collection_select 'user21', enabled_users, :id, :name, { :prompt => 'Offense'[] }, { :class => 'user' }
-    = f.collection_select 'user22', enabled_users, :id, :name, { :prompt => 'Defense'[] }, { :class => 'user' }
+    - (0...current_game.team_size).each do |position|
+      = f.collection_select 'user2[]', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user' }
     %label= 'Score'[] + ':'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
     = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'

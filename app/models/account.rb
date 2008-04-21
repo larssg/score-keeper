@@ -17,6 +17,10 @@ class Account < ActiveRecord::Base
     @all_users ||= self.users.find(:all, :order => 'name, display_name')
   end
   
+  def all_games
+    @all_games ||= self.games.find(:all, :order => 'name')
+  end
+  
   def enabled_users
     @enabled_users ||= all_users.select { |u| u.enabled? }
   end

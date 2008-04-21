@@ -15,6 +15,14 @@ class SessionsController < ApplicationController
     password_authentication(params[:login], params[:password])
   end
   
+  def update
+    unless params[:current_game].blank? || params[:current_game][:id].blank?
+      self.current_game = current_account.games.find(params[:current_game][:id]) 
+      self.current_user.update_attribute :last_game, self.current_game
+    end
+    redirect_back_or_default('/')
+  end
+  
   def destroy
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
@@ -69,6 +77,7 @@ class SessionsController < ApplicationController
   end
   
   def successful_login
+    self.current_game = current_user.last_game unless current_user.last_game.nil?
     redirect_to root_url
   end
   

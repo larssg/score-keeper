@@ -10,3 +10,7 @@
         %td= h(game.name)
         %td= game.team_size
         %td= link_to 'Edit', edit_game_path(game)
+
+- content_for :sidebar do
+  %h3= 'Administration'
+  = link_to 'Create game', new_game_path

@@ -10,7 +10,10 @@
   - if @newbies.size > 0
     = render :partial => 'leaderboard', :locals => { :game_participations => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} matches"[:less_than_matches, current_game.newbie_limit] }
 
-= render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
+- if @recent_matches.size > 0
+  = render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
+- else
+  #no_data= 'There are no games in the database yet.'[]
       
 - content_for :sidebar do
   - cache(cache_key('sidebar')) do
@@ -48,4 +51,5 @@
                 %br
                 = user_link_full find_user(@all_time_low.user_id)
 
-    = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
+    - if @matches_per_day.size > 0
+      = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }

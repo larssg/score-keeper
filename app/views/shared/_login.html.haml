@@ -1,12 +1,15 @@
-#user
-  %span.current_user= link_to current_user.login, current_user
-  |
-  - unless session[:real_user_id].blank?
-    = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
+- form_tag session_path('switch_game'), :method => :put do
+  #user
+    = collection_select :current_game, :id, current_account.all_games, :id, :name, { :prompt => ('-- ' + 'Switch game'[] + ' --') }, { :onchange => 'this.form.submit();' }
     |
-  = link_to 'Profile'[], edit_user_path(current_user)
-  - if account_admin?
+    %span.current_user= link_to current_user.login, current_user
     |
-    = link_to 'Manage account'[], edit_account_path(current_account)
-  |
-  = link_to 'Log out'[], logout_path
+    - unless session[:real_user_id].blank?
+      = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
+      |
+    = link_to 'Profile'[], edit_user_path(current_user)
+    - if account_admin?
+      |
+      = link_to 'Manage account'[], edit_account_path(current_account)
+    |
+    = link_to 'Log out'[], logout_path

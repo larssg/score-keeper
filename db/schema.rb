@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080418235006) do
+ActiveRecord::Schema.define(:version => 20080419085016) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20080418235006) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "newbie_limit", :default => 20
+    t.string   "player_roles"
   end
 
   add_index "games", ["account_id"], :name => "index_games_on_account_id"
@@ -149,6 +150,7 @@ ActiveRecord::Schema.define(:version => 20080418235006) do
     t.string   "feed_token"
     t.string   "login_token"
     t.string   "time_zone"
+    t.integer  "last_game_id"
   end
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"

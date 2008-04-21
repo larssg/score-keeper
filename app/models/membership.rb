@@ -2,12 +2,18 @@ class Membership < ActiveRecord::Base
   belongs_to :team
   belongs_to :user
 
-  def self.all_time_high(account)
-    Membership.find(:first, :order => 'memberships.current_ranking DESC', :conditions => { :user_id => account.enabled_user_ids })
+  def self.all_time_high(game)
+    Membership.find(:first,
+      :order => 'memberships.current_ranking DESC',
+      :conditions => [ 'matches.game_id = ? AND memberships.user_id IN (?)', game.id, game.account.enabled_user_ids ],
+      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
   end
   
-  def self.all_time_low(account)
-    Membership.find(:first, :order => 'memberships.current_ranking', :conditions => { :user_id => account.enabled_user_ids })
+  def self.all_time_low(game)
+    Membership.find(:first,
+      :order => 'memberships.current_ranking',
+      :conditions => [ 'matches.game_id = ? AND memberships.user_id IN (?)', game.id, game.account.enabled_user_ids ],
+      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
   end
   
   def self.find_team(user_ids, from, account)

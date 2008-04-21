@@ -59,4 +59,8 @@ module ApplicationHelper
     out << '</script>'
     out
   end
+  
+  def create_or_update_button(object)
+    submit_tag (object.new_record? ? 'Create'[] : 'Update'[]), :disable_with => (object.new_record? ? 'Creating'[] : 'Updating'[]) + '&hellip;'
+  end
 end

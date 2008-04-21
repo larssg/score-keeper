@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include AccountLocation
   before_filter :adjust_format_for_iphone
   before_filter :set_time_zone
+  before_filter :load_current_game
 
 #  around_filter :set_language
 
@@ -70,10 +71,19 @@ class ApplicationController < ActionController::Base
   end
   
   def current_game
-    @current_game ||= current_account.games.find(session[:current_game_id]) if session[:current_game_id]
-    @current_game ||= current_account.games.first
+    if @current_game.nil?
+      @current_game ||= current_account.games.find(session[:current_game_id]) if session[:current_game_id]
+      @current_game ||= current_account.games.first
+      session[:current_game_id] ||= @current_game.id
+    end
+    @current_game
   end
   helper_method :current_game
+  
+  def current_game=(game)
+    session[:current_game_id] = game.id
+    @current_game = game
+  end
   
   def current_account
     if @current_account.nil?
@@ -144,6 +154,10 @@ class ApplicationController < ActionController::Base
   private
   def set_time_zone
     Time.zone = current_user.time_zone if logged_in?
+  end
+  
+  def load_current_game
+    current_game
   end
 
   def set_language
