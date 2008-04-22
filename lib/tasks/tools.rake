@@ -6,7 +6,9 @@ namespace :tools do
     desc "Update rankings"
     task :rankings => :environment do
       Account.all.each do |account|
-        Match.reset_rankings(account)
+        account.games.each do |game|
+          Match.reset_rankings(game)
+        end
       end
     end
   end

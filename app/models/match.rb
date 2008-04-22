@@ -64,11 +64,11 @@ class Match < ActiveRecord::Base
   end
   
   def winner
-    @winner ||= self.teams.first.score > self.teams.last.score ? self.teams.first : self.teams.last 
+    @winner ||= self.teams.sort_by(&:score).last
   end
   
   def loser
-    @loser ||= self.winner.other
+    @loser ||= self.teams.sort_by(&:score).first
   end
   
   def positions
@@ -94,14 +94,14 @@ class Match < ActiveRecord::Base
     end
   end
 
-  def self.reset_rankings(account)
-    return if account.nil?
-    account.users.update_all("users.ranking = 2000, users.matches_played = 0")
-    account.matches.find(:all).each do |match|
+  def self.reset_rankings(game)
+    return if game.nil?
+    game.game_participations.update_all("game_participations.ranking = 2000, game_participations.matches_played = 0")
+    game.matches.all.each do |match|
       match.update_rankings
       match.teams.each do |team|
         team.memberships.each do |membership|
-          User.update_all("users.matches_played = users.matches_played + 1", "users.id = #{membership.user_id}")
+          GameParticipation.update_all("game_participations.matches_played = game_participations.matches_played + 1", "game_participations.user_id = #{membership.user_id} AND game_participations.game_id = #{game.id}")
         end
       end
       match.update_positions
@@ -160,7 +160,7 @@ class Match < ActiveRecord::Base
   end
   
   def reset_rankings_after_destroy
-    Match.reset_rankings(self.account) unless @postpone_ranking_update
+    Match.reset_rankings(self.game) unless @postpone_ranking_update
   end
   
   def title()

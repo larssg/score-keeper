@@ -3,15 +3,14 @@ module Factory
     people = options.delete(:people) || Factory.create_people(4)
     team_scores = options.delete(:team_scores) || [10, 4]
     account = options.delete(:account) || self.create_account
+    game = options.delete(:game) || self.create_game
 
-    match = Match.new(options)
+    match = game.matches.build(options)
     match.score1 = team_scores[0]
-    match.user11 = people[0].id
-    match.user12 = people[1].id
+    match.team1 = [people[0].id.to_s, people[1].id.to_s]
     
     match.score2 = team_scores[1]
-    match.user21 = people[2].id
-    match.user22 = people[3].id
+    match.team2 = [people[2].id.to_s, people[3].id.to_s]
     
     match.account = account
     match.save!
@@ -39,6 +38,13 @@ module Factory
       :time_zone => 'Copenhagen'
     }
     User.create! default_attributes.merge(attributes)
+  end
+  
+  def self.create_game(attributes = {})
+    default_attributes = {
+      :name => 'Foosball'
+    }
+    Game.create! default_attributes.merge(attributes)
   end
   
   def self.create_account(attributes = {})

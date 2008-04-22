@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Game do
   before(:each) do
-    @game = Game.new
+    @game = Game.new(:name => 'Foosball')
   end
 
   it "should be valid" do

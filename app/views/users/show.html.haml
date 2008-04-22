@@ -3,7 +3,7 @@
 - if @game_participation.matches_played > 0
   #graph
     %h3= 'Ranking chart'[]
-    - form_tag @user, :method => :get do
+    - form_tag game_user_path(current_game, @user), :method => :get do
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'[]
     = graph(formatted_game_user_matches_url(@game, @user.id, :graph, :period => @time_period))

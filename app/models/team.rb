@@ -68,17 +68,15 @@ class Team < ActiveRecord::Base
       award = award.reverse if amount < 0
       
       # Award points
-      game_participations.each_with_index { |gp, index| gp.ranking += award[index] }
+      game_participations.each_with_index { |gp, index| gp.update_attribute :ranking, gp.ranking + award[index] }
       
       # Save points
-      self.memberships.each_with_index do |m, index|
-        m.points_awarded = award[index]
-        m.current_ranking = game_participations.select { |gp| gp.user_id == m.user_id }.first.ranking
-        m.save
+      game_participations.each_with_index do |gp, index|
+        membership = self.memberships.select { |m| m.user_id == gp.user_id }.first
+        membership.points_awarded = award[index]
+        membership.current_ranking = gp.ranking
+        membership.save
       end
-      
-      # Save game participations
-      game_participations.each { |gp| gp.save }
     end
   end
   
