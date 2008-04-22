@@ -27,7 +27,7 @@
           %td= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(@game, :filter => team[:team].team_ids)
           %td= link_to image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(@game, team[:team].team_ids)
           %td= link_to team[:team_mate].name, game_user_path(@game, team[:team_mate])
-          %td= team[:team_mate].ranking.to_i
+          %td= team[:team_mate_game_participation].ranking.to_i
           %td= team[:played]
           %td= team[:wins]
           %td= team[:win_percentage] + ' %'
