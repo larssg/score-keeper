@@ -3,6 +3,8 @@ class AddGameIdToLogs < ActiveRecord::Migration
     add_column :logs, :game_id, :integer
     add_index :logs, :game_id
     
+    Log.reset_column_information
+    
     Account.all.each do |account|
       game = account.games.first
       account.logs.update_all("game_id = #{game.id}")

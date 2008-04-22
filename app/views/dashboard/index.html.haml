@@ -21,7 +21,7 @@
       #leader
         %h3= 'Leader'[]
         .mugshot= link_to image_tag(@leader.user.mugshot.public_filename(:thumb), :alt => @leader.name), user_path(@leader) if @leader.user.mugshot
-        = user_link_full @leader.user
+        = user_link_full current_game, @leader.user
 
     #counts
       %h3= 'Totals'[]
@@ -42,14 +42,14 @@
                 = link_to @all_time_high.current_ranking, game_match_path(current_game, @all_time_high.team.match), :class => 'match'
                 = 'by'[]
                 %br
-                = user_link_full find_user(@all_time_high.user_id)
+                = user_link_full current_game, find_user(@all_time_high.user_id)
             %td
               - unless @all_time_low.nil?
                 %label= 'All time low'[] + ':'
                 = link_to @all_time_low.current_ranking, game_match_path(current_game, @all_time_low.team.match), :class => 'match'
                 = 'by'[]
                 %br
-                = user_link_full find_user(@all_time_low.user_id)
+                = user_link_full current_game, find_user(@all_time_low.user_id)
 
     - if @matches_per_day.size > 0
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }

@@ -5,14 +5,6 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'sessions', :action => 'new'
   map.logout 'logout', :controller => 'sessions', :action => 'destroy'
   
-  map.resources :users do |user|
-    user.resources :matches
-  end
-  map.resources :sessions, :member => { :impersonate => :put }, :collection => { :unimpersonate => :put }
-  
-  map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
-  map.token_login 'token_login/:token', :controller => 'sessions', :action => 'token_login'
-  
   map.resources :games do |games|
     games.resources :matches do |matches|
       matches.resources :comments
@@ -21,7 +13,17 @@ ActionController::Routing::Routes.draw do |map|
     games.resources :teams
   
     games.resources :logs
+    
+    games.resources :users do |user|
+      user.resources :matches
+    end
   end
+
+  map.resources :users
+  map.resources :sessions, :member => { :impersonate => :put }, :collection => { :unimpersonate => :put }
+  
+  map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
+  map.token_login 'token_login/:token', :controller => 'sessions', :action => 'token_login'
   
   map.resources :accounts
   

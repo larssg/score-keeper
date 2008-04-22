@@ -72,9 +72,14 @@ class ApplicationController < ActionController::Base
   
   def current_game
     if @current_game.nil?
+      return unless current_account
       @current_game ||= current_account.games.find(session[:current_game_id]) if session[:current_game_id]
       @current_game ||= current_account.games.first
-      session[:current_game_id] ||= @current_game.id
+      unless @current_game.nil?
+        session[:current_game_id] ||= @current_game.id
+      else
+        redirect_to games_url unless controller_name == 'games' || controller_name == 'sessions'
+      end
     end
     @current_game
   end
@@ -122,12 +127,12 @@ class ApplicationController < ActionController::Base
   end
   
   def y_max
-    max = [Membership.all_time_high(current_account).current_ranking, 2000].max
+    max = [Membership.all_time_high(current_game).current_ranking, 2000].max
     (max / 100.0).ceil * 100 # Round up to nearest 100
   end
   
   def y_min
-    min = [Membership.all_time_low(current_account).current_ranking, 2000].min
+    min = [Membership.all_time_low(current_game).current_ranking, 2000].min
     (min / 100.0).floor * 100 # Round down to nearest 100
   end
   

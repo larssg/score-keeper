@@ -34,6 +34,7 @@ class MatchesController < ApplicationController
   
   def create
     @match = current_account.matches.build(params[:match])
+    @match.game_id = params[:game_id]
     @match.creator = current_user
     if @match.save
       flash[:notice] = 'Match added successfully.'[]
@@ -74,13 +75,14 @@ class MatchesController < ApplicationController
     time_period = params[:period].to_i
     from = time_period.days.ago
     chart = setup_ranking_graph
-    
-    memberships = @user.memberships.find(:all,
+
+    game_participation = current_game.game_participations.find_by_user_id(@user.id)
+    memberships = game_participation.memberships.find(:all,
       :conditions => ['matches.played_at >= ?', from],
       :order => 'memberships.id',
       :select => 'memberships.current_ranking, memberships.created_at, matches.played_at AS played_at',
       :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
-    chart.set_data [@user.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
+    chart.set_data [game_participation.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
     chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
     chart.line 2, '#3399CC'
 

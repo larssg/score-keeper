@@ -11,12 +11,15 @@ class UsersController < ApplicationController
   end
   
   def show
+    @game = current_account.games.find(params[:game_id])
     @user = current_account.users.find(params[:id])
 
+    @game_participation = @user.game_participations.find_by_game_id(@game.id)
+
     @time_period = params[:period] ? params[:period].to_i : 30
-    @all_time_high = @user.all_time_high
-    @all_time_low = @user.all_time_low
-    @matches_per_day = @user.memberships.count(:group => 'matches.played_on', :limit => 10, :order => 'matches.played_on DESC', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
+    @all_time_high = @user.all_time_high(@game)
+    @all_time_low = @user.all_time_low(@game)
+    @matches_per_day = @game_participation.memberships.count(:group => 'matches.played_on', :limit => 10, :order => 'matches.played_on DESC', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
 
     @team_counts = @user.teams.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
     @team_wins = @user.teams.count(:group => :team_ids, :conditions => { :won => true })
@@ -27,12 +30,16 @@ class UsersController < ApplicationController
       :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
       :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0] }
     end
-
-    @teams.each do |team|
-      team[:team_mate] = team[:team].team_mate_for(@user)
-      team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
-      team[:wins] = team[:wins].blank? ? 0 : team[:wins][1].blank? ? 0 : team[:wins][1].to_i
-      team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
+    
+    if @game.team_size == 2
+      @teams.each do |team|
+        team_mate = team[:team].team_mate_for(@user)
+        team[:team_mate] = team_mate
+        team[:team_mate_game_participation] = @game.game_participations.find_by_user_id(team_mate.id)
+        team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
+        team[:wins] = team[:wins].blank? ? 0 : team[:wins][1].blank? ? 0 : team[:wins][1].to_i
+        team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
+      end
     end
     
     @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse

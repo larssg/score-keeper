@@ -48,27 +48,18 @@ class User < ActiveRecord::Base
     find(:all, :order => 'name, display_name')
   end
 
-  def all_time_high
-    Membership.find(:first, :conditions => { :user_id => self.id }, :order => 'memberships.current_ranking DESC')
+  def all_time_high(game)
+    Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking DESC')
   end
   
-  def all_time_low
-    Membership.find(:first, :conditions => { :user_id => self.id }, :order => 'memberships.current_ranking')
+  def all_time_low(game)
+    Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking')
   end
   
-  def position
-    self.account.user_positions.each_with_index do |user, index|
-      return index + 1 if user.id == self.id
+  def position(game)
+    game.user_positions.each_with_index do |game_participation, index|
+      return index + 1 if game_participation.user_id == self.id
     end
-  end
-  
-  def ranking_at(time)
-    membership = self.memberships.find(:first,
-      :conditions => [ 'matches.played_at <= ?', time ],
-      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',
-      :order => 'matches.played_at DESC')
-      
-    membership.nil? ? 2000 : membership.current_ranking
   end
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.

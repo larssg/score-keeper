@@ -28,7 +28,7 @@
               &nbsp;
         %td
           = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), game_matches_path(current_game, :filter => game_participation.user_id)
-          = user_link_full(game_participation.user)
+          = user_link_full(current_game, game_participation.user)
         %td= game_participation.ranking
         %td= game_participation.matches_played
         %td= game_participation.matches_won

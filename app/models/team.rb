@@ -14,6 +14,7 @@ class Team < ActiveRecord::Base
   end
   
   def team_mate_for(user)
+    return nil if self.memberships.size < 2
     team_mate = self.memberships.select { |m| m.user_id != user.id }.first.user
   end
   
@@ -26,7 +27,7 @@ class Team < ActiveRecord::Base
   end
   
   def ranking_total
-    self.memberships.collect{ |m| m.user.ranking }.sum.to_f
+    self.memberships.collect{ |m| m.game_participation.ranking }.sum.to_f
   end
   
   def self.opponents(team_ids)
@@ -41,47 +42,42 @@ class Team < ActiveRecord::Base
   end
   
   def award_points(amount)
-    members = self.memberships.collect { |m| m.user }
-    lead = members.first.ranking > members.last.ranking ? members.first : members.last
-    trail = lead == members.first ? members.last : members.first
-
-    award_to_lead = (amount.abs * (trail.ranking.to_f / self.ranking_total.to_f)).to_i
-    award_to_trail = (amount.abs * (lead.ranking.to_f / self.ranking_total.to_f)).to_i
+    game_participations = self.memberships.collect { |m| m.game_participation }.sort_by(&:ranking)
     
-    # Fix rounding errors
-    if award_to_lead + award_to_trail < amount.abs
-      award_to_trail += 1
-    elsif award_to_lead + award_to_trail > amount.abs
-      award_to_lead -= 1
-    end
+    if game_participations.size == 1
+      game_participations.first.update_attribute :ranking, game_participations.first.ranking + amount
+      self.memberships.first.update_attribute :current_ranking, game_participations.first.ranking
+    else
+      award = []
+      game_participations.each do |gp|
+        award << (amount.abs * (gp.ranking.to_f / ranking_total)).to_i
+      end
 
-    # If match was lost, deduct most points from lead
-    if amount < 0
-      temp = award_to_lead
-      award_to_lead = award_to_trail
-      award_to_trail = temp
+      # Fix rounding errors
+      while award.inject(0) { |sum, item| sum + item } != amount.abs
+        if award.inject(0) { |sum, item| sum + item } < amount.abs
+          award[-1] += 1
+        else
+          award[0] -= 1
+        end
+      end
+
+      # If match was lost, "award" negative points
+      award = award.collect { |a| a * -1 } if amount < 0
       
-      award_to_lead *= -1
-      award_to_trail *= -1
+      # Award points
+      game_participations.each_with_index { |gp, index| gp.ranking += award[index] }
+      
+      # Save points
+      self.memberships.each_with_index do |m, index|
+        m.points_awarded = award[index]
+        m.current_ranking = game_participations[index].ranking
+        m.save
+      end
+      
+      # Save game participations
+      game_participations.each { |gp| gp.save }
     end
-    
-    # Award most points to trail
-    lead.ranking += award_to_lead
-    trail.ranking += award_to_trail
-
-    # Save points
-    lead_membership = self.memberships.select{ |m| m.user == lead }.first
-    lead_membership.points_awarded = award_to_lead
-    lead_membership.current_ranking = lead.ranking
-    lead_membership.save
-    
-    lead_membership = self.memberships.select{ |m| m.user == trail }.first
-    lead_membership.points_awarded = award_to_trail
-    lead_membership.current_ranking = trail.ranking
-    lead_membership.save
-    
-    lead.save
-    trail.save
   end
   
   def update_cache_values

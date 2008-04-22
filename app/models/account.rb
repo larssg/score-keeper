@@ -9,9 +9,8 @@ class Account < ActiveRecord::Base
   validates_uniqueness_of :domain
   validates_format_of :domain, :with => /^[0-9a-z]+$/, :on => :create, :message => "can only contain alphanumeric lowercase characters"
   validates_exclusion_of :domain, :in => %w(www pop pop3 imap smtp mail support ftp mysql), :on => :create, :message => "is not allowed"
-  validates_numericality_of :newbie_limit, :greater_than_or_equal_to => 0
   
-  attr_accessible :name, :domain, :newbie_limit, :time_zone
+  attr_accessible :name, :domain, :time_zone
 
   def all_users
     @all_users ||= self.users.find(:all, :order => 'name, display_name')
@@ -35,7 +34,6 @@ class Account < ActiveRecord::Base
   
   def reset_positions!
     @ranked_users = nil
-    @newbie_limit = nil
     @user_positions = nil
   end
 end

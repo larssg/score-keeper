@@ -2,8 +2,8 @@ class Match < ActiveRecord::Base
   attr_accessor :postpone_ranking_update
 
   # Virtual attributes for match info
-  attr_accessor :score1, :user11, :user12
-  attr_accessor :score2, :user21, :user22
+  attr_accessor :score1, :team1
+  attr_accessor :score2, :team2
 
   attr_accessor :filter
 
@@ -37,7 +37,7 @@ class Match < ActiveRecord::Base
       if filter.index(',')
         conditions = ['team_one = ? OR team_two = ?', filter, filter]
       else
-        conditions = ["team_one LIKE ? OR team_one LIKE ? OR team_two LIKE ? OR team_two LIKE ?", filter + ',%', '%,' + filter, filter + ',%', '%,' + filter]
+        conditions = ["team_one = ? OR team_one LIKE ? OR team_one LIKE ? OR team_two = ? OR team_two LIKE ? OR team_two LIKE ?", filter, filter + ',%', '%,' + filter, filter, filter + ',%', '%,' + filter]
       end
     end
     options[:conditions] = conditions if conditions
@@ -75,8 +75,8 @@ class Match < ActiveRecord::Base
     self.position_ids.blank? ? nil : self.position_ids.split(',').collect(&:to_i)
   end
   
-  def positions=(users)
-    self.position_ids = users.collect(&:id).join(',')
+  def positions=(game_participations)
+    self.position_ids = game_participations.collect(&:user_id).join(',')
   end
 
   def validate
@@ -118,14 +118,14 @@ class Match < ActiveRecord::Base
   def update_winners
     self.teams.each do |team|
       team.memberships.each do |membership|
-        user = membership.user
+        participation = membership.game_participation
 
-        user.increment(:matches_won) if team == self.winner
-        user.goals_for += team.score
-        user.goals_against += team.other.score
-        user.matches_played = Membership.count(:conditions => { :user_id => user.id })
+        participation.increment(:matches_won) if team == self.winner
+        participation.points_for += team.score
+        participation.points_against += team.other.score
+        participation.matches_played = self.game.memberships.count(:conditions => { :user_id => membership.user_id })
         
-        user.save
+        participation.save
       end
       
       team.update_attribute :won, team == self.winner
@@ -133,22 +133,23 @@ class Match < ActiveRecord::Base
   end
   
   def update_positions
-    self.positions = self.account.ranked_users
+    self.positions = self.game.ranked_game_participators
     # Using update_all to avoid callbacks being called
     Match.update_all("matches.position_ids = '#{self.position_ids}'", "matches.id = #{self.id}")
   end
   
   def update_after_destroy
+    game = self.teams.first.game
     self.teams.each do |team|
       team.memberships.each do |membership|
-        user = membership.user
+        participation = membership.game_participation
         
-        user.decrement(:matches_won) if team == self.winner
-        user.goals_for -= team.score
-        user.goals_against -= team.other.score
-        user.decrement(:matches_played)
+        participation.decrement(:matches_won) if team == self.winner
+        participation.goals_for -= team.score
+        participation.goals_against -= team.other.score
+        participation.decrement(:matches_played)
         
-        user.save
+        participation.save
       end
     end
     
@@ -190,17 +191,30 @@ class Match < ActiveRecord::Base
   end
 
   def build_teams
+    # Create game participations first
+    (@team1 + @team2).each { |user_id| game_participation_for_user(user_id) }
+    
+    # Build team 1
     team1 = teams.build(:score => score1, :account => self.account)
-    team1.memberships.build(:user_id => user11)
-    team1.memberships.build(:user_id => user12)
-    team1.opponent_ids = [user21, user22].collect { |user_id| user_id.to_i }.sort.join(',')
+    @team1.each do |member|
+      team1.memberships.build(:user_id => member, :game => self.game, :game_participation => game_participation_for_user(member))
+    end
+    team1.opponent_ids = @team2.collect(&:to_i).sort.join(',')
 
+    # Build team 2
     team2 = teams.build(:score => score2, :account => self.account)
-    team2.memberships.build(:user_id => user21)
-    team2.memberships.build(:user_id => user22)
-    team2.opponent_ids = [user11, user12].collect { |user_id| user_id.to_i }.sort.join(',')
+    @team2.each do |member|
+      team2.memberships.build(:user_id => member, :game => self.game, :game_participation => game_participation_for_user(member))
+    end
+    team2.opponent_ids = @team1.collect(&:to_i).sort.join(',')
     
     self.team_one = team2.opponent_ids
     self.team_two = team1.opponent_ids
+  end
+  
+  def game_participation_for_user(user_id)
+    game_participation = self.game.game_participations.find_by_user_id(user_id)
+    game_participation = self.game.game_participations.create(:user_id => user_id) if game_participation.nil?
+    game_participation
   end
 end

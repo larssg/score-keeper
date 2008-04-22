@@ -1,35 +1,36 @@
 - title h(@user.name), :show => true
 
-- if @user.matches_played > 0
+- if @game_participation.matches_played > 0
   #graph
     %h3= 'Ranking chart'[]
     - form_tag @user, :method => :get do
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'[]
-    = graph(formatted_user_matches_url(@user.id, :graph, :period => @time_period))
+    = graph(formatted_game_user_matches_url(@game, @user.id, :graph, :period => @time_period))
     
-.list
-  %h3= 'Team mates'[]
+- if @game.team_size == 2
+  .list
+    %h3= 'Team mates'[]
 
-  %table
-    %tr
-      %th &nbsp;
-      %th &nbsp;
-      %th= 'Team mate'[]
-      %th= 'Ranking'[]
-      %th= 'Matches played'[]
-      %th= 'Matches won'[]
-      %th= 'Percentage won'[]
+    %table
+      %tr
+        %th &nbsp;
+        %th &nbsp;
+        %th= 'Team mate'[]
+        %th= 'Ranking'[]
+        %th= 'Matches played'[]
+        %th= 'Matches won'[]
+        %th= 'Percentage won'[]
       
-    - @teams.each do |team|
-      %tr{ :class => cycle('odd', 'even') }
-        %td= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => team[:team].team_ids)
-        %td= link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team].team_ids)
-        %td= link_to team[:team_mate].name, team[:team_mate]
-        %td= team[:team_mate].ranking.to_i
-        %td= team[:played]
-        %td= team[:wins]
-        %td= team[:win_percentage] + ' %'
+      - @teams.each do |team|
+        %tr{ :class => cycle('odd', 'even') }
+          %td= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(@game, :filter => team[:team].team_ids)
+          %td= link_to image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(@game, team[:team].team_ids)
+          %td= link_to team[:team_mate].name, game_user_path(@game, team[:team_mate])
+          %td= team[:team_mate].ranking.to_i
+          %td= team[:played]
+          %td= team[:wins]
+          %td= team[:win_percentage] + ' %'
 
 - content_for :sidebar do
   .user
@@ -39,54 +40,54 @@
     - if @user.mugshot
       .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
     
-    .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], matches_path(:filter => @user.id)
+    .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], game_matches_path(@game, :filter => @user.id)
 
     #counts
       %p.position
         %label= 'Position'[] + ':'
-        = @user.position
+        = @user.position(@game)
         
       %table.for_against
         %tr
           %td.for
             %label= 'Ranking'[] + ':'
-            = @user.ranking
+            = @game_participation.ranking
           %td.against
             %label= 'Played matches'[] + ':'
-            = @user.matches_played
+            = @game_participation.matches_played
 
         %tr
           %td.for
             %label= 'Matches won'[] + ':'
-            = @user.matches_won
+            = @game_participation.matches_won
           %td.against
             %label= 'Matches lost'[] + ':'
-            = @user.matches_lost
+            = @game_participation.matches_lost
 
         %tr
           %td.for
             %label= 'Goals for'[] + ':'
-            = @user.goals_for
+            = @game_participation.points_for
           %td.against
             %label= 'Goals against'[] + ':'
-            = @user.goals_against
+            = @game_participation.points_against
             
         %tr
           %td.for
             %label= 'Goal diff.'[] + ':'
-            = @user.difference
+            = @game_participation.difference
             
           %td.against
             %label= 'Average diff.'[] + ':'
-            = @user.difference_average
+            = @game_participation.difference_average
 
         - if @all_time_high && @all_time_low
           %tr
             %td.for
               %label= 'Best ranking'[] + ':'
-              = link_to @all_time_high.current_ranking, match_path(@all_time_high.team.match), :class => 'match'
+              = link_to @all_time_high.current_ranking, game_match_path(@game, @all_time_high.team.match), :class => 'match'
             %td.against
               %label= 'Worst ranking'[] + ':'
-              = link_to @all_time_low.current_ranking, match_path(@all_time_low.team.match), :class => 'match'
+              = link_to @all_time_low.current_ranking, game_match_path(@game, @all_time_low.team.match), :class => 'match'
 
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }

@@ -12,8 +12,11 @@ class CreateGameTypes < ActiveRecord::Migration
     add_column :matches, :game_id, :integer
     add_index :matches, :game_id
     
+    Game.reset_column_information
+    Account.reset_column_information
+    
     Account.all.each do |account|
-      game = account.games.create(:name => 'Foosball', :team_size => 2)
+      game = account.games.create!(:name => 'Foosball', :team_size => 2)
       account.matches.update_all("game_id = #{game.id}")
     end
   end

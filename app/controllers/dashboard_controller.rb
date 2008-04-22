@@ -28,7 +28,7 @@ class DashboardController < ApplicationController
       unless last_month.blank? || last_month.positions.blank?
         last_month.positions.each_with_index do |user_id, index|
           @positions[user_id] = {}
-          @positions[user_id][:now] = find_user(user_id).position
+          @positions[user_id][:now] = find_user(user_id).position(current_game)
           @positions[user_id][:then] = index + 1
         end
       end

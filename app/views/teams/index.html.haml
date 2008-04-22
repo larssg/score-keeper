@@ -4,26 +4,27 @@
   .list
     %table.teams
       %tr
-        %th{ :colspan => 5 }= 'Members'[]
+        %th{ :colspan => current_game.team_size * 2 + 1 }= 'Members'[]
         %th.ranking= 'Total ranking'[]
         %th= 'Matches won'[]
         %th= 'Matches played'[]
         %th= 'Winning percentage'[]
-        %th{ :colspan => 2 }= '% of matches on team'[]
+        %th{ :colspan => current_game.team_size }= '% of matches on team'[]
 
       - @teams.each do |team|
         %tr{ :class => cycle('odd', 'even') }
-          %td.user= user_link_full(team[:players].first)
-          %td.user -
-          %td.user= user_link_full(team[:players].last)
+          - team[:players].each_with_index do |player, index|
+            - if index > 0
+              %td.user -
+            %td.user= user_link_full(current_game, player)
           %td.user
-            = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), matches_path(:filter => team[:team_ids])
+            = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(current_game, :filter => team[:team_ids])
           %td.user
-            = link_to image_tag('icons/chart_bar.png', :class => 'team'), team_path(team[:team_ids])
+            = link_to image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(current_game, team[:team_ids])
           %td.ranking= team[:total_ranking]
           %td= team[:matches_won]
           %td= team[:matches_played]
           %td= team[:percentage].to_s + '%'
           - team[:players].each do |player|
             %td
-              = (((team[:matches_played].to_f / player.matches_played.to_f) * 1000).to_i / 10.0).to_s + '%'
+              = (((team[:matches_played].to_f / (@game_participations.select { |gp| gp.user_id == player.id }.first).matches_played.to_f) * 1000).to_i / 10.0).to_s + '%'

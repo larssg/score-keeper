@@ -5,8 +5,21 @@ class TeamsController < ApplicationController
   def index
     unless read_fragment(cache_key)
       @teams = {}
-      @team_counts = current_account.teams.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
-      @team_wins = current_account.teams.count(:group => :team_ids, :conditions => { :won => true })
+      @team_counts = current_account.teams.count(
+        :group => :team_ids,
+        :conditions => ['matches.game_id = ?', current_game.id],
+        :joins => 'LEFT JOIN matches ON teams.match_id = matches.id').sort_by { |t| t[1] }.reverse
+      @team_wins = current_account.teams.count(
+        :group => :team_ids,
+        :conditions => ['matches.game_id = ? AND teams.won = ?', current_game.id, true],
+        :joins => 'LEFT JOIN matches ON teams.match_id = matches.id')
+
+      # Find user IDs
+      @users = {}
+      @team_counts.each do |count|
+        count[0].split(',').collect(&:to_i).each { |user_id| @users[user_id] = true }
+      end
+      @game_participations = current_game.game_participations.find_all_by_user_id(@users.keys)
 
       @team_counts.each do |count|
         @teams[count[0]] = {}
@@ -25,7 +38,7 @@ class TeamsController < ApplicationController
       end
     
       @teams.keys.each do |team_key|
-        @teams[team_key][:total_ranking] = @teams[team_key][:players].sum(&:ranking)
+        @teams[team_key][:total_ranking] = @teams[team_key][:players].sum { |user| @game_participations.select { |gp| gp.user_id == user.id }.first.ranking }
       end
     
       @teams = @teams.keys.collect { |k| @teams[k] }
@@ -49,6 +62,7 @@ class TeamsController < ApplicationController
   def render_chart
     from = @time_period.days.ago
     memberships = Membership.find_team(@ids, from, current_account)
+    game_participations = current_game.game_participations.find_all_by_user_id(@ids)
     
     data = {}
     memberships.each do |membership|
@@ -62,7 +76,7 @@ class TeamsController < ApplicationController
     previous = []
     (0..1).each do |index|
       people[index] = []
-      previous << find_user(@ids[index]).ranking_at(from)
+      previous << (game_participations.select { |gp| gp.user_id == @ids[index] }.first).ranking_at(from)
     end
     dates = []
     
@@ -81,7 +95,7 @@ class TeamsController < ApplicationController
 
     chart = setup_ranking_graph
     (0..1).each do |index|
-      chart.set_data [find_user(@ids[index]).ranking_at(from)] + people[index]
+      chart.set_data [(game_participations.select { |gp| gp.user_id == @ids[index] }.first).ranking_at(from)] + people[index]
     end
     chart.line 2, '#3399CC', find_user(@ids[0]).name
     chart.line 2, '#77BBDD', find_user(@ids[1]).name

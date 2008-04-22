@@ -3,9 +3,10 @@ class Game < ActiveRecord::Base
   has_many :matches
   has_many :logs
   has_many :game_participations
+  has_many :memberships
   has_many :users, :through => :game_participations
   
-  validates_presence_of :name, :team_size, :newbie_limit
+  validates_presence_of :name, :team_size
   
   before_save :format_player_roles
   
@@ -18,7 +19,7 @@ class Game < ActiveRecord::Base
   end  
   
   def user_positions
-    @user_positions ||= self.ranked_users + self.newbie_users
+    @user_positions ||= self.ranked_game_participators + self.newbie_game_participators
   end
   
   def role(position)
@@ -45,7 +46,7 @@ class Game < ActiveRecord::Base
   
   protected
   def format_player_roles
-    return if player_roles.blank?
+    return if !self.attributes.has_key?(:player_roles) || player_roles.blank?
     player_roles = self.player_roles.split("\n").collect { |pr| pr.strip }.select { |pr| pr.size > 0 }.join("\n")
   end
 end

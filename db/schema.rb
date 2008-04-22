@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080419085016) do
+ActiveRecord::Schema.define(:version => 20080422084312) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -97,9 +97,13 @@ ActiveRecord::Schema.define(:version => 20080419085016) do
     t.datetime "updated_at"
     t.integer  "points_awarded"
     t.integer  "current_ranking"
+    t.integer  "game_id"
+    t.integer  "game_participation_id"
   end
 
   add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
+  add_index "memberships", ["game_id"], :name => "index_memberships_on_game_id"
+  add_index "memberships", ["game_participation_id"], :name => "index_memberships_on_game_participation_id"
 
   create_table "mugshots", :force => true do |t|
     t.integer  "size"

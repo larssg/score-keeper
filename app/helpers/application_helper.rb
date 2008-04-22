@@ -38,12 +38,12 @@ module ApplicationHelper
     logged_in? && current_user.is_admin?
   end
   
-  def user_link(user)
-    link_to h(user.display_name), user_path(user), :class => 'user'
+  def user_link(game, user)
+    link_to h(user.display_name), game_user_path(game, user), :class => 'user'
   end
   
-  def user_link_full(user)
-    link_to h(user.name), user_path(user), :class => 'user'
+  def user_link_full(game, user)
+    link_to h(user.name), game_user_path(game, user), :class => 'user'
   end
 
   def graph(url)
