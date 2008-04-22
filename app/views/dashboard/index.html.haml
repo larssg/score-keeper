@@ -20,7 +20,7 @@
     - unless @leader.nil?
       #leader
         %h3= 'Leader'[]
-        .mugshot= link_to image_tag(@leader.user.mugshot.public_filename(:thumb), :alt => @leader.name), user_path(@leader) if @leader.user.mugshot
+        .mugshot= link_to image_tag(@leader.user.mugshot.public_filename(:thumb), :alt => @leader.user.name), user_path(@leader) if @leader.user.mugshot
         = user_link_full current_game, @leader.user
 
     #counts
@@ -34,7 +34,7 @@
           %td
             %label= 'Goals scored'[] + ':'
             = @goals_scored
-        - unless true && @all_time_high.nil? && @all_time_low.nil?
+        - unless @all_time_high.nil? && @all_time_low.nil?
           %tr
             %td
               - unless @all_time_high.nil?
