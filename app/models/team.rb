@@ -65,13 +65,15 @@ class Team < ActiveRecord::Base
       # If match was lost, "award" negative points
       award = award.collect { |a| a * -1 } if amount < 0
       
+      award = award.reverse if amount < 0
+      
       # Award points
       game_participations.each_with_index { |gp, index| gp.ranking += award[index] }
       
       # Save points
       self.memberships.each_with_index do |m, index|
         m.points_awarded = award[index]
-        m.current_ranking = game_participations[index].ranking
+        m.current_ranking = game_participations.select { |gp| gp.user_id == m.user_id }.first.ranking
         m.save
       end
       
