@@ -52,7 +52,7 @@ class MatchesController < ApplicationController
   def update
     @match = current_account.matches.find(params[:id])
     if @match.update_attributes(params[:match])
-      flash[:notice] = 'Match updated.'
+      flash[:notice] = 'Match updated.'[]
       redirect_to matches_url
     else
       render :action => 'edit'
@@ -62,10 +62,10 @@ class MatchesController < ApplicationController
   def destroy
     @match = current_account.matches.find(params[:id])
     if !@match.nil? && @match.destroy
-      flash[:notice] = 'Match deleted.'
+      flash[:notice] = 'Match deleted.'[]
       redirect_back_or_default matches_url
     else
-      flash[:notice] = 'Unable to delete match.'
+      flash[:notice] = 'Unable to delete match.'[]
       redirect_back_or_default matches_url
     end
   end
