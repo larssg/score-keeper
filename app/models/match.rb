@@ -23,6 +23,7 @@ class Match < ActiveRecord::Base
   after_destroy :reset_rankings_after_destroy
   after_destroy :remove_log
 
+  validates_presence_of :game
   validates_presence_of :team_one
   validates_presence_of :team_two
 

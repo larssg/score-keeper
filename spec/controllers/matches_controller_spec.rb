@@ -4,6 +4,8 @@ describe MatchesController, "logged in" do
   fixtures :users, :accounts
 
   before(:each) do
+    @game = Factory.create_game
+    controller.stub!(:current_game).and_return(@game)
     controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
     @match = mock_model(Match)
@@ -27,16 +29,19 @@ describe MatchesController, "creating a match (logged in)" do
   fixtures :users, :accounts
 
   before(:each) do
+    @game = Factory.create_game
+    controller.stub!(:current_game).and_return(@game)
     controller.stub!(:current_account).and_return(accounts(:champions))
     login_as :aaron
     @people = Factory.create_people(4)
   end
   
   def do_post
-    params = { :match => {
-      :score1 => 10, :user11 => @people[0].id, :user12 => @people[1].id,
-      :score2 => 8, :user21 => @people[2].id, :user22 => @people[3].id
-    } }
+    params = {
+      :match => {
+        :score1 => 10, :team1 => [@people[0].id, @people[1].id],
+        :score2 => 8, :team2 => [@people[2].id, @people[3].id] },
+      :game_id => @game.id }
     post :create, params
   end
   

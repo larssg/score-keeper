@@ -14,10 +14,10 @@ class CommentsController < ApplicationController
       @comment.user = current_user
       if @comment.save
         flash[:notice] = 'Comment added successfully.'[]
-        redirect_to @match
+        redirect_to game_match_url(@match.game, @match)
       else
         flash[:error] = 'Unable to save comment.'[]
-        redirect_to @match
+        redirect_to game_match_url(@match.game, @match)
       end
     end
   end
@@ -39,6 +39,6 @@ class CommentsController < ApplicationController
     else
       flash[:error] = 'An error occured while saving the comment. Please try again.'[]
     end
-    redirect_to @comment.match
+    redirect_to game_match_url(@comment.match.game, @comment.match)
   end
 end

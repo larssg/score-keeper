@@ -42,8 +42,10 @@ module Factory
   
   def self.create_game(attributes = {})
     default_attributes = {
-      :name => 'Foosball'
+      :name => 'Foosball',
+      :team_size => 2
     }
+    default_attributes[:account] = Factory.create_account if attributes[:account].nil?
     Game.create! default_attributes.merge(attributes)
   end
   
