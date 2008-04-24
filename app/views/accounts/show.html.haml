@@ -12,5 +12,5 @@
         %td= h(user.name)
         %td= user.display_name
         %td= mail_to user.email
-        %td= user.matches_played
+        %td= user.game_participations.sum(:matches_played)
         %td= link_to 'Impersonate', impersonate_session_path(user), :method => :put
