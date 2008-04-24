@@ -13,6 +13,7 @@ class MatchesController < ApplicationController
           :include => { :teams => :memberships }, 
           :page => params[:page]))
       @filter = current_account.matches.find_filter_users(params[:filter])
+      @game = current_game
     end
     
     respond_to do |format|

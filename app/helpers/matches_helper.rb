@@ -10,4 +10,10 @@ module MatchesHelper
   def match_feed_url(game, options = {})
     formatted_game_matches_url(game, :atom, {:feed_token => current_user.feed_token}.merge(options))
   end
+  
+  def human_date(date)
+    return 'Today'[] if date.in_time_zone.to_date == Time.now.in_time_zone.to_date
+    return 'Yesterday'[] if date.to_date == 1.day.ago.to_date
+    date.to_date.to_s :long
+  end
 end

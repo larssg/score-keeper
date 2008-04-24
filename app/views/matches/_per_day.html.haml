@@ -10,6 +10,6 @@
 
       - matches_per_day.each do |day|
         %tr{ :class => cycle('odd', 'even') }
-          %td.date= day[0].to_date.to_s :long
+          %td.date= human_date(day[0])
           %td.matches_played= day[1]
       - reset_cycle

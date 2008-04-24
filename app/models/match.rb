@@ -140,14 +140,13 @@ class Match < ActiveRecord::Base
   end
   
   def update_after_destroy
-    game = self.teams.first.game
     self.teams.each do |team|
       team.memberships.each do |membership|
         participation = membership.game_participation
         
         participation.decrement(:matches_won) if team == self.winner
-        participation.goals_for -= team.score
-        participation.goals_against -= team.other.score
+        participation.points_for -= team.score
+        participation.points_against -= team.other.score
         participation.decrement(:matches_played)
         
         participation.save

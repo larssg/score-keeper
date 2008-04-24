@@ -1,9 +1,9 @@
 module Factory
   def self.create_match(options = {})
-    people = options.delete(:people) || Factory.create_people(4)
-    team_scores = options.delete(:team_scores) || [10, 4]
     account = options.delete(:account) || self.create_account
     game = options.delete(:game) || self.create_game
+    people = options.delete(:people) || Factory.create_people(4, :account => account)
+    team_scores = options.delete(:team_scores) || [10, 4]
 
     match = game.matches.build(options)
     match.score1 = team_scores[0]
@@ -17,10 +17,13 @@ module Factory
     match
   end
   
-  def self.create_people(amount)
+  def self.create_people(amount, options = {})
+    options[:account] ||= Factory.create_account
+    
     people = []
     (1..amount).each do |number|
       people << Factory.create_user(
+        :account => options[:account],
         :login => "user#{number}",
         :email => "user#{number}@example.com",
         :name => "Person Personson #{number}",
@@ -30,6 +33,8 @@ module Factory
   end
   
   def self.create_user(attributes = {})
+    attributes[:account] ||= Factory.create_account
+    
     default_attributes = {
       :login => 'admin',
       :password => 'admin',
@@ -50,9 +55,14 @@ module Factory
   end
   
   def self.create_account(attributes = {})
+    count = 1
+    while Account.find_by_domain("account#{count}")
+      count += 1
+    end
+    
     default_attributes = {
       :name => 'Account',
-      :domain => 'account',
+      :domain => "account#{count}",
       :time_zone => 'Copenhagen'
     }
     Account.create! default_attributes.merge(attributes)

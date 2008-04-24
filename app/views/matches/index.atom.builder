@@ -1,9 +1,9 @@
-atom_feed(:url => formatted_matches_url(:atom)) do |feed|
+atom_feed(:url => formatted_game_matches_url(@game, :atom)) do |feed|
   feed.title('Matches'[])
   feed.updated(@matches.first ? @matches.first.created_at : Time.now.utc)
 
   @matches.each do |match|
-    feed.entry(match) do |entry|
+    feed.entry(match, :url => game_match_url(@game, match)) do |entry|
       entry.title(match_title(match))
       entry.content(match.played_at.to_s(:short), :type => 'html')
 
