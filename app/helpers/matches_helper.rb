@@ -12,6 +12,7 @@ module MatchesHelper
   end
   
   def human_date(date)
+    date = date.to_time
     return 'Today'[] if date.in_time_zone.to_date == Time.now.in_time_zone.to_date
     return 'Yesterday'[] if date.to_date == 1.day.ago.to_date
     date.to_date.to_s :long

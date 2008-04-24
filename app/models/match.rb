@@ -111,7 +111,7 @@ class Match < ActiveRecord::Base
   
   def update_rankings
     return if self.teams.count < 2
-    transfer = (0.01 * self.loser.ranking_total).round
+    transfer = (0.01 * self.loser.ranking_total.to_f).round
     self.loser.award_points(-1 * transfer)
     self.winner.award_points(transfer)
   end

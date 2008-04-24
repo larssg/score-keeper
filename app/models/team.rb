@@ -42,42 +42,39 @@ class Team < ActiveRecord::Base
   end
   
   def award_points(amount)
-    game_participations = self.memberships.collect { |m| m.game_participation }.sort_by(&:ranking)
+    game_participations = GameParticipation.find(:all,
+      :conditions => { 
+        :game_id => self.memberships.first.game_id,
+        :user_id => self.memberships.collect(&:user_id) }).sort_by(&:ranking)
+    award = Team.split_award_points(amount, game_participations.collect(&:ranking))
+
+    # Award and save points
+    game_participations.each_with_index do |gp, index|
+      gp.ranking += award[index]
+      gp.save
     
-    if game_participations.size == 1
-      game_participations.first.update_attribute :ranking, game_participations.first.ranking + amount
-      self.memberships.first.update_attribute :current_ranking, game_participations.first.ranking
-    else
-      award = []
-      game_participations.each do |gp|
-        award << (amount.abs * (gp.ranking.to_f / ranking_total)).to_i
-      end
-
-      # Fix rounding errors
-      while award.inject(0) { |sum, item| sum + item } != amount.abs
-        if award.inject(0) { |sum, item| sum + item } < amount.abs
-          award[-1] += 1
-        else
-          award[0] -= 1
-        end
-      end
-
-      # If match was lost, "award" negative points
-      award = award.collect { |a| a * -1 } if amount < 0
-      
-      award = award.reverse if amount < 0
-      
-      # Award points
-      game_participations.each_with_index { |gp, index| gp.update_attribute :ranking, gp.ranking + award[index] }
-      
-      # Save points
-      game_participations.each_with_index do |gp, index|
-        membership = self.memberships.select { |m| m.user_id == gp.user_id }.first
-        membership.points_awarded = award[index]
-        membership.current_ranking = gp.ranking
-        membership.save
-      end
+      membership = self.memberships.select { |m| m.user_id == gp.user_id }.first
+      membership.points_awarded = award[index]
+      membership.current_ranking = gp.ranking
+      membership.save
     end
+  end
+  
+  # The rankings parameter must be sorted in ascending order
+  def self.split_award_points(amount, rankings)
+    return [amount] if rankings.size == 1
+    
+    throw "Rankings not sorted properly" unless rankings == rankings.sort
+    
+    award = rankings.collect do |ranking|
+      (amount * (ranking.to_f / rankings.sum.to_f)).to_i
+    end
+
+    # Fix rounding errors
+    award[-1] += amount - award.sum
+
+    # If match was won, reverse the award list
+    amount > 0 ? award.reverse : award
   end
   
   def update_cache_values
