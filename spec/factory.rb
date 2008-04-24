@@ -44,6 +44,7 @@ module Factory
     attributes[:account] ||= Factory.create_account
     
     default_attributes = {
+      :name => 'Administrator',
       :login => 'admin',
       :password => 'admin',
       :password_confirmation => 'admin',

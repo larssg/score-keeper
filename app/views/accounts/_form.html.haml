@@ -8,6 +8,10 @@
     http://
     = f.text_field :domain
     = '.' + account_domain
+
+  .field
+    %label= 'Time zone'
+    = f.time_zone_select :time_zone, nil
   
   %h3= 'First user'
   

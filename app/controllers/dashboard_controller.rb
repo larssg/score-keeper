@@ -16,7 +16,7 @@ class DashboardController < ApplicationController
       @match_count = current_game.matches.count
       
       total_points_for = current_game.game_participations.sum(:points_for)
-      @goals_scored = total_points_for.nil? ? 0 : total_points_for / 2
+      @points = total_points_for.nil? ? 0 : total_points_for / 2
 
       @all_time_high = Membership.all_time_high(current_game)
       @all_time_low = Membership.all_time_low(current_game)

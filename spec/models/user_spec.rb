@@ -101,6 +101,18 @@ describe User do
     users(:quentin).remember_token_expires_at.should_not be_nil
     users(:quentin).remember_token_expires_at.between?(before, after).should be_true
   end
+  
+  it "should get time_zone from account" do
+    account = Factory.create_account(:time_zone => 'Taipei')
+    user = account.users.create!(
+      :name => 'Mike',
+      :login => 'mike',
+      :email => 'mike@example.com',
+      :password => 'mike',
+      :password_confirmation => 'mike')
+
+    user.time_zone.should == 'Taipei'
+  end
 
 protected
   def create_user(options = {})

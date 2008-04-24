@@ -29,11 +29,11 @@
       %table
         %tr
           %td
-            %label= 'Matches played'[] + ':'
+            %label= 'Matches'[] + ':'
             = @match_count
           %td
-            %label= 'Goals scored'[] + ':'
-            = @goals_scored
+            %label= 'Points'[] + ':'
+            = @points
         - unless @all_time_high.nil? && @all_time_low.nil?
           %tr
             %td
