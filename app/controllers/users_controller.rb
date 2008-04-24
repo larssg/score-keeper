@@ -35,7 +35,7 @@ class UsersController < ApplicationController
       @teams.each do |team|
         team_mate = team[:team].team_mate_for(@user)
         team[:team_mate] = team_mate
-        team[:team_mate_game_participation] = @game.game_participations.find_by_user_id(team_mate.id)
+        team[:team_mate_game_participation] = @game.game_participation_for(team_mate)
         team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
         team[:wins] = team[:wins].blank? ? 0 : team[:wins][1].blank? ? 0 : team[:wins][1].to_i
         team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)

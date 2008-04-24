@@ -44,6 +44,10 @@ class Game < ActiveRecord::Base
     format_player_roles
   end
   
+  def game_participation_for(user)
+    game_participations.find_by_user_id(user.id)
+  end
+  
   protected
   def format_player_roles
     return if !self.attributes.has_key?(:player_roles) || player_roles.blank?
