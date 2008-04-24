@@ -15,6 +15,7 @@ class Comment < ActiveRecord::Base
     self.match.account.logs.create(:linked_model => self.class.class_name,
       :linked_id => self.id,
       :user => self.user,
+      :game => self.match.game,
       :message => "#{self.user.name} said: #{self.body}",
       :published_at => self.created_at)
   end

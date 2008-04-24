@@ -1,7 +1,7 @@
 module Factory
   def self.create_match(options = {})
-    account = options.delete(:account) || self.create_account
-    game = options.delete(:game) || self.create_game
+    account = options.delete(:account) || Factory.create_account
+    game = options.delete(:game) || Factory.create_game
     people = options.delete(:people) || Factory.create_people(4, :account => account)
     team_scores = options.delete(:team_scores) || [10, 4]
 
@@ -15,6 +15,14 @@ module Factory
     match.account = account
     match.save!
     match
+  end
+  
+  def self.create_comment(options = {})
+    match = options.delete(:match) || Factory.create_match
+    user = options.delete(:user) || match.teams.first.memberships.first.user
+    body = options.delete(:body) || 'A test comment.'
+    
+    match.comments.create(:match => match, :user => user, :body => body)
   end
   
   def self.create_people(amount, options = {})

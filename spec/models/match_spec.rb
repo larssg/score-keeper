@@ -53,4 +53,19 @@ describe Match do
       gp.matches_played.should == 0
     end
   end
+  
+  it "should create a log entry" do
+    lambda do
+      match = Factory.create_match
+    end.should change(Log, :count).by(1)
+  end
+  
+  it "should create a log entry linking to the game" do
+    game = Factory.create_game
+    lambda do
+      match = Factory.create_match(:game => game)
+    end.should change(Log, :count).by(1)
+    
+    log = Log.find_by_game_id(game.id).should_not be_nil
+  end
 end

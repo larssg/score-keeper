@@ -177,6 +177,7 @@ class Match < ActiveRecord::Base
     self.account.logs.create(:linked_model => self.class.class_name,
       :linked_id => self.id,
       :user => self.creator,
+      :game => self.game,
       :message => "#{self.winner.memberships.collect { |m| m.user.name }.join(' and ')} won #{self.winner.score} to #{self.loser.score} over #{self.loser.memberships.collect { |m| m.user.name }.join(' and ')}",
       :published_at => self.played_at)
   end
