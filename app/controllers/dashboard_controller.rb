@@ -22,7 +22,6 @@ class DashboardController < ApplicationController
       @all_time_low = Membership.all_time_low(current_game)
 
       # Get positions 7 days ago
-      # FIXME: Newbies...
       @positions = {}
       last_month = current_game.matches.find(:first, :order => 'played_at ASC', :conditions => ['played_at >= ?', 7.days.ago])
       unless last_month.blank? || last_month.positions.blank?

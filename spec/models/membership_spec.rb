@@ -6,4 +6,6 @@ describe Membership do
   end
 
   it "should update memberships_count on users"
+  
+  it "should properly log ranking"
 end
