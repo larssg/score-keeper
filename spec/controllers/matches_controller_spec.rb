@@ -59,3 +59,41 @@ describe MatchesController, "creating a match (logged in)" do
     end.should change(Match, :count).by(1)
   end
 end
+
+describe MatchesController, "deleting a match" do
+  fixtures :users, :accounts
+
+  before(:each) do
+    @game = Factory.create_game
+    controller.stub!(:current_game).and_return(@game)
+    controller.stub!(:current_account).and_return(accounts(:champions))
+    login_as :aaron
+    @people = Factory.create_people(4)
+  end
+  
+  it "should work" do
+    match = Factory.create_match(:people => @people, :account => accounts(:champions), :game => @game)
+    lambda do
+      delete :destroy, :id => match.id, :game_id => @game.id
+    end.should change(Match, :count).by(-1)
+  end
+  
+  it "should redirect to the match list" do
+    match = Factory.create_match(:people => @people, :account => accounts(:champions), :game => @game)
+    delete :destroy, :id => match.id, :game_id => @game.id
+    response.should be_redirect
+    response.should redirect_to(game_matches_path(@game))
+    flash[:notice].should_not be_empty
+  end
+  
+  it "should redirect to the match list when unsuccessful" do
+    match = Factory.create_match(:people => @people, :account => accounts(:champions), :game => @game)
+    match.destroy
+    
+    # now trying to delete a non-existing match
+    delete :destroy, :id => match.id, :game_id => @game.id
+    response.should be_redirect
+    response.should redirect_to(game_matches_path(@game))
+    flash[:warning].should_not be_empty
+  end
+end

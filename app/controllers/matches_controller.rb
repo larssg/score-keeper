@@ -61,13 +61,13 @@ class MatchesController < ApplicationController
   end
   
   def destroy
-    @match = current_account.matches.find(params[:id])
+    @match = current_account.matches.find_by_id(params[:id])
     if !@match.nil? && @match.destroy
       flash[:notice] = 'Match deleted.'[]
-      redirect_back_or_default matches_url
+      redirect_back_or_default game_matches_url(@match.game_id)
     else
-      flash[:notice] = 'Unable to delete match.'[]
-      redirect_back_or_default matches_url
+      flash[:warning] = 'Unable to delete match.'[]
+      redirect_back_or_default game_matches_url(params[:game_id])
     end
   end
   
