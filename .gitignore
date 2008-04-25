@@ -4,6 +4,7 @@ tmp/pids/*
 tmp/sessions/*
 tmp/sockets/*
 .DS_Store
+coverage
 public/cache/**/*
 doc/api
 doc/app
