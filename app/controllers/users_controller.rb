@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     @all_time_low = @user.all_time_low(@game)
     @matches_per_day = @game_participation.memberships.count(:group => 'matches.played_on', :limit => 10, :order => 'matches.played_on DESC', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
 
-    @team_counts = @user.teams.count(:group => :team_ids).sort_by { |t| t[1] }.reverse
+    @team_counts = @user.teams.count(:group => :team_ids, :conditions => ['memberships.game_id = ?', @game.id]).sort_by { |t| t[1] }.reverse
     @team_wins = @user.teams.count(:group => :team_ids, :conditions => { :won => true })
     @teams = current_account.teams.find(:all, :group => :team_ids, :conditions => { :team_ids => @team_counts.collect { |tc| tc[0] } })
     
