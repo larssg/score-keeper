@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Team, 'having won a game' do
-  before(:each) do
-    @team = Team.new
-  end
-
   it "should assign most points to player with lowest ranking" do
     amount = 30
     rankings = [1000, 2000]
@@ -21,10 +17,6 @@ describe Team, 'having won a game' do
 end
 
 describe Team, 'having lost a game' do
-  before(:each) do
-    @team = Team.new
-  end
-
   it "should deduct most points from player with highest ranking" do
     amount = -30
     rankings = [1000, 2000]
