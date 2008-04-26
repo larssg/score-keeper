@@ -105,6 +105,21 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_account
   
+  def current_users_games
+    if @current_users_games.nil?
+      @current_users_games = {:played => [], :not_played => []}
+      current_account.all_games.each do |game|
+        if current_user.cache_game_participation_ids.split(',').index(game.id.to_s)
+          @current_users_games[:played] << game
+        else
+          @current_users_games[:not_played] << game
+        end
+      end
+    end
+    @current_users_games
+  end
+  helper_method :current_users_games
+  
   def time_periods
     [
       ['30 days'[], 30],

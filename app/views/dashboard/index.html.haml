@@ -13,7 +13,7 @@
 - if @recent_matches.size > 0
   = render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
 - else
-  #no_data= 'There are no games in the database yet.'[]
+  #no_data= 'There are no matches in the database yet.'[]
       
 - content_for :sidebar do
   - cache(cache_key('sidebar')) do

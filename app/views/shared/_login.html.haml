@@ -1,6 +1,6 @@
 - form_tag session_path('switch_game'), :method => :put do
   #user
-    = collection_select :current_game, :id, current_account.all_games, :id, :name, { :prompt => ('-- ' + 'Switch game'[] + ' --') }, { :onchange => 'this.form.submit();' }
+    = render :partial => 'shared/current_game'
     |
     %span.current_user= link_to current_user.login, current_user
     |

@@ -3,6 +3,9 @@ class GameParticipation < ActiveRecord::Base
   belongs_to :user
   has_many :memberships
   
+  after_create :update_game_participation_cache_on_user
+  after_destroy :update_game_participation_cache_on_user  
+  
   def matches_lost
     matches_played - matches_won
   end
@@ -28,5 +31,10 @@ class GameParticipation < ActiveRecord::Base
       :order => 'matches.played_at DESC')
       
     membership.nil? ? 2000 : membership.current_ranking
+  end
+  
+  protected
+  def update_game_participation_cache_on_user
+    self.user.update_attribute :cache_game_participation_ids, self.user.game_participations.collect(&:id).join(',')
   end
 end
