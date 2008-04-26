@@ -167,8 +167,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless logged_in? && current_user.is_admin?
   end
   
+  def impersonating?
+    !session[:real_user_id].blank?
+  end
+  
   def must_be_impersonating
-    redirect_to root_url if session[:real_user_id].blank?
+    redirect_to root_url unless impersonating?
   end
   
   private

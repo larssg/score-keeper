@@ -17,8 +17,8 @@ class SessionsController < ApplicationController
   
   def update
     unless params[:current_game].blank? || params[:current_game][:id].blank?
-      self.current_game = current_account.games.find(params[:current_game][:id]) 
-      self.current_user.update_attribute :last_game, self.current_game
+      self.current_game = current_account.games.find(params[:current_game][:id])
+      self.current_user.update_attribute :last_game, self.current_game unless impersonating?
     end
     redirect_back_or_default('/')
   end
@@ -46,6 +46,7 @@ class SessionsController < ApplicationController
   
   def impersonate
     session[:real_user_id] ||= current_user.id
+    session[:current_game_id] = nil
     user = User.find(params[:id])
     unless user.nil?
       self.current_user = user
@@ -57,6 +58,7 @@ class SessionsController < ApplicationController
   def unimpersonate
     self.current_user = User.find(session[:real_user_id])
     session[:real_user_id] = nil
+    session[:current_game_id] = nil
     flash[:notice] = 'You are now yourself!'
     redirect_to root_url
   end
