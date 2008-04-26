@@ -35,6 +35,6 @@ class GameParticipation < ActiveRecord::Base
   
   protected
   def update_game_participation_cache_on_user
-    self.user.update_attribute :cache_game_participation_ids, self.user.game_participations.collect(&:id).join(',')
+    self.user.update_attribute :cache_game_ids, self.user.game_participations.collect(&:game_id).join(',')
   end
 end

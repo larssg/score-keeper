@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080424222712) do
+ActiveRecord::Schema.define(:version => 20080426141924) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(:version => 20080424222712) do
     t.string   "login_token"
     t.string   "time_zone"
     t.integer  "last_game_id"
+    t.string   "cache_game_ids"
   end
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"
