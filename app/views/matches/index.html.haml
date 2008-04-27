@@ -27,7 +27,7 @@
 
             %td
               = match.played_at.to_s :short
-              = ' by {user}'[:by_user, link_to(find_user(match.creator_id).login, find_user(match.creator_id))] unless match.creator_id.nil?
+              = ' by {user}'[:by_user, link_to(find_user(match.creator_id).login, game_user_path(current_game, find_user(match.creator_id)))] unless match.creator_id.nil?
 
             %td= link_to 'Delete', game_match_path(match.game_id, match), :method => :delete, :confirm => 'Delete match. Are you sure?'[] if logged_in?
 
