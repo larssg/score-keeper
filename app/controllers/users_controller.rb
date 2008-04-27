@@ -16,6 +16,8 @@ class UsersController < ApplicationController
 
     @game_participation = @user.game_participations.find_by_game_id(@game.id)
 
+    redirect_to root_url and return if @game_participation.nil?
+
     @time_period = params[:period] ? params[:period].to_i : 30
     @all_time_high = @user.all_time_high(@game)
     @all_time_low = @user.all_time_low(@game)
