@@ -1,6 +1,6 @@
 - form_tag session_path('switch_game'), :method => :put do
   #user
-    - if current_game.nil?
+    - if current_account.all_games.size > 0
       = render :partial => 'shared/current_game'
       |
     %span.current_user= link_to current_user.login, current_user
