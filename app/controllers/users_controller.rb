@@ -90,7 +90,7 @@ class UsersController < ApplicationController
     mugshot = Mugshot.create(params[:mugshot])
     @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil?
     @user.is_account_admin = params[:user][:is_account_admin] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:is_account_admin].nil?
-    @user.is_admin = params[:user][:is_admin] if current_user.is_admin? && !params[:user][:is_admin].nil?
+    @user.is_admin = params[:user][:is_admin] if current_user.is_admin? && params[:user][:is_admin]
     @user.enabled = params[:user][:enabled] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:enabled].nil?
     @success = @user.update_attributes(params[:user])
     respond_to do |format|
