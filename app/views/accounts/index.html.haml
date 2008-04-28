@@ -2,13 +2,15 @@
 .list
   %table
     %tr
-      %th= 'Name'[]
+      %th= link_to 'Name'[], :order => 'name'
       %th= 'Domain'[]
       %th= 'Users'[]
       %th= 'Matches'[]
+      %th= link_to 'Created'[], :order => 'created_at'
     - @accounts.each do |account|
       %tr{ :class => cycle('odd', 'even') }
         %td= link_to h(account.name), account
         %td= h(account.domain)
         %td= account.users.count
         %td= account.matches.count
+        %td= account.created_at

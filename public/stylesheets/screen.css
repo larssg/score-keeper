@@ -207,6 +207,8 @@ table.form {
       background-color: #77BBDD;
       padding: 3px;
       color: #FFFFFF; }
+      .list table th a {
+        color: #CCEEFF; }
     .list table td {
       border: 0;
       padding: 3px;

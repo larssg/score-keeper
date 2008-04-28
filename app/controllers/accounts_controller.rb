@@ -4,7 +4,8 @@ class AccountsController < ApplicationController
   before_filter :must_be_account_admin, :only => [ :edit, :update ]
   
   def index
-    @accounts = Account.find(:all, :order => 'name')
+    order = %w(name created_at).include?(params[:order]) ? params[:order] : 'name'
+    @accounts = Account.find(:all, :order => order)
   end
   
   def show
