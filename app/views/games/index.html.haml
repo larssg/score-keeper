@@ -1,15 +1,20 @@
-.list
-  %table
-    %tr
-      %th= 'Name'[]
-      %th= 'Team size'[]
-      %th= 'Actions'[]
-      
-    - @games.each do |game|
+- if @games.size > 0
+  .list
+    %table
       %tr
-        %td= h(game.name)
-        %td= game.team_size
-        %td= link_to 'Edit', edit_game_path(game)
+        %th= 'Name'[]
+        %th= 'Team size'[]
+        %th= 'Actions'[]
+      
+      - @games.each do |game|
+        %tr
+          %td= h(game.name)
+          %td= game.team_size
+          %td= link_to 'Edit', edit_game_path(game)
+
+- else
+  .list
+    = 'There are no games in the system. Please <a href="{new_game_path}">create a game</a> to get started.'[:no_games, new_game_path]
 
 - content_for :sidebar do
   %h3= 'Administration'

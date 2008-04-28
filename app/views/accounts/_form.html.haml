@@ -1,44 +1,42 @@
 - form_for @account do |f|
-  .field
-    %label= 'Name'
-    = f.text_field :name
-    
-  .field#subdomain
-    %label= 'Subdomain'
-    http://
-    = f.text_field :domain
-    = '.' + account_domain
+  %h3= 'Basics'[]
+  %table.form
+    %tr
+      %td.label= 'Subdomain'[]
+      %td.field
+        http://
+        = f.text_field :domain, :class => 'text domain'
+        = '.' + account_domain
 
-  .field
-    %label= 'Time zone'
-    = f.time_zone_select :time_zone, nil
+    %tr
+      %td.label= 'Time zone'[]
+      %td.field
+        = f.time_zone_select :time_zone, nil
   
-  %h3= 'First user'
-  
+  %h3= 'First user'[]
   - fields_for @user do |u|
-    .field
-      %label= 'Username'
-      = u.text_field :login
-    
-    .field
-      %label= 'Email'
-      = u.text_field :email
+    %table.form
+      %tr
+        %td.label= 'Username'[]
+        %td.field
+          = u.text_field :login, :class => 'text'
 
-    .field
-      %label= 'Full name'[]
-      = u.text_field :name
+      %tr
+        %td.label= 'Email'[]
+        %td.field
+          = u.text_field :email, :class => 'text'
 
-    .field
-      %label= 'Display name'[]
-      = u.text_field :display_name
+      %tr
+        %td.label= 'Password'[]
+        %td.field
+          = u.password_field :password, :class => 'text'
 
-    .field
-      %label= 'Password'[]
-      = u.password_field :password
+      %tr
+        %td.label= 'Confirm Password'[]
+        %td.field
+          = u.password_field :password_confirmation, :class => 'text'
 
-    .field
-      %label= 'Confirm Password'[]
-      = u.password_field :password_confirmation
-  
-  .field
-    = submit_tag
+      %tr
+        %td.label &nbsp;
+        %td.field
+          = submit_tag 'Sign up'

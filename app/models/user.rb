@@ -37,6 +37,7 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone
   
   before_destroy :remove_matches
+  before_validation :set_name_from_login
   before_save :set_display_name
   
   def set_display_name
@@ -123,6 +124,10 @@ class User < ActiveRecord::Base
   end
 
   protected
+    def set_name_from_login
+      self.name ||= self.login.humanize
+    end
+  
     def remove_matches
       self.memberships.each do |membership|
         match = membership.team.match

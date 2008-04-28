@@ -551,12 +551,19 @@ body.login .container {
 
 body.public h1 {
   font-size: 19px; }
+body.public div.visible {
+  padding-left: 20px;
+  padding-right: 20px; }
 body.public h2 {
   font-size: 17px; }
 body.public h3 {
   font-size: 15px; }
 body.public #new_account {
   margin-bottom: 1em; }
+  body.public #new_account input.text {
+    border: 1px solid #999999; }
+  body.public #new_account input.domain {
+    width: 14em; }
   body.public #new_account .field {
     margin-bottom: 0.5em; }
     body.public #new_account .field label {

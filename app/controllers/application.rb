@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
       unless @current_game.nil?
         session[:current_game_id] ||= @current_game.id
       else
-        redirect_to games_url unless controller_name == 'games' || controller_name == 'sessions'
+        redirect_to games_url unless %w(games sessions users accounts).include?(controller_name)
       end
     end
     @current_game

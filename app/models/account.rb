@@ -10,6 +10,8 @@ class Account < ActiveRecord::Base
   validates_format_of :domain, :with => /^[0-9a-z]+$/, :on => :create, :message => "can only contain alphanumeric lowercase characters"
   validates_exclusion_of :domain, :in => %w(www pop pop3 imap smtp mail support ftp mysql), :on => :create, :message => "is not allowed"
   
+  before_validation :set_name_from_domain
+  
   attr_accessible :name, :domain, :time_zone
 
   def all_users
@@ -35,5 +37,10 @@ class Account < ActiveRecord::Base
   def reset_positions!
     @ranked_users = nil
     @user_positions = nil
+  end
+  
+  protected
+  def set_name_from_domain
+    self.name ||= self.domain.humanize
   end
 end
