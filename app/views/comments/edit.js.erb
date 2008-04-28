@@ -1,4 +1,4 @@
-<% form_for @comment, :url => match_comment_path(@comment.match_id, @comment.id) do |f| %>
+<% form_for @comment, :url => game_match_comment_path(@comment.match.game_id, @comment.match_id, @comment.id) do |f| %>
   <%= render :partial => 'comments/form', :locals => { :f => f } %>
   <p>
     <%= submit_tag 'Save changes'[] %>
