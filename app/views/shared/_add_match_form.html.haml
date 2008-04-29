@@ -3,13 +3,13 @@
     %label= 'Team'[] + ':'
     - (0...current_game.team_size).each do |position|
       = f.collection_select 'team1', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user', :name => 'match[team1][]', :id => "match_team1_#{position + 1}" }
-    %label= 'Score'[] + ':'
+    %label= f.label :score1, 'Score'[] + ':'
     = f.text_field 'score1', :class => 'score', :autocomplete => 'off'
   .team
     %label= 'Team'[] + ':'
     - (0...current_game.team_size).each do |position|
       = f.collection_select 'team2', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user', :name => 'match[team2][]', :id => "match_team2_#{position + 1}" }
-    %label= 'Score'[] + ':'
+    %label= f.label :score2, 'Score'[] + ':'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
     = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
     = link_to_function 'Cancel'[], "$('#add_match_form').hide()"
