@@ -11,8 +11,9 @@ Story "signing up as a new user", %{
       Account.delete_all
       User.delete_all
     end
-    When "I fill out the sign up form" do
-      visits 'accounts/new'
+    When "I go to the sign up form and fill it out" do
+      visits "/p"
+      clicks_link 'this form'
       fills_in 'Subdomain', 'test'
       fills_in 'Username', 'testuser'
       fills_in 'Email', 'testuser@test.example.com'
