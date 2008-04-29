@@ -2,6 +2,10 @@
 
 Score Keeper is a very simple web app for keeping score, rankings, etc. for games.
 
+Features:
+
+* Supports games with fixed team sizes of 1, 2 or 3.
+
 == Credits
 
 Score Keeper is created and maintained by Lars Sehested (www.larssehested.com)
