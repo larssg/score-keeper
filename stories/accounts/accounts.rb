@@ -30,4 +30,36 @@ Story "signing up as a new user", %{
       user.account.should == account
     end
   end
+  
+  Scenario "new user does not enter a subdomain" do
+    Given "no users in the database"
+    When "I fill out the sign up form with no subdomain" do
+      visits 'accounts/new'
+      fills_in 'Username', 'testuser'
+      fills_in 'Email', 'testuser@test.example.com'
+      fills_in 'Password', 'testpwd'
+      fills_in 'Confirm Password', 'testpwd'
+      clicks_button 'Sign up'
+    end
+    Then "I should not have access to the system" do
+      account = Account.find_by_domain('test')
+      user = User.find_by_login('testuser')
+      
+      account.should be_nil
+      user.should be_nil
+    end
+  end
+  
+  Scenario "new user does not enter a username" do
+    Given "no users in the database"
+    When "I fill out the sign up form with no username" do
+      visits 'accounts/new'
+      fills_in 'Subdomain', 'test'
+      fills_in 'Email', 'testuser@test.example.com'
+      fills_in 'Password', 'testpwd'
+      fills_in 'Confirm Password', 'testpwd'
+      clicks_button 'Sign up'
+    end
+    Then "I should not have access to the system"  
+  end
 end
