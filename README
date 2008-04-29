@@ -1,8 +1,8 @@
-== Score Keeper
+= Score Keeper
 
 Score Keeper is a very simple web app for keeping score, rankings, etc. for games.
 
-Features:
+== Features
 
 * Supports games with fixed team sizes of 1, 2 or 3.
 
