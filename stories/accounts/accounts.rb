@@ -63,4 +63,19 @@ Story "signing up as a new user", %{
     end
     Then "I should not have access to the system"  
   end
+
+  Scenario "test account already exists" do
+    Given "a test account in the database" do
+      Account.delete_all
+      User.delete_all
+      
+      Account.create!(:domain => 'test')
+    end
+    When "I go to the sign up form and fill it out"
+    Then "I should be told to use another account name" do
+      response.should be_success
+      response.should render_template('accounts/new')
+      response.should have_text(/Domain has already been taken/)
+    end
+  end
 end
