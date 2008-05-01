@@ -22,14 +22,14 @@ class HelperTest < Test::Unit::TestCase
   end
 
   def test_flatten
-    assert_equal(flatten("FooBar"), "FooBar")
+    assert_equal("FooBar", flatten("FooBar"))
 
-    assert_equal(flatten("Foo\rBar"), "FooBar")
+    assert_equal("FooBar", flatten("Foo\rBar"))
 
-    assert_equal(flatten("Foo\nBar"), "Foo&#x000A;Bar")
+    assert_equal("Foo&#x000A;Bar", flatten("Foo\nBar"))
 
-    assert_equal(flatten("Hello\nWorld!\nYOU ARE \rFLAT?\n\rOMGZ!"),
-                         "Hello&#x000A;World!&#x000A;YOU ARE FLAT?&#x000A;OMGZ!")
+    assert_equal("Hello&#x000A;World!&#x000A;YOU ARE FLAT?&#x000A;OMGZ!",
+                 flatten("Hello\nWorld!\nYOU ARE \rFLAT?\n\rOMGZ!"))
   end
 
   def test_list_of_should_render_correctly
@@ -95,6 +95,18 @@ class HelperTest < Test::Unit::TestCase
   def test_capture_haml
     assert_equal("\"<p>13</p>\\n\"\n", render("- foo = capture_haml(13) do |a|\n  %p= a\n= foo.dump"))
   end
+  
+  def test_haml_tag_attribute_html_escaping
+    assert_equal("<p id='foo&amp;bar'>baz</p>\n", render("%p{:id => 'foo&bar'} baz", :escape_html => true))
+  end
+
+  def test_haml_tag_autoclosed_tags_are_closed
+    assert_equal("<br class='foo' />\n", render("- haml_tag :br, :class => 'foo'"))
+  end
+
+  def test_haml_tag_non_autoclosed_tags_arent_closed
+    assert_equal("<p>\n</p>\n", render("- haml_tag :p"))
+  end
 
   def test_is_haml
     assert(!ActionView::Base.new.is_haml?)
@@ -152,6 +164,24 @@ class HelperTest < Test::Unit::TestCase
     end
 
     assert_equal("<p attr='val'>\n  Blah\n</p>\n", result)
+  end
+
+  def test_non_haml
+    assert_equal("false\n", render("= non_haml { is_haml? }"))
+  end
+  
+  class ActsLikeTag
+    # We want to be able to have people include monkeypatched ActionView helpers
+    # without redefining is_haml?.
+    # This is accomplished via Object#is_haml?, and this is a test for it.
+    include ActionView::Helpers::TagHelper
+    def to_s
+      content_tag :p, 'some tag content'
+    end
+  end
+
+  def test_random_class_includes_tag_helper
+    assert_equal "<p>some tag content</p>", ActsLikeTag.new.to_s
   end
 end
 

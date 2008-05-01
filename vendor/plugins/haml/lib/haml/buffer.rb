@@ -6,17 +6,20 @@ module Haml
   class Buffer
     include Haml::Helpers
 
-    # Set the maximum length for a line to be considered a one-liner.
-    # Lines <= the maximum will be rendered on one line,
-    # i.e. <tt><p>Hello world</p></tt>
-    ONE_LINER_LENGTH     = 50
-
     # The string that holds the compiled XHTML. This is aliased as
     # _erbout for compatibility with ERB-specific code.
     attr_accessor :buffer
 
     # The options hash passed in from Haml::Engine.
     attr_accessor :options
+
+    # The Buffer for the enclosing Haml document.
+    # This is set for partials and similar sorts of nested templates.
+    # It's nil at the top level (see #toplevel?).
+    attr_accessor :upper
+
+    # See #active?
+    attr_writer :active
 
     # True if the format is XHTML
     def xhtml?
@@ -38,6 +41,19 @@ module Haml
       @options[:format] == :html5
     end
 
+    # True if this buffer is a top-level template,
+    # as opposed to a nested partial.
+    def toplevel?
+      upper.nil?
+    end
+
+    # True if this buffer is currently being used to render a Haml template.
+    # However, this returns false if a subtemplate is being rendered,
+    # even if it's a subtemplate of this buffer's template.
+    def active?
+      @active
+    end
+
     # Gets the current tabulation of the document.
     def tabulation
       @real_tabs + @tabulation
@@ -50,7 +66,9 @@ module Haml
     end
 
     # Creates a new buffer.
-    def initialize(options = {})
+    def initialize(upper = nil, options = {})
+      @active = true
+      @upper = upper
       @options = {
         :attr_wrapper => "'",
         :ugly => false,
@@ -71,14 +89,14 @@ module Haml
         # Have to push every line in by the extra user set tabulation
         text.gsub!(/^/m, '  ' * @tabulation)
       end
-      
+
       @buffer << text
       @real_tabs += tab_change
     end
 
     # Properly formats the output of a script that was run in the
     # instance_eval.
-    def push_script(result, preserve_script, close_tag = nil, preserve_tag = false)
+    def push_script(result, preserve_script, close_tag = nil, preserve_tag = false, escape_html = false)
       tabulation = @real_tabs
 
       if preserve_tag
@@ -86,24 +104,26 @@ module Haml
       elsif preserve_script
         result = Haml::Helpers.find_and_preserve(result)
       end
-      
+
       result = result.to_s
       while result[-1] == ?\n
         # String#chomp is slow
         result = result[0...-1]
       end
-      
-      if close_tag && (@options[:ugly] || Buffer.one_liner?(result) || preserve_tag)
+
+      result = html_escape(result) if escape_html
+
+      if close_tag && (@options[:ugly] || !result.include?("\n") || preserve_tag)
         @buffer << "#{result}</#{close_tag}>\n"
         @real_tabs -= 1
       else
         if close_tag
           @buffer << "\n"
         end
-        
+
         result = result.gsub(/^/m, tabs(tabulation)) unless @options[:ugly]
         @buffer << "#{result}\n"
-        
+
         if close_tag
           # We never get here if @options[:ugly] is true
           @buffer << "#{tabs(tabulation-1)}</#{close_tag}>\n"
@@ -115,9 +135,9 @@ module Haml
 
     # Takes the various information about the opening tag for an
     # element, formats it, and adds it to the buffer.
-    def open_tag(name, atomic, try_one_line, preserve_tag, class_id, obj_ref, content, *attributes_hashes)
+    def open_tag(name, self_closing, try_one_line, preserve_tag, escape_html, class_id, obj_ref, content, *attributes_hashes)
       tabulation = @real_tabs
-      
+
       attributes = class_id
       attributes_hashes.each do |attributes_hash|
         attributes_hash.keys.each { |key| attributes_hash[key.to_s] = attributes_hash.delete(key) }
@@ -125,7 +145,7 @@ module Haml
       end
       self.class.merge_attrs(attributes, parse_object_ref(obj_ref)) if obj_ref
 
-      if atomic
+      if self_closing
         str = " />\n"
       elsif try_one_line || preserve_tag
         str = ">"
@@ -137,12 +157,12 @@ module Haml
       @buffer << "#{@options[:ugly] ? '' : tabs(tabulation)}<#{name}#{attributes}#{str}"
 
       if content
-        if @options[:ugly] || Buffer.one_liner?(content)
+        if @options[:ugly] || !content.include?("\n")
           @buffer << "#{content}</#{name}>\n"
         else
           @buffer << "\n#{tabs(@real_tabs+1)}#{content}\n#{tabs(@real_tabs)}</#{name}>\n"
         end
-      elsif !atomic
+      elsif !self_closing
         @real_tabs += 1
       end
     end
@@ -164,16 +184,10 @@ module Haml
       to.merge!(from)
     end
 
+    private
+
     # Some of these methods are exposed as public class methods
     # so they can be re-used in helpers.
-
-    # Returns whether or not the given value is short enough to be rendered
-    # on one line.
-    def self.one_liner?(value)
-      value.length <= ONE_LINER_LENGTH && value.scan(/\n/).empty?
-    end
-
-    private
 
     @@tab_cache = {}
     # Gets <tt>count</tt> tabs. Mostly for internal use.
@@ -184,12 +198,19 @@ module Haml
 
     # Takes an array of objects and uses the class and id of the first
     # one to create an attributes hash.
+    # The second object, if present, is used as a prefix,
+    # just like you can do with dom_id() and dom_class() in Rails
     def parse_object_ref(ref)
+      prefix = ref[1]
       ref = ref[0]
       # Let's make sure the value isn't nil. If it is, return the default Hash.
       return {} if ref.nil?
       class_name = underscore(ref.class)
       id = "#{class_name}_#{ref.id || 'new'}"
+      if prefix
+        class_name = "#{ prefix }_#{ class_name}"
+        id = "#{ prefix }_#{ id }"
+      end
 
       {'id' => id, 'class' => class_name}
     end

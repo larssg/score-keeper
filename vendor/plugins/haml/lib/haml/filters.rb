@@ -38,7 +38,7 @@ module Haml
       # to render text with the given filter.
       # If compile is overridden, however, render doesn't need to be.
       def render(text)
-        raise HamlError.new("#{self.inspect}#render not defined!")
+        raise Error.new("#{self.inspect}#render not defined!")
       end
 
       def internal_compile(*args) # :nodoc:
@@ -93,7 +93,7 @@ module Haml
       #
       #     ...
       #   end
-      # 
+      #
       def lazy_require(*reqs)
         @lazy_requires = reqs
       end
@@ -110,7 +110,7 @@ module Haml
             return
           rescue LoadError; end # RCov doesn't see this, but it is run
         end
-       
+
         begin
           @required = @lazy_requires[-1]
           require @required
@@ -118,9 +118,9 @@ module Haml
           classname = self.class.to_s.gsub(/\w+::/, '')
 
           if @lazy_requires.size == 1
-            raise HamlError.new("Can't run #{classname} filter; required file '#{@lazy_requires.first}' not found")
+            raise Error.new("Can't run #{classname} filter; required file '#{@lazy_requires.first}' not found")
           else
-            raise HamlError.new("Can't run #{classname} filter; required #{@lazy_requires.map { |r| "'#{r}'" }.join(' or ')}, but none were found")
+            raise Error.new("Can't run #{classname} filter; required #{@lazy_requires.map { |r| "'#{r}'" }.join(' or ')}, but none were found")
           end
         end
       end
@@ -210,7 +210,7 @@ END
         precompiler.send(:push_silent, src)
       end
     end
-    
+
     module RedCloth
       include Base
       lazy_require 'redcloth'
@@ -219,7 +219,7 @@ END
         ::RedCloth.new(text).to_html
       end
     end
-      
+
     # Uses RedCloth to provide only Textile (not Markdown) parsing
     module Textile
       include Base

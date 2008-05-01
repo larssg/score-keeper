@@ -6,7 +6,6 @@ require 'sass/tree/attr_node'
 require 'sass/tree/directive_node'
 require 'sass/constant'
 require 'sass/error'
-require 'haml/util'
 
 module Sass
   # This is the class where all the parsing and processing of the Sass
@@ -39,9 +38,15 @@ module Sass
 
     # The character used to denote a compiler directive.
     DIRECTIVE_CHAR = ?@
-    
+
     # Designates a non-parsed rule.
     ESCAPE_CHAR    = ?\\
+
+    # Designates block as mixin definition rather than CSS rules to output
+    MIXIN_DEFINITION_CHAR = ?=
+
+    # Includes named mixin declared using MIXIN_DEFINITION_CHAR
+    MIXIN_INCLUDE_CHAR    = ?+
 
     # The regex that matches and extracts data from
     # attributes of the form <tt>:name attr</tt>.
@@ -56,14 +61,14 @@ module Sass
 
     # Creates a new instace of Sass::Engine that will compile the given
     # template string when <tt>render</tt> is called.
-    # See README for available options.
+    # See README.rdoc for available options.
     #
     #--
     #
     # TODO: Add current options to REFRENCE. Remember :filename!
     #
     # When adding options, remember to add information about them
-    # to README!
+    # to README.rdoc!
     #++
     #
     def initialize(template, options={})
@@ -74,6 +79,7 @@ module Sass
       @template = template.split(/\n?\r|\r?\n/)
       @lines = []
       @constants = {"important" => "!important"}
+      @mixins = {}
     end
 
     # Processes the template and returns the result as a string.
@@ -96,6 +102,10 @@ module Sass
       @constants
     end
 
+    def mixins
+      @mixins
+    end
+
     def render_to_tree
       split_lines
 
@@ -113,7 +123,7 @@ module Sass
           end
         end
       end
-      @line = nil
+      @lines.clear
 
       root
     end
@@ -136,7 +146,7 @@ module Sass
 
         if tabs # if line isn't blank
           if tabs - old_tabs > 1
-            raise SyntaxError.new("Illegal Indentation: Only two space characters are allowed as tabulation.", @line)
+            raise SyntaxError.new("#{tabs * 2} spaces were used for indentation. Sass must be indented using two spaces.", @line)
           end
           @lines << [line.strip, tabs]
 
@@ -151,18 +161,20 @@ module Sass
 
     # Counts the tabulation of a line.
     def count_tabs(line)
-      spaces = line.index(/[^ ]/)
-      if spaces
-        if spaces % 2 == 1 || line[spaces] == ?\t
-          # Make sure a line with just tabs isn't an error
-          return nil if line.strip.empty?
+      return nil if line.strip.empty?
+      return nil unless spaces = line.index(/[^ ]/)
 
-          raise SyntaxError.new("Illegal Indentation: Only two space characters are allowed as tabulation.", @line)
-        end
-        spaces / 2
-      else
-        nil
+      if spaces % 2 == 1
+          raise SyntaxError.new(<<END.strip, @line)
+#{spaces} space#{spaces == 1 ? ' was' : 's were'} used for indentation. Sass must be indented using two spaces.
+END
+      elsif line[spaces] == ?\t
+        raise SyntaxError.new(<<END.strip, @line)
+A tab character was used for indentation. Sass must be indented using two spaces.
+Are you sure you have soft tabs enabled in your editor?
+END
       end
+      spaces / 2
     end
 
     def build_tree(index)
@@ -177,14 +189,22 @@ module Sass
       unless node.is_a? Tree::Node
         if has_children
           if node == :constant
-            raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath constants.", @line)
+            raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath constants.", @line + 1)
           elsif node.is_a? Array
-            raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath import directives.", @line)
+            # arrays can either be full of import statements
+            # or attributes from mixin includes
+            # in either case they shouldn't have children.
+            # Need to peek into the array in order to give meaningful errors
+            directive_type = (node.first.is_a?(Tree::DirectiveNode) ? "import" : "mixin")
+            raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath #{directive_type} directives.", @line + 1)
           end
         end
 
+        index = @line if node == :mixin
         return node, index
       end
+
+      node.line = @line
 
       if node.is_a? Tree::CommentNode
         while has_children
@@ -193,24 +213,50 @@ module Sass
 
           has_children = has_children?(index, tabs)
         end
-      else
-        while has_children
-          child, index = build_tree(index)
 
-          if child == :constant
-            raise SyntaxError.new("Constants may only be declared at the root of a document.", @line)
-          elsif child.is_a? Array
-            raise SyntaxError.new("Import directives may only be used at the root of a document.", @line)
-          elsif child.is_a? Tree::Node
-            child.line = @line
-            node << child
+        return node, index
+      end
+
+      # Resolve multiline rules
+      if node.is_a?(Tree::RuleNode)
+        if node.continued?
+          child, index = build_tree(index) if @lines[old_index = index]
+          if @lines[old_index].nil? || has_children?(old_index, tabs) || !child.is_a?(Tree::RuleNode)
+            raise SyntaxError.new("Rules can't end in commas.", @line)
           end
 
-          has_children = has_children?(index, tabs)
+          node.add_rules child
         end
+        node.children = child.children if child
+      end
+
+      while has_children
+        child, index = build_tree(index)
+
+        validate_and_append_child(node, child)
+
+        has_children = has_children?(index, tabs)
       end
 
       return node, index
+    end
+
+    def validate_and_append_child(parent, child)
+      case child
+      when :constant
+        raise SyntaxError.new("Constants may only be declared at the root of a document.", @line)
+      when :mixin
+        raise SyntaxError.new("Mixins may only be defined at the root of a document.", @line)
+      when Array
+        child.each do |c|
+          if c.is_a?(Tree::DirectiveNode)
+            raise SyntaxError.new("Import directives may only be used at the root of a document.", @line)
+          end
+          parent << c
+        end
+      when Tree::Node
+        parent << child
+      end
     end
 
     def has_children?(index, tabs)
@@ -238,6 +284,10 @@ module Sass
         parse_directive(line)
       when ESCAPE_CHAR
         Tree::RuleNode.new(line[1..-1], @options[:style])
+      when MIXIN_DEFINITION_CHAR
+        parse_mixin_definition(line)
+      when MIXIN_INCLUDE_CHAR
+        parse_mixin_include(line)
       else
         if line =~ ATTRIBUTE_ALTERNATE_MATCHER
           parse_attribute(line, ATTRIBUTE_ALTERNATE)
@@ -259,7 +309,7 @@ module Sass
       name, eq, value = line.scan(attribute_regx)[0]
 
       if name.nil? || value.nil?
-        raise SyntaxError.new("Invalid attribute: \"#{line}\"", @line)
+        raise SyntaxError.new("Invalid attribute: \"#{line}\".", @line)
       end
 
       if eq.strip[0] == SCRIPT_CHAR
@@ -272,7 +322,7 @@ module Sass
     def parse_constant(line)
       name, op, value = line.scan(Sass::Constant::MATCH)[0]
       unless name && value
-        raise SyntaxError.new("Invalid constant: \"#{line}\"", @line)
+        raise SyntaxError.new("Invalid constant: \"#{line}\".", @line)
       end
 
       constant = Sass::Constant.parse(value, @constants, @line)
@@ -307,6 +357,27 @@ module Sass
       end
     end
 
+    def parse_mixin_definition(line)
+      mixin_name = line[1..-1]
+      @mixins[mixin_name] =  []
+      index = @line
+      line, tabs = @lines[index]
+      while !line.nil? && tabs > 0
+        child, index = build_tree(index)
+        validate_and_append_child(@mixins[mixin_name], child)
+        line, tabs = @lines[index]
+      end
+      :mixin
+    end
+
+    def parse_mixin_include(line)
+      mixin_name = line[1..-1]
+      unless @mixins.has_key?(mixin_name)
+        raise SyntaxError.new("Undefined mixin '#{mixin_name}'.", @line)
+      end
+      @mixins[mixin_name]
+    end
+
     def import(files)
       nodes = []
 
@@ -320,7 +391,7 @@ module Sass
         end
 
         if filename =~ /\.css$/
-          nodes << Tree::ValueNode.new("@import url(#{filename});", @options[:style])
+          nodes << Tree::DirectiveNode.new("@import url(#{filename})", @options[:style])
         else
           File.open(filename) do |file|
             new_options = @options.dup
@@ -329,6 +400,7 @@ module Sass
           end
 
           engine.constants.merge! @constants
+          engine.mixins.merge! @mixins
 
           begin
             root = engine.render_to_tree
@@ -341,6 +413,7 @@ module Sass
             nodes << child
           end
           @constants = engine.constants
+          @mixins = engine.mixins
         end
       end
 
@@ -362,7 +435,7 @@ module Sass
 
       if new_filename.nil?
         if was_sass
-          raise Exception.new("File to import not found or unreadable: #{original_filename}")
+          raise Exception.new("File to import not found or unreadable: #{original_filename}.")
         else
           return filename + '.css'
         end

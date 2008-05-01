@@ -2,6 +2,43 @@
 require File.dirname(__FILE__) + '/test_helper'
 
 class EngineTest < Test::Unit::TestCase
+  # A map of erroneous Sass documents to the error messages they should produce.
+  # The error messages may be arrays;
+  # if so, the second element should be the line number that should be reported for the error.
+  # If this isn't provided, the tests will assume the line number should be the last line of the document.
+  EXCEPTION_MAP = {
+    "!!!\n  a" => "Illegal nesting: nesting within a header command is illegal.",
+    "a\n  b" => "Illegal nesting: nesting within plain text is illegal.",
+    "/ a\n  b" => "Illegal nesting: nesting within a tag that already has content is illegal.",
+    "% a" => 'Invalid tag: "% a".',
+    "%p a\n  b" => "Illegal nesting: content can't be both given on the same line as %p and nested within it.",
+    "%p=" => "There's no Ruby code for = to evaluate.",
+    "%p~" => "There's no Ruby code for ~ to evaluate.",
+    "~" => "There's no Ruby code for ~ to evaluate.",
+    "=" => "There's no Ruby code for = to evaluate.",
+    "%p/\n  a" => "Illegal nesting: nesting within a self-closing tag is illegal.",
+    "%p\n\ta" => <<END.strip,
+A tab character was used for indentation. Haml must be indented using two spaces.
+Are you sure you have soft tabs enabled in your editor?
+END
+    "%p\n a" => "1 space was used for indentation. Haml must be indented using two spaces.",
+    "%p\n   a" => "3 spaces were used for indentation. Haml must be indented using two spaces.",
+    "%p\n    a" => "4 spaces were used for indentation. Haml must be indented using two spaces.",
+    ":a\n  b" => ['Filter "a" is not defined.', 1],
+    ":a= b" => 'Invalid filter name ":a= b".',
+    "." => "Illegal element: classes and ids must have values.",
+    ".#" => "Illegal element: classes and ids must have values.",
+    ".{} a" => "Illegal element: classes and ids must have values.",
+    ".= a" => "Illegal element: classes and ids must have values.",
+    "%p..a" => "Illegal element: classes and ids must have values.",
+    "%a/ b" => "Self-closing tags can't have content.",
+
+    # Regression tests
+    "- raise 'foo'\n\n\n\nbar" => ["foo", 1],
+    "= 'foo'\n-raise 'foo'" => ["foo", 2]
+  }
+
+  User = Struct.new('User', :id)
 
   def render(text, options = {}, &block)
     scope  = options.delete(:scope)  || Object.new
@@ -36,20 +73,8 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("<p>Hello</p>", render('%p Hello').chomp)
   end
 
-  def test_long_liner_should_not_print_on_one_line
-    assert_equal("<div>\n  #{'x' * 51}\n</div>", render("%div #{'x' * 51}").chomp)
-  end
-  
-  def test_non_prerendered_one_liner
-    assert_equal("<p class='awesome'>One line</p>\n", render("%p{:class => c} One line", :locals => {:c => 'awesome'}))
-  end
-  
-  def test_non_prerendered_script_one_liner
-    assert_equal("<p class='awesome'>One line</p>\n", render("%p{:class => c}= 'One line'", :locals => {:c => 'awesome'}))
-  end
-  
-  def test_non_prerendered_long_script_one_liner
-    assert_equal("<p class='awesome'>\n  #{'x' * 60}\n</p>\n", render("%p{:class => c}= 'x' * 60", :locals => {:c => 'awesome'}))
+  def test_one_liner_with_newline_shouldnt_be_one_line
+    assert_equal("<p>\n  foo\n  bar\n</p>", render('%p= "foo\nbar"').chomp)
   end
 
   def test_multi_render
@@ -116,6 +141,81 @@ class EngineTest < Test::Unit::TestCase
                  render("%p{:foo => 'bar', :bar => false, :baz => 'false'}", :format => :xhtml))
   end
 
+  # HTML escaping tests
+
+  def test_ampersand_equals_should_escape
+    assert_equal("<p>\n  foo &amp; bar\n</p>\n", render("%p\n  &= 'foo & bar'", :escape_html => false))
+  end
+
+  def test_ampersand_equals_inline_should_escape
+    assert_equal("<p>foo &amp; bar</p>\n", render("%p&= 'foo & bar'", :escape_html => false))
+  end
+
+  def test_bang_equals_should_not_escape
+    assert_equal("<p>\n  foo & bar\n</p>\n", render("%p\n  != 'foo & bar'", :escape_html => true))
+  end
+
+  def test_bang_equals_inline_should_not_escape
+    assert_equal("<p>foo & bar</p>\n", render("%p!= 'foo & bar'", :escape_html => true))
+  end
+  
+  def test_static_attributes_should_be_escaped
+    assert_equal("<img class='atlantis' style='ugly&amp;stupid' />\n",
+                 render("%img.atlantis{:style => 'ugly&stupid'}", :escape_html => true))
+    assert_equal("<div class='atlantis' style='ugly&amp;stupid'>foo</div>\n",
+                 render(".atlantis{:style => 'ugly&stupid'} foo", :escape_html => true))
+    assert_equal("<p class='atlantis' style='ugly&amp;stupid'>foo</p>\n",
+                render("%p.atlantis{:style => 'ugly&stupid'}= 'foo'", :escape_html => true))
+  end
+
+  def test_dynamic_attributes_should_be_escaped
+    assert_equal("<img alt='' src='/foo.png' />\n",
+                 render("%img{:width => nil, :src => '/foo.png', :alt => String.new}", :escape_html => true))
+    assert_equal("<p alt='' src='/foo.png'>foo</p>\n",
+                 render("%p{:width => nil, :src => '/foo.png', :alt => String.new} foo", :escape_html => true))
+    assert_equal("<div alt='' src='/foo.png'>foo</div>\n",
+                 render("%div{:width => nil, :src => '/foo.png', :alt => String.new}= 'foo'", :escape_html => true))
+  end
+  
+  def test_string_interpolation_should_be_esaped
+    assert_equal("<p>4&amp;3</p>\n", render("%p== #{2+2}&#{2+1}", :escape_html => true))
+    assert_equal("<p>4&3</p>\n", render("%p== #{2+2}&#{2+1}", :escape_html => false))
+  end
+
+  def test_escaped_inline_string_interpolation
+    assert_equal("<p>4&amp;3</p>\n", render("%p&== #{2+2}&#{2+1}", :escape_html => true))
+    assert_equal("<p>4&amp;3</p>\n", render("%p&== #{2+2}&#{2+1}", :escape_html => false))
+  end
+
+  def test_unescaped_inline_string_interpolation
+    assert_equal("<p>4&3</p>\n", render("%p!== #{2+2}&#{2+1}", :escape_html => true))
+    assert_equal("<p>4&3</p>\n", render("%p!== #{2+2}&#{2+1}", :escape_html => false))
+  end
+
+  def test_escaped_string_interpolation
+    assert_equal("<p>\n  4&amp;3\n</p>\n", render("%p\n  &== #{2+2}&#{2+1}", :escape_html => true))
+    assert_equal("<p>\n  4&amp;3\n</p>\n", render("%p\n  &== #{2+2}&#{2+1}", :escape_html => false))
+  end
+
+  def test_unescaped_string_interpolation
+    assert_equal("<p>\n  4&3\n</p>\n", render("%p\n  !== #{2+2}&#{2+1}", :escape_html => true))
+    assert_equal("<p>\n  4&3\n</p>\n", render("%p\n  !== #{2+2}&#{2+1}", :escape_html => false))
+  end
+
+  def test_scripts_should_respect_escape_html_option
+    assert_equal("<p>\n  foo &amp; bar\n</p>\n", render("%p\n  = 'foo & bar'", :escape_html => true))
+    assert_equal("<p>\n  foo & bar\n</p>\n", render("%p\n  = 'foo & bar'", :escape_html => false))
+  end
+
+  def test_inline_scripts_should_respect_escape_html_option
+    assert_equal("<p>foo &amp; bar</p>\n", render("%p= 'foo & bar'", :escape_html => true))
+    assert_equal("<p>foo & bar</p>\n", render("%p= 'foo & bar'", :escape_html => false))
+  end
+
+  def test_script_ending_in_comment_should_render_when_html_is_escaped
+    assert_equal("foo&amp;bar\n", render("= 'foo&bar' #comment", :escape_html => true))
+  end
+
   # Options tests
 
   def test_stop_eval
@@ -127,9 +227,9 @@ class EngineTest < Test::Unit::TestCase
 
     begin
       assert_equal("", render(":ruby\n  puts 'hello'", :suppress_eval => true))
-    rescue Haml::HamlError => err
+    rescue Haml::Error => err
       caught = true
-      assert_equal('"ruby" filter is not defined!', err.message)
+      assert_equal('Filter "ruby" is not defined.', err.message)
     end
     assert(caught, "Rendering a ruby filter without evaluating didn't throw an error!")
   end
@@ -137,12 +237,13 @@ class EngineTest < Test::Unit::TestCase
   def test_attr_wrapper
     assert_equal("<p strange=*attrs*>\n</p>\n", render("%p{ :strange => 'attrs'}", :attr_wrapper => '*'))
     assert_equal("<p escaped='quo\"te'>\n</p>\n", render("%p{ :escaped => 'quo\"te'}", :attr_wrapper => '"'))
+    assert_equal("<p escaped=\"quo'te\">\n</p>\n", render("%p{ :escaped => 'quo\\'te'}", :attr_wrapper => '"'))
     assert_equal("<p escaped=\"q'uo&quot;te\">\n</p>\n", render("%p{ :escaped => 'q\\'uo\"te'}", :attr_wrapper => '"'))
     assert_equal("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n", render("!!! XML", :attr_wrapper => '"'))
   end
 
   def test_attrs_parsed_correctly
-    assert_equal("<p boom=>biddly='bar => baz'>\n</p>\n", render("%p{'boom=>biddly' => 'bar => baz'}"))
+    assert_equal("<p boom=>biddly='bar =&gt; baz'>\n</p>\n", render("%p{'boom=>biddly' => 'bar => baz'}"))
     assert_equal("<p foo,bar='baz, qux'>\n</p>\n", render("%p{'foo,bar' => 'baz, qux'}"))
     assert_equal("<p escaped='quo\nte'>\n</p>\n", render("%p{ :escaped => \"quo\\nte\"}"))
     assert_equal("<p escaped='quo4te'>\n</p>\n", render("%p{ :escaped => \"quo\#{2 + 2}te\"}"))
@@ -158,6 +259,14 @@ class EngineTest < Test::Unit::TestCase
     foo[0] = Struct.new('Foo', :id).new
     assert_equal("<p class='struct_foo' id='struct_foo_new'>New User]</p>\n",
                  render("%p[foo[0]] New User]", :locals => {:foo => foo}))
+    assert_equal("<p class='prefix_struct_foo' id='prefix_struct_foo_new'>New User]</p>\n",
+                 render("%p[foo[0], :prefix] New User]", :locals => {:foo => foo}))
+
+    foo[0].id = 1
+    assert_equal("<p class='struct_foo' id='struct_foo_1'>New User]</p>\n",
+                 render("%p[foo[0]] New User]", :locals => {:foo => foo}))
+    assert_equal("<p class='prefix_struct_foo' id='prefix_struct_foo_1'>New User]</p>\n",
+                 render("%p[foo[0], :prefix] New User]", :locals => {:foo => foo}))
   end
   
   def test_empty_attrs
@@ -208,40 +317,25 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("<a b='2' />\nc\n", render("%a{'b' => 1 + 1}/\n= 'c'\n"))
   end
 
-  def test_rec_merge
-    hash1 = {1=>2, 3=>{5=>7, 8=>9}}
-    hash2 = {4=>5, 3=>{5=>2, 16=>12}}
-    hash3 = {1=>2, 4=>5, 3=>{5=>2, 8=>9, 16=>12}}
-
-    hash1.rec_merge!(hash2)
-    assert_equal(hash3, hash1)
-  end
-
-  def test_syntax_errors
-    errs = [ "!!!\n  a", "a\n  b", "a\n:foo\nb", "/ a\n  b",
-             "% a", "%p a\n  b", "a\n%p=\nb", "%p=\n  a",
-             "a\n%p~\nb", "a\n~\nb", "a\n~\n  b", "%p~\n  b", "%p/\n  a",
-             "%p\n \t%a b", "%a\n b\nc", "%a\n    b\nc",
-             ":notafilter\n  This isn't\n  a filter!",
-             ".{} a", "\#{} a", ".= 'foo'", "%a/ b", "%p..class", "%p..#." ]
-    errs.each do |err|
+  def test_exceptions
+    EXCEPTION_MAP.each do |key, value|
       begin
-        render(err)
-      rescue Exception => e
-        assert(e.is_a?(Haml::Error), "#{err.dump} doesn't produce Haml::SyntaxError")
+        render(key)
+      rescue Exception => err
+        value = [value] unless value.is_a?(Array)
+
+        assert_equal(value.first, err.message, "Line: #{key}")
+        assert_equal(value[1] || key.split("\n").length, err.backtrace[0].gsub('(haml):', '').to_i, "Line: #{key}")
       else
-        assert(false, "#{err.dump} doesn't produce an exception")
+        assert(false, "Exception not raised for\n#{key}")
       end
     end
   end
 
-  def test_syntax_error
+  def test_exception_line
     render("a\nb\n!!!\n  c\nd")
   rescue Haml::SyntaxError => e
-    assert_equal(e.message, "Illegal Nesting: Nesting within a header command is illegal.")
-    assert_equal("(haml):3", e.backtrace[0])
-  rescue Exception => e
-    assert(false, '"a\nb\n!!!\n  c\nd" doesn\'t produce a Haml::SyntaxError')
+    assert_equal("(haml):4", e.backtrace[0])
   else
     assert(false, '"a\nb\n!!!\n  c\nd" doesn\'t produce an exception')
   end
@@ -270,6 +364,11 @@ class EngineTest < Test::Unit::TestCase
     assert_equal("Unbalanced brackets.", e.message)
   end
 
+  def test_balanced_conditional_comments
+    assert_equal("<!--[if !(IE 6)|(IE 7)]> Bracket: ] <![endif]-->\n",
+                 render("/[if !(IE 6)|(IE 7)] Bracket: ]"))
+  end
+
   def test_no_bluecloth
     Kernel.module_eval do
       def gem_original_require_with_bluecloth(file)
@@ -283,7 +382,7 @@ class EngineTest < Test::Unit::TestCase
     begin
       assert_equal("<h1>Foo</h1>\t<p>- a\n- b</p>\n",
                    Haml::Engine.new(":markdown\n  Foo\n  ===\n  - a\n  - b").to_html)
-    rescue Haml::HamlError => e
+    rescue Haml::Error => e
       if e.message == "Can't run Markdown filter; required 'bluecloth' or 'redcloth', but none were found"
         puts "\nCouldn't require 'bluecloth' or 'redcloth'; skipping a test."
       else
@@ -308,7 +407,7 @@ class EngineTest < Test::Unit::TestCase
 
     begin
       Haml::Engine.new(":redcloth\n  _foo_").to_html
-    rescue Haml::HamlError
+    rescue Haml::Error
     else
       assert(false, "No exception raised!")
     end
@@ -330,7 +429,7 @@ class EngineTest < Test::Unit::TestCase
 
     begin
       Haml::Engine.new(":markdown\n  _foo_").to_html
-    rescue Haml::HamlError
+    rescue Haml::Error
     else
       assert(false, "No exception raised!")
     end
@@ -340,15 +439,31 @@ class EngineTest < Test::Unit::TestCase
     end    
   end
 
+  def test_empty_filter
+    assert_equal(<<END, render(':javascript'))
+<script type='text/javascript'>
+  //<![CDATA[
+    
+  //]]>
+</script>
+END
+  end
+
   def test_local_assigns_dont_modify_class
     assert_equal("bar\n", render("= foo", :locals => {:foo => 'bar'}))
     assert_equal(nil, defined?(foo))
   end
 
   def test_object_ref_with_nil_id
-    user = Struct.new('User', :id).new
+    user = User.new
     assert_equal("<p class='struct_user' id='struct_user_new'>New User</p>\n",
                  render("%p[user] New User", :locals => {:user => user}))
+  end
+
+  def test_object_ref_before_attrs
+    user = User.new 42
+    assert_equal("<p class='struct_user' id='struct_user_42' style='width: 100px;'>New User</p>\n",
+                 render("%p[user]{:style => 'width: 100px;'} New User", :locals => {:user => user}))
   end
 
   def test_non_literal_attributes

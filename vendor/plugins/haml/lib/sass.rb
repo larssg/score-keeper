@@ -11,7 +11,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # and implements various features that are useful
 # for creating manageable stylesheets.
 #
-# == Features 
+# == Features
 #
 # * Whitespace active
 # * Well-formatted output
@@ -32,9 +32,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 # To enable it as a Rails plugin,
 # then run
-# 
+#
 #   haml --rails path/to/rails/app
-# 
+#
 # To enable Sass in Merb,
 # add
 #
@@ -157,12 +157,12 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 #   #main
 #     :width 97%
-#     
+#
 #     p, div
 #       :font-size 2em
 #       a
 #         :font-weight bold
-#         
+#
 #     pre
 #       :font-size 3em
 #
@@ -595,6 +595,84 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #     background-image: url(/images/pbj.png);
 #     color: red; }
 #
+# == Mixins
+#
+# Mixins enable you to define groups of CSS attributes and
+# then include them inline in any number of selectors
+# throughout the document.
+#
+# === Defining a Mixin
+#
+# To define a mixin you use a slightly modified form of selector syntax.
+# For example the 'large-text' mixin is defined as follows:
+#
+# =large-text
+#   :font
+#     :family Arial
+#     :size 20px
+#     :weight bold
+#   :color #ff0000
+#
+# The initial '=' marks this as a mixin rather than a standard selector.
+# The CSS rules that follow won't be included until the mixin is referenced later on.
+# Anything you can put into a standard selector,
+# you can put into a mixin definition. e.g.
+#
+# =clearfix
+#   display: inline-block
+#   &:after
+#     content: "."
+#     display: block
+#     height: 0
+#     clear: both
+#     visibility: hidden
+#   * html &
+#     height: 1px
+#
+#
+# === Mixing it in
+#
+# Inlining a defined mixin is simple,
+# just prepend a '+' symbol to the name of a mixin defined earlier in the document.
+# So to inline the 'large-text' defined earlier,
+# we include the statment '+large-text' in our selector definition thus:
+#
+# .page-title
+#   +large-text
+#   :padding 4px
+#   :margin
+#     :top 10px
+#
+#
+# This will produce the following CSS output:
+#
+# .page-title {
+#   font-family: Arial;
+#   font-size: 20px;
+#   font-weight: bold;
+#   color: #ff0000;
+#   padding: 4px;
+#   margin-top: 10px;
+# }
+#
+# Any number of mixins may be defined and there is no limit on
+# the number that can be included in a particular selector.
+#
+# Mixin definitions can also include references to other mixins defined earlier in the file.
+# E.g.
+#
+# =highlighted-background
+#   background:
+#     color: #fc0
+# =header-text
+#   font:
+#     size: 20px
+#
+# =compound
+#   +highlighted-background
+#   +header-text
+#
+#
 # == Output Style
 #
 # Although the default CSS style that Sass outputs is very nice,
@@ -668,7 +746,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #   #main { color: #fff; background-color: #000; }
 #   #main p { width: 10em; }
 #
-#   .huge { font-size: 10em; font-weight: bold; text-decoration: underline; } 
+#   .huge { font-size: 10em; font-weight: bold; text-decoration: underline; }
 #
 # === <tt>:compressed</tt>
 #
@@ -678,7 +756,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # It's not meant to be human-readable.
 # For example:
 #
-#   #main{color:#fff;background-color:#000}#main p{width:10em}.huge{font-size:10em;font-weight:bold;text-decoration:underline} 
+#   #main{color:#fff;background-color:#000}#main p{width:10em}.huge{font-size:10em;font-weight:bold;text-decoration:underline}
 #
 # == Sass Options
 #
@@ -701,7 +779,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #                               For example: <tt>color: #0f3</tt>
 #                               or <tt>width = !main_width</tt>.
 #                               By default, either syntax is valid.
-#                               
+#
 # [<tt>:never_update</tt>]      Whether the CSS files should never be updated,
 #                               even if the template file changes.
 #                               Setting this to true may give small performance gains.
@@ -713,7 +791,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #                               as opposed to only when the template has been modified.
 #                               Defaults to false.
 #                               Only has meaning within Ruby on Rails or Merb.
-#                               
+#
 # [<tt>:always_check</tt>]      Whether a Sass template should be checked for updates every
 #                               time a controller is accessed,
 #                               as opposed to only when the Rails server starts.
@@ -748,7 +826,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #                               for Sass templates imported with the "@import" directive.
 #                               This defaults to the working directory and, in Rails or Merb,
 #                               whatever <tt>:template_location</tt> is.
-# 
+#
 module Sass; end
 
 require 'sass/engine'

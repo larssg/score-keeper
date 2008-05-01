@@ -21,7 +21,7 @@ module Haml
           @opts.parse!(@args)
 
           process_result
-          
+
           @options
         rescue Exception => e
           raise e if e.is_a? SystemExit
@@ -43,9 +43,13 @@ module Haml
       protected
 
       def get_line(exception)
+        # SyntaxErrors have weird line reporting
+        # when there's trailing whitespace,
+        # which there is for Haml documents.
+        return exception.message.scan(/:(\d+)/)[0] if exception.is_a?(::SyntaxError)
         exception.backtrace[0].scan(/:(\d+)/)[0]
       end
-      
+
       private
 
       def set_opts(opts)
@@ -63,7 +67,7 @@ module Haml
         end
 
         opts.on_tail("-v", "--version", "Print version") do
-          puts("Haml " + File.read(File.dirname(__FILE__) + '/../../VERSION'))
+          puts("Haml #{::Haml.version[:string]}")
           exit
         end
       end
@@ -110,7 +114,7 @@ Description:
 
 Options:
 END
-       
+
         opts.on('--rails RAILS_DIR', "Install Haml and Sass from the Gem to a Rails project") do |dir|
           original_dir = dir
 
@@ -145,6 +149,7 @@ END
         end
 
         opts.on('-c', '--check', "Just check syntax, don't evaluate.") do
+          require 'stringio'
           @options[:check_syntax] = true
           @options[:output] = StringIO.new
         end
@@ -170,7 +175,7 @@ END
         super
 
         opts.on('-t', '--style NAME',
-                'Output style. Can be nested (default), compact, or expanded.') do |name|
+                'Output style. Can be nested (default), compact, compressed, or expanded.') do |name|
           @options[:for_engine][:style] = name.to_sym
         end
       end
@@ -218,6 +223,11 @@ END
                 'Output format. Can be xhtml (default), html4, or html5.') do |name|
           @options[:for_engine][:format] = name.to_sym
         end
+
+        opts.on('-e', '--escape-html',
+                'Escape HTML characters (like ampersands and angle brackets) by default.') do
+          @options[:for_engine][:escape_html] = true
+        end
       end
 
       def process_result
@@ -240,7 +250,7 @@ END
 
           case e
           when ::Haml::SyntaxError; raise "Syntax error on line #{get_line e}: #{e.message}"
-          when ::Haml::HamlError;   raise "Haml error on line #{get_line e}: #{e.message}"
+          when ::Haml::Error;       raise "Haml error on line #{get_line e}: #{e.message}"
           else raise "Exception on line #{get_line e}: #{e.message}\n  Use --trace for backtrace."
           end
         end
@@ -303,6 +313,8 @@ END
       def initialize(args)
         super
 
+        @module_opts = {}
+
         require 'sass/css'
       end
 
@@ -315,6 +327,10 @@ Description: Transforms a CSS file into corresponding Sass code.
 Options:
 END
 
+        opts.on('-a', '--alternate', 'Output using alternative Sass syntax (margin: 1px)') do
+          @module_opts[:alternate] = true
+        end
+
         super
       end
 
@@ -324,7 +340,7 @@ END
         input = @options[:input]
         output = @options[:output]
 
-        output.write(::Sass::CSS.new(input).render)
+        output.write(::Sass::CSS.new(input, @module_opts).render)
       end
     end
   end

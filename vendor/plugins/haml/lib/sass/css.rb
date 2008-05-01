@@ -6,11 +6,11 @@ module Sass
   # :stopdoc:
   module Tree
     class Node
-      def to_sass
+      def to_sass(opts = {})
         result = ''
 
         children.each do |child|
-          result << "#{child.to_sass(0)}\n"
+          result << "#{child.to_sass(0, opts)}\n"
         end
 
         result
@@ -24,11 +24,11 @@ module Sass
     end
 
     class RuleNode
-      def to_sass(tabs)
-        str = "#{'  ' * tabs}#{rule}\n"
+      def to_sass(tabs, opts = {})
+        str = "\n#{'  ' * tabs}#{rule}#{children.any? { |c| c.is_a? AttrNode } ? "\n" : ''}"
 
         children.each do |child|
-          str << "#{child.to_sass(tabs + 1)}"
+          str << "#{child.to_sass(tabs + 1, opts)}"
         end
 
         str
@@ -36,8 +36,8 @@ module Sass
     end
 
     class AttrNode
-      def to_sass(tabs)
-        "#{'  ' * tabs}:#{name} #{value}\n"
+      def to_sass(tabs, opts = {})
+        "#{'  ' * tabs}#{opts[:alternate] ? '' : ':'}#{name}#{opts[:alternate] ? ':' : ''} #{value}\n"
       end
     end
   end
@@ -90,11 +90,12 @@ module Sass
 
     # Creates a new instance of Sass::CSS that will compile the given document
     # to a Sass string when +render+ is called.
-    def initialize(template)
+    def initialize(template, options = {})
       if template.is_a? IO
         template = template.read
       end
 
+      @options = options
       @template = StringScanner.new(template)
     end
 
@@ -102,10 +103,10 @@ module Sass
     # containing the CSS template.
     def render
       begin
-        build_tree.to_sass
+        build_tree.to_sass(@options).lstrip
       rescue Exception => err
         line = @template.string[0...@template.pos].split("\n").size
-        
+
         err.backtrace.unshift "(css):#{line}"
         raise err
       end
@@ -116,12 +117,13 @@ module Sass
     def build_tree
       root = Tree::Node.new(nil)
       whitespace
-      directives    root
-      rules         root
-      expand_commas root
-      nest_rules    root
-      flatten_rules root
-      fold_commas   root
+      directives         root
+      rules              root
+      expand_commas      root
+      parent_ref_rules   root
+      remove_parent_refs root
+      flatten_rules      root
+      fold_commas        root
       root
     end
 
@@ -164,12 +166,12 @@ module Sass
         whitespace
 
         assert_match /:/
-        
+
         value = ''
         while @template.scan(/[^;\s\}]+/)
           value << @template[0] << whitespace
         end
-        
+
         assert_match /(;|(?=\}))/
         rule << Tree::AttrNode.new(name, value, nil)
       end
@@ -191,7 +193,10 @@ module Sass
 
     def assert_match(re)
       if !@template.scan(re)
-        raise Exception.new("Invalid CSS!")
+        line = @template.string[0..@template.pos].count "\n"
+        # Display basic regexps as plain old strings
+        expected = re.source == Regexp.escape(re.source) ? "\"#{re.source}\"" : re.inspect
+        raise Exception.new("Invalid CSS on line #{line}: expected #{expected}")
       end
       whitespace
     end
@@ -224,7 +229,22 @@ module Sass
       root.children.flatten!
     end
 
-    # Nest rules so that
+    # Make rules use parent refs so that
+    #
+    #   foo
+    #     color: green
+    #   foo.bar
+    #     color: blue
+    #
+    # becomes
+    #
+    #   foo
+    #     color: green
+    #     &.bar
+    #       color: blue
+    #
+    # This has the side effect of nesting rules,
+    # so that
     #
     #   foo
     #     color: green
@@ -237,27 +257,48 @@ module Sass
     #
     #   foo
     #     color: green
-    #     bar
+    #     & bar
     #       color: red
-    #     baz
+    #     & baz
     #       color: blue
-    # 
-    def nest_rules(root)
+    #
+    def parent_ref_rules(root)
       rules = OrderedHash.new
       root.children.select { |c| Tree::RuleNode === c }.each do |child|
         root.children.delete child
-        first, rest = child.rule.split(' ', 2)
+        first, rest = child.rule.scan(/^(&?(?: .|[^ ])[^.#: \[]*)([.#: \[].*)?$/).first
         rules[first] ||= Tree::RuleNode.new(first, nil)
         if rest
-          child.rule = rest
+          child.rule = "&" + rest
           rules[first] << child
         else
           rules[first].children += child.children
         end
       end
 
-      rules.values.each { |v| nest_rules(v) }
+      rules.values.each { |v| parent_ref_rules(v) }
       root.children += rules.values
+    end
+
+    # Remove useless parent refs so that
+    #
+    #   foo
+    #     & bar
+    #       color: blue
+    #
+    # becomes
+    #
+    #   foo
+    #     bar
+    #       color: blue
+    #
+    def remove_parent_refs(root)
+      root.children.each do |child|
+        if child.is_a?(Tree::RuleNode)
+          child.rule.gsub! /^& /, ''
+          remove_parent_refs child
+        end
+      end
     end
 
     # Flatten rules so that
@@ -271,7 +312,18 @@ module Sass
     #
     #   foo bar baz
     #     color: red
-    # 
+    #
+    # and
+    #
+    #   foo
+    #     &.bar
+    #       color: blue
+    #
+    # becomes
+    #
+    #   foo.bar
+    #     color: blue
+    #
     def flatten_rules(root)
       root.children.each { |child| flatten_rule(child) if child.is_a?(Tree::RuleNode) }
     end
@@ -279,7 +331,13 @@ module Sass
     def flatten_rule(rule)
       while rule.children.size == 1 && rule.children.first.is_a?(Tree::RuleNode)
         child = rule.children.first
-        rule.rule = "#{rule.rule} #{child.rule}"
+
+        if child.rule[0] == ?&
+          rule.rule = child.rule.gsub /^&/, rule.rule
+        else
+          rule.rule = "#{rule.rule} #{child.rule}"
+        end
+
         rule.children = child.children
       end
 

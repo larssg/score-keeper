@@ -34,18 +34,35 @@ module Haml
     #     include Haml::Helpers
     #   end
     #   context.init_haml_helpers
-    #   context.open :p, "Stuff"
-    # 
+    #   context.haml_tag :p, "Stuff"
+    #
     def init_haml_helpers
-      @haml_is_haml = true
-      @haml_stack = [Haml::Buffer.new]
+      @haml_buffer = Haml::Buffer.new(@haml_buffer, Haml::Engine.new('').send(:options_for_buffer))
       nil
+    end
+
+    # call-seq:
+    #   non_haml { ... }
+    #
+    # Runs a block of code in a non-Haml context
+    # (i.e. #is_haml? will return false).
+    #
+    # This is mainly useful for rendering sub-templates such as partials in a non-Haml language,
+    # particularly where helpers may behave differently when run from Haml.
+    #
+    # Note that this is automatically applied to Rails partials.
+    def non_haml
+      was_active = @haml_buffer.active?
+      @haml_buffer.active = false
+      res = yield
+      @haml_buffer.active = was_active
+      res
     end
 
     # call-seq:
     #   find_and_preserve(input)
     #   find_and_preserve {...}
-    #   
+    #
     # Isolates the whitespace-sensitive tags in the string and uses preserve
     # to convert any endlines inside them into HTML entities for endlines.
     def find_and_preserve(input = '', &block)
@@ -107,14 +124,14 @@ module Haml
     def list_of(array, &block) # :yields: item
       to_return = array.collect do |i|
         result = capture_haml(i, &block)
-        
+
         if result.count("\n") > 1
           result.gsub!("\n", "\n  ")
           result = "\n  #{result.strip}\n"
         else
           result.strip!
         end
-        
+
         "<li>#{result}</li>"
       end
       to_return.join("\n")
@@ -156,14 +173,14 @@ module Haml
       haml_buffer.tabulation += i
     end
 
-    # Increments the number of tabs the buffer automatically adds
+    # Decrements the number of tabs the buffer automatically adds
     # to the lines of the template.
     #
-    # See tab_up.
+    # See also tab_up.
     def tab_down(i = 1)
       haml_buffer.tabulation -= i
     end
-    
+
     # Surrounds the given block of Haml code with the given characters,
     # with no whitespace in between.
     # For example:
@@ -187,10 +204,10 @@ module Haml
     def surround(front, back = nil, &block)
       back ||= front
       output = capture_haml(&block)
-      
+
       "#{front}#{output.chomp}#{back}\n"
     end
-    
+
     # Prepends the given character to the beginning of the Haml block,
     # with no whitespace between.
     # For example:
@@ -205,7 +222,7 @@ module Haml
     def precede(char, &block)
       "#{char}#{capture_haml(&block).chomp}\n"
     end
-    
+
     # Appends the given character to the end of the Haml block,
     # with no whitespace between.
     # For example:
@@ -222,7 +239,7 @@ module Haml
     def succeed(char, &block)
       "#{capture_haml(&block).chomp}#{char}\n"
     end
-    
+
     # Captures the result of the given block of Haml code,
     # gets rid of the excess indentation,
     # and returns it as a string.
@@ -246,24 +263,24 @@ module Haml
 
     #
     # call-seq:
-    #   open(name, attributes = {}) {...}
-    #   open(name, text, attributes = {}) {...}
+    #   haml_tag(name, attributes = {}) {...}
+    #   haml_tag(name, text, attributes = {}) {...}
     #
     # Creates an HTML tag with the given name and optionally text and attributes.
     # Can take a block that will be executed
     # between when the opening and closing tags are output.
     # If the block is a Haml block or outputs text using puts,
     # the text will be properly indented.
-    # 
+    #
     # For example,
     #
-    #   open :table do
-    #     open :tr do
-    #       open :td, {:class => 'cell'} do
-    #         open :strong, "strong!"
+    #   haml_tag :table do
+    #     haml_tag :tr do
+    #       haml_tag :td, {:class => 'cell'} do
+    #         haml_tag :strong, "strong!"
     #         puts "data"
     #       end
-    #       open :td do
+    #       haml_tag :td do
     #         puts "more_data"
     #       end
     #     end
@@ -286,15 +303,18 @@ module Haml
     #   </table>
     #
     def haml_tag(name, attributes = {}, alt_atts = {}, &block)
+      name = name.to_s
+
       text = nil
       if attributes.is_a? String
         text = attributes
         attributes = alt_atts
       end
 
-      attributes = Haml::Precompiler.build_attributes(haml_buffer.html?,
-                                                      haml_buffer.options[:attr_wrapper], attributes)
-      if text.nil? && block.nil?
+      attributes = Haml::Precompiler.build_attributes(
+        haml_buffer.html?, haml_buffer.options[:attr_wrapper], attributes)
+
+      if text.nil? && block.nil? && haml_buffer.options[:autoclose].include?(name)
         puts "<#{name}#{attributes} />"
         return nil
       end
@@ -314,22 +334,37 @@ module Haml
       nil
     end
 
-    def open(*args, &block)
-              warn <<END
-DEPRECATION WARNING:
-The Haml #open helper is deprecated and will be removed in version 2.0.
-Use the #haml_tag method instead.
-END
-      haml_tag(*args, &block)
+    # Characters that need to be escaped to HTML entities from user input
+    HTML_ESCAPE = { '&'=>'&amp;', '<'=>'&lt;', '>'=>'&gt;', '"'=>'&quot;', "'"=>'&#039;', }
+
+    # Returns a copy of <tt>text</tt> with ampersands, angle brackets and quotes
+    # escaped into HTML entities.
+    def html_escape(text)
+      text.to_s.gsub(/[\"><&]/) { |s| HTML_ESCAPE[s] }
     end
-    
+
+    # Escapes HTML entities in <tt>text</tt>, but without escaping an ampersand
+    # that is already part of an escaped entity.
+    def escape_once(text)
+      text.to_s.gsub(/[\"><]|&(?!([a-zA-Z]+|(#\d+));)/) { |s| HTML_ESCAPE[s] }
+    end
+
+    # Returns whether or not the current template is a Haml template.
+    #
+    # This function, unlike other Haml::Helpers functions,
+    # also works in other ActionView templates,
+    # where it will always return false.
+    def is_haml?
+      !@haml_buffer.nil? && @haml_buffer.active?
+    end
+
     private
 
     # Gets a reference to the current Haml::Buffer object.
     def haml_buffer
-      @haml_stack[-1]
+      @haml_buffer
     end
-    
+
     # Gives a proc the same local "_hamlout" and "_erbout" variables
     # that the current template has.
     def haml_bind_proc(&proc)
@@ -337,46 +372,42 @@ END
       _erbout = _hamlout.buffer
       proc { |*args| proc.call(*args) }
     end
-    
+
     # Performs the function of capture_haml, assuming <tt>local_buffer</tt>
     # is where the output of block goes.
     def capture_haml_with_buffer(local_buffer, *args, &block)
       position = local_buffer.length
-      
+
       block.call *args
-      
+
       captured = local_buffer.slice!(position..-1)
-      
+
       min_tabs = nil
       captured.each do |line|
         tabs = line.index(/[^ ]/)
         min_tabs ||= tabs
         min_tabs = min_tabs > tabs ? tabs : min_tabs
       end
-      
+
       result = captured.map do |line|
         line[min_tabs..-1]
       end
       result.to_s
     end
 
-    # Returns whether or not the current template is a Haml template.
-    # 
-    # This function, unlike other Haml::Helpers functions,
-    # also works in other ActionView templates,
-    # where it will always return false.
-    def is_haml?
-      @haml_is_haml
-    end
-
     include ActionViewExtensions if self.const_defined? "ActionViewExtensions"
   end
 end
 
-module ActionView
-  class Base # :nodoc:
-    def is_haml?
-      false
-    end
+class Object
+  # Haml overrides various ActionView helpers,
+  # which call an #is_haml? method
+  # to determine whether or not the current context object
+  # is a proper Haml context.
+  # Because ActionView helpers may be included in non-ActionView::Base classes,
+  # it's a good idea to define is_haml? for all objects.
+  def is_haml?
+    false
   end
 end
+

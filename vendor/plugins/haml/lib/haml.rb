@@ -2,18 +2,18 @@ dir = File.dirname(__FILE__)
 $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 
 # = Haml (XHTML Abstraction Markup Language)
-# 
+#
 # Haml is a markup language
 # that's used to cleanly and simply describe the XHTML of any web document,
 # without the use of inline code.
 # Haml functions as a replacement
-# for inline page templating systems such as PHP, ERB, and ASP. 
-# However, Haml avoids the need for explicitly coding XHTML into the template, 
+# for inline page templating systems such as PHP, ERB, and ASP.
+# However, Haml avoids the need for explicitly coding XHTML into the template,
 # because it is actually an abstract description of the XHTML,
 # with some code to generate dynamic content.
-# 
+#
 # == Features
-# 
+#
 # * Whitespace active
 # * Well-formatted markup
 # * DRY
@@ -36,9 +36,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 # To enable it as a Rails plugin,
 # then run
-# 
+#
 #   haml --rails path/to/rails/app
-# 
+#
 # Haml is enabled in Merb by default,
 # so Merb users don't have to do anything more.
 #
@@ -50,24 +50,24 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # the same way you do in ERb templates.
 # Helper methods are also available in Haml templates.
 # For example (this example uses Rails, but the principle for Merb is the same):
-# 
+#
 #   # file: app/controllers/movies_controller.rb
-# 
+#
 #   class MoviesController < ApplicationController
 #     def index
 #       @title = "Teen Wolf"
 #     end
 #   end
-# 
+#
 #   -# file: app/views/movies/index.haml
-# 
+#
 #   #content
 #    .title
 #      %h1= @title
 #      = link_to 'Home', home_url
-# 
+#
 # may be compiled to:
-# 
+#
 #   <div id='content'>
 #     <div class='title'>
 #       <h1>Teen Wolf</h1>
@@ -89,41 +89,41 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #   engine.render #=> "<p>Haml code!</p>\n"
 #
 # == Characters with meaning to Haml
-# 
+#
 # Various characters, when placed at a certain point in a line,
 # instruct Haml to render different types of things.
-# 
+#
 # === XHTML Tags
-# 
+#
 # These characters render XHTML tags.
-# 
+#
 # ==== %
-# 
-# 
+#
+#
 # The percent character is placed at the beginning of a line.
 # It's followed immediately by the name of an element,
 # then optionally by modifiers (see below), a space,
 # and text to be rendered inside the element.
 # It creates an element in the form of <tt><element></element></tt>.
 # For example:
-# 
+#
 #   %one
 #     %two
 #       %three Hey there
-# 
+#
 # is compiled to:
-# 
+#
 #   <one>
 #     <two>
 #       <three>Hey there</three>
 #     </two>
 #   </one>
-# 
+#
 # Any string is a valid element name;
 # Haml will automatically generate opening and closing tags for any element.
-# 
+#
 # ==== {}
-# 
+#
 # Brackets represent a Ruby hash
 # that is used for specifying the attributes of an element.
 # It is literally evaluated as a Ruby hash,
@@ -132,13 +132,13 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # will be replaced by appropriate escape sequences.
 # The hash is placed after the tag is defined.
 # For example:
-# 
+#
 #   %head{ :name => "doc_head" }
 #     %script{ 'type' => "text/" + "javascript",
 #              :src   => "javascripts/script_#{2 + 7}" }
-# 
+#
 # is compiled to:
-# 
+#
 #   <head name="doc_head">
 #     <script src='javascripts/script_9' type='text/javascript'>
 #     </script>
@@ -200,7 +200,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 # In XHTML, the only valid value for these attributes is the name of the attribute.
 # Thus this will render in XHTML as
-# 
+#
 #   <input selected="selected">
 #
 # To set these attributes to false, simply assign them to a Ruby false value.
@@ -211,9 +211,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # will just render as
 #
 #   <input>
-# 
+#
 # ==== []
-# 
+#
 # Square brackets follow a tag definition and contain a Ruby object
 # that is used to set the class and id of that tag.
 # The class is set to the object's class
@@ -221,41 +221,40 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # and the id is set to the object's class, followed by its id.
 # Because the id of an object is normally an obscure implementation detail,
 # this is most useful for elements that represent instances of Models.
+# Additionally, the second argument (if present) will be used as a prefix for
+# both the id and class attributes.
 # For example:
-# 
+#
 #   # file: app/controllers/users_controller.rb
-# 
+#
 #   def show
 #     @user = CrazyUser.find(15)
 #   end
-# 
+#
 #   -# file: app/views/users/show.haml
-# 
-#   %div[@user]
+#
+#   %div[@user, :greeting]
 #     %bar[290]/
 #     Hello!
-# 
+#
 # is compiled to:
-# 
-#   <div class="crazy_user" id="crazy_user_15">
+#
+#   <div class="greeting_crazy_user" id="greeting_crazy_user_15">
 #     <bar class="fixnum" id="fixnum_581" />
 #     Hello!
 #   </div>
-# 
-# This is based off of DHH's SimplyHelpful syntax,
-# as presented at RailsConf Europe 2006.
-# 
+#
 # ==== /
-# 
+#
 # The forward slash character, when placed at the end of a tag definition,
 # causes the tag to be self-closed.
 # For example:
-# 
+#
 #   %br/
 #   %meta{'http-equiv' => 'Content-Type', :content => 'text/html'}/
-# 
+#
 # is compiled to:
-# 
+#
 #   <br />
 #   <meta http-equiv='Content-Type' content='text/html' />
 #
@@ -271,9 +270,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 #   <br />
 #   <meta http-equiv='Content-Type' content='text/html' />
-# 
+#
 # ==== . and #
-# 
+#
 # The period and pound sign are borrowed from CSS.
 # They are used as shortcuts to specify the <tt>class</tt>
 # and <tt>id</tt> attributes of an element, respectively.
@@ -281,22 +280,22 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # by chaining the class names together with periods.
 # They are placed immediately after the tag and before an attributes hash.
 # For example:
-# 
+#
 #   %div#things
 #     %span#rice Chicken Fried
 #     %p.beans{ :food => 'true' } The magical fruit
 #     %h1.class.otherclass#id La La La
-# 
+#
 # is compiled to:
-# 
+#
 #   <div id='things'>
 #     <span id='rice'>Chicken Fried</span>
 #     <p class='beans' food='true'>The magical fruit</p>
 #     <h1 class='class otherclass' id='id'>La La La</h1>
 #   </div>
-# 
+#
 # And,
-# 
+#
 #   #content
 #     .articles
 #       .article.title
@@ -305,9 +304,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #         2006-11-05
 #       .article.entry
 #         Neil Patrick Harris would like to dispel any rumors that he is straight
-# 
+#
 # is compiled to:
-# 
+#
 #   <div id="content">
 #     <div class="articles">
 #       <div class="article title">Doogie Howser Comes Out</div>
@@ -317,34 +316,34 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #       </div>
 #     </div>
 #   </div>
-# 
+#
 # ==== Implicit Div Elements
-# 
+#
 # Because the div element is used so often, it is the default element.
 # If you only define a class and/or id using the <tt>.</tt> or <tt>#</tt> syntax,
 # a div element is automatically used.
 # For example:
-# 
+#
 #   #collection
 #     .item
 #       .description What a cool item!
-# 
+#
 # is the same as:
-# 
+#
 #   %div{:id => collection}
 #     %div{:class => 'item'}
 #       %div{:class => 'description'} What a cool item!
-# 
+#
 # and is compiled to:
-# 
+#
 #   <div id='collection'>
 #     <div class='item'>
 #       <div class='description'>What a cool item!</div>
 #     </div>
 #   </div>
-# 
+#
 # ==== =
-# 
+#
 # <tt>=</tt> is placed at the end of a tag definition,
 # after class, id, and attribute declarations.
 # It's just a shortcut for inserting Ruby code into an element.
@@ -353,45 +352,63 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # However, if the result is short enough,
 # it is displayed entirely on one line.
 # For example:
-# 
+#
 #   %p= "hello"
-# 
+#
 # is not quite the same as:
-# 
+#
 #   %p
 #     = "hello"
-# 
+#
 # It's compiled to:
-# 
+#
 #   <p>hello</p>
-# 
+#
+# ==== ~
+#
+# ~ works just like =, except that it runs Haml::Helpers#find_and_preserve on its input.
+# For example,
+#
+#   ~ "Foo\n<pre>Bar\nBaz</pre>"
+#
+# is the same as:
+#
+#   = find_and_preserve("Foo\n<pre>Bar\nBaz</pre>")
+#
+# and is compiled to:
+#
+#   Foo
+#   <pre>Bar&#x000A;Baz</pre>
+#
+# See also Whitespace Preservation, below.
+#
 # === XHTML Helpers
-# 
+#
 # ==== No Special Character
-# 
+#
 # If no special character appears at the beginning of a line,
 # the line is rendered as plain text.
 # For example:
-# 
+#
 #   %gee
 #     %whiz
 #       Wow this is cool!
-# 
+#
 # is compiled to:
-# 
+#
 #   <gee>
 #     <whiz>
 #       Wow this is cool!
 #     </whiz>
 #   </gee>
-# 
+#
 # ==== !!!
-# 
+#
 # When describing XHTML documents with Haml,
 # you can have a document type or XML prolog generated automatically
 # by including the characters <tt>!!!</tt>.
 # For example:
-# 
+#
 #   !!! XML
 #   !!!
 #   %html
@@ -400,9 +417,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #     %body
 #       %h1 I am the international space station
 #       %p Sign my guestbook
-# 
+#
 # is compiled to:
-# 
+#
 #   <?xml version="1.0" encoding="utf-8" ?>
 #   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 #   <html>
@@ -414,112 +431,112 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #       <p>Sign my guestbook</p>
 #     </body>
 #   </html>
-# 
+#
 # You can also specify the version and type of XHTML after the <tt>!!!</tt>.
 # XHTML 1.0 Strict, Transitional, and Frameset and XHTML 1.1 are supported.
 # The default version is 1.0 and the default type is Transitional.
 # For example:
-# 
+#
 #   !!! 1.1
-# 
+#
 # is compiled to:
-# 
+#
 #   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-# 
+#
 # and
-# 
+#
 #   !!! Strict
-# 
+#
 # is compiled to:
-# 
+#
 #   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-# 
+#
 # If you're not using the UTF-8 character set for your document,
 # you can specify which encoding should appear
 # in the XML prolog in a similar way.
 # For example:
-# 
+#
 #   !!! XML iso-8859-1
-# 
+#
 # is compiled to:
-# 
+#
 #   <?xml version="1.0" encoding="iso-8859-1" ?>
-# 
+#
 # ==== /
-# 
+#
 # The forward slash character, when placed at the beginning of a line,
 # wraps all text after it in an HTML comment.
 # For example:
-# 
+#
 #   %peanutbutterjelly
 #     / This is the peanutbutterjelly element
 #     I like sandwiches!
-# 
+#
 # is compiled to:
-# 
+#
 #   <peanutbutterjelly>
 #     <!-- This is the peanutbutterjelly element -->
 #     I like sandwiches!
 #   </peanutbutterjelly>
-# 
+#
 # The forward slash can also wrap indented sections of code. For example:
-# 
+#
 #   /
 #     %p This doesn't render...
 #     %div
 #       %h1 Because it's commented out!
-# 
+#
 # is compiled to:
-# 
+#
 #   <!--
 #     <p>This doesn't render...</p>
 #     <div>
 #       <h1>Because it's commented out!</h1>
 #     </div>
 #   -->
-# 
+#
 # You can also use Internet Explorer conditional comments
 # (about)[http://www.quirksmode.org/css/condcom.html]
 # by enclosing the condition in square brackets after the <tt>/</tt>.
 # For example:
-# 
+#
 #   /[if IE]
 #     %a{ :href => 'http://www.mozilla.com/en-US/firefox/' }
 #       %h1 Get Firefox
-# 
+#
 # is compiled to:
-# 
+#
 #   <!--[if IE]>
 #     <a href='http://www.mozilla.com/en-US/firefox/'>
 #       <h1>Get Firefox</h1>
 #     </a>
 #   <![endif]-->
-# 
+#
 # ==== \
-# 
+#
 # The backslash character escapes the first character of a line,
 # allowing use of otherwise interpreted characters as plain text.
 # For example:
-# 
+#
 #   %title
 #     = @title
 #     \- MySite
-# 
+#
 # is compiled to:
-# 
+#
 #   <title>
 #     MyPage
 #     - MySite
 #   </title>
-# 
+#
 # ==== |
-# 
+#
 # The pipe character designates a multiline string.
 # It's placed at the end of a line
 # and means that all following lines that end with <tt>|</tt>
 # will be evaluated as though they were on the same line.
 # For example:
-# 
+#
 #   %whoo
 #     %hoo I think this might get |
 #       pretty long so I should |
@@ -527,9 +544,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #       multiline so it doesn't |
 #       look awful. |
 #     %p This is short.
-# 
+#
 # is compiled to:
-# 
+#
 #   <whoo>
 #     <hoo>
 #       I think this might get pretty long so I should probably make it multiline so it doesn't look awful.
@@ -593,6 +610,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #              <tt>preserve</tt>d blocks of text aren't indented,
 #              and newlines are replaced with the HTML escape code for newlines,
 #              to preserve nice-looking output.
+#              See also Whitespace Preservation, below.
 #
 # [erb]        Parses the filtered text with ERB, like an RHTML template.
 #              Not available if the <tt>suppress_eval</tt> option is set to true.
@@ -613,49 +631,58 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #              (BlueCloth takes precedence if both are installed).
 #
 # You can also define your own filters (see Setting Options, below).
-# 
+#
 # === Ruby evaluators
-# 
+#
 # ==== =
-# 
+#
 # The equals character is followed by Ruby code,
 # which is evaluated and the output inserted into the document as plain text.
 # For example:
-# 
+#
 #   %p
 #     = ['hi', 'there', 'reader!'].join " "
 #     = "yo"
-# 
+#
 # is compiled to:
-# 
+#
 #   <p>
 #     hi there reader!
 #     yo
 #   </p>
 #
-# 
+# If the <tt>:escape_html</tt> option is set,
+# = will sanitize any HTML-sensitive characters generated by the script.
+# For example:
+#
+#   = '<script>alert("I\'m evil!");</script>'
+#
+# would be compiled to
+#
+#   &lt;script&gt;alert(&quot;I'm evil!&quot;);&lt;/script&gt;
+#
 # ==== -
-# 
+#
 # The hyphen character makes the text following it into "silent script":
 # Ruby script that is evaluated, but not output.
-# 
+#
 # <b>It is not recommended that you use this widely;
 # almost all processing code and logic should be restricted
 # to the Controller, the Helper, or partials.</b>
-# 
+#
 # For example:
-# 
+#
 #   - foo = "hello"
 #   - foo << " there"
 #   - foo << " you!"
 #   %p= foo
-# 
+#
 # is compiled to:
-# 
+#
 #   <p>
 #     hello there you!
 #   </p>
-# 
+#
 # ==== ==
 #
 # Two equals characters interpolates Ruby code into plain text,
@@ -685,8 +712,42 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #    \\ Look at \yon lack of backslash: #{foo}
 #  </p>
 #
+# ==== &=
+#
+# An ampersand followed by one or two equals characters
+# evaluates Ruby code just like the equals without the ampersand,
+# but sanitizes any HTML-sensitive characters in the result of the code.
+# For example:
+#
+#   &= "I like cheese & crackers"
+#
+# compiles to
+#
+#   I like cheese &amp; crackers
+#
+# If the <tt>:escape_html</tt> option is set,
+# &= behaves identically to =.
+#
+# ==== !=
+#
+# An exclamation mark followed by one or two equals characters
+# evaluates Ruby code just like the equals would,
+# but never sanitizes the HTML.
+#
+# By default, the single equals doesn't sanitize HTML either.
+# However, if the <tt>:escape_html</tt> option is set, = will sanitize the HTML, but != still won't.
+# For example, if <tt>:escape_html</tt> is set:
+#
+#   = "I feel <strong>!"
+#   != "I feel <strong>!"
+#
+# compiles to
+#
+#   I feel &lt;strong&gt;!
+#   I feel <strong>!
+#
 # ===== Blocks
-# 
+#
 # Ruby blocks, like XHTML tags, don't need to be explicitly closed in Haml.
 # Rather, they're automatically closed, based on indentation.
 # A block begins whenever the indentation is increased
@@ -694,13 +755,13 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # It ends when the indentation decreases
 # (as long as it's not an +else+ clause or something similar).
 # For example:
-# 
+#
 #   - (42...47).each do |i|
 #     %p= i
 #   %p See, I can count!
-# 
+#
 # is compiled to:
-# 
+#
 #   <p>
 #     42
 #   </p>
@@ -716,9 +777,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #   <p>
 #     46
 #   </p>
-# 
+#
 # Another example:
-# 
+#
 #   %p
 #     - case 2
 #     - when 1
@@ -727,9 +788,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #       = "2?"
 #     - when 3
 #       = "3."
-# 
+#
 # is compiled to:
-# 
+#
 #   <p>
 #     2?
 #   </p>
@@ -740,7 +801,7 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # signifies a silent comment.
 # Any text following this isn't rendered in the resulting document
 # at all.
-# 
+#
 # For example:
 #
 # %p foo
@@ -766,8 +827,25 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 # <p>foo</p>
 # <p>bar</p>
-# 
+#
 # == Other Useful Things
+#
+# === Whitespace Preservation
+#
+# Sometimes you don't want Haml to indent all your text.
+# For example, tags like +pre+ and +textarea+ are whitespace-sensitive;
+# indenting the text makes them render wrong.
+#
+# Haml deals with this by "preserving" newlines before they're put into the document --
+# converting them to the XHTML whitespace escape code, <tt>&#x000A;</tt>.
+# Then Haml won't try to re-format the indentation.
+#
+# Literal +textarea+ and +pre+ tags automatically preserve their content.
+# Dynamically can't be caught automatically,
+# and so should be passed through Haml::Helpers#find_and_preserve or the <tt>~</tt> command,
+# which has the same effect (see above).
+#
+# Blocks of literal text can be preserved using the :preserve filter (see above).
 #
 # === Helpers
 #
@@ -776,9 +854,9 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 # creating nicely indented output for user-defined helpers,
 # and other useful things.
 # The helpers are all documented in the Haml::Helpers and Haml::Helpers::ActionViewExtensions modules.
-# 
+#
 # === Haml Options
-# 
+#
 # Options can be set by setting the hash <tt>Haml::Template.options</tt>
 # from <tt>environment.rb</tt> in Rails,
 # or by passing an options hash to Haml::Engine.
@@ -789,11 +867,17 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #                           identical to :xhtml except there are no self-closing tags,
 #                           XML prolog is ignored and correct DOCTYPEs are generated.
 #
+# [<tt>:escape_html</tt>]   Sets whether or not to escape HTML-sensitive characters in script.
+#                           If this is true, = behaves like &=;
+#                           otherwise, it behaves like !=.
+#                           <b>Note that this escapes tag attributes.</b>
+#                           Defaults to false.
+#
 # [<tt>:suppress_eval</tt>] Whether or not attribute hashes and Ruby scripts
 #                           designated by <tt>=</tt> or <tt>~</tt> should be
 #                           evaluated. If this is true, said scripts are
 #                           rendered as empty strings. Defaults to false.
-# 
+#
 # [<tt>:attr_wrapper</tt>]  The character that should wrap element attributes.
 #                           This defaults to <tt>'</tt> (an apostrophe). Characters
 #                           of this type within the attributes will be escaped
@@ -829,7 +913,54 @@ $LOAD_PATH << dir unless $LOAD_PATH.include?(dir)
 #
 #                           Defaults to <tt>['textarea', 'pre']</tt>.
 #
+#                           See also Whitespace Preservation, above.
+#
 module Haml
+  # Returns a hash representing the version of Haml.
+  # The :major, :minor, and :teeny keys have their respective numbers.
+  # The :string key contains a human-readable string representation of the version.
+  # If Haml is checked out from Git,
+  # the :rev key will have the revision hash.
+  def self.version
+    return @@version if defined?(@@version)
+
+    numbers = File.read(scope('VERSION')).strip.split('.').map { |n| n.to_i }
+    @@version = {
+      :major => numbers[0],
+      :minor => numbers[1],
+      :teeny => numbers[2]
+    }
+    @@version[:string] = [:major, :minor, :teeny].map { |comp| @@version[comp] }.compact.join('.')
+
+    if File.exists?(scope('REVISION'))
+      rev = File.read(scope('REVISION')).strip
+      rev = nil if rev !~ /a-f0-9+/
+    end
+
+    if rev.nil? && File.exists?(scope('.git/HEAD'))
+      rev = File.read(scope('.git/HEAD')).strip
+      if rev =~ /^ref: (.*)$/
+        rev = File.read(scope(".git/#{$1}")).strip
+      end
+    end
+
+    if rev
+      @@version[:rev] = rev
+      @@version[:string] << "." << rev[0...7]
+    end
+
+    @@version
+  end
+
+  # Returns the path of file relative to the Haml root.
+  def self.scope(file) # :nodoc:
+    File.join(File.dirname(__FILE__), '..', file)
+  end
+
+  # A string representing the version of Haml.
+  # A more fine-grained representation is generated by Haml.version.
+  VERSION = version[:string] unless defined?(Haml::VERSION)
+
   # This method is called by init.rb,
   # which is run by Rails on startup.
   # We use it rather than putting stuff straight into init.rb

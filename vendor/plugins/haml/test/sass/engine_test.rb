@@ -5,51 +5,71 @@ require File.dirname(__FILE__) + '/../../lib/sass'
 require 'sass/engine'
 
 class SassEngineTest < Test::Unit::TestCase
+  # A map of erroneous Sass documents to the error messages they should produce.
+  # The error messages may be arrays;
+  # if so, the second element should be the line number that should be reported for the error.
+  # If this isn't provided, the tests will assume the line number should be the last line of the document.
   EXCEPTION_MAP = {
-    "!a = 1 + " => 'Constant arithmetic error: "1 +"',
-    "!a = 1 + 2 +" => 'Constant arithmetic error: "1 + 2 +"',
-    "!a = \"b" => 'Unterminated string: "\\"b"',
-    "!a = #aaa - a" => 'Undefined operation: "#aaaaaa minus a"',
-    "!a = #aaa / a" => 'Undefined operation: "#aaaaaa div a"',
-    "!a = #aaa * a" => 'Undefined operation: "#aaaaaa times a"',
-    "!a = #aaa % a" => 'Undefined operation: "#aaaaaa mod a"',
-    "!a = 1 - a" => 'Undefined operation: "1 minus a"',
-    "!a = 1 * a" => 'Undefined operation: "1 times a"',
-    "!a = 1 / a" => 'Undefined operation: "1 div a"',
-    "!a = 1 % a" => 'Undefined operation: "1 mod a"',
-    ":" => 'Invalid attribute: ":"',
-    ": a" => 'Invalid attribute: ": a"',
-    ":= a" => 'Invalid attribute: ":= a"',
-    "a\n  :b" => 'Invalid attribute: ":b "',
-    "a\n  :b: c" => 'Invalid attribute: ":b: c"',
-    "a\n  :b:c d" => 'Invalid attribute: ":b:c d"',
-    "a\n  :b=c d" => 'Invalid attribute: ":b=c d"',
-    "a\n  :b c;" => 'Invalid attribute: ":b c;" (This isn\'t CSS!)',
-    "a\n  b : c" => 'Invalid attribute: "b : c"',
-    "a\n  b=c: d" => 'Invalid attribute: "b=c: d"',
+    "!a = 1 + " => 'Constant arithmetic error: "1 +".',
+    "!a = 1 + 2 +" => 'Constant arithmetic error: "1 + 2 +".',
+    "!a = \"b" => 'Unterminated string: "\\"b".',
+    "!a = #aaa - a" => 'Undefined operation: "#aaaaaa minus a".',
+    "!a = #aaa / a" => 'Undefined operation: "#aaaaaa div a".',
+    "!a = #aaa * a" => 'Undefined operation: "#aaaaaa times a".',
+    "!a = #aaa % a" => 'Undefined operation: "#aaaaaa mod a".',
+    "!a = 1 - a" => 'Undefined operation: "1 minus a".',
+    "!a = 1 * a" => 'Undefined operation: "1 times a".',
+    "!a = 1 / a" => 'Undefined operation: "1 div a".',
+    "!a = 1 % a" => 'Undefined operation: "1 mod a".',
+    ":" => 'Invalid attribute: ":".',
+    ": a" => 'Invalid attribute: ": a".',
+    ":= a" => 'Invalid attribute: ":= a".',
+    "a\n  :b" => 'Invalid attribute: ":b ".',
+    "a\n  :b: c" => 'Invalid attribute: ":b: c".',
+    "a\n  :b:c d" => 'Invalid attribute: ":b:c d".',
+    "a\n  :b=c d" => 'Invalid attribute: ":b=c d".',
+    "a\n  :b c;" => 'Invalid attribute: ":b c;" (This isn\'t CSS!).',
+    "a\n  b : c" => 'Invalid attribute: "b : c".',
+    "a\n  b=c: d" => 'Invalid attribute: "b=c: d".',
     ":a" => 'Attributes aren\'t allowed at the root of a document.',
-    "!" => 'Invalid constant: "!"',
-    "!a" => 'Invalid constant: "!a"',
-    "! a" => 'Invalid constant: "! a"',
-    "!a b" => 'Invalid constant: "!a b"',
-    "a\n\t:b c" => "Illegal Indentation: Only two space characters are allowed as tabulation.",
-    "a\n :b c" => "Illegal Indentation: Only two space characters are allowed as tabulation.",
-    "a\n    :b c" => "Illegal Indentation: Only two space characters are allowed as tabulation.",
+    "!" => 'Invalid constant: "!".',
+    "!a" => 'Invalid constant: "!a".',
+    "! a" => 'Invalid constant: "! a".',
+    "!a b" => 'Invalid constant: "!a b".',
+    "a\n\t:b c" => <<END.strip,
+A tab character was used for indentation. Sass must be indented using two spaces.
+Are you sure you have soft tabs enabled in your editor?
+END
+    "a\n :b c" => "1 space was used for indentation. Sass must be indented using two spaces.",
+    "a\n    :b c" => "4 spaces were used for indentation. Sass must be indented using two spaces.",
     "a\n  :b c\n  !d = 3" => "Constants may only be declared at the root of a document.",
-    "!a = 1b + 2c" => "Incompatible units: b and c",
-    "& a\n  :b c" => "Base-level rules cannot contain the parent-selector-referencing character '&'",
+    "!a = 1b + 2c" => "Incompatible units: b and c.",
+    "& a\n  :b c" => "Base-level rules cannot contain the parent-selector-referencing character '&'.",
     "a\n  :b\n    c" => "Illegal nesting: Only attributes may be nested beneath attributes.",
     "a,\n  :b c" => "Rules can\'t end in commas.",
+    "a," => "Rules can\'t end in commas.",
+    "a,\n!b = c" => "Rules can\'t end in commas.",
     "!a = b\n  :c d\n" => "Illegal nesting: Nothing may be nested beneath constants.",
-    "@import foo.sass" => "File to import not found or unreadable: foo.sass",
+    "@import foo.sass" => "File to import not found or unreadable: foo.sass.",
     "@import templates/basic\n  foo" => "Illegal nesting: Nothing may be nested beneath import directives.",
     "foo\n  @import templates/basic" => "Import directives may only be used at the root of a document.",
     "!foo = bar baz !" => "Unterminated constant.",
     "!foo = !(foo)" => "Invalid constant.",
+    "=foo\n  :color red\n.bar\n  +bang" => "Undefined mixin 'bang'.",
+    ".bar\n  =foo\n    :color red\n" => "Mixins may only be defined at the root of a document.",
+    "=foo\n  :color red\n.bar\n  +foo\n    :color red" => "Illegal nesting: Nothing may be nested beneath mixin directives.",
+
+    # Regression tests
+    "a\n  b:\n    c\n    d" => ["Illegal nesting: Only attributes may be nested beneath attributes.", 3]
   }
   
   def test_basic_render
     renders_correctly "basic", { :style => :compact }
+  end
+
+  def test_multiple_calls_to_render
+    sass = Sass::Engine.new("a\n  b: c")
+    assert_equal sass.render, sass.render
   end
 
   def test_alternate_styles
@@ -64,8 +84,10 @@ class SassEngineTest < Test::Unit::TestCase
       begin
         Sass::Engine.new(key).render
       rescue Sass::SyntaxError => err
-        assert_equal(value, err.message)
-        assert(err.sass_line, "Line: #{key}")
+        value = [value] unless value.is_a?(Array)
+
+        assert_equal(value.first, err.message, "Line: #{key}")
+        assert_equal(value[1] || key.split("\n").length, err.sass_line, "Line: #{key}")
         assert_match(/\(sass\):[0-9]+/, err.backtrace[0], "Line: #{key}")
       else
         assert(false, "Exception not raised for\n#{key}")
@@ -103,21 +125,31 @@ class SassEngineTest < Test::Unit::TestCase
     assert_equal("@import \"./fonts.css\" screen;", render("@import \"./fonts.css\" screen"))
   end
 
+  def test_sass_import
+    renders_correctly "import", { :style => :compact, :load_paths => [File.dirname(__FILE__) + "/templates"] }
+  end
+
   def test_default_function
     assert_equal("foo {\n  bar: url(foo.png); }\n",
                  render("foo\n  bar = url(foo.png)\n"));
   end
 
-  def test_multiline_selector
+  def test_basic_multiline_selector
     assert_equal("#foo #bar,\n#baz #boom {\n  foo: bar; }\n",
                  render("#foo #bar,\n#baz #boom\n  :foo bar"))
     assert_equal("#foo #bar,\n#foo #baz {\n  foo: bar; }\n",
                  render("#foo\n  #bar,\n  #baz\n    :foo bar"))
+    assert_equal("#foo,\n#bar {\n  foo: bar; }\n  #foo #baz,\n  #bar #baz {\n    foo: bar; }\n",
+                 render("#foo,\n#bar\n  :foo bar\n  #baz\n    :foo bar"))
     assert_equal("#foo #bar, #baz #boom { foo: bar; }\n",
                  render("#foo #bar,\n#baz #boom\n  :foo bar", :style => :compact))
                  
     assert_equal("#foo #bar,#baz #boom{foo:bar}\n",
                  render("#foo #bar,\n#baz #boom\n  :foo bar", :style => :compressed))
+  end
+
+  def test_complex_multiline_selector
+    renders_correctly "multiline"
   end
 
   def test_colon_only
@@ -219,6 +251,10 @@ END
     assert_equal("foo {\n  a: b; }\n", render("!foo ||= b\nfoo\n  a = !foo"))
   end
   
+  def test_mixins
+    renders_correctly "mixins", { :style => :expanded }
+  end
+
   private
 
   def render(sass, options = {})

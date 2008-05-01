@@ -26,7 +26,7 @@ module ActionView
     def compile_haml(template, file_name, local_assigns)
       render_symbol = assign_method_name(:haml, template, file_name)
       locals = local_assigns.keys
-      
+
       @@template_args[render_symbol] ||= {}
       locals_keys = @@template_args[render_symbol].keys | locals
       @@template_args[render_symbol] = locals_keys.inject({}) { |h, k| h[k] = true; h }
@@ -42,7 +42,14 @@ module ActionView
           logger.debug "Backtrace: #{e.backtrace.join("\n")}"
         end
 
-        raise TemplateError.new(@base_path, file_name || template, @assigns, template, e)
+        base_path = if defined?(extract_base_path_from)
+                      # Rails 2.0.x
+                      extract_base_path_from(file_name) || view_paths.first
+                    else
+                      # Rails <=1.2.6
+                      @base_path
+                    end
+        raise ActionView::TemplateError.new(base_path, file_name || template, @assigns, template, e)
       end
 
       @@compile_time[render_symbol] = Time.now

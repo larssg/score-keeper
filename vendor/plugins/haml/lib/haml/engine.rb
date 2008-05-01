@@ -3,7 +3,6 @@ require 'haml/buffer'
 require 'haml/precompiler'
 require 'haml/filters'
 require 'haml/error'
-require 'haml/util'
 
 module Haml
   # This is the class where all the parsing and processing of the Haml
@@ -46,11 +45,11 @@ module Haml
 
     # Creates a new instace of Haml::Engine that will compile the given
     # template string when <tt>render</tt> is called.
-    # See README for available options.
+    # See README.rdoc for available options.
     #
     #--
     # When adding options, remember to add information about them
-    # to README!
+    # to README.rdoc!
     #++
     #
     def initialize(template, options = {})
@@ -72,9 +71,11 @@ module Haml
           'markdown' => Haml::Filters::Markdown },
         :filename => '(haml)',
         :ugly => false,
-        :format => :xhtml
+        :format => :xhtml,
+        :escape_html => false
       }
-      @options.rec_merge! options
+      @options[:filters].merge! options.delete(:filters) if options[:filters]
+      @options.merge! options
 
       unless [:xhtml, :html4, :html5].include?(@options[:format])
         raise Haml::Error, "Invalid format #{@options[:format].inspect}"
@@ -86,7 +87,6 @@ module Haml
           'ruby' => Haml::Filters::Ruby
         })
       end
-      @options[:filters].rec_merge! options[:filters] if options[:filters]
 
       if @options[:locals]
         warn <<END
@@ -96,16 +96,17 @@ Use the locals option for Haml::Engine#render instead.
 END
       end
 
-      @template = template.strip #String
+      @template = template.rstrip #String
       @to_close_stack = []
       @output_tabs = 0
       @template_tabs = 0
       @index = 0
       @flat_spaces = -1
+      @newlines = 0
 
       precompile
     rescue Haml::Error
-      $!.backtrace.unshift "#{@options[:filename]}:#{@index}"
+      $!.backtrace.unshift "#{@options[:filename]}:#{@index + $!.line_offset}" if @index
       raise
     end
 
@@ -115,7 +116,7 @@ END
     # If it's a Binding or Proc object,
     # Haml uses it as the second argument to Kernel#eval;
     # otherwise, Haml just uses its #instance_eval context.
-    # 
+    #
     # Note that Haml modifies the evaluation context
     # (either the scope object or the "self" object of the scope binding).
     # It extends Haml::Helpers, and various instance variables are set
@@ -146,7 +147,7 @@ END
     # they won't work.
     def render(scope = Object.new, locals = {}, &block)
       locals = (@options[:locals] || {}).merge(locals)
-      buffer = Haml::Buffer.new(options_for_buffer)
+      buffer = Haml::Buffer.new(scope.instance_variable_get('@haml_buffer'), options_for_buffer)
 
       if scope.is_a?(Binding) || scope.is_a?(Proc)
         scope_object = eval("self", scope)
@@ -160,17 +161,14 @@ END
 
       scope_object.instance_eval do
         extend Haml::Helpers
-        @haml_stack ||= Array.new
-        @haml_stack.push(buffer)
-        @haml_is_haml = true
+        @haml_buffer = buffer
       end
 
-      eval(@precompiled, scope, @options[:filename], 0)
+      eval(@precompiled, scope, @options[:filename])
 
       # Get rid of the current buffer
       scope_object.instance_eval do
-        @haml_stack.pop
-        @haml_is_haml = false
+        @haml_buffer = buffer.upper
       end
 
       buffer.buffer
@@ -224,7 +222,7 @@ END
     #
     #   Haml::Engine.new(".upcased= upcase").def_method(String, :upcased_div)
     #   "foobar".upcased_div #=> "<div class='upcased'>FOOBAR</div>\n"
-    # 
+    #
     # The first argument of the defined method is a hash of local variable names to values.
     # However, due to an unfortunate Ruby quirk,
     # the local variables which can be assigned must be pre-declared.
@@ -240,7 +238,7 @@ END
     #   obj = Object.new
     #   Haml::Engine.new("%p= foo").def_method(obj, :render)
     #   obj.render(:foo => "Hello!") #=> NameError: undefined local variable or method `foo'
-    # 
+    #
     # Note that Haml modifies the evaluation context
     # (either the scope object or the "self" object of the scope binding).
     # It extends Haml::Helpers, and various instance variables are set
@@ -264,6 +262,7 @@ END
     # This should remain loadable from #inspect.
     def options_for_buffer
       {
+        :autoclose => @options[:autoclose],
         :preserve => @options[:preserve],
         :attr_wrapper => @options[:attr_wrapper],
         :ugly => @options[:ugly],
