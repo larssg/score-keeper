@@ -5,10 +5,10 @@
 
 - cache(cache_key) do
   - if @rankings.size > 0
-    = render :partial => 'leaderboard', :locals => { :game_participations => @rankings, :start_at => 1, :title => 'Rankings'[], :details => '' }
+    = render :partial => 'leaderboard', :locals => { :game_participations => @rankings, :start_at => 1, :title => 'Rankings'[], :details => '', :board_id => 'rankings' }
 
   - if @newbies.size > 0
-    = render :partial => 'leaderboard', :locals => { :game_participations => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} matches"[:less_than_matches, current_game.newbie_limit] }
+    = render :partial => 'leaderboard', :locals => { :game_participations => @newbies, :start_at => @rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} matches"[:less_than_matches, current_game.newbie_limit], :board_id => 'newbies' }
 
 - if @recent_matches.size > 0
   = render :partial => 'recent_matches', :locals => { :recent_matches => @recent_matches }
