@@ -422,8 +422,6 @@ table.form {
 #bd table.teams .user {
   width: 0%;
   white-space: nowrap; }
-#bd table.teams .ranking {
-  padding-left: 20px; }
 #bd #graph {
   margin-top: 1.5em; }
   #bd #graph #chart {

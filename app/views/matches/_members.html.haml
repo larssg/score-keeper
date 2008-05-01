@@ -1,4 +1,4 @@
 - team.memberships.sort_by(&:id).each_with_index do |membership, index|
-  = ' - ' if index == 1
+  = ' - ' if index > 0
   %span{ :title => membership.points_awarded }
     = user_link(current_game, find_user(membership.user_id))
