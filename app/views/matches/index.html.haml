@@ -31,7 +31,7 @@
 
             %td= link_to 'Delete', game_match_path(match.game_id, match), :method => :delete, :confirm => 'Delete match. Are you sure?'[] if logged_in?
 
-  .pagination= will_paginate @matches
+  = will_paginate @matches
 
   .bottom_space
     = link_to 'Atom feed (all matches)'[] + ' ' + image_tag('rss.gif'), match_feed_url(current_game), :class => 'rss'

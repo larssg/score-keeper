@@ -233,6 +233,19 @@ table.form {
   margin-top: 1em;
   padding-bottom: 5px;
   border-bottom: 1px solid #333333; }
+#bd div.pagination span, #bd div.pagination a {
+  display: inline;
+  border: 1px solid #EEEEEE;
+  padding-left: 3px;
+  padding-right: 3px; }
+#bd div.pagination a:hover {
+  text-decoration: none;
+  background-color: #DDDDDD; }
+#bd div.pagination .current {
+  background-color: #DDDDDD; }
+#bd div.pagination .disabled {
+  border: 1px solid #FFFFFF;
+  color: #999999; }
 #bd #errorExplanation {
   margin-top: 1em;
   border: 1px solid #999999; }
@@ -494,17 +507,17 @@ table.form {
       margin-bottom: 1em; }
       #sidebar .content #recent_comments .comment .user {
         font-weight: bold; }
-  #sidebar .content .user .edit_user_link, #sidebar .content .team .edit_user_link {
+  #sidebar .content .user .edit_user_link,   #sidebar .content .team .edit_user_link {
     float: right; }
-  #sidebar .content .user .matchlink, #sidebar .content .team .matchlink {
+  #sidebar .content .user .matchlink,   #sidebar .content .team .matchlink {
     margin-top: 1.5em; }
-    #sidebar .content .user .matchlink a, #sidebar .content .team .matchlink a {
+    #sidebar .content .user .matchlink a,     #sidebar .content .team .matchlink a {
       text-decoration: none; }
-      #sidebar .content .user .matchlink a img, #sidebar .content .team .matchlink a img {
+      #sidebar .content .user .matchlink a img,       #sidebar .content .team .matchlink a img {
         vertical-align: text-bottom; }
-  #sidebar .content .user #counts, #sidebar .content .team #counts {
+  #sidebar .content .user #counts,   #sidebar .content .team #counts {
     margin-top: 1.5em; }
-    #sidebar .content .user #counts label, #sidebar .content .team #counts label {
+    #sidebar .content .user #counts label,     #sidebar .content .team #counts label {
       display: block;
       font-weight: bold; }
   #sidebar .content .team .mugshot {
@@ -530,19 +543,19 @@ input#openid_url {
 
 body.login, body.public {
   background-color: #E5E5E5; }
-  body.login a, body.public a {
+  body.login a,   body.public a {
     color: #6666CC; }
-    body.login a:hover, body.public a:hover {
+    body.login a:hover,     body.public a:hover {
       text-decoration: underline; }
-  body.login .container, body.public .container {
+  body.login .container,   body.public .container {
     border: 10px solid #CCCCCC;
     background-color: #FFFFFF; }
-    body.login .container #hd, body.public .container #hd {
+    body.login .container #hd,     body.public .container #hd {
       background-image: none; }
-      body.login .container #hd #logo, body.public .container #hd #logo {
+      body.login .container #hd #logo,       body.public .container #hd #logo {
         background-image: none;
         border-bottom: none; }
-    body.login .container #bd .content, body.public .container #bd .content {
+    body.login .container #bd .content,     body.public .container #bd .content {
       padding-top: 15px;
       padding-bottom: 5px;
       padding-left: 20px;
