@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080426141924) do
+ActiveRecord::Schema.define(:version => 20080501194205) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -43,14 +43,15 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
   end
 
   create_table "games", :force => true do |t|
-    t.integer  "account_id",   :limit => 11
+    t.integer  "account_id",    :limit => 11
     t.string   "name"
-    t.integer  "team_size",    :limit => 11, :default => 1
+    t.integer  "team_size",     :limit => 11, :default => 1
     t.text     "rules"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "newbie_limit", :limit => 11, :default => 20
+    t.integer  "newbie_limit",  :limit => 11, :default => 20
     t.string   "player_roles"
+    t.integer  "matches_count", :limit => 11, :default => 0
   end
 
   add_index "games", ["account_id"], :name => "index_games_on_account_id"
