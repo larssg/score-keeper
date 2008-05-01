@@ -26,4 +26,14 @@ $(document).ready(function() {
 			5: { sorter: false }
 		}
 	});
+	
+	$('#teammates').tablesorter({
+		sortList: [[6, 1]],
+		widgets: ['zebra'],
+		headers: {
+			0: { sorter: false },
+			1: { sorter: false },
+			2: { sorter: false }
+		}
+	});
 });
