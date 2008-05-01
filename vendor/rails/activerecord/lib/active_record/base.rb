@@ -423,7 +423,9 @@ module ActiveRecord #:nodoc:
     @@default_timezone = :local
 
     # Determines whether to use a connection for each thread, or a single shared connection for all threads.
-    # Defaults to false. Set to true if you're writing a threaded application.
+    # Defaults to false. If you're writing a threaded application, set to true
+    # and periodically call verify_active_connections! to clear out connections
+    # assigned to stale threads.
     cattr_accessor :allow_concurrency, :instance_writer => false
     @@allow_concurrency = false
 
@@ -532,6 +534,12 @@ module ActiveRecord #:nodoc:
         find(:last, *args)
       end
       
+      # This is an alias for find(:all).  You can pass in all the same arguments to this method as you can
+      # to find(:all)
+      def all(*args)
+        find(:all, *args)
+      end
+      
       #
       # Executes a custom sql query against your database and returns all the results.  The results will
       # be returned as an array with columns requested encapsulated as attributes of the model you call
@@ -595,13 +603,25 @@ module ActiveRecord #:nodoc:
       # ==== Examples
       #   # Create a single new object
       #   User.create(:first_name => 'Jamie')
+      #
       #   # Create an Array of new objects
       #   User.create([{:first_name => 'Jamie'}, {:first_name => 'Jeremy'}])
-      def create(attributes = nil)
+      #
+      #   # Create a single object and pass it into a block to set other attributes.
+      #   User.create(:first_name => 'Jamie') do |u|
+      #     u.is_admin = false
+      #   end
+      #
+      #   # Creating an Array of new objects using a block, where the block is executed for each object:
+      #   User.create([{:first_name => 'Jamie'}, {:first_name => 'Jeremy'}]) do |u|
+      #     u.is_admin = false
+      #   end 
+      def create(attributes = nil, &block)
         if attributes.is_a?(Array)
-          attributes.collect { |attr| create(attr) }
+          attributes.collect { |attr| create(attr, &block) }
         else
           object = new(attributes)
+          yield(object) if block_given?
           object.save
           object
         end
@@ -1272,7 +1292,7 @@ module ActiveRecord #:nodoc:
 
       private
         def find_initial(options)
-          options.update(:limit => 1) unless options[:include]
+          options.update(:limit => 1)
           find_every(options).first
         end
 

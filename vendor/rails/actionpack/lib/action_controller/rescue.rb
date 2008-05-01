@@ -26,7 +26,7 @@ module ActionController #:nodoc:
 
     DEFAULT_RESCUE_TEMPLATE = 'diagnostics'
     DEFAULT_RESCUE_TEMPLATES = {
-      'ActionController::MissingTemplate' => 'missing_template',
+      'ActionView::MissingTemplate'       => 'missing_template',
       'ActionController::RoutingError'    => 'routing_error',
       'ActionController::UnknownAction'   => 'unknown_action',
       'ActionView::TemplateError'         => 'template_error'
@@ -153,7 +153,7 @@ module ActionController #:nodoc:
       # If the file doesn't exist, the body of the response will be left empty.
       def render_optional_error_file(status_code)
         status = interpret_status(status_code)
-        path = "#{RAILS_ROOT}/public/#{status[0,3]}.html"
+        path = "#{Rails.public_path}/#{status[0,3]}.html"
         if File.exist?(path)
           render :file => path, :status => status
         else
@@ -165,7 +165,7 @@ module ActionController #:nodoc:
       # method if you wish to redefine the meaning of a local request to
       # include remote IP addresses or other criteria.
       def local_request? #:doc:
-        request.remote_addr == LOCALHOST and request.remote_ip == LOCALHOST
+        request.remote_addr == LOCALHOST && request.remote_ip == LOCALHOST
       end
 
       # Render detailed diagnostics for unhandled exceptions rescued from

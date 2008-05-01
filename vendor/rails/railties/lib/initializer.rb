@@ -38,6 +38,14 @@ module Rails
     def cache
       RAILS_CACHE
     end
+
+    def public_path
+      @@public_path ||= File.join(self.root, "public")
+    end
+
+    def public_path=(path)
+      @@public_path = path
+    end
   end
   
   # The Initializer is responsible for processing the Rails configuration, such
@@ -130,6 +138,9 @@ module Rails
       # the framework is now fully initialized
       after_initialize
 
+      # Prepare dispatcher callbacks and run 'prepare' callbacks
+      prepare_dispatcher
+
       # Routing must be initialized after plugins to allow the former to extend the routes
       initialize_routing
 
@@ -149,6 +160,10 @@ module Rails
     # ActiveResource. This allows Gem plugins to depend on Rails even when
     # the Gem version of Rails shouldn't be loaded.
     def install_gem_spec_stubs
+      unless Rails.respond_to?(:vendor_rails?)
+        abort "Your config/boot.rb is outdated: Run 'rake rails:update'."
+      end
+
       if Rails.vendor_rails?
         begin; require "rubygems"; rescue LoadError; return; end
 
@@ -432,6 +447,12 @@ module Rails
       Dir["#{configuration.root_path}/config/initializers/**/*.rb"].sort.each do |initializer|
         load(initializer)
       end
+    end
+
+    def prepare_dispatcher
+      require 'dispatcher' unless defined?(::Dispatcher)
+      Dispatcher.define_dispatcher_callbacks(configuration.cache_classes)
+      Dispatcher.new(RAILS_DEFAULT_LOGGER).send :run_callbacks, :prepare_dispatch
     end
 
   end
