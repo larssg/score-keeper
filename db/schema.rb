@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
   end
 
   create_table "comments", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "match_id"
+    t.integer  "user_id",    :limit => 11
+    t.integer  "match_id",   :limit => 11
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -31,40 +31,40 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
   add_index "comments", ["match_id"], :name => "index_comments_on_game_id"
 
   create_table "game_participations", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "game_id"
-    t.integer  "ranking",        :default => 2000
-    t.integer  "points_for",     :default => 0
-    t.integer  "points_against", :default => 0
-    t.integer  "matches_won",    :default => 0
+    t.integer  "user_id",        :limit => 11
+    t.integer  "game_id",        :limit => 11
+    t.integer  "ranking",        :limit => 11, :default => 2000
+    t.integer  "points_for",     :limit => 11, :default => 0
+    t.integer  "points_against", :limit => 11, :default => 0
+    t.integer  "matches_won",    :limit => 11, :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "matches_played"
+    t.integer  "matches_played", :limit => 11
   end
 
   create_table "games", :force => true do |t|
-    t.integer  "account_id"
+    t.integer  "account_id",   :limit => 11
     t.string   "name"
-    t.integer  "team_size",    :default => 1
+    t.integer  "team_size",    :limit => 11, :default => 1
     t.text     "rules"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "newbie_limit", :default => 20
+    t.integer  "newbie_limit", :limit => 11, :default => 20
     t.string   "player_roles"
   end
 
   add_index "games", ["account_id"], :name => "index_games_on_account_id"
 
   create_table "logs", :force => true do |t|
-    t.integer  "account_id"
-    t.integer  "user_id"
+    t.integer  "account_id",   :limit => 11
+    t.integer  "user_id",      :limit => 11
     t.string   "linked_model"
-    t.integer  "linked_id"
+    t.integer  "linked_id",    :limit => 11
     t.text     "message"
     t.datetime "published_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "game_id"
+    t.integer  "game_id",      :limit => 11
   end
 
   add_index "logs", ["account_id"], :name => "index_logs_on_account_id"
@@ -75,14 +75,14 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
     t.datetime "played_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "creator_id"
+    t.integer  "creator_id",     :limit => 11
     t.string   "team_one"
     t.string   "team_two"
     t.datetime "played_on"
-    t.integer  "comments_count", :default => 0
-    t.integer  "account_id"
+    t.integer  "comments_count", :limit => 11, :default => 0
+    t.integer  "account_id",     :limit => 11
     t.string   "position_ids"
-    t.integer  "game_id"
+    t.integer  "game_id",        :limit => 11
   end
 
   add_index "matches", ["played_on"], :name => "index_games_on_played_on"
@@ -91,14 +91,14 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
   add_index "matches", ["played_at"], :name => "index_matches_on_played_at"
 
   create_table "memberships", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "team_id"
+    t.integer  "user_id",               :limit => 11
+    t.integer  "team_id",               :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "points_awarded"
-    t.integer  "current_ranking"
-    t.integer  "game_id"
-    t.integer  "game_participation_id"
+    t.integer  "points_awarded",        :limit => 11
+    t.integer  "current_ranking",       :limit => 11
+    t.integer  "game_id",               :limit => 11
+    t.integer  "game_participation_id", :limit => 11
   end
 
   add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
@@ -106,26 +106,26 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
   add_index "memberships", ["game_participation_id"], :name => "index_memberships_on_game_participation_id"
 
   create_table "mugshots", :force => true do |t|
-    t.integer  "size"
+    t.integer  "size",         :limit => 11
     t.string   "content_type"
     t.string   "filename"
-    t.integer  "height"
-    t.integer  "width"
-    t.integer  "parent_id"
+    t.integer  "height",       :limit => 11
+    t.integer  "width",        :limit => 11
+    t.integer  "parent_id",    :limit => 11
     t.string   "thumbnail"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "teams", :force => true do |t|
-    t.integer  "match_id"
-    t.integer  "score"
+    t.integer  "match_id",     :limit => 11
+    t.integer  "score",        :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "team_ids"
-    t.boolean  "won",          :default => false
+    t.boolean  "won",                        :default => false
     t.string   "opponent_ids"
-    t.integer  "account_id"
+    t.integer  "account_id",   :limit => 11
   end
 
   add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
@@ -146,15 +146,15 @@ ActiveRecord::Schema.define(:version => 20080426141924) do
     t.boolean  "is_admin",                                :default => false
     t.string   "name"
     t.string   "display_name"
-    t.integer  "mugshot_id"
-    t.integer  "comments_count",                          :default => 0
-    t.integer  "account_id"
+    t.integer  "mugshot_id",                :limit => 11
+    t.integer  "comments_count",            :limit => 11, :default => 0
+    t.integer  "account_id",                :limit => 11
     t.boolean  "is_account_admin",                        :default => false
     t.boolean  "enabled",                                 :default => true
     t.string   "feed_token"
     t.string   "login_token"
     t.string   "time_zone"
-    t.integer  "last_game_id"
+    t.integer  "last_game_id",              :limit => 11
     t.string   "cache_game_ids"
   end
 
