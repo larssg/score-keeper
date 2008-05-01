@@ -237,11 +237,14 @@ table.form {
   display: inline;
   border: 1px solid #EEEEEE;
   padding-left: 3px;
-  padding-right: 3px; }
+  padding-right: 3px;
+  padding-top: 1px;
+  padding-bottom: 1px; }
 #bd div.pagination a:hover {
   text-decoration: none;
   background-color: #DDDDDD; }
 #bd div.pagination .current {
+  font-weight: bold;
   background-color: #DDDDDD; }
 #bd div.pagination .disabled {
   border: 1px solid #FFFFFF;

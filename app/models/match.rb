@@ -34,11 +34,16 @@ class Match < ActiveRecord::Base
   def self.recent_options(filter, options = {})
     default_options = { :order => 'played_at DESC' }
 
-    if filter
+    game = options.delete(:game)
+    if filter.blank?
+      options[:total_entries] = game.matches_count unless game.nil?
+    else
       if filter.index(',')
         conditions = ['team_one = ? OR team_two = ?', filter, filter]
+        options[:total_entries] = Match.count(:conditions => conditions)
       else
         conditions = ["team_one = ? OR team_one LIKE ? OR team_one LIKE ? OR team_two = ? OR team_two LIKE ? OR team_two LIKE ?", filter, filter + ',%', '%,' + filter, filter, filter + ',%', '%,' + filter]
+        options[:total_entries] = game.memberships.count(:conditions => ['memberships.user_id = ?', filter])
       end
     end
     options[:conditions] = conditions if conditions

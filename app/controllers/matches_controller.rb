@@ -8,19 +8,13 @@ class MatchesController < ApplicationController
       # used for /users/xxx/matches.graph
       @user = current_account.users.find(params[:user_id])
     else
-      if params[:filter].blank?
-        @matches = current_game.matches.paginate(
-        Match.recent_options(params[:filter],
+      @matches = current_game.matches.paginate(
+        Match.recent_options(
+          params[:filter],
+          :game => current_game,
           :include => { :teams => :memberships }, 
-          :page => params[:page],
-          :total_entries => current_game.matches_count))
-      else
-        @matches = current_game.matches.paginate(
-          Match.recent_options(params[:filter],
-            :include => { :teams => :memberships }, 
-            :page => params[:page]))
-        @filter = current_account.matches.find_filter_users(params[:filter])
-      end
+          :page => params[:page]))
+      @filter = current_account.matches.find_filter_users(params[:filter])
       @game = current_game
     end
     
