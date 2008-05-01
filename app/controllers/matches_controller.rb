@@ -19,8 +19,8 @@ class MatchesController < ApplicationController
           Match.recent_options(params[:filter],
             :include => { :teams => :memberships }, 
             :page => params[:page]))
+        @filter = current_account.matches.find_filter_users(params[:filter])
       end
-      @filter = current_account.matches.find_filter_users(params[:filter])
       @game = current_game
     end
     
