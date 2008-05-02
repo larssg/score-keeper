@@ -93,3 +93,6 @@
               = link_to @all_time_low.current_ranking, game_match_path(@game, @all_time_low.team.match), :class => 'match'
 
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
+
+- content_for :head do
+  = javascript_include_tag 'swfobject'

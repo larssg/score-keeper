@@ -8,7 +8,6 @@
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
-    = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application', 'swfobject'
     = yield :head
 
   %body
@@ -59,3 +58,4 @@
             .content= sidebar
   
       .column.span-24= render :partial => 'shared/footer'
+    = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application'  
