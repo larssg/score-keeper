@@ -28,7 +28,11 @@ module Rails
     end
   
     def root
-      RAILS_ROOT
+      if defined?(RAILS_ROOT)
+        RAILS_ROOT
+      else
+        nil
+      end
     end
   
     def env
@@ -40,7 +44,7 @@ module Rails
     end
 
     def public_path
-      @@public_path ||= File.join(self.root, "public")
+      @@public_path ||= self.root ? File.join(self.root, "public") : "public"
     end
 
     def public_path=(path)
@@ -382,6 +386,7 @@ module Rails
     def initialize_routing
       return unless configuration.frameworks.include?(:action_controller)
       ActionController::Routing.controller_paths = configuration.controller_paths
+      ActionController::Routing::Routes.configuration_file = configuration.routes_configuration_file
       ActionController::Routing::Routes.reload
     end
 
@@ -499,6 +504,10 @@ module Rails
     # The path to the database configuration file to use. (Defaults to
     # <tt>config/database.yml</tt>.)
     attr_accessor :database_configuration_file
+    
+    # The path to the routes configuration file to use. (Defaults to
+    # <tt>config/routes.rb</tt>.)
+    attr_accessor :routes_configuration_file
 
     # The list of rails framework components that should be loaded. (Defaults
     # to <tt>:active_record</tt>, <tt>:action_controller</tt>,
@@ -563,11 +572,11 @@ module Rails
     attr_accessor :plugin_loader
     
     # Enables or disables plugin reloading.  You can get around this setting per plugin.
-    # If #reload_plugins? == false, add this to your plugin's init.rb to make it reloadable:
+    # If <tt>reload_plugins?</tt> is false, add this to your plugin's init.rb to make it reloadable:
     #
     #   Dependencies.load_once_paths.delete lib_path
     #
-    # If #reload_plugins? == true, add this to your plugin's init.rb to only load it once:
+    # If <tt>reload_plugins?</tt> is true, add this to your plugin's init.rb to only load it once:
     #
     #   Dependencies.load_once_paths << lib_path
     #
@@ -631,6 +640,7 @@ module Rails
       self.plugin_locators              = default_plugin_locators
       self.plugin_loader                = default_plugin_loader
       self.database_configuration_file  = default_database_configuration_file
+      self.routes_configuration_file    = default_routes_configuration_file
       self.gems                         = default_gems
 
       for framework in default_frameworks
@@ -769,6 +779,10 @@ module Rails
 
       def default_database_configuration_file
         File.join(root_path, 'config', 'database.yml')
+      end
+
+      def default_routes_configuration_file
+        File.join(root_path, 'config', 'routes.rb')
       end
 
       def default_view_path
