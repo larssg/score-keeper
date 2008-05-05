@@ -3,7 +3,7 @@
     - if current_account.all_games.size > 0
       = render :partial => 'shared/current_game'
       |
-    %span.current_user= link_to current_user.login, current_user
+    %span.current_user= link_to current_user.login, game_user_path(current_game, current_user)
     |
     - unless session[:real_user_id].blank?
       = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put

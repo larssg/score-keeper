@@ -6,9 +6,9 @@
       .user
         .image
           - if user.mugshot
-            = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), user
+            = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), edit_user_path(user)
         .login= user.login
-        .name= link_to user.name, user
+        .name= link_to user.name, edit_user_path(user)
         .role= user.is_admin? ? 'Super Admin'[] : (user.is_account_admin? ? 'Admin'[] : 'Normal'[])
         .email= mail_to user.email
         .created_at= user.created_at.to_s :long
