@@ -35,7 +35,9 @@ module Factory
         :login => "user#{number}",
         :email => "user#{number}@example.com",
         :name => "Person Personson #{number}",
-        :display_name => "Person Personson #{number}")
+        :display_name => "Person Personson #{number}",
+        :password => options[:password] || 'admin',
+        :password_confirmation => options[:password] || 'admin')
     end
     people
   end
