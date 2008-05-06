@@ -9,7 +9,7 @@
       - @games.each do |game|
         %tr
           %td= link_to h(game.name), session_path('switch_game', :current_game => { :id => game.id }), :method => :put
-          %td= game.team_size
+          %td= '{team_size}-on-{team_size}'[:team_size, game.team_size, game.team_size]
           %td= link_to 'Edit', edit_game_path(game)
 
 - else
