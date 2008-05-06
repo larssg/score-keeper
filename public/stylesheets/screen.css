@@ -196,6 +196,8 @@ table.form {
     vertical-align: top; }
   table.form td.field {
     width: 75%; }
+    table.form td.field label {
+      display: inline; }
 
 .list {
   margin-top: 1.5em; }
@@ -329,6 +331,9 @@ table.form {
   #bd label input {
     display: block;
     margin-bottom: 10px; }
+#bd .radio label {
+  display: inline;
+  font-weight: normal; }
 #bd #filter {
   margin-top: 1.5em; }
 #bd #matches .score {
