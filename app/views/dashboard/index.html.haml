@@ -53,3 +53,7 @@
 
     - if @matches_per_day.size > 0
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
+      
+#dashboard_data
+  .last_update= @logs.first.published_at.to_s(:db)
+  .game_id= current_game.id

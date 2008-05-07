@@ -51,7 +51,7 @@
                 %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
             = javascript_tag "$('#messages').pause(8000).Fade();"
 
-          = yield
+          #main= yield
 
         - unless sidebar.blank?
           #sidebar.column.span-6.last
