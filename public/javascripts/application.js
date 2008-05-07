@@ -84,6 +84,6 @@ $(document).ready(function() {
 	scoreKeeper.tableSort();
 	scoreKeeper.matchUpdate.init();
 	if ($('#messages').length > 0) {
-	  $('#messages').animate({opacity: 1.0}, 8000).fadeOut('slow');
+		setTimeout(function() { $('#messages').fadeOut('slow'); }, 8000);
 	}
 });
