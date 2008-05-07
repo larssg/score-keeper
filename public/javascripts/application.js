@@ -4,8 +4,12 @@ var scoreKeeper = {
 		
 		init: function() {
 			if (scoreKeeper.matchUpdate.isShowingDashboard()) {
-				setTimeout(scoreKeeper.matchUpdate.run, scoreKeeper.matchUpdate.interval * 1000);
+				scoreKeeper.matchUpdate.schedule();
 			}
+		},
+		
+		schedule: function() {
+			setTimeout(scoreKeeper.matchUpdate.run, scoreKeeper.matchUpdate.interval * 1000);
 		},
 		
 		run: function() {
@@ -18,7 +22,7 @@ var scoreKeeper = {
 						$('#main').html(data);
 						scoreKeeper.tableSort();
 					}
-					setTimeout(scoreKeeper.matchUpdate.run, scoreKeeper.matchUpdate.interval * 1000);
+					scoreKeeper.matchUpdate.schedule();
 				}
 			);
 		},
@@ -28,21 +32,12 @@ var scoreKeeper = {
 		},
 		
 		lastUpdate: function() {
-			return scoreKeeper.matchUpdate.getValue('last_update');
+			return $('#dashboard_data .last_update').html();
 		},
 		
 		gameId: function() {
-			return scoreKeeper.matchUpdate.getValue('game_id');
+			return $('#dashboard_data .game_id').html();
 		},
-		
-		getValue: function(value) {
-			var elements = $("#dashboard_data ." + value);
-			if (elements.length > 0) {
-				var element = elements[0];
-				return element.innerHTML;
-			}
-			return false;
-		}
 	},
 	
 	tableSort: function() {
