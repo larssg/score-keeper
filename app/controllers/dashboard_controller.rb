@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
     @logs = current_game.logs.find(:all, :order => 'published_at DESC', :limit => 5)
     respond_to do |format|
       format.js do
-        if @logs.first.published_at.to_s(:db) != params[:last_update]
+        if @logs.size > 0 && @logs.first.published_at.to_s(:db) != params[:last_update]
           load_data
           render :action => 'index', :layout => false
         else
