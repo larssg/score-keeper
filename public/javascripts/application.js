@@ -1,10 +1,10 @@
 var scoreKeeper = {
 	matchUpdate: {
-		interval: 60,
+		interval: 1 * 60,
 		
 		init: function() {
 			if (scoreKeeper.matchUpdate.isShowingDashboard()) {
-				scoreKeeper.matchUpdate.run();
+				setTimeout(scoreKeeper.matchUpdate.run, scoreKeeper.matchUpdate.interval * 1000);
 			}
 		},
 		
@@ -14,11 +14,11 @@ var scoreKeeper = {
 					last_update: scoreKeeper.matchUpdate.lastUpdate()
 				},
 				function(data, status) {
-					setTimeout(scoreKeeper.matchUpdate.run, scoreKeeper.matchUpdate.interval * 1000);
 					if (jQuery.trim(data) != '') {
 						$('#main').html(data);
 						scoreKeeper.tableSort();
 					}
+					setTimeout(scoreKeeper.matchUpdate.run, scoreKeeper.matchUpdate.interval * 1000);
 				}
 			);
 		},
