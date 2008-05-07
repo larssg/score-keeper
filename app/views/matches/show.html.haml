@@ -36,6 +36,8 @@
       .info
         %span.index= '#' + (index + 1).to_s + '&nbsp;'
         %span.user= link_to(h(comment.user.name), comment.user) + '&nbsp;'
+        - if match.winner.memberships.collect(&:user_id).include?(comment.user_id)
+          %span.medal= image_tag('icons/medal_gold_2.png', :class => 'winner')
         %span.time= time_ago_in_words(comment.created_at) + ' ago'
       .content{ :id => "content_#{comment.id}" }
         = render :partial => 'comments/comment', :object => comment
