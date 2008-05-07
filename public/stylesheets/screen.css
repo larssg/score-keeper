@@ -378,6 +378,10 @@ table.form {
         display: inline; }
       #bd #comments .comment .info .user {
         font-weight: bold; }
+      #bd #comments .comment .info .medal img {
+        margin: 0;
+        padding: 0;
+        vertical-align: text-bottom; }
     #bd #comments .comment .edit {
       margin-bottom: 1em; }
     #bd #comments .comment textarea {
