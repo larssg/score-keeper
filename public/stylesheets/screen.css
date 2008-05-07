@@ -354,7 +354,7 @@ table.form {
     #bd #match .team .list .score {
       text-align: center;
       vertical-align: middle; }
-    #bd #match .team .list .team-2 {
+    #bd #match .team .list .team-2, #bd #match .team .list .team-3 {
       font-size: 2em; }
 #bd #comments {
   border-top: 1px solid #CCCCCC; }
