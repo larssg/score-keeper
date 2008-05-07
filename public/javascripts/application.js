@@ -83,4 +83,7 @@ $(document).ready(function() {
 	$('body.login #login').focus();
 	scoreKeeper.tableSort();
 	scoreKeeper.matchUpdate.init();
+	if ($('#messages').length > 0) {
+	  $('#messages').animate({opacity: 1.0}, 8000).fadeOut('slow');
+	}
 });

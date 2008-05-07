@@ -49,7 +49,6 @@
             #messages
               - flash.keys.each do |key|
                 %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
-            = javascript_tag "$('#messages').pause(8000).Fade();"
 
           #main= yield
 
