@@ -4,29 +4,30 @@
   %label= 'Played at' + ':'
   = @match.played_at.to_s :long
 
-  - [@match.winner, @match.loser].each_with_index do |team, team_index|
-    .team.column.span-12{ :class => (team_index == 1 ? 'last' : nil) }
-      %h3= team.winner? ? 'Winner'[] : 'Loser'[]
-      .list
-        %table
+  .rankings
+    - [@match.winner, @match.loser].each_with_index do |team, team_index|
+      .team.column.span-12{ :class => (team_index == 1 ? 'last' : nil) }
+        %h3= team.winner? ? 'Winner'[] : 'Loser'[]
+        .list
+          %table
         
-          %thead
-            %tr
-              %th= 'Player'
-              %th.score= 'Score'
-              %th= 'Before'
-              %th= 'Awarded'
-              %th= 'After'
-          
-          %tbody
-            - team.memberships.each_with_index do |membership, index|
+            %thead
               %tr
-                %td= link_to h(membership.user.name), game_user_path(current_game, membership.user)
-                - if index == 0
-                  %td.score{ :class => "team-#{current_game.team_size}", :rowspan => current_game.team_size }= team.score
-                %td= membership.current_ranking - membership.points_awarded
-                %td= membership.points_awarded
-                %td= membership.current_ranking
+                %th= 'Player'
+                %th.score= 'Score'
+                %th= 'Before'
+                %th= 'Awarded'
+                %th= 'After'
+          
+            %tbody
+              - team.memberships.each_with_index do |membership, index|
+                %tr
+                  %td= link_to h(membership.user.name), game_user_path(current_game, membership.user)
+                  - if index == 0
+                    %td.score{ :class => "team-#{current_game.team_size}", :rowspan => current_game.team_size }= team.score
+                  %td= membership.current_ranking - membership.points_awarded
+                  %td= membership.points_awarded
+                  %td= membership.current_ranking
   
 %h3= 'Comments'
 #comments
