@@ -1,7 +1,3 @@
-@import url(lib/reset.css);
-@import url(lib/typography.css);
-@import url(lib/grid.css);
-@import url(lib/forms.css);
 a {
   color: #000000;
   text-decoration: none; }

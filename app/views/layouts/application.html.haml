@@ -4,7 +4,10 @@
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
     %title= page_title
-    = stylesheet_link_tag 'screen', :media => 'screen, projection'
+    - if RAILS_ENV == 'production'
+      = stylesheet_link_tag 'base'
+    - else
+      = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
@@ -57,4 +60,7 @@
             .content= sidebar
   
       .column.span-24= render :partial => 'shared/footer'
-    = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application', :cache => true
+    - if RAILS_ENV == 'production'
+      = javascript_include_tag 'base'
+    - else
+      = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application'
