@@ -128,6 +128,8 @@ textarea {
   #add_match_form .score {
     margin-right: 0.5em;
     width: 3em; }
+  #add_match_form .game_added_warning {
+    margin-left: 0.5em; }
 
 h2#page_title {
   display: none;

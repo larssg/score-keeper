@@ -27,7 +27,7 @@
         - unless current_game.nil?
           #add_match.column.span-8.last
             - if enabled_users.size >= current_game.team_size * 2
-              = link_to_function image_tag('icons/add.png') + ' ' + 'Add match'[], "$('#add_match_form').toggle()"
+              = link_to_function image_tag('icons/add.png') + ' ' + 'Add match'[], "scoreKeeper.newMatch.toggle();"
             - else
               #user_minimum= 'You need at least {user_minimum} users'[:you_need_user_minimum_users, current_game.team_size * 2]
   
@@ -57,4 +57,4 @@
             .content= sidebar
   
       .column.span-24= render :partial => 'shared/footer'
-    = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application'  
+    = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application'

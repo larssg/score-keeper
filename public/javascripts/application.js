@@ -1,6 +1,28 @@
 var scoreKeeper = {
+  newMatch: {
+    toggle: function() {
+      var element = $('#add_match_form');
+      element.toggle();
+      if (element.css('display') == 'block') {
+        scoreKeeper.matchUpdate.interval = 10;
+        $.get('/games/' + scoreKeeper.matchUpdate.gameId() + '/game_added_warning',
+          {},
+          function(data, status) {
+            if (status == 'success') {
+              $('#add_match_form .game_added_warning').html(data);
+              $('#add_match_form .game_added_warning').show();
+            }
+          });
+      } else {
+        scoreKeeper.matchUpdate.interval = 60;
+        $('#add_match_form .game_added_warning').html('');
+        $('#add_match_form .game_added_warning').hide();
+      }
+    }
+  },
+  
 	matchUpdate: {
-		interval: 1 * 60,
+		interval: 60,
 		
 		init: function() {
 			if (scoreKeeper.matchUpdate.isShowingDashboard()) {

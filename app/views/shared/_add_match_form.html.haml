@@ -12,4 +12,5 @@
     %label= f.label :score2, 'Score'[] + ':'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
     = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
-    = link_to_function 'Cancel'[], "$('#add_match_form').hide()"
+    = link_to_function 'Cancel'[], "scoreKeeper.newMatch.toggle();"
+.game_added_warning{ :style => 'display: none' }

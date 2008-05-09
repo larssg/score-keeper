@@ -169,8 +169,7 @@ class Match < ActiveRecord::Base
   end
   
   def title()
-    [
-      self.teams.first.display_names.join(' - '),
+    [ self.teams.first.display_names.join(' - '),
       "(#{self.teams.first.score} - #{self.teams.last.score})",
       self.teams.last.display_names.join(' - ')
     ].join(' ')

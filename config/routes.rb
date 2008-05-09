@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   map.login 'login', :controller => 'sessions', :action => 'new'
   map.logout 'logout', :controller => 'sessions', :action => 'destroy'
   
-  map.resources :games do |games|
+  map.resources :games, { :member => 'game_added_warning' } do |games|
     games.resources :matches do |matches|
       matches.resources :comments
     end

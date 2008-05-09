@@ -33,4 +33,15 @@ class GamesController < ApplicationController
       render :action => 'edit'
     end
   end
+  
+  def game_added_warning
+    @game = current_account.games.find(params[:id])
+    @latest_membership = current_user.memberships.find(:first, :conditions => ['memberships.game_id = ? AND created_at >= ?', @game.id, 10.minutes.ago], :order => 'created_at DESC')
+    
+    if @latest_membership && @latest_membership.team.match.creator != current_user
+      render :layout => false
+    else
+      head :not_found
+    end
+  end
 end
