@@ -143,16 +143,16 @@ class ApplicationController < ActionController::Base
   end
   
   def colors
-    parts = %w(33 66 99 CC)
     colors = []
-    parts.each do |first_color|
-      parts.select { |p| p != first_color }.each do |second_color|
-        parts.select { |p| p != first_color && p != second_color }.each do |third_color|
-          colors << "#" + first_color + second_color + third_color
+    [0.8, 0.4, 1.0, 0.6].each do |saturation|
+      [0.6, 0.9, 0.3, 0.75].each do |light|
+        [0, 0.15, 0.3, 0.5, 0.6, 0.75, 0.9, 1.0].each do |hue|
+          color = Color::HSL.from_fraction(hue, saturation, light)
+          colors << color.html
         end
       end
     end
-    colors.sort
+    colors
   end
   helper_method :colors
   

@@ -24,6 +24,7 @@ Rails::Initializer.run do |config|
   config.gem 'gchartrb', :lib => 'google_chart'
   config.gem 'hpricot', :version => '0.6'
   config.gem 'webrat', :version => '0.2'
+  config.gem 'color-tools', :lib => 'color', :version => '1.3.0'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
