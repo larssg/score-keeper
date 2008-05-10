@@ -340,6 +340,12 @@ table.form {
   text-align: center; }
 #bd #matches .comments {
   white-space: nowrap; }
+#bd #feeds {
+  padding-top: 10px;
+  padding-bottom: 20px; }
+  #bd #feeds a.rss {
+    display: inline;
+    margin-right: 10px; }
 #bd #match {
   margin-top: 1.5em;
   margin-bottom: 1.5em; }
@@ -393,8 +399,7 @@ table.form {
 #bd .filter a.clear {
   font-size: 85%; }
 #bd .pagination {
-  padding-top: 10px;
-  padding-bottom: 10px; }
+  padding-top: 10px; }
 #bd .match {
   margin-bottom: 20px; }
   #bd .match label {
