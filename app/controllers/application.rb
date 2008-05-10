@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   before_filter :adjust_format_for_iphone
   before_filter :set_time_zone
   before_filter :load_current_game
+  
+  @@colors = []
 
 #  around_filter :set_language
 
@@ -143,16 +145,17 @@ class ApplicationController < ActionController::Base
   end
   
   def colors
-    colors = []
-    [0.8, 0.4, 1.0, 0.6].each do |saturation|
-      [0.6, 0.9, 0.3, 0.75].each do |light|
-        [0, 0.15, 0.3, 0.5, 0.6, 0.75, 0.9, 1.0].each do |hue|
-          color = ::Color::HSL.from_fraction(hue, saturation, light)
-          colors << color.html
+    if @@colors.size == 0
+      [0.8, 0.4, 1.0, 0.6].each do |saturation|
+        [0.6, 0.9, 0.3, 0.75].each do |light|
+          [0, 0.15, 0.3, 0.5, 0.6, 0.75, 0.9, 1.0].each do |hue|
+            color = ::Color::HSL.from_fraction(hue, saturation, light)
+            @@colors << color.html
+          end
         end
       end
     end
-    colors
+    @@colors
   end
   helper_method :colors
   
