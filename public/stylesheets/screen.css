@@ -299,6 +299,8 @@ table.form {
   border: 0; }
 #bd #leaderboards .notes {
   float: right; }
+#bd #leaderboards input.submit {
+  margin-top: 3px; }
 #bd #dashboard_data {
   display: none; }
 #bd .bottom_space {
