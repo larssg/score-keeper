@@ -147,7 +147,7 @@ class ApplicationController < ActionController::Base
     [0.8, 0.4, 1.0, 0.6].each do |saturation|
       [0.6, 0.9, 0.3, 0.75].each do |light|
         [0, 0.15, 0.3, 0.5, 0.6, 0.75, 0.9, 1.0].each do |hue|
-          color = Color::HSL.from_fraction(hue, saturation, light)
+          color = ::Color::HSL.from_fraction(hue, saturation, light)
           colors << color.html
         end
       end
