@@ -103,6 +103,8 @@ textarea {
       #menu ul li.current a {
         background-image: url('../images/tab_active_left.gif');
         color: #7C7C7C; }
+    #menu ul li.admin {
+      margin-left: 3em; }
   #menu #login_form {
     display: none;
     font-size: 85%; }
