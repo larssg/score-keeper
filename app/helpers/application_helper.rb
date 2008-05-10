@@ -12,6 +12,24 @@ module ApplicationHelper
     title
   end
   
+  def stylesheet_link_merged
+    if RAILS_ENV == 'production'
+      base = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'stylesheets', 'base*.css')].first)
+      content_tag 'link', ' ', { :href => "/stylesheets/#{base}", :media => 'screen, projection', :rel => 'stylesheet', :type => 'text/css' }
+    else
+      stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
+    end
+  end
+  
+  def javascript_include_tag_merged
+    if RAILS_ENV == 'production'
+      base = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'javascripts', 'base*.js')].first)
+      content_tag 'script', ' ', { :src => "/javascripts/#{base}", :type => 'text/javascript' }
+    else
+      javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
+    end
+  end
+  
   def user_area(&block)
     if logged_in?
       concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding

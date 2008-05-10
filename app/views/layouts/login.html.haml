@@ -6,10 +6,7 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    - if RAILS_ENV == 'production'
-      = stylesheet_link_tag 'base'
-    - else
-      = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
+    = stylesheet_link_merged
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
@@ -39,7 +36,4 @@
           .content= yield
 
       = render :partial => 'shared/footer'
-    - if RAILS_ENV == 'production'
-      = javascript_include_tag 'base'
-    - else
-      = javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application'
+    = javascript_include_tag_merged

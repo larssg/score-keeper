@@ -10,6 +10,7 @@ namespace :package do
       :js => File.join(RAILS_ROOT, 'public', 'javascripts')
     }
     
+    latest_mtime = 0
     files.keys.each do |type|
       temp_file = File.join(RAILS_ROOT, 'tmp', "temp.#{type}")
 
@@ -19,10 +20,12 @@ namespace :package do
           File.open(filename, 'r') do |sf|
             f.write(sf.read)
           end
+          
+          latest_mtime = File.mtime(filename).to_i if File.mtime(filename).to_i > latest_mtime
         end
       end
 
-      output_file = File.join(file_dirs[type], "base.#{type}")
+      output_file = File.join(file_dirs[type], "base_#{latest_mtime}.#{type}")
       `java -jar lib/yuicompressor.jar --type #{type} -o #{output_file} #{temp_file}`
 
       File.delete(temp_file)
