@@ -8,6 +8,6 @@
       %th &nbsp;
 
     - recent_matches.each do |match|
-      %tr{ :class => cycle('odd', 'even') }
+      %tr{ :class => cycle('even', 'odd') }
         = render :partial => 'matches/match_columns', :locals => { :match => match }
     - reset_cycle

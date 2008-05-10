@@ -7,6 +7,7 @@
     %thead
       %tr
         %th= '&nbsp;'
+        %th= '&nbsp;'
         - if start_at == 1
           %th= '&nbsp;'
         %th= 'Person'[]
@@ -20,6 +21,7 @@
     %tbody
       - game_participations.each_with_index do |game_participation, index|
         %tr
+          %td= check_box_tag 'user[]', game_participation.user_id
           %td= index + start_at
           - if start_at == 1
             %td
@@ -38,6 +40,7 @@
           %td= game_participation.winning_percentage.to_s + '%'
           %td= game_participation.difference_average
       - reset_cycle
-    
+
   - if start_at == 1
     .notes= "Numbers in parenthesis: user's position 7 days ago. The arrow indicates position movement."[]
+  = submit_tag 'Compare'

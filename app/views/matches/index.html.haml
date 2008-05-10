@@ -22,7 +22,7 @@
           %th &nbsp;
 
         - @matches.each do |match|
-          %tr{ :class => cycle('odd', 'even') }
+          %tr{ :class => cycle('even', 'odd') }
             = render :partial => 'match_columns', :locals => { :match => match }
 
             %td

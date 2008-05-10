@@ -1,0 +1,30 @@
+- if @selected_player_ids.size > 0
+  #graph
+    %h3= 'Ranking chart'[]
+    - form_tag game_comparisons_path(current_game), :method => :get do
+      - @selected_player_ids.each do |player_id|
+        = hidden_field_tag 'user[]', player_id
+      = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
+      = submit_tag 'Update'[]
+    
+    .legend
+      - @selected_players.each_with_index do |player, index|
+        .player
+          %span.color{ :style => "background-color: #{colors[index]}" }
+          %span.name= player.name
+
+    = graph(formatted_game_comparison_url(current_game, @selected_player_ids.join('-'), :chart, :period => @time_period))
+- else
+  #graph= 'Please select users to compare to the right.'[]
+
+- content_for :sidebar do
+  - form_tag game_comparisons_path(@game), :method => :get, :id => 'compare_users' do
+    - @players.each do |player|
+      .player
+        = check_box_tag 'user[]', player.id, @selected_player_ids.include?(player.id), :id => "user_#{player.id}"
+        = label_tag "user_#{player.id}", player.name
+        
+    = submit_tag 'Compare'[]
+    
+- content_for :head do
+  = javascript_include_tag 'swfobject'

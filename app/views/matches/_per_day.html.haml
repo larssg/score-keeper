@@ -9,7 +9,7 @@
         %th.matches_played= 'Matches'[]
 
       - matches_per_day.each do |day|
-        %tr{ :class => cycle('odd', 'even') }
+        %tr{ :class => cycle('even', 'odd') }
           %td.date= human_date(day[0])
           %td.matches_played= day[1]
       - reset_cycle

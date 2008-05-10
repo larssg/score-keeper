@@ -21,7 +21,7 @@ class MatchesController < ApplicationController
     respond_to do |format|
       format.html # index.haml
       format.atom { render :layout => false } # index.atom.builder
-      format.graph { render_chart if params[:user_id] }
+      format.chart { render_chart if params[:user_id] }
     end
   end
   

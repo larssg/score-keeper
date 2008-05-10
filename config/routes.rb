@@ -17,6 +17,8 @@ ActionController::Routing::Routes.draw do |map|
     games.resources :users do |user|
       user.resources :matches
     end
+    
+    games.resources :comparisons
   end
 
   map.resources :users

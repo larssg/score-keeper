@@ -32,7 +32,7 @@
 %h3= 'Comments'
 #comments
   - @comments.each_with_index do |comment, index|
-    .comment{ :class => cycle('odd', 'even') }
+    .comment{ :class => cycle('even', 'odd') }
       .mugshot= link_to image_tag(comment.user.mugshot.public_filename(:thumb), :alt => comment.user.name), user_path(comment.user) if comment.user.mugshot
       .info
         %span.index= '#' + (index + 1).to_s + '&nbsp;'

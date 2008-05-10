@@ -8,7 +8,7 @@
       %th= 'Matches'[]
       %th= link_to 'Created'[], :order => 'created_at'
     - @accounts.each do |account|
-      %tr{ :class => cycle('odd', 'even') }
+      %tr{ :class => cycle('even', 'odd') }
         %td= link_to h(account.name), account
         %td= h(account.domain)
         %td= account.users.count

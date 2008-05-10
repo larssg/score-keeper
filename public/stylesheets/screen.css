@@ -238,7 +238,7 @@ table.form {
         margin: 0;
         padding: 0;
         vertical-align: text-bottom; }
-    .list table tr.even td {
+    .list table tr.odd td {
       background-color: #EEEEEE; }
   .list .notes {
     font-size: 11px;
@@ -292,6 +292,13 @@ table.form {
     margin-top: 0; }
     #bd #errorExplanation ul li {
       padding-bottom: 6px; }
+#bd #leaderboards .list h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: bold;
+  border: 0; }
+#bd #leaderboards .notes {
+  float: right; }
 #bd #dashboard_data {
   display: none; }
 #bd .bottom_space {
@@ -328,6 +335,8 @@ table.form {
   margin: 0;
   padding: 0;
   vertical-align: text-bottom; }
+#bd #rankings input, #bd #newbies input {
+  margin: 0; }
 #bd label {
   display: block; }
   #bd label input {
@@ -364,7 +373,7 @@ table.form {
       font-size: 2em; }
 #bd #comments {
   border-top: 1px solid #CCCCCC; }
-  #bd #comments .odd {
+  #bd #comments .even {
     background-color: #F5F5F5; }
   #bd #comments .comment {
     margin: 0;
@@ -451,8 +460,22 @@ table.form {
   white-space: nowrap; }
 #bd #graph {
   margin-top: 1.5em; }
-  #bd #graph #chart {
+  #bd #graph .legend {
     margin-top: 1em; }
+    #bd #graph .legend .player {
+      display: block;
+      float: left;
+      margin-right: 10px; }
+      #bd #graph .legend .player span.color {
+        display: block;
+        float: left;
+        width: 1em;
+        height: 1em;
+        margin-top: 4px; }
+      #bd #graph .legend .player span.name {
+        padding-left: 3px; }
+  #bd #graph #chart {
+    margin-top: 0.5em; }
 #bd .user .mugshot {
   text-align: center;
   padding-bottom: 1em; }
@@ -538,9 +561,9 @@ table.form {
     margin-top: 1em; }
   #sidebar .content #opponents h3 {
     margin-top: 1.5em; }
-  #sidebar .content #opponents .odd {
-    background-color: #F0F0F0; }
   #sidebar .content #opponents .even {
+    background-color: #F0F0F0; }
+  #sidebar .content #opponents .odd {
     background-color: #F9F9F9; }
   #sidebar .content #opponents .opponent {
     padding: 5px; }
@@ -571,6 +594,16 @@ table.form {
     float: left; }
     #sidebar .content .team .mugshot a {
       display: block; }
+  #sidebar .content #compare_users input {
+    width: auto;
+    margin: 0; }
+  #sidebar .content #compare_users .player {
+    padding-bottom: 5px; }
+    #sidebar .content #compare_users .player input, #sidebar .content #compare_users .player label {
+      display: inline; }
+    #sidebar .content #compare_users .player label {
+      vertical-align: top;
+      font-weight: normal; }
   #sidebar .content table {
     width: 100%; }
 

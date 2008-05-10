@@ -64,19 +64,21 @@ var scoreKeeper = {
 	
 	tableSort: function() {
 		$('#rankings').tablesorter({
-			sortList: [[0, 0]],
+			sortList: [[1, 0]],
 			widgets: ['zebra'],
 			headers: {
-				1: { sorter: false },
-				2: { sorter: false }
+				0: { sorter: false },
+				2: { sorter: false },
+				3: { sorter: false }
 			}
 		});
 
 		$('#newbies').tablesorter({
-			sortList: [[0, 0]],
+			sortList: [[1, 0]],
 			widgets: ['zebra'],
 			headers: {
-				1: { sorter: false }
+				0: { sorter: false },
+				2: { sorter: false }
 			}
 		});
 

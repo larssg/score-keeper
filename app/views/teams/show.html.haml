@@ -5,7 +5,14 @@
   - form_tag game_team_path(current_game, @ids.join(',')), :method => :get do
     = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
     = submit_tag 'Update'[]
-  = graph(formatted_game_team_url(current_game, params[:id], :graph, :period => @time_period))
+
+  .legend
+    - @team_members.sort_by(&:id).each_with_index do |player, index|
+      .player
+        %span.color{ :style => "background-color: #{colors[index]}" }
+        %span.name= player.name
+
+  = graph(formatted_game_comparison_url(current_game, @ids.join('-'), :chart, :period => @time_period))
 
 - content_for :sidebar do
   .team
@@ -21,7 +28,7 @@
     #opponents
       %h3= 'Opponents'[]
       - @opponents.each do |opponent|
-        .opponent{ :class => cycle('odd', 'even') }
+        .opponent{ :class => cycle('even', 'odd') }
           .members
             = link_to Team.team_members(opponent.team_ids).collect { |user| h(user.display_name) }.join(', '), game_team_path(current_game, opponent.team_ids)
           %label= 'Matches'[] + ':'

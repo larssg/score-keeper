@@ -293,7 +293,7 @@ table.form
         :padding 0
         :vertical-align text-bottom
 
-    tr.even
+    tr.odd
       td
         :background-color #EEEEEE
 
@@ -362,6 +362,17 @@ table.form
       li
         :padding-bottom 6px
 
+  #leaderboards
+    .list
+      h3
+        :margin 0
+        :font-size 13px
+        :font-weight bold
+        :border 0
+        
+    .notes
+      :float right
+
   #dashboard_data
     :display none
 
@@ -412,6 +423,10 @@ table.form
       :margin 0
       :padding 0
       :vertical-align text-bottom
+
+  #rankings, #newbies
+    input
+      :margin 0
 
   label
     :display block
@@ -466,7 +481,7 @@ table.form
   #comments
     :border-top 1px solid #CCCCCC
 
-    .odd
+    .even
       :background-color #F5F5F5
 
     .comment
@@ -594,9 +609,27 @@ table.form
 
   #graph
     :margin-top 1.5em
-
-    #chart
+    
+    .legend
       :margin-top 1em
+      
+      .player
+        :display block
+        :float left
+        :margin-right 10px
+    
+        span.color
+          :display block
+          :float left
+          :width 1em
+          :height 1em
+          :margin-top 4px
+        
+        span.name
+          :padding-left 3px
+          
+    #chart
+      :margin-top 0.5em
 
   .user
     .mugshot
@@ -709,10 +742,10 @@ table.form
       h3
         :margin-top 1.5em
     
-      .odd
+      .even
         :background-color #F0F0F0
 
-      .even
+      .odd
         :background-color #F9F9F9
 
       .opponent
@@ -758,6 +791,21 @@ table.form
       
         a
           :display block
+          
+    #compare_users
+      input
+        :width auto
+        :margin 0
+
+      .player
+        :padding-bottom 5px
+        
+        input, label
+          :display inline
+          
+        label
+          :vertical-align top
+          :font-weight normal
 
     table
       :width 100%

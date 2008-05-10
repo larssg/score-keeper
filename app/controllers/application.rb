@@ -142,6 +142,20 @@ class ApplicationController < ActionController::Base
     chart
   end
   
+  def colors
+    parts = %w(33 66 99 CC)
+    colors = []
+    parts.each do |first_color|
+      parts.select { |p| p != first_color }.each do |second_color|
+        parts.select { |p| p != first_color && p != second_color }.each do |third_color|
+          colors << "#" + first_color + second_color + third_color
+        end
+      end
+    end
+    colors.sort
+  end
+  helper_method :colors
+  
   def y_max
     max = [Membership.all_time_high(current_game).current_ranking, 2000].max
     (max / 100.0).ceil * 100 # Round up to nearest 100

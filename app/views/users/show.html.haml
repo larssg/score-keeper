@@ -6,7 +6,7 @@
     - form_tag game_user_path(current_game, @user), :method => :get do
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'[]
-    = graph(formatted_game_user_matches_url(@game, @user.id, :graph, :period => @time_period))
+    = graph(formatted_game_user_matches_url(@game, @user.id, :chart, :period => @time_period))
     
 - if @game.team_size == 2
   .list
@@ -25,7 +25,7 @@
 
       %tbody
         - @teams.each do |team|
-          %tr{ :class => cycle('odd', 'even') }
+          %tr{ :class => cycle('even', 'odd') }
             %td= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(@game, :filter => team[:team].team_ids)
             %td= link_to image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(@game, team[:team].team_ids)
             %td= link_to team[:team_mate].name, game_user_path(@game, team[:team_mate])
