@@ -1,5 +1,8 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  @@stylesheet_base_name = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'stylesheets', 'base*.css')].first) rescue nil
+  @@javascript_base_name = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'javascripts', 'base*.js')].first) rescue nil
+
   def title(page_title, options = {})
     @page_title = page_title
     @page_title_options = options
@@ -14,8 +17,7 @@ module ApplicationHelper
   
   def stylesheet_link_merged
     if RAILS_ENV == 'production'
-      base = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'stylesheets', 'base*.css')].first)
-      content_tag 'link', ' ', { :href => "/stylesheets/#{base}", :media => 'screen, projection', :rel => 'stylesheet', :type => 'text/css' }
+      content_tag 'link', ' ', { :href => "/stylesheets/#{@@stylesheet_base_name}", :media => 'screen, projection', :rel => 'stylesheet', :type => 'text/css' }
     else
       stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
     end
@@ -23,8 +25,7 @@ module ApplicationHelper
   
   def javascript_include_tag_merged
     if RAILS_ENV == 'production'
-      base = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'javascripts', 'base*.js')].first)
-      content_tag 'script', ' ', { :src => "/javascripts/#{base}", :type => 'text/javascript' }
+      content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
     else
       javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
     end
