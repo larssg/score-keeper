@@ -20,6 +20,10 @@ module ActiveRecord
 
       # def tables(name = nil) end
 
+      def table_exists?(table_name)
+        tables.include?(table_name.to_s)
+      end
+
       # Returns an array of indexes for the given table.
       # def indexes(table_name, name = nil) end
 
@@ -93,8 +97,8 @@ module ActiveRecord
 
         yield table_definition
 
-        if options[:force]
-          drop_table(table_name, options) rescue nil
+        if options[:force] && table_exists?(table_name)
+          drop_table(table_name, options)
         end
 
         create_sql = "CREATE#{' TEMPORARY' if options[:temporary]} TABLE "
@@ -293,6 +297,12 @@ module ActiveRecord
       # Returns a string of <tt>CREATE TABLE</tt> SQL statement(s) for recreating the
       # entire structure of the database.
       def structure_dump
+      end
+
+      def dump_schema_information #:nodoc:
+        sm_table = ActiveRecord::Migrator.schema_migrations_table_name
+        migrated = select_values("SELECT version FROM #{sm_table}")
+        migrated.map { |v| "INSERT INTO #{sm_table} (version) VALUES ('#{v}');" }.join("\n")
       end
 
       # Should not be called normally, but this operation is non-destructive.
