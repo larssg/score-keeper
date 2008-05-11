@@ -20,7 +20,7 @@
 
     %tbody
       - game_participations.each_with_index do |game_participation, index|
-        %tr
+        %tr{ :class => cycle('even', 'odd') }
           %td= check_box_tag 'user[]', game_participation.user_id
           %td= index + start_at
           - if start_at == 1
