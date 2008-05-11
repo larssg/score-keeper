@@ -50,5 +50,7 @@ class DashboardController < ApplicationController
         @positions[user_id][:then] = index + 1
       end
     end
+    
+    @news = NewsItem.find(:all, :order => 'posted_at DESC', :limit => 3)
   end
 end

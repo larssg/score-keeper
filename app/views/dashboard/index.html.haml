@@ -55,6 +55,14 @@
     - if @matches_per_day.size > 0
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
       
+    #news
+      %h3= 'News'[]
+      %ul
+        - @news.each do |news|
+          %li
+            = link_to news.name, news.url
+            %span= news.posted_at.to_date.to_s :long
+      
 #dashboard_data
   - if @logs && @logs.first
     .last_update= @logs.first.published_at.to_s(:db)

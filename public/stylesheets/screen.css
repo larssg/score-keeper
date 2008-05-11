@@ -555,6 +555,21 @@ table.form {
     #sidebar .content #leader h3 {
       padding: 0;
       margin: 0; }
+  #sidebar .content #news h3 {
+    margin-top: 1.5em; }
+  #sidebar .content #news ul {
+    margin: 0; }
+    #sidebar .content #news ul li {
+      margin: 0;
+      list-style: none;
+      margin-top: 0.5em; }
+      #sidebar .content #news ul li a {
+        display: block; }
+      #sidebar .content #news ul li span {
+        font-size: 11px;
+        color: #999999;
+        position: relative;
+        top: -5px; }
   #sidebar .content #matches_per_day h3 {
     margin-top: 1.5em; }
   #sidebar .content #matches_per_day .matches_played {
