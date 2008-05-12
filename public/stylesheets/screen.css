@@ -644,21 +644,21 @@ input#openid_url {
   background: white url(/images/openid.gif) no-repeat scroll 0pt 50%;
   padding-left: 18px; }
 
-body.login, body.public {
+body.login {
   background-color: #E5E5E5; }
-  body.login a,   body.public a {
+  body.login a {
     color: #6666CC; }
-    body.login a:hover,     body.public a:hover {
+    body.login a:hover {
       text-decoration: underline; }
-  body.login .container,   body.public .container {
+  body.login .container {
     border: 10px solid #CCCCCC;
     background-color: #FFFFFF; }
-    body.login .container #hd,     body.public .container #hd {
+    body.login .container #hd {
       background-image: none; }
-      body.login .container #hd #logo,       body.public .container #hd #logo {
+      body.login .container #hd #logo {
         background-image: none;
         border-bottom: none; }
-    body.login .container #bd .content,     body.public .container #bd .content {
+    body.login .container #bd .content {
       padding-top: 15px;
       padding-bottom: 5px;
       padding-left: 20px;
@@ -667,15 +667,39 @@ body.login, body.public {
 body.login .container {
   width: 470px; }
 
+body.public a {
+  color: #6666CC; }
 body.public h1 {
+  margin-top: 1em;
   font-size: 19px; }
-body.public div.visible {
-  padding-left: 20px;
-  padding-right: 20px; }
 body.public h2 {
   font-size: 17px; }
 body.public h3 {
   font-size: 15px; }
+  body.public h3 a {
+    color: #000000; }
+body.public #sign_up a {
+  display: block;
+  background-color: #CFC;
+  border: solid 1px #6C6;
+  text-align: center;
+  padding: 1.5em;
+  color: #000000;
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 1.5em; }
+  body.public #sign_up a:hover {
+    text-decoration: none; }
+  body.public #sign_up a span {
+    display: block;
+    font-size: 11px;
+    color: #666666; }
+body.public #news {
+  color: #666666; }
+  body.public #news .left .article {
+    padding-right: 5px; }
+  body.public #news .right .article {
+    padding-left: 5px; }
 body.public #domain_login .notes {
   color: #66666E;
   font-size: 11px; }

@@ -856,7 +856,7 @@ input#openid_url
   :background white url(/images/openid.gif) no-repeat scroll 0pt 50%
   :padding-left 18px
 
-body.login, body.public
+body.login
   :background-color #E5E5E5
 
   a
@@ -888,18 +888,52 @@ body.login
     :width 470px
 
 body.public
+  a
+    :color #6666CC
+
   h1
+    :margin-top 1em
     :font-size 19px
-    
-  div.visible
-    :padding-left 20px
-    :padding-right 20px
-    
+
   h2
     :font-size 17px
     
   h3
     :font-size 15px
+    
+    a
+      :color #000000
+
+  #sign_up
+    a
+      :display block
+      :background-color #CFC
+      :border solid 1px #6C6
+      :text-align center
+      :padding 1.5em
+      :color #000000
+      :font-size 17px
+      :font-weight bold
+      :margin-bottom 1.5em
+      
+      &:hover
+        :text-decoration none
+      
+      span
+        :display block
+        :font-size 11px
+        :color #666666
+
+  #news
+    :color #666666
+
+    .left
+      .article
+        :padding-right 5px
+    
+    .right
+      .article
+        :padding-left 5px
 
   #domain_login
     .notes

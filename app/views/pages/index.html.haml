@@ -1,17 +1,19 @@
 %h1 Welcome to Score Keeper
 
 %p
-  Score Keeper is a very simple web app for keeping score, rankings, etc. for matches.
+  Use Score Keeper to keep score, rankings, etc. for matches. Compare players, comment on matches, subscribe to game feeds and much more.
   
-%p
-  Score Keeper now supports games with two teams of equal size such as 1-on-1, 2-on-2, etc.
+#news
+  %h2 News
+  - @news.each_with_index do |news, index|
+    .column.span-9{ :class => (index == 1 ? 'last' : '') + ' ' + %w(left right)[index] }
+      .article
+        %h3= link_to news.name, news.url
+        = news.content
   
 - content_for :sidebar do
-  %h2
-    Create a new account
-
-  %p
-    = 'To create a new account, fill out <a href="{new_account_url}">this form</a>.'[:to_create_an_account, new_account_path]
+  #sign_up
+    = link_to 'Sign up'[] + "<span>Sign up for Score Keeper now. It's free.</span>", new_account_path
     
   %h2
     Login

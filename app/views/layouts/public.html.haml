@@ -15,37 +15,36 @@
     = yield :head
 
   %body.public
-    .border
-      .container
-        #hd
-          #links
-            #languages
-              = 'Language'[] + ':'
-              = link_to_unless(language == 'en', 'English', :language => 'en')
-              = link_to_unless(language == 'da', 'Dansk', :language => 'da')
-  
-          #logo= link_to image_tag('logo.gif'), root_url
-  
-        - unless @page_title.blank?
-          - if @page_title_options[:show]
-            .visible
-              %h2#page_title
-                %span= @page_title
-          - else
-            %h2#page_title= @page_title
+    .container
+      #hd
+        #links
+          #languages
+            = 'Language'[] + ':'
+            = link_to_unless(language == 'en', 'English', :language => 'en')
+            = link_to_unless(language == 'da', 'Dansk', :language => 'da')
 
-        #bd.column{ :class => sidebar.blank? ? 'span-24' : 'span-18' }
-          - if flash.keys.length > 0
-            #messages
-              - flash.keys.each do |key|
-                %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
-            = javascript_tag "$('#messages').pause(8000).Fade();"
+        #logo= link_to image_tag('logo.gif'), root_url
 
-          .content= yield
+      - unless @page_title.blank?
+        - if @page_title_options[:show]
+          .visible
+            %h2#page_title
+              %span= @page_title
+        - else
+          %h2#page_title= @page_title
 
-        - unless sidebar.blank?
-          #sidebar.column.span-6.last
-            .content= sidebar
+      #bd.column{ :class => sidebar.blank? ? 'span-24' : 'span-18' }
+        - if flash.keys.length > 0
+          #messages
+            - flash.keys.each do |key|
+              %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
+          = javascript_tag "$('#messages').pause(8000).Fade();"
+
+        .content= yield
+
+      - unless sidebar.blank?
+        #sidebar.column.span-6.last
+          .content= sidebar
 
       = render :partial => 'shared/footer'
     = javascript_include_tag_merged
