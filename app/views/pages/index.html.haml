@@ -12,3 +12,14 @@
 
   %p
     = 'To create a new account, fill out <a href="{new_account_url}">this form</a>.'[:to_create_an_account, new_account_path]
+    
+  %h2
+    Login
+    
+  %p
+    - form_tag({ :controller => :pages, :action => 'login' }, { :id => 'domain_login' }) do
+      = label_tag :domain, 'Domain'
+      = text_field_tag :domain, nil, :id => 'domain'
+      .notes= 'Enter the subdomain you signed up with.'
+      
+      = submit_tag 'Go', :class => 'submit'

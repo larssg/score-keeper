@@ -676,6 +676,11 @@ body.public h2 {
   font-size: 17px; }
 body.public h3 {
   font-size: 15px; }
+body.public #domain_login .notes {
+  color: #66666E;
+  font-size: 11px; }
+body.public #domain_login .submit {
+  margin-top: 1em; }
 body.public #new_account {
   margin-bottom: 1em; }
   body.public #new_account input.text {
