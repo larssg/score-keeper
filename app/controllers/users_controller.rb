@@ -78,7 +78,7 @@ class UsersController < ApplicationController
     redirect_to users_path
   rescue ActiveRecord::RecordInvalid
     @users = current_account.users.find(:all, :order => 'login')
-    render :action => 'index'
+    render :action => 'new'
   end
   
   def edit
