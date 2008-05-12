@@ -55,6 +55,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new(params[:user])
     @user.account = current_account
+    @user.time_zone ||= current_account.time_zone
     @user.valid? if params[:user]
     
     render :layout => 'public' unless logged_in?
