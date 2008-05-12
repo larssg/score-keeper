@@ -95,14 +95,12 @@ class UsersController < ApplicationController
     @user.is_account_admin = params[:user][:is_account_admin] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:is_account_admin].nil?
     @user.is_admin = params[:user][:is_admin] if current_user.is_admin? && params[:user][:is_admin]
     @user.enabled = params[:user][:enabled] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:enabled].nil?
-    @success = @user.update_attributes(params[:user])
-    respond_to do |format|
-      if @success
-        flash[:notice] = "User saved successfully."
-        format.html { redirect_to users_url }
-      else
-        format.html { render :action => "edit" }
-      end
+
+    if @user.update_attributes(params[:user])
+      redirect_to users_url
+      flash[:notice] = "User saved successfully."
+    else
+      render :action => "edit"
     end
   end
   
