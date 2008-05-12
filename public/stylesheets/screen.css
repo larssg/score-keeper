@@ -535,6 +535,10 @@ table.form {
   width: 200px; }
 #sidebar label {
   display: block; }
+#sidebar a img {
+  float: none;
+  margin: 0;
+  vertical-align: text-bottom; }
 #sidebar .content {
   padding-top: 1.5em;
   padding-left: 1em;
