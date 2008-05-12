@@ -20,11 +20,28 @@
       - @team_members.each do |user|
         .mugshot
           - if user.mugshot
-            = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), user
-          = link_to h(user.name), user
+            = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), game_user_path(current_game, user)
+          = link_to h(user.name), game_user_path(current_game, user)
 
     .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]) + ' ' + 'Show matches'[], game_matches_path(current_game, :filter => @ids.join(','))
-      
+
+    %table.for_against
+      %tr
+        %td.for
+          %label= 'Played'[] + ':'
+          = @opponents.sum { |o| o.matches.to_i }
+        %td.against
+          %label= 'Win %'[] + ':'
+          = number_to_percentage((@opponents.sum { |o| o.wins.to_f } / @opponents.sum { |o| o.matches.to_f }) * 100, :precision => 1)
+
+      %tr
+        %td.for
+          %label= 'Won'[] + ':'
+          = @opponents.sum { |o| o.wins.to_i }
+        %td.against
+          %label= 'Lost'[] + ':'
+          = @opponents.sum { |o| o.matches.to_i } - @opponents.sum { |o| o.wins.to_i }
+    
     #opponents
       %h3= 'Opponents'[]
       - @opponents.each do |opponent|

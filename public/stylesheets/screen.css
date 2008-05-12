@@ -635,6 +635,8 @@ table.form {
     float: left; }
     #sidebar .content .team .mugshot a {
       display: block; }
+  #sidebar .content .team .for_against {
+    margin-top: 1.5em; }
   #sidebar .content #compare_users input {
     width: auto;
     margin: 0; }
