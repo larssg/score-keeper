@@ -48,7 +48,7 @@
           - if flash.keys.length > 0
             #messages
               - flash.keys.each do |key|
-                %div{ :class => 'key', :id => "flash_#{key}" }= flash[key]
+                %div{ :class => key, :id => "flash_#{key}" }= flash[key]
 
           #main= yield
 

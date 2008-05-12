@@ -306,17 +306,20 @@ table.form {
 #bd .bottom_space {
   padding-bottom: 20px; }
 #bd #messages {
-  border: 1px solid #999999;
-  background-color: #EEEEEE;
-  margin-top: 1.5em;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #CFC;
-  border: solid 1px #6C6;
-  background-color: #DD9A24;
-  border: solid 1px #DD9A24;
-  background-color: #FCC;
-  border: solid 1px #C66; }
+  margin-top: 1.5em; }
+  #bd #messages .notice, #bd #messages .warning, #bd #messages .error {
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #000000; }
+  #bd #messages .notice {
+    background-color: #CFC;
+    border: solid 1px #6C6; }
+  #bd #messages .warning {
+    background-color: #DD9A24;
+    border: solid 1px #DD9A24; }
+  #bd #messages .error {
+    background-color: #FCC;
+    border: solid 1px #C66; }
 #bd #no_data {
   margin-top: 1.5em; }
 #bd #logs a.rss {

@@ -383,23 +383,24 @@ table.form
     :padding-bottom 20px
 
   #messages
-    :border 1px solid #999999
-    :background-color #EEEEEE
     :margin-top 1.5em
-    :padding 10px
-    :margin-bottom 10px
-  
-    #notice
-    :background-color #CFC
-    :border solid 1px #6C6
+    
+    .notice, .warning, .error
+      :padding 10px
+      :margin-bottom 10px
+      :color #000000
 
-    #warning
-    :background-color #DD9A24
-    :border solid 1px #DD9A24
+    .notice
+      :background-color #CFC
+      :border solid 1px #6C6
 
-    #error
-    :background-color #FCC
-    :border solid 1px #C66
+    .warning
+      :background-color #DD9A24
+      :border solid 1px #DD9A24
+
+    .error
+      :background-color #FCC
+      :border solid 1px #C66
     
   #no_data
     :margin-top 1.5em
