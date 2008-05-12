@@ -9,19 +9,20 @@
     .column.span-9{ :class => (index == 1 ? 'last' : '') + ' ' + %w(left right)[index] }
       .article
         %h3= link_to news.name, news.url
+        .date= news.posted_at.to_date.to_s :long
         = news.content
   
 - content_for :sidebar do
   #sign_up
     = link_to 'Sign up'[] + "<span>Sign up for Score Keeper now. It's free.</span>", new_account_path
     
-  %h2
-    Login
+  #login
+    %h2
+      Login
     
-  %p
     - form_tag({ :controller => :pages, :action => 'login' }, { :id => 'domain_login' }) do
       = label_tag :domain, 'Domain'
       = text_field_tag :domain, nil, :id => 'domain'
       .notes= 'Enter the subdomain you signed up with.'
-      
+    
       = submit_tag 'Go to login form'[], :class => 'submit'

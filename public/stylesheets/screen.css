@@ -653,7 +653,8 @@ table.form {
 #ft {
   color: #999999;
   text-align: center;
-  font-size: 85%; }
+  font-size: 85%;
+  clear: both; }
   #ft a {
     color: #999999; }
   #ft .content {
@@ -713,8 +714,18 @@ body.public #sign_up a {
     display: block;
     font-size: 11px;
     color: #666666; }
+body.public #login input {
+  width: 212px; }
+body.public #login input.submit {
+  width: 100%; }
+body.public #login label {
+  padding-top: 5px; }
 body.public #news {
   color: #666666; }
+  body.public #news .article h3 a {
+    color: #666666; }
+  body.public #news .article .date {
+    margin-bottom: 1.5em; }
   body.public #news .left .article {
     padding-right: 5px; }
   body.public #news .right .article {
