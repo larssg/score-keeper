@@ -553,6 +553,23 @@ table.form {
     border-bottom: 1px solid #3399CC;
     margin-bottom: 5px;
     color: #FFFFFF; }
+  #sidebar .content #getting_started {
+    margin: 0;
+    background-color: #CFC;
+    border: solid 1px #6C6;
+    padding: 10px;
+    margin-bottom: 1.5em;
+    color: #000000; }
+    #sidebar .content #getting_started .help {
+      margin-bottom: 1em; }
+    #sidebar .content #getting_started .step {
+      color: #888888; }
+      #sidebar .content #getting_started .step a {
+        color: #888888; }
+    #sidebar .content #getting_started .next {
+      color: #000000; }
+      #sidebar .content #getting_started .next a {
+        color: #000000; }
   #sidebar .content #leader {
     padding: 20px;
     margin-bottom: 20px;

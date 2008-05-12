@@ -34,13 +34,13 @@
   %tr
     %td.label= f.label :password
     %td.field
-      = f.password_field :password, :class => 'password'
+      = f.password_field :password, :class => 'password' + (@user.new_record? ? ' required' : '')
       - unless @user.new_record?
         .notes= 'Fill out the password fields to change password.'[]
     
   %tr
     %td.label= f.label :password_confirmation, 'Confirm password'[]
-    %td.field= f.password_field :password_confirmation, :class => 'password'
+    %td.field= f.password_field :password_confirmation, :class => 'password' + (@user.new_record? ? ' required' : '')
 
   - unless @user.new_record?
     %tr

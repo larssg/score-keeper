@@ -1,6 +1,8 @@
 - title 'Matches'[], :show => true
 
-- if @matches.length > 0
+- if @matches.length == 0
+  = 'There are no matches in the database yet.'[]
+- else
   - if @filter
     #filter
       - if @filter.length > 1

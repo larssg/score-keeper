@@ -1,0 +1,16 @@
+- if current_game.nil? || enabled_users.size < current_game.team_size * 2 || current_account.matches.size == 0
+  #getting_started
+    %h3= 'Getting started'[]
+    .help= 'Complete the following steps to get started.'[]
+  
+    .step{ :class => current_account.games.count == 0 ? 'next' : nil }
+      %span 1.
+      = link_to_if current_account.games.count == 0, 'Create a game.', new_game_path
+    
+    .step{ :class => current_account.games.count > 0 && enabled_users.size < current_game.team_size * 2 ? 'next' : nil }
+      %span 2.
+      = link_to_if current_account.games.count > 0 && enabled_users.size < current_game.team_size * 2, 'Create users.', new_user_path
+    
+    .step{ :class => !current_game.nil? && enabled_users.size >= current_game.team_size * 2 ? 'next' : nil }
+      %span 3.
+      Add the first match.
