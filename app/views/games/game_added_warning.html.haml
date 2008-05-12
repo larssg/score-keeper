@@ -1,4 +1,4 @@
-= time_ago_in_words(@latest_membership.created_at)
+= time_ago_in_words(@latest_membership.created_at).capitalize
 ago
 = @latest_membership.team.match.creator.name
 added
