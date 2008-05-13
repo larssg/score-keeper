@@ -341,7 +341,7 @@ table.form {
     border-bottom: 1px dashed #CCCCCC; }
     #bd #logs .list a img {
       position: relative;
-      top: 2px;
+      top: 1px;
       vertical-align: top; }
     #bd #logs .list a:hover {
       background-color: #EEEEEE; }
