@@ -24,11 +24,11 @@ module ApplicationHelper
   end
   
   def javascript_include_tag_merged
-#    if RAILS_ENV == 'production'
-#      content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
-#    else
+    if RAILS_ENV == 'production'
+      content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
+    else
       javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
-#    end
+    end
   end
   
   def user_area(&block)
