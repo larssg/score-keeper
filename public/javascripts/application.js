@@ -59,7 +59,7 @@ var scoreKeeper = {
 		
 		gameId: function() {
 			return $('#dashboard_data .game_id').html();
-		},
+		}
 	},
 	
 	tableSort: function() {
