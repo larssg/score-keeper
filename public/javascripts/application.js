@@ -100,7 +100,7 @@ var scoreKeeper = {
 				2: { sorter: false }
 			}
 		});
-	},
+	}
 };
 
 $(document).ready(function() {
