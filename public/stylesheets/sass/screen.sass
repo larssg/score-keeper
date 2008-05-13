@@ -416,9 +416,27 @@ table.form
   
     .list
       :margin 0
-      :padding 5px
       :border-top 1px solid #999999
       :border-bottom 1px solid #999999
+      
+      a
+        :display block
+        :padding 1px
+        :padding-left 5px
+        :padding-right 5px
+        :border-bottom 1px dashed #CCCCCC
+        
+        img
+          :position relative
+          :top 2px
+          :vertical-align top
+          
+        &:hover
+          :background-color #EEEEEE
+          
+      .last
+        a
+          :border-bottom 0
   
     a:hover
       :text-decoration none
