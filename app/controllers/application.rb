@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
     return unless session[:real_user_id].nil? # Impersonating a user
     return true if disable_subdomains?
     redirect_to public_root_url and return false if account_subdomain.blank?
-    redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_user.account.domain != account_subdomain
+    redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_account.domain != account_subdomain
     redirect_to public_root_url(:host => account_domain) and return false if !logged_in? && Account.find_by_domain(account_subdomain).nil?
     true
   end
@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
       if session[:real_user_id].nil?
         unless account_subdomain.nil?
           @current_account ||= Account.find_by_domain(account_subdomain)
-          redirect_to account_url(current_account.account.domain) if logged_in? && current_user.account.domain != @current_account.domain
+          redirect_to account_url(current_account.account.domain) if logged_in? && current_user.account_id != @current_account.id
         end
       else
         @current_account ||= current_user.account
