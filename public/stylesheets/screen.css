@@ -132,10 +132,13 @@ textarea {
     padding-right: 15px;
     list-style: none; }
     #submenu li a {
-      color: #000000;
+      color: #999999;
       font-weight: bold; }
+      #submenu li a:hover {
+        color: #000000;
+        text-decoration: none; }
     #submenu li.current a {
-      text-decoration: underline; }
+      color: #000000; }
 
 #add_match_form {
   background-color: #EEEEEE;
