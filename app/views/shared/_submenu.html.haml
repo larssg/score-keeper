@@ -1,0 +1,7 @@
+- unless current_game.nil? || !%w(dashboard matches teams comparisons).include?(controller.controller_name)
+  %ul#submenu
+    %li{ :class => controller.controller_name == 'dashboard' ? 'current' : nil }= link_to 'Dashboard'[], root_path
+    %li{ :class => controller.controller_name == 'matches' ? 'current' : nil }= link_to 'Matches'[], game_matches_path(current_game)
+    - if current_game.team_size > 1
+      %li{ :class => controller.controller_name == 'teams' ? 'current' : nil }= link_to 'Teams'[], game_teams_path(current_game)
+    %li{ :class => controller.controller_name == 'comparisons' ? 'current' : nil }= link_to 'Compare'[], game_comparisons_path(current_game)

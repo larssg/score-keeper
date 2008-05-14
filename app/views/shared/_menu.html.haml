@@ -1,13 +1,14 @@
-%ul
-  - unless current_game.nil?
-    %li{ :class => controller.controller_name == 'dashboard' ? 'current' : nil }= link_to 'Dashboard'[], root_path
-    %li{ :class => controller.controller_name == 'matches' ? 'current' : nil }= link_to 'Matches'[], game_matches_path(current_game)
-    - if current_game.team_size > 1
-      %li{ :class => controller.controller_name == 'teams' ? 'current' : nil }= link_to 'Teams'[], game_teams_path(current_game)
-    %li{ :class => controller.controller_name == 'comparisons' ? 'current' : nil }= link_to 'Compare'[], game_comparisons_path(current_game)
-    %li.admin{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to 'Games'[], games_path
-  - if current_game.nil?
-    %li{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to 'Games'[], games_path
-  %li{ :class => controller.controller_name == 'users' ? 'current' : nil }= link_to 'Users'[], users_path
-  - if admin?
-    %li{ :class => controller.controller_name == 'accounts' ? 'current' : nil }= link_to 'Accounts'[], accounts_path
+- form_tag session_path('switch_game'), :method => :put do
+  %ul
+    - if current_game
+      %li{ :class => %w(dashboard matches teams comparisons).include?(controller.controller_name) ? 'current' : nil}= link_to h(current_game.name), root_path
+      - if current_account.all_games.size > 0
+        %li.current_game
+          = render :partial => 'shared/current_game'
+    
+      %li.admin{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to 'Games'[], games_path
+    - if current_game.nil?
+      %li{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to 'Games'[], games_path
+    %li{ :class => controller.controller_name == 'users' ? 'current' : nil }= link_to 'Users'[], users_path
+    - if admin?
+      %li{ :class => controller.controller_name == 'accounts' ? 'current' : nil }= link_to 'Accounts'[], accounts_path

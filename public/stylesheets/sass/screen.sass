@@ -131,6 +131,13 @@ textarea
         
     li.admin
       :margin-left 3em
+      
+    li.current_game
+      :margin-left 1em
+      :background none
+      
+      select
+        :width 150px
 
   #login_form
     :display none
@@ -144,6 +151,25 @@ textarea
       
     .submit
       :margin-right 0
+      
+#submenu
+  :display block
+  :margin 0
+  :padding 5px
+  :padding-left 20px
+  :border-bottom 1px solid #999999
+  
+  li
+    :display inline
+    :padding-right 15px
+    :list-style none
+    
+    a
+      :color #000000
+      :font-weight bold
+      
+    &.current a
+      :text-decoration underline
       
 #add_match_form
   :background-color #EEEEEE

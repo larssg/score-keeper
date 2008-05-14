@@ -1,16 +1,12 @@
-- form_tag session_path('switch_game'), :method => :put do
-  #user
-    - if current_account.all_games.size > 0
-      = render :partial => 'shared/current_game'
-      |
-    %span.current_user= link_to current_user.login, game_user_path(current_game, current_user)
+#user
+  %span.current_user= link_to current_user.login, game_user_path(current_game, current_user)
+  |
+  - unless session[:real_user_id].blank?
+    = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
     |
-    - unless session[:real_user_id].blank?
-      = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
-      |
-    = link_to 'Profile'[], edit_user_path(current_user)
-    - if account_admin?
-      |
-      = link_to 'Manage account'[], edit_account_path(current_account)
+  = link_to 'Profile'[], edit_user_path(current_user)
+  - if account_admin?
     |
-    = link_to 'Log out'[], logout_path
+    = link_to 'Manage account'[], edit_account_path(current_account)
+  |
+  = link_to 'Log out'[], logout_path
