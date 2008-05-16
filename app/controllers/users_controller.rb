@@ -57,8 +57,6 @@ class UsersController < ApplicationController
     @user.account = current_account
     @user.time_zone ||= current_account.time_zone
     @user.valid? if params[:user]
-    
-    render :layout => 'public' unless logged_in?
   end
   
   def create
@@ -66,7 +64,7 @@ class UsersController < ApplicationController
     @user.account = current_account
 
     mugshot = Mugshot.create(params[:mugshot])
-    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil? || !(mugshot.size > 0)
+    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil? || !(mugshot.size > 0)
 
     if current_user.is_admin? && params[:user][:is_admin]
       @user.is_admin = true
@@ -77,7 +75,6 @@ class UsersController < ApplicationController
     flash[:notice] = 'User created successfully'
     redirect_to users_path
   rescue ActiveRecord::RecordInvalid
-    @users = current_account.users.find(:all, :order => 'login')
     render :action => 'new'
   end
   
