@@ -27,4 +27,21 @@ describe LogsHelper do
     link.should include('/images/icons/comment.png')
     link.should include('Someone said something')
   end
+  
+  it "should show a message without link" do
+    @log.stub!(:linked_model).and_return nil
+    @log.stub!(:message).and_return 'This is a message with <b>no</b> link'
+
+    link = log_link(@log)
+    link.should == 'This is a message with &lt;b&gt;no&lt;/b&gt; link'
+  end
+  
+  it "should generate an atom feed link" do
+    game = mock_model(Game, :to_param => '1')
+    current_user = mock_model(User, :feed_token => 'feedtoken')
+    stub!(:current_user).and_return(current_user)
+#    controller.stub!(:current_user).and_return(current_user)
+
+    log_feed_url(game).should == 'http://test.host/games/1/logs.atom?feed_token=feedtoken'
+  end
 end
