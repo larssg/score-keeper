@@ -26,6 +26,8 @@ class Match < ActiveRecord::Base
   validates_presence_of :game
   validates_presence_of :team_one
   validates_presence_of :team_two
+  
+  validates_presence_of :score1, :score2, :team1, :team2
 
   def self.per_page
     20
@@ -196,6 +198,8 @@ class Match < ActiveRecord::Base
   end
 
   def build_teams
+    return if score1.blank? || score2.blank? || team1.blank? || team2.blank?
+    
     # Create game participations first
     (@team1 + @team2).each { |user_id| game_participation_for_user(user_id) }
     

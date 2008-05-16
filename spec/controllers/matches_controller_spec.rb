@@ -36,11 +36,11 @@ describe MatchesController, "creating a match (logged in)" do
     @people = Factory.create_people(4)
   end
   
-  def do_post
+  def do_post(match = {})
     params = {
       :match => {
         :score1 => 10, :team1 => [@people[0].id, @people[1].id],
-        :score2 => 8, :team2 => [@people[2].id, @people[3].id] },
+        :score2 => 8, :team2 => [@people[2].id, @people[3].id] }.merge(match),
       :game_id => @game.id }
     post :create, params
   end
@@ -57,6 +57,26 @@ describe MatchesController, "creating a match (logged in)" do
     lambda do
       do_post
     end.should change(Match, :count).by(1)
+  end
+  
+  describe "entering wrong data" do
+    it "should not create a match" do
+      lambda do
+        do_post(:score1 => '')
+      end.should_not change(Match, :count)
+    end
+    
+    it "should redirect to the dashboard" do
+      do_post(:score1 => '')
+      response.should be_redirect
+      response.should redirect_to(root_path)
+    end
+    
+    it "should log an error" do
+      do_post(:score1 => '')
+      flash[:warning].should_not be_nil
+      flash[:warning].should_not be_empty
+    end
   end
 end
 
