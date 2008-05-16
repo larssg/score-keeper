@@ -1,3 +1,4 @@
+require 'erb'
 require 'yaml'
 require 'optparse'
 
@@ -8,7 +9,7 @@ OptionParser.new do |opt|
 end
 
 env = ARGV.first || ENV['RAILS_ENV'] || 'development'
-unless config = YAML.load_file(RAILS_ROOT + "/config/database.yml")[env]
+unless config = YAML::load(ERB.new(IO.read(RAILS_ROOT + "/config/database.yml")).result)[env]
   abort "No database is configured for the environment '#{env}'"
 end
 
@@ -39,10 +40,11 @@ when "mysql"
   exec(find_cmd('mysql5', 'mysql'), *args)
 
 when "postgresql"
+  ENV['PGUSER']     = config["username"] if config["username"]
   ENV['PGHOST']     = config["host"] if config["host"]
   ENV['PGPORT']     = config["port"].to_s if config["port"]
   ENV['PGPASSWORD'] = config["password"].to_s if config["password"]
-  exec(find_cmd('psql'), '-U', config["username"], config["database"])
+  exec(find_cmd('psql'), config["database"])
 
 when "sqlite"
   exec(find_cmd('sqlite'), config["database"])
