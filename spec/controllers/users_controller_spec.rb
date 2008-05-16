@@ -20,6 +20,18 @@ describe UsersController do
     response.should be_success
   end
   
+  it "should render /edit for the user himself" do
+    get :edit, :id => users(:aaron).id
+    response.should be_success
+  end
+  
+  it "should not allow editing other users if the user is not an administrator" do
+    user = Factory.create_user(:account => accounts(:champions))
+    get :edit, :id => user.id
+    response.should be_redirect
+    response.should redirect_to(root_path)
+  end
+  
   describe "creating a user" do
     it "should add a user to the database" do
       lambda do
