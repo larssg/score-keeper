@@ -10,6 +10,12 @@ class ComparisonsController < ApplicationController
         gp.id == sp
       end.first
     end
+    
+    @indexed_sorted_players = []
+    @selected_players.each_with_index do |player, index|
+      @indexed_sorted_players << [player, index]
+    end
+    @indexed_sorted_players = @indexed_sorted_players.sort_by { |ip| ip.first.name }
   end
   
   def show
