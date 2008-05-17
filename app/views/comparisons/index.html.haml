@@ -11,7 +11,7 @@
       - @selected_players.each_with_index do |player, index|
         .player
           %span.color{ :style => "background-color: #{colors[index]}" }
-          %span.name= player.name
+          %span.name= link_to player.name, game_user_path(@game, player)
 
     = graph(formatted_game_comparison_url(current_game, @selected_player_ids.join('-'), :chart, :period => @time_period))
 - else
