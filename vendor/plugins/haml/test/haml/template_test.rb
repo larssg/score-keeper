@@ -3,7 +3,8 @@ require File.dirname(__FILE__) + '/test_helper'
 require 'haml/template'
 require File.dirname(__FILE__) + '/mocks/article'
 
-module TestFilter
+
+module Haml::Filters::Test
   include Haml::Filters::Base
 
   def render(text)
@@ -15,10 +16,9 @@ class TemplateTest < Test::Unit::TestCase
   @@templates = %w{       very_basic        standard    helpers
     whitespace_handling   original_engine   list        helpful
     silent_script         tag_parsing       just_stuff  partials
-    filters }
+    filters               nuke_outer_whitespace         nuke_inner_whitespace }
 
   def setup
-    Haml::Template.options = { :filters => { 'test'=>TestFilter } }
     @base = ActionView::Base.new(File.dirname(__FILE__) + "/templates/", {'article' => Article.new, 'foo' => 'value one'})
     @base.send(:evaluate_assigns)
 
@@ -69,7 +69,7 @@ class TemplateTest < Test::Unit::TestCase
   def test_templates_should_render_correctly_with_render_proc
     @@templates.each do |template|
       assert_renders_correctly(template) do |name|
-        engine = Haml::Engine.new(File.read(File.dirname(__FILE__) + "/templates/#{name}.haml"), :filters => { 'test'=>TestFilter })
+        engine = Haml::Engine.new(File.read(File.dirname(__FILE__) + "/templates/#{name}.haml"))
         engine.render_proc(@base).call
       end
     end
@@ -80,7 +80,7 @@ class TemplateTest < Test::Unit::TestCase
       assert_renders_correctly(template) do |name|
         method = "render_haml_" + name.gsub(/[^a-zA-Z0-9]/, '_')
 
-        engine = Haml::Engine.new(File.read(File.dirname(__FILE__) + "/templates/#{name}.haml"), :filters => { 'test'=>TestFilter })
+        engine = Haml::Engine.new(File.read(File.dirname(__FILE__) + "/templates/#{name}.haml"))
         engine.def_method(@base, method)
         @base.send(method)
       end

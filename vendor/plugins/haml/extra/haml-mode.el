@@ -33,6 +33,13 @@
   :type 'integer
   :group 'haml)
 
+(defcustom haml-backspace-backdents-nesting t
+  "Non-nil to have `haml-electric-backspace' re-indent all code
+nested beneath the backspaced line be re-indented along with the
+line itself."
+  :type 'boolean
+  :group 'haml)
+
 (defface haml-tab-face
   '((((class color)) (:background "hotpink"))
     (t (:reverse-video t)))
@@ -47,8 +54,9 @@ if the next line could be nested within this line.")
 (defvar haml-block-openers
   `("^ *\\([%\\.#][^ \t]*\\)\\(\\[.*\\]\\)?\\({.*}\\)?\\(\\[.*\\]\\)?[ \t]*$"
     "^ *[-=].*do[ \t]*\\(|.*|[ \t]*\\)?$"
-    ,(concat "^ *-[ \t]*"
-             (regexp-opt '("else" "elsif" "rescue" "ensure" "when")))
+    ,(concat "^ *-[ \t]*\\("
+             (regexp-opt '("else" "elsif" "rescue" "ensure" "when"))
+             "\\)")
     "^ */\\(\\[.*\\]\\)?[ \t]*$"
     "^ *-#"
     "^ *:")
@@ -97,6 +105,11 @@ text nested beneath them.")
   (let ((map (make-sparse-keymap)))
     (define-key map [backspace] 'haml-electric-backspace)
     (define-key map "\C-?" 'haml-electric-backspace)
+    (define-key map "\C-\M-f" 'haml-forward-sexp)
+    (define-key map "\C-\M-b" 'haml-backward-sexp)
+    (define-key map "\C-\M-u" 'haml-up-list)
+    (define-key map "\C-\M-d" 'haml-down-list)
+    (define-key map "\C-C\C-k" 'haml-kill-line-and-indent)
     map))
 
 (define-derived-mode haml-mode fundamental-mode "Haml"
@@ -106,7 +119,100 @@ text nested beneath them.")
   (set-syntax-table haml-mode-syntax-table)
   (set (make-local-variable 'indent-line-function) 'haml-indent-line)
   (set (make-local-variable 'indent-region-function) 'haml-indent-region)
+  (set (make-local-variable 'forward-sexp-function) 'haml-forward-sexp)
   (setq font-lock-defaults '((haml-font-lock-keywords) nil t)))
+
+;; Navigation
+
+(defun haml-forward-through-whitespace (&optional backward)
+  "Move the point forward at least one line, until it reaches
+either the end of the buffer or a line with no whitespace.
+
+If `backward' is non-nil, move the point backward instead."
+  (let ((arg (if backward -1 1))
+        (endp (if backward 'bobp 'eobp)))
+    (loop do (forward-line arg)
+          while (and (not (funcall endp))
+                     (looking-at "^[ \t]*$")))))
+
+(defun haml-at-indent-p ()
+  "Returns whether or not the point is at the first
+non-whitespace character in a line or whitespace preceding that
+character."
+  (let ((opoint (point)))
+    (save-excursion
+      (back-to-indentation)
+      (>= (point) opoint))))
+
+(defun haml-forward-sexp (&optional arg)
+  "Move forward across one nested expression.
+With `arg', do it that many times.  Negative arg -N means move
+backward across N balanced expressions.
+
+A sexp in Haml is defined as a line of Haml code as well as any
+lines nested beneath it."
+  (interactive "p")
+  (or arg (setq arg 1))
+  (if (and (< arg 0) (not (haml-at-indent-p)))
+      (back-to-indentation)
+    (while (/= arg 0)
+      (let ((indent (current-indentation)))
+        (loop do (haml-forward-through-whitespace (< arg 0))
+              while (and (not (eobp))
+                         (not (bobp))
+                         (> (current-indentation) indent)))
+        (back-to-indentation)
+      (setq arg (+ arg (if (> arg 0) -1 1)))))))
+
+(defun haml-backward-sexp (&optional arg)
+  "Move backward across one nested expression.
+With ARG, do it that many times.  Negative arg -N means move
+forward across N balanced expressions.
+
+A sexp in Haml is defined as a line of Haml code as well as any
+lines nested beneath it."
+  (interactive "p")
+  (haml-forward-sexp (if arg (- arg) -1)))
+
+(defun haml-up-list (&optional arg)
+  "Move out of one level of nesting.
+With ARG, do this that many times."
+  (interactive "p")
+  (or arg (setq arg 1))
+  (while (> arg 0)
+    (let ((indent (current-indentation)))
+      (loop do (haml-forward-through-whitespace t)
+            while (and (not (bobp))
+                       (>= (current-indentation) indent)))
+      (setq arg (- arg 1))))
+  (back-to-indentation))
+
+(defun haml-down-list (&optional arg)
+  "Move down one level of nesting.
+With ARG, do this that many times."
+  (interactive "p")
+  (or arg (setq arg 1))
+  (while (> arg 0)
+    (let ((indent (current-indentation)))
+      (haml-forward-through-whitespace)
+      (when (<= (current-indentation) indent)
+        (haml-forward-through-whitespace t)
+        (back-to-indentation)
+        (error "Nothing is nested beneath this line"))
+      (setq arg (- arg 1))))
+  (back-to-indentation))
+
+(defun haml-mark-sexp-but-not-next-line ()
+  "Marks the next Haml sexp, but puts the mark at the end of the
+last line of the sexp rather than the first non-whitespace
+character of the next line."
+  (mark-sexp)
+  (set-mark
+   (save-excursion
+     (goto-char (mark))
+     (forward-line -1)
+     (end-of-line)
+     (point))))
 
 ;; Indentation and electric keys
 
@@ -114,16 +220,14 @@ text nested beneath them.")
   "Returns true if the current line can have lines nested beneath it."
   (loop for opener in haml-block-openers
         if (looking-at opener) return t
-        return nil))
+        finally return nil))
 
 (defun haml-compute-indentation ()
   "Calculate the maximum sensible indentation for the current line."
   (save-excursion
     (beginning-of-line)
     (if (bobp) 0
-      (loop do (forward-line -1)
-            while (and (looking-at "^[ \t]$")
-                       (> (point) (point-min))))
+      (haml-forward-through-whitespace t)
       (+ (current-indentation)
          (if (funcall haml-indent-function) haml-indent-offset
            0)))))
@@ -140,8 +244,6 @@ between possible indentations."
     (goto-char end)
     (setq end (point-marker))
     (goto-char start)
-    ;; Don't start in the middle of a line
-    (unless (bolp) (forward-line 1))
     (let (this-line-column current-column
           (next-line-column
            (if (and (equal last-command this-command) (/= (current-indentation) 0))
@@ -182,19 +284,45 @@ back-dent the line by `haml-indent-offset' spaces.  On reaching column
       (if (< (current-column) (current-indentation))
           (forward-to-indentation 0))))
 
+(defun haml-reindent-region-by (n)
+  "Add N spaces to the beginning of each line in the region.
+If N is negative, will remove the spaces instead.  Assumes all
+lines in the region have indentation >= that of the first line."
+  (let ((ci (current-indentation)))
+    (save-excursion
+      (replace-regexp (concat "^" (make-string ci ? ))
+                      (make-string (max 0 (+ ci n)) ? )
+                      nil (point) (mark)))))
+
 (defun haml-electric-backspace (arg)
   "Delete characters or back-dent the current line.
-If invoked following only whitespace on a line, will back-dent to the
-immediately previous multiple of `haml-indent-offset' spaces."
+If invoked following only whitespace on a line, will back-dent
+the line and all nested lines to the immediately previous
+multiple of `haml-indent-offset' spaces.
+
+Set `haml-backspace-backdents-nesting' to nil to just back-dent
+the current line."
   (interactive "*p")
-  (if (or (/= (current-indentation) (current-column)) (bolp))
+  (if (or (/= (current-indentation) (current-column))
+          (bolp)
+          (looking-at "^[ \t]+$"))
       (backward-delete-char arg)
     (let ((ci (current-column)))
       (beginning-of-line)
-      (delete-horizontal-space)
-      (indent-to (* (/ (- ci (* arg haml-indent-offset))
-                       haml-indent-offset)
-                    haml-indent-offset)))))
+      (if haml-backspace-backdents-nesting
+          (haml-mark-sexp-but-not-next-line)
+        (set-mark (save-excursion (end-of-line) (point))))
+      (haml-reindent-region-by (* (- arg) haml-indent-offset))
+      (back-to-indentation)
+      (pop-mark))))
+
+(defun haml-kill-line-and-indent ()
+  "Kill the current line, and re-indent all lines nested beneath it."
+  (interactive)
+  (beginning-of-line)
+  (haml-mark-sexp-but-not-next-line)
+  (kill-line 1)
+  (haml-reindent-region-by (* -1 haml-indent-offset)))
 
 ;; Setup/Activation
 

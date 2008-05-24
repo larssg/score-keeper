@@ -61,39 +61,16 @@ module Haml
         :autoclose => %w[meta img link br hr input area param col base],
         :preserve => %w[textarea pre],
 
-        :filters => {
-          'sass' => Haml::Filters::Sass,
-          'plain' => Haml::Filters::Plain,
-          'javascript' => Haml::Filters::Javascript,
-          'preserve' => Haml::Filters::Preserve,
-          'redcloth' => Haml::Filters::RedCloth,
-          'textile' => Haml::Filters::Textile,
-          'markdown' => Haml::Filters::Markdown },
         :filename => '(haml)',
+        :line => 1,
         :ugly => false,
         :format => :xhtml,
         :escape_html => false
       }
-      @options[:filters].merge! options.delete(:filters) if options[:filters]
       @options.merge! options
 
       unless [:xhtml, :html4, :html5].include?(@options[:format])
         raise Haml::Error, "Invalid format #{@options[:format].inspect}"
-      end
-
-      unless @options[:suppress_eval]
-        @options[:filters].merge!({
-          'erb' => Haml::Filters::ERB,
-          'ruby' => Haml::Filters::Ruby
-        })
-      end
-
-      if @options[:locals]
-        warn <<END
-DEPRECATION WARNING:
-The Haml :locals option is deprecated and will be removed in version 2.0.
-Use the locals option for Haml::Engine#render instead.
-END
       end
 
       @template = template.rstrip #String
@@ -104,9 +81,17 @@ END
       @flat_spaces = -1
       @newlines = 0
 
+      if @options[:filters]
+        warn <<END
+DEPRECATION WARNING:
+The Haml :filters option is deprecated and will be removed in version 2.1.
+Filters are now automatically registered.
+END
+      end
+
       precompile
     rescue Haml::Error
-      $!.backtrace.unshift "#{@options[:filename]}:#{@index + $!.line_offset}" if @index
+      $!.backtrace.unshift "#{@options[:filename]}:#{@index + $!.line_offset + @options[:line] - 1}" if @index
       raise
     end
 
@@ -146,7 +131,6 @@ END
     # but if you're relying on local variables defined in the context of scope,
     # they won't work.
     def render(scope = Object.new, locals = {}, &block)
-      locals = (@options[:locals] || {}).merge(locals)
       buffer = Haml::Buffer.new(scope.instance_variable_get('@haml_buffer'), options_for_buffer)
 
       if scope.is_a?(Binding) || scope.is_a?(Proc)
@@ -164,7 +148,7 @@ END
         @haml_buffer = buffer
       end
 
-      eval(@precompiled, scope, @options[:filename])
+      eval(@precompiled, scope, @options[:filename], @options[:line])
 
       # Get rid of the current buffer
       scope_object.instance_eval do
@@ -205,7 +189,7 @@ END
       end
 
       eval("Proc.new { |*_haml_locals| _haml_locals = _haml_locals[0] || {};" +
-           precompiled_with_ambles(local_names) + "}\n", scope, @options[:filename], 0)
+           precompiled_with_ambles(local_names) + "}\n", scope, @options[:filename], @options[:line])
     end
 
     # Defines a method on +object+
@@ -247,7 +231,7 @@ END
       method = object.is_a?(Module) ? :module_eval : :instance_eval
 
       object.send(method, "def #{name}(_haml_locals = {}); #{precompiled_with_ambles(local_names)}; end",
-                  @options[:filename], 0)
+                  @options[:filename], @options[:line])
     end
 
     private

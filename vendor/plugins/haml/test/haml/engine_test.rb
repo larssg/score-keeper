@@ -35,7 +35,8 @@ END
 
     # Regression tests
     "- raise 'foo'\n\n\n\nbar" => ["foo", 1],
-    "= 'foo'\n-raise 'foo'" => ["foo", 2]
+    "= 'foo'\n-raise 'foo'" => ["foo", 2],
+    "\n\n\n- raise 'foo'" => ["foo", 4],
   }
 
   User = Struct.new('User', :id)
@@ -51,7 +52,7 @@ END
   end
 
   def test_attributes_should_render_correctly
-    assert_equal("<div class='atlantis' style='ugly'>\n</div>", render(".atlantis{:style => 'ugly'}").chomp)
+    assert_equal("<div class='atlantis' style='ugly'></div>", render(".atlantis{:style => 'ugly'}").chomp)
   end
 
   def test_ruby_code_should_work_inside_attributes
@@ -60,7 +61,7 @@ END
   end
 
   def test_nil_should_render_empty_tag
-    assert_equal("<div class='no_attributes'>\n</div>",
+    assert_equal("<div class='no_attributes'></div>",
                  render(".no_attributes{:nil => nil}").chomp)
   end
 
@@ -127,18 +128,36 @@ END
 
     assert_equal("<textarea>#{'a' * 100}</textarea>\n",
                  render("%textarea #{'a' * 100}"))
+
+    assert_equal("<p>\n  <textarea>Foo\n  Bar\n  Baz</textarea>\n</p>\n", render(<<SOURCE))
+%p
+  %textarea
+    Foo
+    Bar
+    Baz
+SOURCE
   end
 
   def test_boolean_attributes
-    assert_equal("<p bar baz='true' foo='bar'>\n</p>\n",
+    assert_equal("<p bar baz='true' foo='bar'></p>\n",
                  render("%p{:foo => 'bar', :bar => true, :baz => 'true'}", :format => :html4))
-    assert_equal("<p bar='bar' baz='true' foo='bar'>\n</p>\n",
+    assert_equal("<p bar='bar' baz='true' foo='bar'></p>\n",
                  render("%p{:foo => 'bar', :bar => true, :baz => 'true'}", :format => :xhtml))
 
-    assert_equal("<p baz='false' foo='bar'>\n</p>\n",
+    assert_equal("<p baz='false' foo='bar'></p>\n",
                  render("%p{:foo => 'bar', :bar => false, :baz => 'false'}", :format => :html4))
-    assert_equal("<p baz='false' foo='bar'>\n</p>\n",
+    assert_equal("<p baz='false' foo='bar'></p>\n",
                  render("%p{:foo => 'bar', :bar => false, :baz => 'false'}", :format => :xhtml))
+  end
+
+  def test_both_whitespace_nukes_work_together
+    assert_equal(<<RESULT, render(<<SOURCE))
+<p><q>Foo
+  Bar</q></p>
+RESULT
+%p
+  %q><= "Foo\\nBar"
+SOURCE
   end
 
   # HTML escaping tests
@@ -218,35 +237,44 @@ END
 
   # Options tests
 
+  def test_filename_and_line
+    begin
+      render("\n\n = abc", :filename => 'test', :line => 2)
+    rescue Exception => e
+      assert_kind_of Haml::SyntaxError, e
+      assert_match /test:4/, e.backtrace.first
+    end
+
+    begin
+      render("\n\n= 123\n\n= nil[]", :filename => 'test', :line => 2)
+    rescue Exception => e
+      assert_kind_of NoMethodError, e
+      assert_match /test:6/, e.backtrace.first
+    end
+  end
+
   def test_stop_eval
     assert_equal("", render("= 'Hello'", :suppress_eval => true))
     assert_equal("", render("- puts 'foo'", :suppress_eval => true))
     assert_equal("<div id='foo' yes='no' />\n", render("#foo{:yes => 'no'}/", :suppress_eval => true))
     assert_equal("<div id='foo' />\n", render("#foo{:yes => 'no', :call => a_function() }/", :suppress_eval => true))
     assert_equal("<div />\n", render("%div[1]/", :suppress_eval => true))
-
-    begin
-      assert_equal("", render(":ruby\n  puts 'hello'", :suppress_eval => true))
-    rescue Haml::Error => err
-      caught = true
-      assert_equal('Filter "ruby" is not defined.', err.message)
-    end
-    assert(caught, "Rendering a ruby filter without evaluating didn't throw an error!")
+    assert_equal("", render(":ruby\n  puts 'hello'", :suppress_eval => true))
   end
 
   def test_attr_wrapper
-    assert_equal("<p strange=*attrs*>\n</p>\n", render("%p{ :strange => 'attrs'}", :attr_wrapper => '*'))
-    assert_equal("<p escaped='quo\"te'>\n</p>\n", render("%p{ :escaped => 'quo\"te'}", :attr_wrapper => '"'))
-    assert_equal("<p escaped=\"quo'te\">\n</p>\n", render("%p{ :escaped => 'quo\\'te'}", :attr_wrapper => '"'))
-    assert_equal("<p escaped=\"q'uo&quot;te\">\n</p>\n", render("%p{ :escaped => 'q\\'uo\"te'}", :attr_wrapper => '"'))
+    assert_equal("<p strange=*attrs*></p>\n", render("%p{ :strange => 'attrs'}", :attr_wrapper => '*'))
+    assert_equal("<p escaped='quo\"te'></p>\n", render("%p{ :escaped => 'quo\"te'}", :attr_wrapper => '"'))
+    assert_equal("<p escaped=\"quo'te\"></p>\n", render("%p{ :escaped => 'quo\\'te'}", :attr_wrapper => '"'))
+    assert_equal("<p escaped=\"q'uo&quot;te\"></p>\n", render("%p{ :escaped => 'q\\'uo\"te'}", :attr_wrapper => '"'))
     assert_equal("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n", render("!!! XML", :attr_wrapper => '"'))
   end
 
   def test_attrs_parsed_correctly
-    assert_equal("<p boom=>biddly='bar =&gt; baz'>\n</p>\n", render("%p{'boom=>biddly' => 'bar => baz'}"))
-    assert_equal("<p foo,bar='baz, qux'>\n</p>\n", render("%p{'foo,bar' => 'baz, qux'}"))
-    assert_equal("<p escaped='quo\nte'>\n</p>\n", render("%p{ :escaped => \"quo\\nte\"}"))
-    assert_equal("<p escaped='quo4te'>\n</p>\n", render("%p{ :escaped => \"quo\#{2 + 2}te\"}"))
+    assert_equal("<p boom=>biddly='bar =&gt; baz'></p>\n", render("%p{'boom=>biddly' => 'bar => baz'}"))
+    assert_equal("<p foo,bar='baz, qux'></p>\n", render("%p{'foo,bar' => 'baz, qux'}"))
+    assert_equal("<p escaped='quo\nte'></p>\n", render("%p{ :escaped => \"quo\\nte\"}"))
+    assert_equal("<p escaped='quo4te'></p>\n", render("%p{ :escaped => \"quo\#{2 + 2}te\"}"))
   end
   
   def test_correct_parsing_with_brackets
@@ -296,21 +324,9 @@ END
     assert_equal("<p>Paragraph!</p>\n", render("%p= text", :locals => { :text => "Paragraph!" }))
   end
 
-  def test_deprecated_locals_option
-    Kernel.module_eval do
-      def warn_with_stub(msg); end
-      alias_method :warn_without_stub, :warn
-      alias_method :warn, :warn_with_stub
-    end
-
-    assert_equal("<p>Paragraph!</p>\n", Haml::Engine.new("%p= text", :locals => { :text => "Paragraph!" }).render)
-
-    Kernel.module_eval { alias_method :warn, :warn_without_stub }
-  end
-
   def test_dynamic_attrs_shouldnt_register_as_literal_values
-    assert_equal("<p a='b2c'>\n</p>\n", render('%p{:a => "b#{1 + 1}c"}'))
-    assert_equal("<p a='b2c'>\n</p>\n", render("%p{:a => 'b' + (1 + 1).to_s + 'c'}"))
+    assert_equal("<p a='b2c'></p>\n", render('%p{:a => "b#{1 + 1}c"}'))
+    assert_equal("<p a='b2c'></p>\n", render("%p{:a => 'b' + (1 + 1).to_s + 'c'}"))
   end
 
   def test_dynamic_attrs_with_self_closed_tag
@@ -542,11 +558,11 @@ END
   end
 
   def test_html_renders_empty_node_with_closing_tag
-    assert_equal %{<div class='foo'>\n</div>\n}, render(".foo", :format => :html4)
+    assert_equal "<div class='foo'></div>\n", render(".foo", :format => :html4)
   end
 
   def test_html_ignores_explicit_self_closing_declaration
-    assert_equal "<a>\n</a>\n", render("%a/", :format => :html4)
+    assert_equal "<a></a>\n", render("%a/", :format => :html4)
   end
 
   def test_html_ignores_xml_prolog_declaration
