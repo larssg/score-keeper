@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  belongs_to :account
+  belongs_to :account, :counter_cache => true
   has_many :matches
   has_many :logs
   has_many :game_participations
