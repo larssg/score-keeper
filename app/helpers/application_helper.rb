@@ -27,7 +27,7 @@ module ApplicationHelper
     if RAILS_ENV == 'production'
       content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
     else
-      javascript_include_tag 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
+      javascript_include_tag 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
     end
   end
   
