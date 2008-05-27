@@ -2,7 +2,7 @@ namespace :package do
   task :build => :environment do
     files = {
       :css => ['lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen'],
-      :js => ['jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application']
+      :js => ['jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'application']
     }
     
     file_dirs = {
