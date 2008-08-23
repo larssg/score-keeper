@@ -22,10 +22,10 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'gchartrb', :lib => 'google_chart'
-  config.gem 'hpricot', :version => '0.6'
+  config.gem 'hpricot'
   config.gem 'webrat', :version => '0.2'
   config.gem 'color-tools', :lib => 'color', :version => '1.3.0'
-  config.gem 'aws-s3'
+  config.gem 'aws-s3', :lib => 'aws/s3'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
