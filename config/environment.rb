@@ -26,6 +26,7 @@ Rails::Initializer.run do |config|
   config.gem 'webrat', :version => '0.2'
   config.gem 'color-tools', :lib => 'color', :version => '1.3.0'
   config.gem 'aws-s3', :lib => 'aws/s3'
+  config.gem 'haml'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
