@@ -1,29 +1,16 @@
 class ApplicationController < ActionController::Base
+  include AuthenticatedSystem
   include ExceptionNotifiable
   include AccountLocation
-  before_filter :adjust_format_for_iphone
+
   before_filter :set_time_zone
   before_filter :load_current_game
   
+  helper :all # include all helpers, all the time
+
   @@colors = []
 
-#  around_filter :set_language
-
-  include AuthenticatedSystem
-
-  helper :all # include all helpers, all the time
-#  protect_from_forgery :secret => 'f22c29e38d18cebc96d57d166b462fe45c52f25c14487e8fe75fd2989f5795997db0bb1178a453bfc9f83b12a54bc61210a06d7bbc82393bc317961a2b635675'
-
-  protected
-  # Set iPhone format if request to iphone.trawlr.com
-  def adjust_format_for_iphone    
-    request.format = :iphone if iphone_user_agent?
-  end
-
-  def iphone_user_agent?
-    request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"][/(Mobile\/.+Safari)/]
-  end
-  
+  protected  
   def login_from_feed_token
     if params[:feed_token] && !logged_in? && request.format.to_s == 'application/atom+xml'
       self.current_user = User.find_by_feed_token(params[:feed_token])
@@ -33,11 +20,6 @@ class ApplicationController < ActionController::Base
       yield
     end
   end
-
-  def language
-    session[:language]
-  end
-  helper_method :language
   
   def all_users
     current_account.all_users

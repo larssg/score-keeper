@@ -7,7 +7,6 @@ class UsersController < ApplicationController
   
   def index
     @user = current_account.users.build
-    render :layout => false if iphone_user_agent?
   end
   
   def show
@@ -45,8 +44,6 @@ class UsersController < ApplicationController
     end
     
     @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
-
-    render :layout => false if iphone_user_agent?
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "No user was found with that ID (#{params[:id]})."
     redirect_to root_url
