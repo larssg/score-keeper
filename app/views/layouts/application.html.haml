@@ -15,11 +15,7 @@
       #hd.column.span-24
         #links
           = render :partial => 'shared/login'
-          #languages
-            = 'Language'[] + ':'
-            = link_to_unless(language == 'en', 'English', :language => 'en')
-            = link_to_unless(language == 'da', 'Dansk', :language => 'da')
-  
+
         #logo= link_to image_tag('logo.gif'), root_url
 
       #menu.clear
@@ -65,3 +61,4 @@
     %script{ :src => 'http://www.google.com/jsapi' }
     %script google.load("jquery", "1.2");
     = javascript_include_tag_merged
+    = render :partial => 'shared/feedback_tab'

@@ -17,12 +17,6 @@
   %body.public
     .container
       #hd
-        #links
-          #languages
-            = 'Language'[] + ':'
-            = link_to_unless(language == 'en', 'English', :language => 'en')
-            = link_to_unless(language == 'da', 'Dansk', :language => 'da')
-
         #logo= link_to image_tag('logo.gif'), root_url
 
       - unless @page_title.blank?
