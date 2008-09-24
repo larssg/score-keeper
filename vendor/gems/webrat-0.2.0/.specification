@@ -1,0 +1,107 @@
+--- !ruby/object:Gem::Specification 
+name: webrat
+version: !ruby/object:Gem::Version 
+  version: 0.2.0
+platform: ruby
+authors: 
+- Bryan Helmkamp
+- Seth Fitzsimmons
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2008-04-04 00:00:00 +02:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: hpricot
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: "0.6"
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: hoe
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 1.5.1
+    version: 
+description: Webrat lets you quickly write robust and thorough acceptance tests for a Ruby web application. By leveraging the DOM, it can run tests similarly to an in-browser testing solution without the associated performance hit (and browser dependency). The result is tests that are less fragile and more effective at verifying that the app will respond properly to users.  When comparing Webrat with an in-browser testing solution like Watir or Selenium, the primary consideration should be how much JavaScript the application uses. In-browser testing is currently the only way to test JS, and that may make it a requirement for your project. If JavaScript is not central to your application, Webrat is a simpler, effective solution that will let you run your tests much faster and more frequently. (Benchmarks forthcoming.)  Initial development was sponsored by EastMedia (http://www.eastmedia.com).
+email: 
+- bryan@brynary.com
+- seth@mojodna.net
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- History.txt
+- MIT-LICENSE.txt
+- Manifest.txt
+- README.txt
+- TODO.txt
+files: 
+- History.txt
+- MIT-LICENSE.txt
+- Manifest.txt
+- README.txt
+- Rakefile
+- TODO.txt
+- init.rb
+- install.rb
+- lib/webrat.rb
+- lib/webrat/rails_extensions.rb
+- lib/webrat/session.rb
+- test/checks_test.rb
+- test/chooses_test.rb
+- test/clicks_button_test.rb
+- test/clicks_link_test.rb
+- test/fills_in_test.rb
+- test/helper.rb
+- test/reloads_test.rb
+- test/selects_test.rb
+- test/visits_test.rb
+has_rdoc: true
+homepage: http://rubyforge.org/projects/webrat
+post_install_message: 
+rdoc_options: 
+- --main
+- README.txt
+require_paths: 
+- bin
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: webrat
+rubygems_version: 1.2.0
+signing_key: 
+specification_version: 2
+summary: Ruby Acceptance Testing for Web applications
+test_files: 
+- test/checks_test.rb
+- test/chooses_test.rb
+- test/clicks_button_test.rb
+- test/clicks_link_test.rb
+- test/fills_in_test.rb
+- test/reloads_test.rb
+- test/selects_test.rb
+- test/visits_test.rb

@@ -23,8 +23,8 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'gchartrb', :lib => 'google_chart'
   config.gem 'hpricot'
-  config.gem 'webrat', :version => '0.2'
-  config.gem 'color-tools', :lib => 'color', :version => '1.3.0'
+  config.gem 'webrat'
+  config.gem 'color-tools', :lib => 'color'
   config.gem 'aws-s3', :lib => 'aws/s3'
   config.gem 'haml'
 
