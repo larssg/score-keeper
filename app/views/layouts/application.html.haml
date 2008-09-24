@@ -4,7 +4,7 @@
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
     %title= page_title
-    = stylesheet_link_tag 'screen'
+    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'

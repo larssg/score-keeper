@@ -8,7 +8,7 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    = stylesheet_link_merged
+    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
