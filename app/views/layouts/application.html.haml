@@ -4,7 +4,7 @@
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
     %title= page_title
-    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
+    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection', :cache => true
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
@@ -60,5 +60,5 @@
       .column.span-24= render :partial => 'shared/footer'
     %script{ :src => 'http://www.google.com/jsapi' }
     %script google.load("jquery", "1.2");
-    = javascript_include_tag_merged
+    = javascript_include_tag :all, :cache => true
     = render :partial => 'shared/feedback_tab'
