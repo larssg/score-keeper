@@ -43,14 +43,14 @@
                 = link_to @all_time_high.current_ranking, game_match_path(@game, @all_time_high.team.match), :class => 'match'
                 = 'by'[]
                 %br
-                = user_link_full @game, find_user(@all_time_high.user_id)
+                = user_link @game, find_user(@all_time_high.user_id)
             %td
               - unless @all_time_low.nil?
                 %label= 'All time low'[] + ':'
                 = link_to @all_time_low.current_ranking, game_match_path(@game, @all_time_low.team.match), :class => 'match'
                 = 'by'[]
                 %br
-                = user_link_full @game, find_user(@all_time_low.user_id)
+                = user_link @game, find_user(@all_time_low.user_id)
 
     - if @matches_per_day.size > 0
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
