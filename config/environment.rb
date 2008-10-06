@@ -25,7 +25,6 @@ Rails::Initializer.run do |config|
   config.gem 'hpricot'
   config.gem 'webrat'
   config.gem 'color-tools', :lib => 'color'
-  config.gem 'aws-s3', :lib => 'aws/s3'
   config.gem 'haml'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
