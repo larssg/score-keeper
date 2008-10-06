@@ -359,23 +359,10 @@ table.form {
 #bd #logs .list {
   margin: 0;
   border-top: 1px solid #999999;
-  border-bottom: 1px solid #999999; }
-  #bd #logs .list a {
-    display: block;
-    padding: 1px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-bottom: 1px dashed #CCCCCC; }
-    #bd #logs .list a img {
-      position: relative;
-      top: 1px;
-      vertical-align: top; }
-    #bd #logs .list a:hover {
-      background-color: #EEEEEE; }
-  #bd #logs .list .last a {
-    border-bottom: 0; }
-#bd #logs a:hover {
-  text-decoration: none; }
+  border-bottom: 1px solid #999999;
+  padding-top: 2px; }
+  #bd #logs .list .log {
+    padding-bottom: 2px; }
 #bd #logs img {
   margin: 0;
   padding: 0;

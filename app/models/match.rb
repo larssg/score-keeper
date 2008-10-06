@@ -177,17 +177,17 @@ class Match < ActiveRecord::Base
     ].join(' ')
   end
 
-  protected
   def log
     return if self.account.blank?
     self.account.logs.create(:linked_model => self.class.class_name,
       :linked_id => self.id,
       :user => self.creator,
       :game => self.game,
-      :message => "#{self.winner.memberships.collect { |m| m.user.name }.join(' and ')} won #{self.winner.score} to #{self.loser.score} over #{self.loser.memberships.collect { |m| m.user.name }.join(' and ')}",
+      :message => "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% won #{self.winner.score} to #{self.loser.score} over %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
       :published_at => self.played_at)
   end
   
+  protected
   def remove_log
     Log.clear_item_log(self.account, self)
   end

@@ -2,14 +2,14 @@ module LogsHelper
   def log_link(log)
     icon = icons[log.linked_model]
     unless icon.blank?
-      icon_link icon, h(log.message), log_uri(log)
+      icon_link log.game_id, icon, h(log.message), log_uri(log)
     else
       h(log.message)
     end
   end
   
-  def icon_link(icon, name, url)
-    link_to image_tag("icons/#{icon}.png") + ' ' + name, url
+  def icon_link(game_id, icon, message, url)
+    link_to image_tag("icons/#{icon}.png") + ' ' + format_message(game_id, message), url
   end
 
   def log_uri(log)
@@ -24,6 +24,17 @@ module LogsHelper
     formatted_game_logs_url(game, :atom, {:feed_token => current_user.feed_token}.merge(options))
   end
   
+  def format_message(game_id, message)
+    message.split('%').collect do |part|
+      if part.to_i > 0
+        user = find_user(part)
+        link_to user.display_name, game_user_url(game_id, user.id)
+      else
+        part
+      end
+    end.join('')
+  end
+
   protected
   def icons
     {
