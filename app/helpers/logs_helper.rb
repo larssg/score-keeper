@@ -9,7 +9,7 @@ module LogsHelper
   end
   
   def icon_link(game_id, icon, message, url)
-    link_to image_tag("icons/#{icon}.png") + ' ' + format_message(game_id, message), url
+    link_to(image_tag("icons/#{icon}.png"), url) + ' ' + format_message(game_id, message)
   end
 
   def log_uri(log)
