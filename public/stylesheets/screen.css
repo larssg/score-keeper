@@ -362,6 +362,7 @@ table.form {
   border-bottom: 1px solid #999999;
   padding-top: 2px; }
   #bd #logs .list .log {
+    display: block;
     padding-bottom: 2px; }
 #bd #logs img {
   margin: 0;
