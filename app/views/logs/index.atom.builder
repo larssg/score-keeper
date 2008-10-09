@@ -1,5 +1,5 @@
-atom_feed(:url => formatted_game_logs_url(@game, :atom)) do |feed|
-  feed.title('Events for {game} at {account}'[:event_for_game_at_account, @game.name, current_account.name])
+atom_feed(:url => log_feed_url(@game)) do |feed|
+  feed.title("Events for #{@game.name} at #{current_account.name}")
   feed.updated(@logs.first ? @logs.first.created_at : Time.now.utc)
 
   @logs.each do |log|
