@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   include HoptoadNotifier::Catcher
   include AuthenticatedSystem
-  include ExceptionNotifiable
   include AccountLocation
 
   before_filter :set_time_zone
