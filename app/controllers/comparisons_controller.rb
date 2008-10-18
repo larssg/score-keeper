@@ -1,4 +1,6 @@
 class ComparisonsController < ApplicationController
+  before_filter :login_required
+
   def index
     @game = params[:game_id].to_i == current_game.id ? current_game : current_account.games.find(params[:game_id])
     @players = @game.game_participations.find(:all, :include => :user, :order => 'users.name').collect { |gp| gp.user }.select { |u| u.enabled? }
