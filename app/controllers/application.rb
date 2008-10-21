@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
       if session[:real_user_id].nil?
         unless account_subdomain.nil?
           @current_account ||= Account.find_by_domain(account_subdomain)
-          redirect_to account_url(current_account.account.domain) if logged_in? && current_user.account_id != @current_account.id
+          redirect_to account_url(current_user.account.domain) if logged_in? && current_user.account_id != @current_account.id
         end
       else
         @current_account ||= current_user.account
