@@ -10,6 +10,21 @@ class ApplicationController < ActionController::Base
 
   @@colors = []
 
+  def current_account
+    if @current_account.nil?
+      if session[:real_user_id].nil?
+        unless account_subdomain.nil?
+          @current_account ||= Account.find_by_domain(account_subdomain)
+          redirect_to account_url(current_user.account.domain) if logged_in? && current_user.account_id != @current_account.id
+        end
+      else
+        @current_account ||= current_user.account
+      end
+    end
+    @current_account
+  end
+  helper_method :current_account
+  
   protected  
   def login_from_feed_token
     if params[:feed_token] && !logged_in? && request.format.to_s == 'application/atom+xml'
@@ -73,21 +88,6 @@ class ApplicationController < ActionController::Base
     session[:current_game_id] = game.id
     @current_game = game
   end
-  
-  def current_account
-    if @current_account.nil?
-      if session[:real_user_id].nil?
-        unless account_subdomain.nil?
-          @current_account ||= Account.find_by_domain(account_subdomain)
-          redirect_to account_url(current_user.account.domain) if logged_in? && current_user.account_id != @current_account.id
-        end
-      else
-        @current_account ||= current_user.account
-      end
-    end
-    @current_account
-  end
-  helper_method :current_account
   
   def current_users_games
     if @current_users_games.nil?
