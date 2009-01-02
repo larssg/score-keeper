@@ -50,56 +50,64 @@ describe User do
   end
 
   it 'resets password' do
-    users(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
-    User.authenticate('quentin', 'new password').should == users(:quentin)
+    user = Factory(:user)
+    user.update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    User.authenticate(user.login, 'new password').should == user
   end
 
   it 'does not rehash password' do
-    users(:quentin).update_attributes(:login => 'quentin2')
-    User.authenticate('quentin2', 'test').should == users(:quentin)
+    user = Factory(:user)
+    user.update_attributes(:login => 'quentin2')
+    User.authenticate('quentin2', user.password).should == user
   end
 
   it 'authenticates user' do
-    User.authenticate('quentin', 'test').should == users(:quentin)
+    user = Factory(:user)
+    User.authenticate(user.login, user.password).should == user
   end
 
   it 'sets remember token' do
-    users(:quentin).remember_me
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
+    user = Factory(:user)
+    user.remember_me
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
   end
 
   it 'unsets remember token' do
-    users(:quentin).remember_me
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).forget_me
-    users(:quentin).remember_token.should be_nil
+    user = Factory(:user)
+    user.remember_me
+    user.remember_token.should_not be_nil
+    user.forget_me
+    user.remember_token.should be_nil
   end
 
   it 'remembers me for one week' do
+    user = Factory(:user)
     before = 1.week.from_now.utc
-    users(:quentin).remember_me_for 1.week
+    user.remember_me_for 1.week
     after = 1.week.from_now.utc
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.between?(before, after).should be_true
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
+    user.remember_token_expires_at.between?(before, after).should be_true
   end
 
   it 'remembers me until one week' do
+    user = Factory(:user)
     time = 1.week.from_now.utc
-    users(:quentin).remember_me_until time
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.should == time
+    user.remember_me_until time
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
+    user.remember_token_expires_at.should == time
   end
 
   it 'remembers me default two weeks' do
+    user = Factory(:user)
     before = 2.weeks.from_now.utc
-    users(:quentin).remember_me
+    user.remember_me
     after = 2.weeks.from_now.utc
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.between?(before, after).should be_true
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
+    user.remember_token_expires_at.between?(before, after).should be_true
   end
   
   it "should get time_zone from account" do

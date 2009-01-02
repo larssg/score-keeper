@@ -1,14 +1,15 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe MatchesController, "logged in" do
-  fixtures :users, :accounts
-
   before(:each) do
-    @game = Factory.create_game
+    @game = Factory(:game)
     controller.stub!(:current_game).and_return(@game)
-    controller.stub!(:current_account).and_return(accounts(:champions))
-    login_as :aaron
-    @match = mock_model(Match)
+    controller.stub!(:current_account).and_return(@game.account)
+
+    @user = Factory(:user, :account => @game.account)
+    login_as @user
+
+    @match = Factory(:match)
   end
 
   it "should render" do
@@ -26,21 +27,23 @@ describe MatchesController, 'not logged in' do
 end
 
 describe MatchesController, "creating a match (logged in)" do
-  fixtures :users, :accounts
-
   before(:each) do
-    @game = Factory.create_game
+    @game = Factory(:game)
     controller.stub!(:current_game).and_return(@game)
-    controller.stub!(:current_account).and_return(accounts(:champions))
-    login_as :aaron
-    @people = Factory.create_people(4)
+    controller.stub!(:current_account).and_return(@game.account)
+
+    @user = Factory(:user, :account => @game.account)
+    login_as @user
+
+    @team1 = 2.times.collect { Factory(:user, :account => @game.account) }
+    @team2 = 2.times.collect { Factory(:user, :account => @game.account) }  
   end
   
   def do_post(match = {})
     params = {
       :match => {
-        :score1 => 10, :team1 => [@people[0].id, @people[1].id],
-        :score2 => 8, :team2 => [@people[2].id, @people[3].id] }.merge(match),
+        :score1 => 10, :team1 => [@team1[0].id, @team1[1].id],
+        :score2 => 8, :team2 => [@team2[0].id, @team2[1].id] }.merge(match),
       :game_id => @game.id }
     post :create, params
   end
@@ -84,22 +87,23 @@ describe MatchesController, "deleting a match" do
   fixtures :users, :accounts
 
   before(:each) do
-    @game = Factory.create_game
+    @game = Factory(:game)
     controller.stub!(:current_game).and_return(@game)
-    controller.stub!(:current_account).and_return(accounts(:champions))
-    login_as :aaron
-    @people = Factory.create_people(4)
+    controller.stub!(:current_account).and_return(@game.account)
+
+    @user = Factory(:user, :account => @game.account)
+    login_as @user
   end
   
   it "should work" do
-    match = Factory.create_match(:people => @people, :account => accounts(:champions), :game => @game)
+    match = Factory(:match, :account => @game.account, :game => @game)
     lambda do
       delete :destroy, :id => match.id, :game_id => @game.id
     end.should change(Match, :count).by(-1)
   end
   
   it "should redirect to the match list" do
-    match = Factory.create_match(:people => @people, :account => accounts(:champions), :game => @game)
+    match = Factory(:match, :account => @game.account, :game => @game)
     delete :destroy, :id => match.id, :game_id => @game.id
     response.should be_redirect
     response.should redirect_to(game_matches_path(@game))
@@ -107,7 +111,7 @@ describe MatchesController, "deleting a match" do
   end
   
   it "should redirect to the match list when unsuccessful" do
-    match = Factory.create_match(:people => @people, :account => accounts(:champions), :game => @game)
+    match = Factory(:match, :account => @game.account, :game => @game)
     match.destroy
     
     # now trying to delete a non-existing match

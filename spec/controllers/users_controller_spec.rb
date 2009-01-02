@@ -4,10 +4,12 @@ describe UsersController do
   fixtures :users, :accounts
 
   before(:each) do
-    @game = Factory.create_game
+    @game = Factory(:game)
     controller.stub!(:current_game).and_return(@game)
-    controller.stub!(:current_account).and_return(accounts(:champions))
-    login_as :aaron
+    controller.stub!(:current_account).and_return(@game.account)
+
+    @user = Factory(:user, :account => @game.account)
+    login_as @user
   end
 
   it "should show /index" do
@@ -21,12 +23,12 @@ describe UsersController do
   end
   
   it "should render /edit for the user himself" do
-    get :edit, :id => users(:aaron).id
+    get :edit, :id => @user.id
     response.should be_success
   end
   
   it "should not allow editing other users if the user is not an administrator" do
-    user = Factory.create_user(:account => accounts(:champions))
+    user = Factory(:user, :account => @user.account)
     get :edit, :id => user.id
     response.should be_redirect
     response.should redirect_to(root_path)

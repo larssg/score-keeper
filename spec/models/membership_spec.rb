@@ -26,7 +26,6 @@ describe Membership do
 
       [@match.team1[0], @match.team1[1]].each do |user_id|
         user = User.find(user_id)
-        puts "User: #{user.inspect}"
         gp = GameParticipation.find_by_game_id_and_user_id(@game.id, user.id)
         Membership.find_by_team_id_and_user_id(team.id, user.id).current_ranking.should == gp.ranking
       end
