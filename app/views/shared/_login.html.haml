@@ -1,5 +1,5 @@
 #user
-  - unless current_game.nil?
+  - unless current_game.nil? || current_game.new_record?
     %span.current_user= link_to current_user.login, game_user_path(current_game, current_user)
   - else
     %span.current_user= link_to current_user.login, edit_user_path(current_user)
