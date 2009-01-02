@@ -7,48 +7,58 @@ describe Match do
   
   it "should be created correctly by Factory" do
     lambda do
-      @match = Factory.create_match
+      @match = Factory(:match)
     end.should change(Match, :count).by(1)
     @match.should be_valid
   end
   
   it "should update rankings properly" do
-    people = Factory.create_people(4)
-    team_scores = [1, 0]
-    game = Factory.create_game
+    account = Factory(:account)
+    score1 = 1
+    team1 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    score2 = 0
+    team2 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    game = Factory(:game, :account => account)
     
-    Factory.create_match(:people => people, :team_scores => team_scores, :game => game)
+    Factory(:match, :score1 => score1, :team1 => team1, :score2 => score2, :team2 => team2, :game => game)
     
-    [people[0], people[1]].each do |person|
-      gp = person.game_participations.find_by_game_id(game.id)
+    team1.each do |user_id|
+      user = User.find(user_id)
+      gp = user.game_participations.find_by_game_id(game.id)
       gp.ranking.should == 2020
       gp.matches_played.should == 1
     end
-    
-    [people[2], people[3]].each do |person|
-      gp = person.game_participations.find_by_game_id(game.id)
+
+    team2.each do |user_id|
+      user = User.find(user_id)
+      gp = user.game_participations.find_by_game_id(game.id)
       gp.ranking.should == 1980
       gp.matches_played.should == 1
     end
   end
   
   it "should update rankings properly when a game is deleted" do
-    people = Factory.create_people(4)
-    team_scores = [1, 0]
-    game = Factory.create_game
+    account = Factory(:account)
+    score1 = 1
+    team1 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    score2 = 0
+    team2 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    game = Factory(:game, :account => account)
     
-    match = Factory.create_match(:people => people, :team_scores => team_scores, :game => game)
+    match = Factory(:match, :score1 => score1, :team1 => team1, :score2 => score2, :team2 => team2, :game => game)
     
     match.destroy
     
-    [people[0], people[1]].each do |person|
-      gp = person.game_participations.find_by_game_id(game.id)
+    team1.each do |user_id|
+      user = User.find(user_id)
+      gp = user.game_participations.find_by_game_id(game.id)
       gp.ranking.should == 2000
       gp.matches_played.should == 0
     end
-    
-    [people[2], people[3]].each do |person|
-      gp = person.game_participations.find_by_game_id(game.id)
+
+    team2.each do |user_id|
+      user = User.find(user_id)
+      gp = user.game_participations.find_by_game_id(game.id)
       gp.ranking.should == 2000
       gp.matches_played.should == 0
     end
@@ -56,14 +66,14 @@ describe Match do
   
   it "should create a log entry" do
     lambda do
-      match = Factory.create_match
+      match = Factory(:match)
     end.should change(Log, :count).by(1)
   end
   
   it "should create a log entry linking to the game" do
-    game = Factory.create_game
+    game = Factory(:game)
     lambda do
-      match = Factory.create_match(:game => game)
+      match = Factory(:match, :game => game)
     end.should change(Log, :count).by(1)
     
     log = Log.find_by_game_id(game.id).should_not be_nil

@@ -103,14 +103,8 @@ describe User do
   end
   
   it "should get time_zone from account" do
-    account = Factory.create_account(:time_zone => 'Taipei')
-    user = account.users.create!(
-      :name => 'Mike',
-      :login => 'mike',
-      :email => 'mike@example.com',
-      :password => 'mike',
-      :password_confirmation => 'mike')
-
+    account = Factory(:account, :time_zone => 'Taipei')
+    user = Factory(:user, :account => account, :time_zone => nil)
     user.time_zone.should == 'Taipei'
   end
 
