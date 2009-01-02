@@ -27,6 +27,7 @@ Rails::Initializer.run do |config|
   config.gem 'color-tools', :lib => 'color'
   config.gem 'haml'
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
+  config.gem 'rspec-rails', :lib => 'spec'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
