@@ -1,13 +1,16 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe GamesController do
-  fixtures :users, :accounts
-
+  before(:each) do
+    controller.stub!(:domain_required).and_return(true)
+  end
+  
   describe "with no games in the database" do
     before(:each) do
       @user = Factory(:user)
       controller.stub!(:current_game).and_return(nil)
       controller.stub!(:current_account).and_return(@user.account)
+
       login_as @user
     end
 

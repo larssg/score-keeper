@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/../test_helper'
 
 class FirstLoginTest < ActionController::IntegrationTest
   test "should be able to go to the dashboard on first login" do

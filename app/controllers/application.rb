@@ -62,7 +62,6 @@ class ApplicationController < ActionController::Base
   
   def domain_required
     return unless session[:real_user_id].nil? # Impersonating a user
-    return true if disable_subdomains?
     redirect_to public_root_url and return false if account_subdomain.blank?
     redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_account.domain != account_subdomain
     redirect_to public_root_url(:host => account_domain) and return false if !logged_in? && Account.find_by_domain(account_subdomain).nil?
@@ -153,10 +152,6 @@ class ApplicationController < ActionController::Base
   
   def y_axis_steps(min, max)
     (max - min) / 100
-  end
-
-  def disable_subdomains?
-    Rails.env == 'test'
   end
   
   def must_be_account_admin

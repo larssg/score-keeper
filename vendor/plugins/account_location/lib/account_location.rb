@@ -45,6 +45,8 @@ module AccountLocation
     end
     
     def account_subdomain
-      request.subdomains.first
+      subdomain = request.subdomains.first
+      return nil if %w(www).include?(subdomain)
+      subdomain
     end
 end

@@ -16,3 +16,4 @@ Spec::Runner.configure do |config|
   include AuthenticatedTestHelper
   require File.join(Rails.root, 'spec/factories')
 end
+
