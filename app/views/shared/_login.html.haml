@@ -1,5 +1,9 @@
 #user
-  %span.current_user= link_to current_user.login, game_user_path(current_game, current_user)
+  - unless current_game.nil?
+    %span.current_user= link_to current_user.login, game_user_path(current_game, current_user)
+  - else
+    %span.current_user= link_to current_user.login, edit_user_path(current_user)
+
   |
   - unless session[:real_user_id].blank?
     = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
@@ -8,5 +12,6 @@
   - if account_admin?
     |
     = link_to 'Manage account'[], edit_account_path(current_account)
+
   |
   = link_to 'Log out'[], logout_path

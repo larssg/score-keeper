@@ -1,3 +1,5 @@
+- sidebar = yield(:sidebar)
+
 !!! Strict
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
@@ -52,7 +54,6 @@
           #main= yield
 
         - getting_started = render :partial => 'shared/getting_started'
-        - sidebar = yield(:sidebar)
         - unless sidebar.blank? && getting_started.blank?
           #sidebar.column.span-6.last
             .content
