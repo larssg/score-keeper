@@ -20,7 +20,7 @@
 
       #menu.clear
         .column.span-20= render :partial => 'shared/menu'
-        - unless current_game.nil?
+        - unless current_game.nil? || current_game.new_record?
           #add_match.column.span-4.last
             - if enabled_users.size >= current_game.team_size * 2
               = link_to_function image_tag('icons/add.png') + ' ' + 'Add match'[], "scoreKeeper.newMatch.toggle();"
