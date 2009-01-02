@@ -35,15 +35,15 @@ describe MatchesController, "creating a match (logged in)" do
     @user = Factory(:user, :account => @game.account)
     login_as @user
 
-    @team1 = 2.times.collect { Factory(:user, :account => @game.account) }
-    @team2 = 2.times.collect { Factory(:user, :account => @game.account) }  
+    @team1 = (0..1).collect { Factory(:user, :account => @game.account).id.to_s }
+    @team2 = (0..1).collect { Factory(:user, :account => @game.account).id.to_s }
   end
   
   def do_post(match = {})
     params = {
       :match => {
-        :score1 => 10, :team1 => [@team1[0].id, @team1[1].id],
-        :score2 => 8, :team2 => [@team2[0].id, @team2[1].id] }.merge(match),
+        :score1 => 10, :team1 => @team1,
+        :score2 => 8, :team2 => @team2}.merge(match),
       :game_id => @game.id }
     post :create, params
   end

@@ -15,9 +15,9 @@ describe Match do
   it "should update rankings properly" do
     account = Factory(:account)
     score1 = 1
-    team1 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    team1 = (0..1).collect { Factory(:user, :account => account).id.to_s }
     score2 = 0
-    team2 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    team2 = (0..1).collect { Factory(:user, :account => account).id.to_s }
     game = Factory(:game, :account => account)
     
     Factory(:match, :score1 => score1, :team1 => team1, :score2 => score2, :team2 => team2, :game => game)
@@ -40,9 +40,9 @@ describe Match do
   it "should update rankings properly when a game is deleted" do
     account = Factory(:account)
     score1 = 1
-    team1 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    team1 = (0..1).collect { Factory(:user, :account => account).id.to_s }
     score2 = 0
-    team2 = 2.times.collect { Factory(:user, :account => account).id.to_s }
+    team2 = (0..1).collect { Factory(:user, :account => account).id.to_s }
     game = Factory(:game, :account => account)
     
     match = Factory(:match, :score1 => score1, :team1 => team1, :score2 => score2, :team2 => team2, :game => game)
