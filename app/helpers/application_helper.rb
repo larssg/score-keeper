@@ -32,22 +32,19 @@ module ApplicationHelper
   end
   
   def user_area(&block)
-    if logged_in?
-      concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
-    end
+    return unless logged_in?
+    concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
   end
   
   def account_admin_area(&block)
-    if account_admin?
-      concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
-    end
+    return unless account_admin?
+    concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
   end
   
   def admin_area(&block)
-    if admin?
-      concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
-    end
-  end
+    return unless admin?
+    concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
+   end
   
   def account_admin?
     logged_in? && current_user.is_account_admin? || current_user.is_admin?
