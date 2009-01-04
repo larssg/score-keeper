@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   include AccountLocation
 
   before_filter :set_time_zone
-  before_filter :load_current_game
   
   helper :all # include all helpers, all the time
 
@@ -52,14 +51,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :find_user
 
-  def cache_key(extra = nil)
-    key = [self.controller_name]
-    key << account_subdomain unless account_subdomain.nil?
-    key << extra unless extra.nil?
-    key.join('_')
-  end
-  helper_method :cache_key
-  
   def domain_required
     return unless session[:real_user_id].nil? # Impersonating a user
     redirect_to public_root_url and return false if account_subdomain.blank?
@@ -173,10 +164,6 @@ class ApplicationController < ActionController::Base
   private
   def set_time_zone
     Time.zone = current_user.time_zone if logged_in?
-  end
-  
-  def load_current_game
-    current_game
   end
 
   def set_language

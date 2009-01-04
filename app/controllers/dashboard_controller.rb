@@ -3,11 +3,12 @@ class DashboardController < ApplicationController
   before_filter :login_required
 
   def index
-    if params[:game_id]
-      @game = current_game if current_game.id.to_s == params[:game_id]
-      @game ||= current_account.games.find(params[:game_id])
+    if params[:game_id] && params[:game_id].to_i != current_game.id
+      @game = current_account.games.find(params[:game_id])
     end
     @game ||= current_game
+
+    return if @game.nil?
     
     @logs = @game.logs.find(:all, :order => 'published_at DESC', :limit => 5)
     if params[:last_update]
