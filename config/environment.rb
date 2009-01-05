@@ -29,6 +29,8 @@ Rails::Initializer.run do |config|
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
   config.gem 'rspec', :lib => 'spec'
   config.gem 'rspec-rails', :lib => 'spec/rails'
+  config.gem 'jeremymcanally-context', :lib => 'context', :source => 'http://gems.github.com'
+  config.gem 'jeremymcanally-matchy', :lib => 'matchy', :source => 'http://gems.github.com'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
