@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   before_filter :domain_required
   before_filter :must_be_admin, :only => [ :impersonate ]
   before_filter :must_be_impersonating, :only => [ :unimpersonate ]
-  
+
   filter_parameter_logging :password
 
   # render new.rhtml
@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
   def create
     password_authentication(params[:login], params[:password])
   end
-  
+
   def update
     unless params[:current_game].blank? || params[:current_game][:id].blank?
       redirect_to new_game_url and return if params[:current_game][:id] == 'new'
@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
     end
     redirect_back_or_default('/')
   end
-  
+
   def destroy
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
     flash[:notice] = "You have been logged out."
     redirect_back_or_default('/')
   end
-  
+
   def token_login
     user = User.find_by_login_token(params[:token])
     unless user.blank?
@@ -44,7 +44,7 @@ class SessionsController < ApplicationController
       redirect_to login_url
     end
   end
-  
+
   def impersonate
     session[:real_user_id] ||= current_user.id
     session[:current_game_id] = nil
@@ -55,7 +55,7 @@ class SessionsController < ApplicationController
       redirect_to root_url
     end
   end
-  
+
   def unimpersonate
     self.current_user = User.find(session[:real_user_id])
     session[:real_user_id] = nil
@@ -63,14 +63,14 @@ class SessionsController < ApplicationController
     flash[:notice] = 'You are now yourself!'
     redirect_to root_url
   end
-  
+
   private
   def password_authentication(login, password)
     self.current_user = current_account.users.authenticate(login, password)
     if logged_in?
       if params[:remember_me] == "1"
         self.current_user.remember_me
-        cookies[:auth_token] = { 
+        cookies[:auth_token] = {
           :value => self.current_user.remember_token, :expires => self.current_user.remember_token_expires_at }
       end
       successful_login
@@ -78,12 +78,12 @@ class SessionsController < ApplicationController
       failed_login('Invalid login or password')
     end
   end
-  
+
   def successful_login
     self.current_game = current_user.last_game unless current_user.last_game.nil?
     redirect_to root_url
   end
-  
+
   def failed_login(message)
     flash[:error] = message
     redirect_to login_url

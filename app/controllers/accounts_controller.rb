@@ -4,28 +4,28 @@ class AccountsController < ApplicationController
   before_filter :login_required, :except => [ :new, :create ]
   before_filter :must_be_admin, :except => [ :new, :create, :edit, :update ]
   before_filter :must_be_account_admin, :only => [ :edit, :update ]
-  
+
   def index
     order = %w(name created_at).include?(params[:order]) ? params[:order] : 'name'
     @accounts = Account.find(:all, :order => order)
   end
-  
+
   def show
     @account = Account.find(params[:id])
     @account_users = @account.users.find(:all, :order => 'name')
   end
-  
+
   def new
     @account = Account.new
     @user = User.new
     render :layout => 'public'
   end
-  
+
   def create
     @account = Account.new(params[:account])
     @user = @account.users.build(params[:user])
     @user.is_account_admin = true
-    
+
     if @account.save
       self.current_user = @user
       redirect_to account_url(@account.domain)
@@ -35,11 +35,11 @@ class AccountsController < ApplicationController
       render :action => 'new', :layout => 'public'
     end
   end
-  
+
   def edit
     @account = current_account
   end
-  
+
   def update
     if current_account.update_attributes(params[:account])
       flash[:notice] = 'Account saved.'[]
@@ -49,7 +49,7 @@ class AccountsController < ApplicationController
       render :action => 'edit'
     end
   end
-  
+
   protected
   def must_be_account_admin
     redirect_to root_url unless (current_user.account_id.to_s == params[:id] && current_user.is_account_admin?) || current_user.is_admin?

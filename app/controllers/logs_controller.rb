@@ -6,7 +6,7 @@ class LogsController < ApplicationController
   def index
     @game = current_account.games.find(params[:game_id])
     @logs = @game.logs.find(:all, :order => 'published_at DESC', :limit => 10)
-    
+
     respond_to do |format|
       format.atom
     end

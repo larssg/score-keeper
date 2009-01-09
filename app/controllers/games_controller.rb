@@ -5,11 +5,11 @@ class GamesController < ApplicationController
   def index
     @games = current_account.games.all(:order => 'name')
   end
-  
+
   def new
-    @game = current_account.games.build    
+    @game = current_account.games.build
   end
-  
+
   def create
     @game = current_account.games.build(params[:game])
     if @game.save
@@ -19,11 +19,11 @@ class GamesController < ApplicationController
       render :action => 'new'
     end
   end
-  
+
   def edit
     @game = current_account.games.find(params[:id])
   end
-  
+
   def update
     @game = current_account.games.find(params[:id])
     if @game.update_attributes(params[:game])
@@ -33,11 +33,11 @@ class GamesController < ApplicationController
       render :action => 'edit'
     end
   end
-  
+
   def game_added_warning
     @game = current_account.games.find(params[:id])
     @latest_membership = current_user.memberships.find(:first, :conditions => ['memberships.game_id = ? AND created_at >= ?', @game.id, 10.minutes.ago], :order => 'created_at DESC')
-    
+
     if @latest_membership && @latest_membership.team.match.creator != current_user
       render :layout => false
     else

@@ -12,14 +12,14 @@ class ComparisonsController < ApplicationController
         gp.id == sp
       end.first
     end
-    
+
     @indexed_sorted_players = []
     @selected_players.each_with_index do |player, index|
       @indexed_sorted_players << [player, index]
     end
     @indexed_sorted_players = @indexed_sorted_players.sort_by { |ip| ip.first.name }
   end
-  
+
   def show
     @game = params[:game_id].to_i == current_game.id ? current_game : current_account.games.find(params[:game_id])
     @ids = params[:id].split('-').collect(&:to_i).sort
@@ -29,18 +29,18 @@ class ComparisonsController < ApplicationController
       format.chart { render_chart }
     end
   end
-  
+
   protected
   def render_chart
     from = @time_period.days.ago
     players = current_account.users.find(@ids)
     game_participations = @game.game_participations.find(:all, :conditions => { :user_id => @ids})
     memberships = @game.memberships.find(:all,
-      :conditions => ['memberships.user_id IN (?) AND memberships.created_at >= ?', @ids, from],
-      :order => 'memberships.created_at',
-      :select => 'memberships.user_id, memberships.current_ranking, teams.match_id AS match_id, memberships.created_at, matches.played_at AS played_at',
-      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
-    
+                                         :conditions => ['memberships.user_id IN (?) AND memberships.created_at >= ?', @ids, from],
+                                         :order => 'memberships.created_at',
+                                         :select => 'memberships.user_id, memberships.current_ranking, teams.match_id AS match_id, memberships.created_at, matches.played_at AS played_at',
+                                         :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
+
     data = {}
     memberships.each do |membership|
       match_id = membership.match_id.to_i
@@ -48,7 +48,7 @@ class ComparisonsController < ApplicationController
       data[match_id][@ids.index(membership.user_id)] = membership.current_ranking
       data[match_id][@ids.size] = membership.played_at.to_time
     end
-    
+
     people = {}
     previous = []
     (0..@ids.size - 1).each do |index|

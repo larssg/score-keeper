@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
       end
     end
   end
-  
+
   def edit
     @comment = current_user.comments.find(params[:id])
     respond_to do |format|
@@ -29,7 +29,7 @@ class CommentsController < ApplicationController
       format.js # edit.js.haml
     end
   end
-  
+
   def update
     @comment = current_user.comments.find(params[:id])
     if @comment.update_attributes(params[:comment])

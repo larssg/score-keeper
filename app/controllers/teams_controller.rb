@@ -5,13 +5,13 @@ class TeamsController < ApplicationController
   def index
     @teams = {}
     @team_counts = current_account.teams.count(
-      :group => :team_ids,
-      :conditions => ['matches.game_id = ?', current_game.id],
-      :joins => 'LEFT JOIN matches ON teams.match_id = matches.id').sort_by { |t| t[1] }.reverse
+                                               :group => :team_ids,
+                                               :conditions => ['matches.game_id = ?', current_game.id],
+                                               :joins => 'LEFT JOIN matches ON teams.match_id = matches.id').sort_by { |t| t[1] }.reverse
     @team_wins = current_account.teams.count(
-      :group => :team_ids,
-      :conditions => ['matches.game_id = ? AND teams.won = ?', current_game.id, true],
-      :joins => 'LEFT JOIN matches ON teams.match_id = matches.id')
+                                             :group => :team_ids,
+                                             :conditions => ['matches.game_id = ? AND teams.won = ?', current_game.id, true],
+                                             :joins => 'LEFT JOIN matches ON teams.match_id = matches.id')
 
     # Find user IDs
     @users = {}
@@ -27,23 +27,23 @@ class TeamsController < ApplicationController
       @teams[count[0]][:matches_won] = 0
       @teams[count[0]][:players] = count[0].split(',').collect { |id| find_user(id) }
     end
-  
+
     @team_wins.each do |win|
       @teams[win[0]][:matches_won] = win[1]
     end
-  
+
     @teams.keys.each do |team_key|
       @teams[team_key][:percentage] = ((@teams[team_key][:matches_won].to_f / @teams[team_key][:matches_played].to_f) * 1000).to_i / 10.to_f
     end
-  
+
     @teams.keys.each do |team_key|
       @teams[team_key][:total_ranking] = @teams[team_key][:players].sum { |user| @game_participations.select { |gp| gp.user_id == user.id }.first.ranking }
     end
-  
+
     @teams = @teams.keys.collect { |k| @teams[k] }
     @teams = @teams.sort_by { |t| t[:total_ranking] }.reverse
   end
-  
+
   def show
     @time_period = params[:period] ? params[:period].to_i : 30
     @ids = params[:id].split(',').collect { |id| id.to_i }.sort

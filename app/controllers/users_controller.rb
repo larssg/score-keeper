@@ -2,13 +2,13 @@ class UsersController < ApplicationController
   before_filter :domain_required
   before_filter :login_required, :except => [ :forgot_password ]
   before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
-  
+
   filter_parameter_logging :password
-  
+
   def index
     @user = current_account.users.build
   end
-  
+
   def show
     @game = current_account.games.find(params[:game_id])
     @user = current_account.users.find(params[:id])
@@ -25,13 +25,13 @@ class UsersController < ApplicationController
     @team_counts = @user.teams.count(:group => :team_ids, :conditions => ['memberships.game_id = ?', @game.id]).sort_by { |t| t[1] }.reverse
     @team_wins = @user.teams.count(:group => :team_ids, :conditions => { :won => true })
     @teams = current_account.teams.find(:all, :group => :team_ids, :conditions => { :team_ids => @team_counts.collect { |tc| tc[0] } })
-    
+
     @teams = @teams.collect do |t|
       { :team => t,
-      :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
-      :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0] }
+        :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
+        :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0] }
     end
-    
+
     if @game.team_size == 2
       @teams.each do |team|
         team_mate = team[:team].team_mate_for(@user)
@@ -42,20 +42,20 @@ class UsersController < ApplicationController
         team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
       end
     end
-    
+
     @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "No user was found with that ID (#{params[:id]})."
     redirect_to root_url
   end
-  
+
   def new
     @user = User.new(params[:user])
     @user.account = current_account
     @user.time_zone ||= current_account.time_zone
     @user.valid? if params[:user]
   end
-  
+
   def create
     @user = User.new(params[:user])
     @user.account = current_account
@@ -74,14 +74,14 @@ class UsersController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     render :action => 'new'
   end
-  
+
   def edit
     @user = current_account.users.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "No user was found with that ID (#{params[:id]})."
     redirect_to root_url
   end
-  
+
   def update
     @user = current_account.users.find(params[:id])
     mugshot = Mugshot.create(params[:mugshot])
@@ -97,7 +97,7 @@ class UsersController < ApplicationController
       render :action => "edit"
     end
   end
-  
+
   def destroy
     @user = current_account.users.find(params[:id])
     if @user.destroy
@@ -116,12 +116,12 @@ class UsersController < ApplicationController
       render :action => 'edit'
     end
   end
-  
+
   def forgot_password
     if params[:username] || params[:email]
       user = current_account.users.find_by_login(params[:username]) if params[:username]
       user ||= current_account.users.find_by_email(params[:email]) if params[:email]
-      
+
       unless user.blank?
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
         user.set_login_token
@@ -134,12 +134,12 @@ class UsersController < ApplicationController
     end
     render :layout => 'login'
   end
-  
+
   protected
   def must_be_account_admin_or_self
     redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_account_admin? || current_user.is_admin?
   end
-  
+
   def must_be_admin_or_self
     redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_admin?
   end
