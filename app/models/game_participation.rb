@@ -2,10 +2,10 @@ class GameParticipation < ActiveRecord::Base
   belongs_to :game
   belongs_to :user
   has_many :memberships
-  
+
   after_create :update_game_participation_cache_on_user
-  after_destroy :update_game_participation_cache_on_user  
-  
+  after_destroy :update_game_participation_cache_on_user
+
   def matches_lost
     matches_played - matches_won
   end
@@ -14,25 +14,25 @@ class GameParticipation < ActiveRecord::Base
     return 0.0 if matches_played == 0
     ((matches_won.to_f / matches_played.to_f) * 1000).to_i / 10.to_f
   end
-  
+
   def difference
     points_for - points_against
   end
-  
+
   def difference_average
     return 0.0 if matches_played == 0
     ((10 * difference) / matches_played) / 10.0
   end
-  
+
   def ranking_at(time)
     membership = self.memberships.find(:first,
-      :conditions => [ 'matches.played_at <= ?', time ],
-      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',
-      :order => 'matches.played_at DESC')
-      
+                                       :conditions => [ 'matches.played_at <= ?', time ],
+                                       :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',
+                                       :order => 'matches.played_at DESC')
+
     membership.nil? ? 2000 : membership.current_ranking
   end
-  
+
   protected
   def update_game_participation_cache_on_user
     self.user.update_attribute :cache_game_ids, self.user.game_participations.collect(&:game_id).join(',')

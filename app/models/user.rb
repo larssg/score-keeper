@@ -2,7 +2,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
-  
+
   belongs_to :account
   has_many :game_participations
   has_many :games, :through => :game_participations
@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   has_many :logs
   has_many :teams, :through => :memberships
   belongs_to :last_game, :class_name => "Game", :foreign_key => "last_game_id"
-  
+
   validates_presence_of     :email
   validates_length_of       :email,    :within => 3..100
   validates_presence_of     :login
@@ -24,22 +24,22 @@ class User < ActiveRecord::Base
   validates_presence_of     :password_confirmation,       :if => :password_required?
   validates_length_of       :password, :within => 4..40,  :if => :password_required?
   validates_confirmation_of :password,                    :if => :password_required?
-  
+
   validates_presence_of :name
   validates_presence_of :time_zone
-  
+
   before_save :encrypt_password
   before_validation :set_time_zone
   after_create :set_feed_token
-  
+
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone
-  
+
   before_destroy :remove_matches
   before_validation :set_name_from_login
   before_save :set_display_name
-  
+
   def set_display_name
     return if self.name.blank?
     self.display_name = self.name.split[0] if self.display_name.blank?
@@ -52,17 +52,17 @@ class User < ActiveRecord::Base
   def all_time_high(game)
     Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking DESC')
   end
-  
+
   def all_time_low(game)
     Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking')
   end
-  
+
   def position(game)
     game.user_positions.each_with_index do |game_participation, index|
       return index + 1 if game_participation.user_id == self.id
     end
   end
-  
+
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     u = find_by_login(login) # need to get the salt
@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   end
 
   def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at 
+    remember_token_expires_at && Time.now.utc < remember_token_expires_at
   end
 
   # These create and unset the fields required for remembering users between browser closes
@@ -107,46 +107,46 @@ class User < ActiveRecord::Base
     self.remember_token            = nil
     save(false)
   end
-  
+
   def set_time_zone
     if self.time_zone.blank?
       self.time_zone = self.account.time_zone unless self.account.nil?
       self.time_zone ||= 'Copenhagen'
     end
   end
-  
+
   def set_feed_token
     self.update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
   end
-  
+
   def set_login_token
     self.update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
   end
 
   protected
-    def set_name_from_login
-      self.name ||= self.login.humanize
-    end
-  
-    def remove_matches
-      self.memberships.each do |membership|
-        match = membership.team.match
-        match.postpone_ranking_update = true
-        match.destroy
-      end
-    
-      # Fix stats
-      Match.reset_rankings(self.account)
+  def set_name_from_login
+    self.name ||= self.login.humanize
+  end
+
+  def remove_matches
+    self.memberships.each do |membership|
+      match = membership.team.match
+      match.postpone_ranking_update = true
+      match.destroy
     end
 
-    # before filter 
-    def encrypt_password
-      return if password.blank?
-      self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
-      self.crypted_password = encrypt(password)
-    end
-    
-    def password_required?
-      crypted_password.blank? || !password.blank?
-    end
+    # Fix stats
+    Match.reset_rankings(self.account)
+  end
+
+  # before filter
+  def encrypt_password
+    return if password.blank?
+    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
+    self.crypted_password = encrypt(password)
+  end
+
+  def password_required?
+    crypted_password.blank? || !password.blank?
+  end
 end
