@@ -23,7 +23,7 @@ module ApplicationHelper
     end
   end
 
-  def javascript_include_tag_merged
+  def javascript_include_merged
     if RAILS_ENV == 'production'
       content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
     else
