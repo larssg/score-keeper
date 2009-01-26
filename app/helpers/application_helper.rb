@@ -16,7 +16,7 @@ module ApplicationHelper
   end
 
   def stylesheet_link_merged
-    if Rails.env == 'production'
+    if request.host.include?('scorekeepr.dk')
       content_tag 'link', ' ', { :href => "/stylesheets/#{@@stylesheet_base_name}", :media => 'screen, projection', :rel => 'stylesheet', :type => 'text/css' }
     else
       stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
@@ -24,7 +24,7 @@ module ApplicationHelper
   end
 
   def javascript_include_merged
-    if Rails.env == 'production'
+    if request.host.include?('scorekeepr.dk')
       content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
     else
       javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
