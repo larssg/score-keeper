@@ -7,14 +7,14 @@ module ApplicationHelper
     @page_title = page_title
     @page_title_options = options
   end
-  
+
   def page_title
     title = 'Score Keeper'[]
     title << ': ' + @page_title unless @page_title.blank?
     title << ' - ' + h(current_account.name)
     title
   end
-  
+
   def stylesheet_link_merged
     if RAILS_ENV == 'production'
       content_tag 'link', ' ', { :href => "/stylesheets/#{@@stylesheet_base_name}", :media => 'screen, projection', :rel => 'stylesheet', :type => 'text/css' }
@@ -22,7 +22,7 @@ module ApplicationHelper
       stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
     end
   end
-  
+
   def javascript_include_tag_merged
     if RAILS_ENV == 'production'
       content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
@@ -30,34 +30,34 @@ module ApplicationHelper
       javascript_include_tag 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
     end
   end
-  
+
   def user_area(&block)
     return unless logged_in?
     concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
   end
-  
+
   def account_admin_area(&block)
     return unless account_admin?
     concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
   end
-  
+
   def admin_area(&block)
     return unless admin?
     concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
-   end
-  
+  end
+
   def account_admin?
     logged_in? && current_user.is_account_admin? || current_user.is_admin?
   end
-  
+
   def admin?
     logged_in? && current_user.is_admin?
   end
-  
+
   def user_link(game, user)
     link_to h(user.display_name), game_user_path(game, user), :class => 'user'
   end
-  
+
   def user_link_full(game, user)
     link_to h(user.name), game_user_path(game, user), :class => 'user'
   end
@@ -75,7 +75,7 @@ module ApplicationHelper
     out << '</script>'
     out
   end
-  
+
   def create_or_update_button(object)
     submit_tag (object.new_record? ? 'Create'[] : 'Update'[]), :disable_with => (object.new_record? ? 'Creating'[] : 'Updating'[]) + '&hellip;'
   end
