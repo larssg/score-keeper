@@ -12,11 +12,17 @@ class Game < ActiveRecord::Base
   before_save :format_player_roles
 
   def ranked_game_participators
-    @ranked_users ||= self.game_participations.find(:all, :order => 'game_participations.ranking DESC, game_participations.matches_won DESC', :conditions => ['users.enabled = ? AND game_participations.matches_played >= ?', true, self.newbie_limit], :include => :user)
+    @ranked_users ||= self.game_participations.find(:all,
+                                                    :order => 'game_participations.ranking DESC, game_participations.matches_won DESC',
+                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played >= ?', true, self.newbie_limit],
+                                                    :include => :user)
   end
 
   def newbie_game_participators
-    @newbie_users ||= self.game_participations.find(:all, :order => 'game_participations.matches_played DESC, game_participations.ranking DESC, game_participations.matches_won DESC', :conditions => ['users.enabled = ? AND game_participations.matches_played < ?', true, self.newbie_limit], :include => :user)
+    @newbie_users ||= self.game_participations.find(:all,
+                                                    :order => 'game_participations.matches_played DESC, game_participations.ranking DESC, game_participations.matches_won DESC',
+                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played < ?', true, self.newbie_limit],
+                                                    :include => :user)
   end
 
   def user_positions
