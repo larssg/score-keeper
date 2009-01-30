@@ -1,7 +1,7 @@
-- title 'Matches', :show => true
+- title t('matches.matches'), :show => true
 
 - if @matches.length == 0
-  = 'There are no matches in the database yet.'
+  = t('matches.no_matches')
 - else
   - if @filter
     #filter
@@ -39,7 +39,7 @@
       = link_to image_tag('rss.gif') + ' ' + 'Atom feed (filtered)'[], match_feed_url(current_game, :filter => params[:filter]), :class => 'rss'
 
 - content_for :head do
-  = auto_discovery_link_tag :atom, match_feed_url(current_game), :title => 'All matches'[]
+  = auto_discovery_link_tag :atom, match_feed_url(current_game), :title => t('matches.feeds.all')
 
   - unless params[:filter].blank?
     = auto_discovery_link_tag :atom, match_feed_url(current_game, :filter => params[:filter]), :title => 'Filtered'[]

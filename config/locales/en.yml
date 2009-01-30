@@ -174,3 +174,34 @@ en:
     matches: Matches
     teams: Teams
     compare: Compare
+  matches:
+    matches: Matches
+    no_matches: There are no matches in the database yet.
+    feeds:
+      all: All matches
+  compare:
+    select_users: Please select users to compare to the right.
+    compare: Compare
+  users:
+    create_user: Create user
+    form:
+      basics: Basics
+      login: Login
+      full_name: Full name
+      display_name: Display name
+      display_name_help: A short version of the user's name, such as first name or nick name
+      email: Email
+      time_zone: Time zone
+      password: Password
+      password_help: Fill out the password fields to change password.
+      confirm_password: Confirm password
+      picture: Picture
+      picture_help: This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.
+      advanced: Advanced
+      account_admin: Account administrator
+      account_admin_help: Allow the user to edit users and account settings.
+      super_admin: Super administrator
+      update: Update
+      updating: Updating
+      create_user: Create user
+      creating_user: Creating user

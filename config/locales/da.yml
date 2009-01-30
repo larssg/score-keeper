@@ -35,8 +35,8 @@ da:
         less_than_or_equal_to: "skal v\xC3\xA6re mindre end eller lig med {{count}}"
         confirmation: stemmer ikke overens
         blank: skal udfyldes
-        exclusion: er reserveret
         invalid: er ikke gyldig
+        exclusion: er reserveret
         odd: "skal v\xC3\xA6re ulige"
         too_short: er for kort (minimum {{count}} tegn)
         empty: "m\xC3\xA5 ikke udelades"
@@ -128,6 +128,29 @@ da:
     project_home: Projektets hjemmeside
     feedback: Feedback
     issue_tracker: Bug tracker
+  users: 
+    create_user: Opret bruger
+    form: 
+      picture_help: "Dette vil blive vist p\xC3\xA5 bruger-detalje siden, ved kommentarer og p\xC3\xA5 forsiden. Billedets st\xC3\xB8rrelse bliver automatisk tilpasset."
+      super_admin: Superadministrator
+      create_user: Opret bruger
+      confirm_password: "Bekr\xC3\xA6ft kodeord"
+      advanced: Avanceret
+      display_name_help: "En kort udgave af brugerens navn, s\xC3\xA5som fornavn eller \xC3\xB8genavn"
+      account_admin_help: Tillad brugeren af redigere brugere og kontoindstillinger
+      account_admin: Kontoadministrator
+      full_name: Fulde navn
+      basics: "Grundl\xC3\xA6ggende"
+      password_help: Udfyld kodeord-felterne for at skifte kodeord.
+      display_name: Kort navn
+      time_zone: Tidszone
+      update: Opdater
+      password: Kodeord
+      login: Brugernavn
+      updating: Opdaterer
+      email: E-mail
+      creating_user: Opretter bruger
+      picture: Billede
   datetime: 
     distance_in_words: 
       less_than_x_minutes: 
@@ -166,16 +189,24 @@ da:
     forgot_password: Glemt kodeord eller brugernavn?
     remember_me: Husk mig
     invalid_login: Ugyldigt brugernavn eller kodeord
+    signing_in: Logger ind
     password: Kodeord
     login: Brugernavn
-    signing_in: Logger ind
+  compare: 
+    compare: Sammenlign
+    select_users: "V\xC3\xA6lg venligst hvilke brugere der skal sammenlignes til h\xC3\xB8jre."
   menu: 
     games: Spil
-    dashboard: Forside
     teams: Hold
+    dashboard: Forside
     accounts: Konti
     users: Brugere
     compare: Sammenlign
+    matches: Kampe
+  matches: 
+    feeds: 
+      all: Alle kampe
+    no_matches: Der er ingen kampe i databasen endnu.
     matches: Kampe
   getting_started: 
     create_game: Opret et spil.
