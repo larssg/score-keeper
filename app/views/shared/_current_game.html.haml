@@ -1,13 +1,13 @@
 %select{:id => 'current_game_id', :name => 'current_game[id]', :onchange => 'this.form.submit();'}
-  %option{ :selected => 'selected' }= '-- Switch game --'[]
+  %option{ :selected => 'selected' }= '-- Switch game --'
   - if current_users_games[:played].size > 0
-    %optgroup{:label => 'Your games'[]}
+    %optgroup{:label => 'Your games'}
       - current_users_games[:played].each do |game|
         %option{:value => game.id}= h(game.name)
 
   - if current_users_games[:not_played].size > 0
-    %optgroup{:label => 'Other games'[]}
+    %optgroup{:label => 'Other games'}
       - current_users_games[:not_played].each do |game|
         %option{:value => game.id}= h(game.name)
         
-  %option{ :value => 'new' }= 'New game...'[]
+  %option{ :value => 'new' }= 'New game...'

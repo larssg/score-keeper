@@ -23,12 +23,12 @@
         - unless current_game.nil? || current_game.new_record?
           #add_match.column.span-4.last
             - if enabled_users.size >= current_game.team_size * 2
-              = link_to_function image_tag('icons/add.png') + ' ' + 'Add match'[], "scoreKeeper.newMatch.toggle();"
+              = link_to_function image_tag('icons/add.png') + ' ' + 'Add match', "scoreKeeper.newMatch.toggle();"
             - else
               - if current_game.team_size * 2 - enabled_users.size == 1
                 #user_minimum= 'Add one more user'[:add_one_more_user]
               - else
-                #user_minimum= 'Add {users_needed} more users'[:add_x_more_ser, current_game.team_size * 2 - enabled_users.size]
+                #user_minimum= 'Add {users_needed} more users'.gsub('{users_needed}', (current_game.team_size * 2 - enabled_users.size).to_s)
       
       = render :partial => 'shared/submenu'
   

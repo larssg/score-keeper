@@ -1,0 +1,185 @@
+--- 
+da: 
+  number: 
+    format: 
+      separator: ","
+      precision: 3
+      delimiter: .
+    human: 
+      format: 
+        precision: 1
+        delimiter: ""
+      storage_units: 
+      - Bytes
+      - KB
+      - MB
+      - GB
+      - TB
+    percentage: 
+      format: 
+        delimiter: ""
+    currency: 
+      format: 
+        format: "%u %n"
+        unit: DKK
+        separator: ","
+        precision: 2
+        delimiter: .
+    precision: 
+      format: 
+        delimiter: ""
+  activerecord: 
+    errors: 
+      messages: 
+        greater_than_or_equal_to: "skal v\xC3\xA6re st\xC3\xB8rre end eller lig med {{count}}"
+        less_than_or_equal_to: "skal v\xC3\xA6re mindre end eller lig med {{count}}"
+        confirmation: stemmer ikke overens
+        blank: skal udfyldes
+        exclusion: er reserveret
+        invalid: er ikke gyldig
+        odd: "skal v\xC3\xA6re ulige"
+        too_short: er for kort (minimum {{count}} tegn)
+        empty: "m\xC3\xA5 ikke udelades"
+        wrong_length: "har forkert l\xC3\xA6ngde (skulle v\xC3\xA6re {{count}} tegn)"
+        even: "skal v\xC3\xA6re lige"
+        less_than: "skal v\xC3\xA6re mindre end {{count}}"
+        equal_to: "skal v\xC3\xA6re lig med {{count}}"
+        greater_than: "skal v\xC3\xA6re st\xC3\xB8rre end {{count}}"
+        accepted: skal accepteres
+        taken: er allerede brugt
+        too_long: er for lang (maksimum {{count}} tegn)
+        inclusion: er ikke i listen
+        not_a_number: er ikke et tal
+      template: 
+        body: "Der var problemer med f\xC3\xB8lgende felter:"
+        header: 
+          one: En fejl forhindrede {{model}} i at blive gemt
+          other: "{{count}} fejl forhindrede denne {{model}} i at blive gemt"
+  time: 
+    am: "f\xC3\xB8r middag"
+    formats: 
+      default: "%e. %B %Y, %H:%M"
+      short: "%e. %b %Y, %H:%M"
+      long: "%A, %e. %B %Y, %H:%M"
+    pm: efter middag
+  date: 
+    month_names: 
+    - 
+    - januar
+    - februar
+    - marts
+    - april
+    - maj
+    - juni
+    - juli
+    - august
+    - september
+    - oktober
+    - november
+    - december
+    abbr_day_names: 
+    - !binary |
+      c8O4
+
+    - ma
+    - ti
+    - "on"
+    - to
+    - fr
+    - !binary |
+      bMO4
+
+    order: 
+    - :day
+    - :month
+    - :year
+    formats: 
+      default: "%d.%m.%Y"
+      short: "%e. %b %Y"
+      long: "%e. %B %Y"
+    day_names: 
+    - "s\xC3\xB8ndag"
+    - mandag
+    - tirsdag
+    - onsdag
+    - torsdag
+    - fredag
+    - "l\xC3\xB8rdag"
+    abbr_month_names: 
+    - 
+    - jan
+    - feb
+    - mar
+    - apr
+    - maj
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - dec
+  support: 
+    array: 
+      skip_last_comma: true
+      sentence_connector: og
+  footer: 
+    source_code: Kildekode
+    project_home: Projektets hjemmeside
+    feedback: Feedback
+    issue_tracker: Bug tracker
+  datetime: 
+    distance_in_words: 
+      less_than_x_minutes: 
+        one: mindre end et minut
+        other: mindre end {{count}} minutter
+      x_days: 
+        one: en dag
+        other: "{{count}} dage"
+      x_seconds: 
+        one: et sekund
+        other: "{{count}} sekunder"
+      less_than_x_seconds: 
+        one: mindre end et sekund
+        other: mindre end {{count}} sekunder
+      x_months: 
+        one: "en m\xC3\xA5ned"
+        other: "{{count}} m\xC3\xA5neder"
+      x_minutes: 
+        one: et minut
+        other: "{{count}} minutter"
+      about_x_hours: 
+        one: cirka en time
+        other: cirka {{count}} timer
+      about_x_years: 
+        one: "cirka et \xC3\xA5r"
+        other: "cirka {{count}} \xC3\xA5r"
+      about_x_months: 
+        one: "cirka en m\xC3\xA5ned"
+        other: "cirka {{count}} m\xC3\xA5neder"
+      over_x_years: 
+        one: "mere end et \xC3\xA5r"
+        other: "mere end {{count}} \xC3\xA5r"
+      half_a_minute: et halvt minut
+  login: 
+    sign_in: Log ind
+    forgot_password: Glemt kodeord eller brugernavn?
+    remember_me: Husk mig
+    invalid_login: Ugyldigt brugernavn eller kodeord
+    password: Kodeord
+    login: Brugernavn
+    signing_in: Logger ind
+  menu: 
+    games: Spil
+    dashboard: Forside
+    teams: Hold
+    accounts: Konti
+    users: Brugere
+    compare: Sammenlign
+    matches: Kampe
+  getting_started: 
+    create_game: Opret et spil.
+    heading: Kom i gang
+    complete_these_steps: "Gennemf\xC3\xB8r disse trin for at komme i gang."
+    create_users: Opret brugere.
+    add_match: "Opret den f\xC3\xB8rste kamp."

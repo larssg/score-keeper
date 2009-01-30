@@ -1,13 +1,13 @@
 #ft
   .content
-    = 'Copyright 2007-{this_year} by Lars Sehested'[:copyright, Date.today.year]
+    = 'Copyright 2007-{this_year} by Lars Sehested'.gsub('{this_year}', Date.today.year.to_s)
     = '&middot;'
-    = link_to 'Project home'[], 'http://scorekeepr.dk/'
+    = link_to t('footer.project_home'), 'http://scorekeepr.dk/'
     = '&middot;'
-    = link_to 'Feedback'[], 'http://scorekeepr.uservoice.com/'
+    = link_to t('footer.feedback'), 'http://scorekeepr.uservoice.com/'
     = '&middot;'
-    = link_to 'Issue tracker'[], 'http://code.google.com/p/scorekeeper/issues/list'
+    = link_to t('footer.issue_tracker'), 'http://code.google.com/p/scorekeeper/issues/list'
     = '&middot;'
-    = link_to 'Source code'[], 'http://github.com/larssg/score-keeper/tree/master'
+    = link_to t('footer.source_code'), 'http://github.com/larssg/score-keeper/tree/master'
 
 = render :partial => 'shared/google_analytics' unless Rails.env == 'development'

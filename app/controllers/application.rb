@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include AccountLocation
 
   before_filter :set_time_zone
+  before_filter :set_locale
 
   helper :all # include all helpers, all the time
 
@@ -166,8 +167,8 @@ class ApplicationController < ActionController::Base
     Time.zone = current_user.time_zone if logged_in?
   end
 
-  def set_language
-    session[:language] = params[:language] || session[:language]
-    Gibberish.use_language(session[:language]) { yield }
+  def set_locale
+    session[:locale] = params[:locale] if params[:locale]
+    I18n.locale = session[:locale] || 'en'
   end
 end

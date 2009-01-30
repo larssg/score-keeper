@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def page_title
-    title = 'Score Keeper'[]
+    title = 'Score Keeper'
     title << ': ' + @page_title unless @page_title.blank?
     title << ' - ' + h(current_account.name)
     title
