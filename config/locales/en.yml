@@ -175,6 +175,16 @@ en:
     teams: Teams
     compare: Compare
     add_match: Add match
+  login:
+    unimpersonate: Unimpersonate
+    profile: Profile
+    manage_account: Manage account
+    log_out: Log out
+  forms:
+    create: Create
+    creating: Creating
+    update: Update
+    updating: Updating
   header:
     add_one_more: Add one more user
     add_x_more_users: Add {users_needed} more users
@@ -213,6 +223,7 @@ en:
   matches:
     matches: Matches
     no_matches: There are no matches in the database yet.
+    matches_per_day: Matches per day
     feeds:
       all: All matches
       link_all: Atom feed (all matches)
@@ -254,6 +265,12 @@ en:
     show_team_details: Show team details
   comments:
     comment: Comment
+    added: Comment added successfully.
+    add_error: Unable to save comment.
+    updated: Changes saved successfully.
+    update_error: Please enter a comment.
+    save_changes: Save changes
+    cancel: Cancel
   compare:
     compare: Compare
     select_users: Please select users to compare to the right.
@@ -278,8 +295,40 @@ en:
     no_games: There are no games in the system. Please <a href="{new_game_path}">create a game</a> to get started.
     administration: Administration
     create: Create game
+    edit_game: Edit game
+    created: Game created.
+    updated: Changes to game saved successfully!
+    form:
+      basics: Basics
+      name: Name
+      team_size: Team size
+      cannot_change: This value cannot be changed because there are matches in the database.
+      team_size_help: Number of players on each team
+      details: Details
+      player_roles: Player roles
+      player_roles_help: "Player roles, one per line. E.g.: Offense, Defense."
+      rules: Rules
+      newbie_limit: Newbie limit
+      newbie_limit_help: Number of matches a user must play to be part of normal rankings.
   users:
+    users: Users
+    edit_user: Edit user
+    remove_user: Remove user
+    remove_user_sure: Remove user. Are you sure?
+    super_admin: Super Admin
+    admin: Admin
+    normal: Normal
     create_user: Create user
+    edit: Edit
+    disable: Disable
+    enable: Enable
+    remove: Remove
+    are_you_sure: Are you sure?
+    administration: Administration
+    user_created: User created successfully.
+    user_saved: User saved successfully.
+    user_removed: User deleted.
+    your_user_removed: You have removed your account.
     form:
       basics: Basics
       login: Login
@@ -310,3 +359,10 @@ en:
     winning_percentage: Winning percentage
     percent_of_matches: % of matches
     show_teams_matches: Show this team's matches
+  accounts:
+    accounts: Accounts
+    name: Name
+    domain: Domain
+    users: Users
+    matches: Matches
+    created: Created

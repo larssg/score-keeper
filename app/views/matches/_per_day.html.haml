@@ -1,6 +1,6 @@
 #matches_per_day
   %h3= t('matches.per_day.per_day')
-  /= image_tag matches_per_day_chart(matches_per_day), :class => 'chart', :alt => t('matches.per_day.chart') if matches_per_day.size > 1
+  = image_tag matches_per_day_chart(matches_per_day), :class => 'chart', :alt => t('matches.per_day.chart') if matches_per_day.size > 1
 
   .list
     %table

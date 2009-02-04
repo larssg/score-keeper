@@ -13,7 +13,7 @@ class GamesController < ApplicationController
   def create
     @game = current_account.games.build(params[:game])
     if @game.save
-      flash[:notice] = 'Game created.'[]
+      flash[:notice] = t('games.created')
       redirect_to games_url
     else
       render :action => 'new'
@@ -27,7 +27,7 @@ class GamesController < ApplicationController
   def update
     @game = current_account.games.find(params[:id])
     if @game.update_attributes(params[:game])
-      flash[:notice] = 'Changes to game saved successfully!'[]
+      flash[:notice] = t('games.updated')
       redirect_to games_url
     else
       render :action => 'edit'
