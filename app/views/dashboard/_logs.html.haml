@@ -1,11 +1,11 @@
 #logs
   = link_to image_tag('rss.gif'), log_feed_url(current_game), :class => 'rss'
   
-  %h3= 'Events'[]
+  %h3= 'Events'
   .list
     - @logs.each do |log|
       %span.log{ :class => log == @logs.last ? 'last' : nil }
         = log_link log
         
 - content_for :head do
-  = auto_discovery_link_tag :atom, log_feed_url(current_game), :title => 'Events for {account}'[:event_for_account, current_account.name]
+  = auto_discovery_link_tag :atom, log_feed_url(current_game), :title => 'Events for {account}'.gsub('{account}', current_account.name)

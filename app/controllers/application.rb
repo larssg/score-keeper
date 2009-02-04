@@ -98,10 +98,10 @@ class ApplicationController < ActionController::Base
 
   def time_periods
     [
-     ['30 days'[], 30],
-     ['90 days'[], 90],
-     ['180 days'[], 180],
-     ['360 days'[], 360]
+     [t('time_periods.days_30'), 30],
+     [t('time_periods.days_90'), 90],
+     [t('time_periods.days_180'), 180],
+     [t('time_periods.days_360'), 360]
     ]
   end
   helper_method :time_periods
@@ -169,6 +169,6 @@ class ApplicationController < ActionController::Base
 
   def set_locale
     session[:locale] = params[:locale] if params[:locale]
-    I18n.locale = session[:locale] || 'en'
+    I18n.locale = session[:locale] || I18n.default_locale
   end
 end

@@ -1,11 +1,11 @@
 - if @selected_player_ids.size > 0
   #graph
-    %h3= 'Ranking chart'[]
+    %h3= t('compare.ranking_chart')
     - form_tag game_comparisons_path(current_game), :method => :get do
       - @selected_player_ids.each do |player_id|
         = hidden_field_tag 'user[]', player_id
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
-      = submit_tag 'Update'[]
+      = submit_tag t('compare.update')
     
     .legend
       - @indexed_sorted_players.each do |isp|

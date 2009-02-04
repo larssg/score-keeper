@@ -9,13 +9,13 @@ module DashboardHelper
       return lc.to_url
     end
   end
-  
+
   def position_icon(position)
     return '' if position.blank?
-    
+
     now = position[:now].to_i
     before = position[:then].to_i
-    
+
     if now < before
       return image_tag('arrow_up.png')
     elsif now == before

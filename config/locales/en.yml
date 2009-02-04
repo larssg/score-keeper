@@ -174,14 +174,110 @@ en:
     matches: Matches
     teams: Teams
     compare: Compare
+    add_match: Add match
+  header:
+    add_one_more: Add one more user
+    add_x_more_users: Add {users_needed} more users
+  dashboard:
+    dashboard: Dashboard
+    leader: Leader
+    no_matches: There are no matches in the database yet.
+    news: News
+    totals:
+      totals: Totals
+      matches: Matches
+      points: Points
+      all_time_high: All time high
+      all_time_low: All time low
+      by: by
+    leader_boards:
+      rankings: Rankings
+      newbies: Newbies
+      newbie_limit: less than {limit} matches
+      person: Person
+      ranking: Ranking
+      played: Played
+      won: Won
+      lost: Lost
+      win_percentage: Win %
+      goal_diff_avg: Goal difference average
+      diff_avg: Diff. avg
+      show_users_matches: Show this users's matches
+      position_arrow_help: "Numbers in parenthesis: user's position 7 days ago. The arrow indicates position movement."
+      compare: Compare
+    recent_matches:
+      recent_matches: Recent matches
+      team_one: Team one
+      score: Score
+      team_two: Team two
   matches:
     matches: Matches
     no_matches: There are no matches in the database yet.
     feeds:
       all: All matches
+      link_all: Atom feed (all matches)
+      filtered: Filtered
+      link_filtered: Atom feed (filtered)
+    show_teams_matches: Show this team's matches
+    comment: Comment on this match
+    played_at: Played at
+    winner: Winner
+    loser: Loser
+    player: Player
+    score: Score
+    before: Before
+    awarded: Awarded
+    after: After
+    comments: Comments
+    add_comment: Add comment
+    per_day:
+      per_day: Matches played per day
+      chart: Chart showing matches per day
+      date: Date
+      matches: Matches
+    add:
+      team: Team
+      score: Score
+      add: Add
+      adding: Adding
+      cancel: Cancel
+    team_one: Team one
+    team_two: Team two
+    created: Created
+    matches_for_x_y: Showing matches for <b>{first}</b> and <b>{second}</b>
+    matches_for_x: Showing matches for <b>{first}</b>
+    by_user: by {user}
+    delete: Delete
+    delete_match_warning: Delete match. Are you sure?\n\nBe aware that deleting a match may take a while.
+    show_all_matches: Show all matches
+    show_user_details: Show user details
+    show_team_details: Show team details
+  comments:
+    comment: Comment
   compare:
-    select_users: Please select users to compare to the right.
     compare: Compare
+    select_users: Please select users to compare to the right.
+    ranking_chart: Ranking chart
+    update: Update
+  time_periods:
+    days_30: 30 days
+    days_90: 90 days
+    days_180: 180 days
+    days_360: 360 days
+  games:
+    switch:
+      switch: Switch game
+      yours: Your games
+      other: Other games
+      new: New game...
+    name: Name
+    team_size: Team size
+    actions: Actions
+    x_on_x: "{team_size}-on-{team_size}"
+    edit: Edit
+    no_games: There are no games in the system. Please <a href="{new_game_path}">create a game</a> to get started.
+    administration: Administration
+    create: Create game
   users:
     create_user: Create user
     form:
@@ -189,7 +285,7 @@ en:
       login: Login
       full_name: Full name
       display_name: Display name
-      display_name_help: A short version of the user's name, such as first name or nick name
+      display_name_help: "A short version of the user's name, such as first name or nick name"
       email: Email
       time_zone: Time zone
       password: Password
@@ -205,3 +301,12 @@ en:
       updating: Updating
       create_user: Create user
       creating_user: Creating user
+  teams:
+    teams: Teams
+    members: Members
+    total_ranking: Total ranking
+    matches_won: Matches won
+    matches_played: Matches played
+    winning_percentage: Winning percentage
+    percent_of_matches: % of matches
+    show_teams_matches: Show this team's matches
