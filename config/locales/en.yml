@@ -263,6 +263,10 @@ en:
     show_all_matches: Show all matches
     show_user_details: Show user details
     show_team_details: Show team details
+    added: Match added successfully.
+    not_added: The match could not be saved. Please try again.
+    today: Today
+    yesterday: Yesterday
   comments:
     comment: Comment
     added: Comment added successfully.
@@ -359,6 +363,16 @@ en:
     winning_percentage: Winning percentage
     percent_of_matches: % of matches
     show_teams_matches: Show this team's matches
+    ranking_chart: Ranking chart
+    update: Update
+    played: Played
+    win_percentage: Win %
+    won: Won
+    lost: Lost
+    opponents: Opponents
+    matches: Matches
+    player_and_player: "{first} and {second}"
+    show_matches: Show matches
   accounts:
     accounts: Accounts
     name: Name
@@ -366,3 +380,9 @@ en:
     users: Users
     matches: Matches
     created: Created
+    settings: Account settings
+    basics: Basics
+    name: Name
+    time_zone: Time zone
+    time_zone_help: Default time zone for users in the account.
+    update: Update

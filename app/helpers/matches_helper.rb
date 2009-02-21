@@ -12,8 +12,8 @@ module MatchesHelper
 
   def human_date(date)
     date = date.to_time
-    return 'Today'[] if date.in_time_zone.to_date == Time.now.in_time_zone.to_date
-    return 'Yesterday'[] if date.in_time_zone.to_date == 1.day.ago.in_time_zone.to_date
+    return t('matches.today') if date.in_time_zone.to_date == Time.now.in_time_zone.to_date
+    return t('matches.yesterday') if date.in_time_zone.to_date == 1.day.ago.in_time_zone.to_date
     I18n.l(date.to_date, :format => 'long')
   end
 end

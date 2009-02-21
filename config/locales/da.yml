@@ -18,9 +18,6 @@ da:
     percentage: 
       format: 
         delimiter: ""
-    precision: 
-      format: 
-        delimiter: ""
     currency: 
       format: 
         format: "%u %n"
@@ -28,12 +25,15 @@ da:
         separator: ","
         precision: 2
         delimiter: .
+    precision: 
+      format: 
+        delimiter: ""
   games: 
+    actions: Handlinger
     name: Navn
     edit_game: Rediger spil
-    actions: Handlinger
-    administration: Administration
     edit: Rediger
+    administration: Administration
     switch: 
       new: Nyt spil...
       switch: Skift spil
@@ -43,17 +43,17 @@ da:
     x_on_x: "{team_size} mod {team_size}"
     no_games: Der er ingen spil i systemet. <a href="{new_game_path}">Opret et spil</a> for at komme i gang.
     form: 
-      name: Navn
       team_size_help: "Antal spillere p\xC3\xA5 hvert hold"
+      name: Navn
       player_roles: Spillerroller
       details: Detaljer
-      cannot_change: "Denne indstiling kan ikke \xC3\xA6ndres da der er registreret kampe p\xC3\xA5 dette spil."
       rules: Regler
+      cannot_change: "Denne indstiling kan ikke \xC3\xA6ndres da der er registreret kampe p\xC3\xA5 dette spil."
       player_roles_help: "Spillerroller, en per linie. F.eks.: Angreb, Forsvar"
       team_size: "Holdst\xC3\xB8rrelse"
       basics: "Grundl\xC3\xA6ggende"
-      newbie_limit_help: "Antal kampe en bruger skal spille for at f\xC3\xA5 tildelt en stilling."
       newbie_limit: "Begynder-gr\xC3\xA6nse"
+      newbie_limit_help: "Antal kampe en bruger skal spille for at f\xC3\xA5 tildelt en stilling."
     team_size: "Holdst\xC3\xB8rrelse"
     create: Opret spil
     updated: "\xC3\x86ndringerne er gemt."
@@ -62,37 +62,32 @@ da:
     errors: 
       messages: 
         greater_than_or_equal_to: "skal v\xC3\xA6re st\xC3\xB8rre end eller lig med {{count}}"
-        confirmation: stemmer ikke overens
         less_than_or_equal_to: "skal v\xC3\xA6re mindre end eller lig med {{count}}"
+        confirmation: stemmer ikke overens
         blank: skal udfyldes
         exclusion: er reserveret
         invalid: er ikke gyldig
         odd: "skal v\xC3\xA6re ulige"
-        even: "skal v\xC3\xA6re lige"
         too_short: er for kort (minimum {{count}} tegn)
         empty: "m\xC3\xA5 ikke udelades"
         wrong_length: "har forkert l\xC3\xA6ngde (skulle v\xC3\xA6re {{count}} tegn)"
+        even: "skal v\xC3\xA6re lige"
         less_than: "skal v\xC3\xA6re mindre end {{count}}"
-        greater_than: "skal v\xC3\xA6re st\xC3\xB8rre end {{count}}"
         equal_to: "skal v\xC3\xA6re lig med {{count}}"
+        greater_than: "skal v\xC3\xA6re st\xC3\xB8rre end {{count}}"
+        accepted: skal accepteres
         taken: er allerede brugt
         too_long: er for lang (maksimum {{count}} tegn)
-        accepted: skal accepteres
-        not_a_number: er ikke et tal
         inclusion: er ikke i listen
+        not_a_number: er ikke et tal
       template: 
         body: "Der var problemer med f\xC3\xB8lgende felter:"
         header: 
           one: En fejl forhindrede {{model}} i at blive gemt
           other: "{{count}} fejl forhindrede denne {{model}} i at blive gemt"
-  time_periods: 
-    days_90: 90 dage
-    days_180: 180 dage
-    days_360: 360 dage
-    days_30: 30 dage
   dashboard: 
-    leader: Nummer 1
     dashboard: Forside
+    leader: Nummer 1
     no_matches: Der er ingen kampe i databasen endnu.
     recent_matches: 
       recent_matches: Seneste kampe
@@ -102,18 +97,18 @@ da:
     leader_boards: 
       rankings: Stilling
       won: Vundet
-      newbies: Begyndere
       person: Person
-      position_arrow_help: "Tallene i parentes: brugerens stilling 7 dage siden. Pilen indikerer stillingsforl\xC3\xB8b."
+      newbies: Begyndere
       ranking: Stilling
+      position_arrow_help: "Tallene i parentes: brugerens stilling 7 dage siden. Pilen indikerer stillingsforl\xC3\xB8b."
       diff_avg: Gns.forsk.
       goal_diff_avg: "Gennemsnitlig m\xC3\xA5lforskel"
-      lost: Tabt
       played: Spillet
       newbie_limit: "mindre end {limit}\xC2\xA0kampe"
       show_users_matches: Vis denne brugers kampe
-      win_percentage: Vind %
+      lost: Tabt
       compare: Sammenlign
+      win_percentage: Vind %
     news: Nyheder
     totals: 
       by: af
@@ -122,23 +117,38 @@ da:
       points: Point
       totals: Totaler
       matches: Kampe
+  time_periods: 
+    days_90: 90 dage
+    days_180: 180 dage
+    days_360: 360 dage
+    days_30: 30 dage
+  teams: 
+    won: Vundet
+    winning_percentage: Procent vundne
+    ranking_chart: Stillingsgraf
+    matches_won: Kampe vundet
+    teams: Hold
+    opponents: Modstandere
+    total_ranking: Samlet stilling
+    player_and_player: "{first} og {second}"
+    percent_of_matches: "% af kampe"
+    members: Medlemmer
+    played: Spillet
+    show_matches: Vis kampe
+    lost: Tabt
+    update: Opdater
+    matches_played: Kampe spillet
+    win_percentage: Vind %
+    show_teams_matches: Vis dette holds kampe
+    matches: Kampe
   comments: 
-    comment: Kommentar
     added: Kommentaren er gemt.
-    save_changes: "Gem \xC3\xA6ndringer"
+    comment: Kommentar
     add_error: Kunne ikke gemme kommentaren.
+    save_changes: "Gem \xC3\xA6ndringer"
     cancel: Fortryd
     update_error: Indtast venligst en kommentar.
     updated: "\xC3\x86ndringerne er gemt."
-  teams: 
-    winning_percentage: Procent vundne
-    matches_won: Kampe vundet
-    teams: Hold
-    total_ranking: Samlet stilling
-    percent_of_matches: "% af kampe"
-    members: Medlemmer
-    matches_played: Kampe spillet
-    show_teams_matches: Vis dette holds kampe
   time: 
     am: "f\xC3\xB8r middag"
     formats: 
@@ -164,10 +174,6 @@ da:
     - oktober
     - november
     - december
-    order: 
-    - :day
-    - :month
-    - :year
     abbr_day_names: 
     - !binary |
       c8O4
@@ -180,6 +186,10 @@ da:
     - !binary |
       bMO4
 
+    order: 
+    - :day
+    - :month
+    - :year
     formats: 
       default: "%d.%m.%Y"
       short: "%e. %b %Y"
@@ -206,67 +216,72 @@ da:
     - okt
     - nov
     - dec
-  support: 
-    array: 
-      skip_last_comma: true
-      sentence_connector: og
   forms: 
     creating: Opretter
     create: Opret
     update: Opdater
     updating: Opdaterer
+  support: 
+    array: 
+      skip_last_comma: true
+      sentence_connector: og
   accounts: 
     name: Navn
+    time_zone_help: "Standard tidszone for brugerne p\xC3\xA5 denne konto."
     domain: "Dom\xC3\xA6ne"
     accounts: Konti
+    settings: Kontoindstillinger
+    basics: "Grundl\xC3\xA6ggende"
     users: Brugere
-    created: Oprettet
+    time_zone: Tidszone
+    update: Opdater
     matches: Kampe
+    created: Oprettet
   footer: 
     source_code: Kildekode
-    feedback: Feedback
     project_home: Projektets hjemmeside
+    feedback: Feedback
     issue_tracker: Bug tracker
   users: 
     normal: Normal
+    edit: Rediger
     user_removed: Bruger slettet.
     administration: Administration
-    edit: Rediger
-    super_admin: Superadmin
-    user_created: Bruger oprettet.
     are_you_sure: Er du sikker?
     edit_user: Rediger bruger
-    create_user: Opret bruger
+    user_created: Bruger oprettet.
+    super_admin: Superadmin
     remove_user_sure: Fjern bruger. Er du sikker?
-    your_user_removed: Du har fjernet din konto.
+    create_user: Opret bruger
     admin: Admin
+    your_user_removed: Du har fjernet din konto.
     enable: Aktiver
     form: 
       picture_help: "Dette vil blive vist p\xC3\xA5 bruger-detalje siden, ved kommentarer og p\xC3\xA5 forsiden. Billedets st\xC3\xB8rrelse bliver automatisk tilpasset."
       super_admin: Superadministrator
       create_user: Opret bruger
+      display_name_help: "En kort udgave af brugerens navn, s\xC3\xA5som fornavn eller \xC3\xB8genavn"
       confirm_password: "Bekr\xC3\xA6ft kodeord"
       advanced: Avanceret
-      display_name_help: "En kort udgave af brugerens navn, s\xC3\xA5som fornavn eller \xC3\xB8genavn"
       account_admin_help: Tillad brugeren af redigere brugere og kontoindstillinger
-      password_help: Udfyld kodeord-felterne for at skifte kodeord.
+      account_admin: Kontoadministrator
       full_name: Fulde navn
       basics: "Grundl\xC3\xA6ggende"
-      account_admin: Kontoadministrator
+      password_help: Udfyld kodeord-felterne for at skifte kodeord.
       display_name: Kort navn
       time_zone: Tidszone
+      update: Opdater
       password: Kodeord
       login: Brugernavn
-      update: Opdater
       updating: Opdaterer
       email: E-mail
-      creating_user: Opretter bruger
       picture: Billede
+      creating_user: Opretter bruger
     remove: Fjern
+    disable: Deaktiver
     remove_user: Fjern bruger
     user_saved: Bruger gemt.
     users: Brugere
-    disable: Deaktiver
   datetime: 
     distance_in_words: 
       less_than_x_minutes: 
@@ -278,9 +293,6 @@ da:
       x_seconds: 
         one: et sekund
         other: "{{count}} sekunder"
-      about_x_hours: 
-        one: cirka en time
-        other: cirka {{count}} timer
       less_than_x_seconds: 
         one: mindre end et sekund
         other: mindre end {{count}} sekunder
@@ -290,6 +302,9 @@ da:
       x_minutes: 
         one: et minut
         other: "{{count}} minutter"
+      about_x_hours: 
+        one: cirka en time
+        other: cirka {{count}} timer
       about_x_years: 
         one: "cirka et \xC3\xA5r"
         other: "cirka {{count}} \xC3\xA5r"
@@ -302,21 +317,21 @@ da:
       half_a_minute: et halvt minut
   login: 
     sign_in: Log ind
+    forgot_password: Glemt kodeord eller brugernavn?
     log_out: Log af
     remember_me: Husk mig
-    forgot_password: Glemt kodeord eller brugernavn?
     unimpersonate: Unimpersonate
     profile: Profil
     invalid_login: Ugyldigt brugernavn eller kodeord
     password: Kodeord
-    login: Brugernavn
     signing_in: Logger ind
+    login: Brugernavn
     manage_account: Administrer konto
   compare: 
     ranking_chart: Stillingsgraf
+    update: Opdater
     select_users: "V\xC3\xA6lg venligst hvilke brugere der skal sammenlignes til h\xC3\xB8jre."
     compare: Sammenlign
-    update: Opdater
   menu: 
     games: Spil
     dashboard: Forside
@@ -333,8 +348,9 @@ da:
     create_users: Opret brugere.
     add_match: "Opret den f\xC3\xB8rste kamp."
   matches: 
-    comment: "Komment\xC3\xA9r denne kamp"
     matches_for_x: Kampe for <b>{first}</b>
+    added: "Kamp tilf\xC3\xB8jet."
+    comment: "Komment\xC3\xA9r denne kamp"
     winner: Vinder
     add: 
       add: "Tilf\xC3\xB8j"
@@ -342,38 +358,43 @@ da:
       adding: "Tilf\xC3\xB8jer"
       team: Hold
       score: Point
+    player: Spiller
+    today: I dag
+    show_all_matches: Vis alle kampe
     feeds: 
       all: Alle kampe
       filtered: Filtreret
       link_all: Atom feed (alle kampe)
       link_filtered: Atom feed (filtreret)
-    player: Spiller
-    show_all_matches: Vis alle kampe
     delete: Slet
-    played_at: Spillet
+    not_added: "Kampen kunne ikke gemmes. Pr\xC3\xB8v venligst igen."
     comments: Kommentarer
+    played_at: Spillet
+    yesterday: !binary |
+      SSBnw6Vy
+
     no_matches: Der er ingen kampe i databasen endnu.
-    show_team_details: Vis hold
     after: Efter
-    team_one: Hold 1
     per_day: 
       per_day: Kampe spillet per dag
       date: Dato
       chart: Graf visende kampe per dag
       matches: Kampe
-    matches_per_day: Kampe per dag
+    show_team_details: Vis hold
+    team_one: Hold 1
     matches_for_x_y: Kampe for <b>{first}</b> og <b>{second}</b>
+    matches_per_day: Kampe per dag
     awarded: Tildelt
-    delete_match_warning: "Slet kamp. Er du sikker?\\n\\nV\xC3\xA6r opm\xC3\xA6rksom p\xC3\xA5 at det kan tage et stykke tid for systemet at gennemf\xC3\xB8re sletningen."
     loser: Taber
+    delete_match_warning: "Slet kamp. Er du sikker?\\n\\nV\xC3\xA6r opm\xC3\xA6rksom p\xC3\xA5 at det kan tage et stykke tid for systemet at gennemf\xC3\xB8re sletningen."
     by_user: af {user}
-    show_user_details: Vis bruger
     score: Score
     before: !binary |
       RsO4cg==
 
-    created: Oprettet
-    team_two: Hold 2
+    show_user_details: Vis bruger
+    show_teams_matches: Vis dette holds kampe
     add_comment: "Tilf\xC3\xB8j kommentar"
     matches: Kampe
-    show_teams_matches: Vis dette holds kampe
+    team_two: Hold 2
+    created: Oprettet

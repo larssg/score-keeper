@@ -1,5 +1,5 @@
 atom_feed(:url => formatted_game_matches_url(@game, :atom)) do |feed|
-  feed.title('Matches'[])
+  feed.title(t('matches.matches'))
   feed.updated(@matches.first ? @matches.first.created_at : Time.now.utc)
 
   @matches.each do |match|
