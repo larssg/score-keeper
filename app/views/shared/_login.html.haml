@@ -6,12 +6,12 @@
 
   |
   - unless session[:real_user_id].blank?
-    = link_to 'Unimpersonate'[], unimpersonate_sessions_path, :method => :put
+    = link_to t('login.unimpersonate'), unimpersonate_sessions_path, :method => :put
     |
-  = link_to 'Profile'[], edit_user_path(current_user)
+  = link_to t('login.profile'), edit_user_path(current_user)
   - if account_admin?
     |
-    = link_to 'Manage account'[], edit_account_path(current_account)
+    = link_to t('login.manage_account'), edit_account_path(current_account)
 
   |
-  = link_to 'Log out'[], logout_path
+  = link_to t('login.log_out'), logout_path

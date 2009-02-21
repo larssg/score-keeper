@@ -1,21 +1,21 @@
-- title 'Teams'[], :show => true
+- title t('teams.teams'), :show => true
 
 .list
   %table.teams{ :id => 'teams' }
     %thead
       %tr
-        %th= 'Members'[]
-        %th.ranking= 'Total ranking'[]
-        %th= 'Matches won'[]
-        %th= 'Matches played'[]
-        %th= 'Winning percentage'[]
-        %th{ :colspan => current_game.team_size }= '% of matches'[]
-        
+        %th= t('teams.members')
+        %th.ranking= t('teams.total_ranking')
+        %th= t('teams.matches_won')
+        %th= t('teams.matches_played')
+        %th= t('teams.winning_percentage')
+        %th{ :colspan => current_game.team_size }= t('teams.percent_of_matches')
+
     %tbody
       - @teams.each do |team|
         %tr{ :class => cycle('even', 'odd') }
           %td.user
-            = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(current_game, :filter => team[:team_ids])
+            = link_to image_tag('icons/game.png', :class => 'team', :alt => t('show_teams_matches')), game_matches_path(current_game, :filter => team[:team_ids])
             = link_to image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(current_game, team[:team_ids])
             = team[:players].collect { |u| user_link(current_game, u)}.join(', ')
 

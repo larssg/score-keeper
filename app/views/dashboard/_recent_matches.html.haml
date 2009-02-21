@@ -1,10 +1,10 @@
 .list
-  %h3= 'Recent matches'[]
+  %h3= t('dashboard.recent_matches.recent_matches')
   %table
     %tr
-      %th.name= 'Team one'[]
-      %th.score= 'Score'[]
-      %th.name= 'Team two'[]
+      %th.name= t('dashboard.recent_matches.team_one')
+      %th.score= t('dashboard.recent_matches.score')
+      %th.name= t('dashboard.recent_matches.team_two')
       %th &nbsp;
 
     - recent_matches.each do |match|

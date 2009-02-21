@@ -6,9 +6,9 @@
         %li.current_game
           = render :partial => 'shared/current_game'
     
-      %li.admin{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to 'Games'[], games_path
+      %li.admin{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to t('menu.games'), games_path
     - if current_game.nil? || current_game.new_record?
-      %li{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to 'Games'[], games_path
-    %li{ :class => controller.controller_name == 'users' ? 'current' : nil }= link_to 'Users'[], users_path
+      %li{ :class => controller.controller_name == 'games' ? 'current' : nil }= link_to t('menu.games'), games_path
+    %li{ :class => controller.controller_name == 'users' ? 'current' : nil }= link_to t('menu.users'), users_path
     - if admin?
-      %li{ :class => controller.controller_name == 'accounts' ? 'current' : nil }= link_to 'Accounts'[], accounts_path
+      %li{ :class => controller.controller_name == 'accounts' ? 'current' : nil }= link_to t('menu.accounts'), accounts_path

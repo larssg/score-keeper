@@ -1,0 +1,388 @@
+--- 
+en: 
+  number: 
+    format: 
+      separator: .
+      precision: 3
+      delimiter: ","
+    human: 
+      format: 
+        precision: 1
+        delimiter: ""
+    percentage: 
+      format: 
+        delimiter: ""
+    currency: 
+      format: 
+        format: "%u%n"
+        unit: $
+        separator: .
+        precision: 2
+        delimiter: ","
+    precision: 
+      format: 
+        delimiter: ""
+  activerecord: 
+    errors: 
+      models: 
+      messages: 
+        greater_than_or_equal_to: must be greater than or equal to {{count}}
+        less_than_or_equal_to: must be less than or equal to {{count}}
+        confirmation: doesn't match confirmation
+        blank: can't be blank
+        exclusion: is reserved
+        invalid: is invalid
+        odd: must be odd
+        too_short: is too short (minimum is {{count}} characters)
+        empty: can't be empty
+        wrong_length: is the wrong length (should be {{count}} characters)
+        even: must be even
+        less_than: must be less than {{count}}
+        equal_to: must be equal to {{count}}
+        greater_than: must be greater than {{count}}
+        accepted: must be accepted
+        taken: has already been taken
+        too_long: is too long (maximum is {{count}} characters)
+        inclusion: is not included in the list
+        not_a_number: is not a number
+      template: 
+        body: "There were problems with the following fields:"
+        header: 
+          one: 1 error prohibited this {{model}} from being saved
+          other: "{{count}} errors prohibited this {{model}} from being saved"
+  time: 
+    am: am
+    formats: 
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      short: "%d %b %H:%M"
+      long: "%B %d, %Y %H:%M"
+    pm: pm
+  date: 
+    month_names: 
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_day_names: 
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    order: 
+    - :year
+    - :month
+    - :day
+    formats: 
+      default: "%Y-%m-%d"
+      short: "%b %d"
+      long: "%B %d, %Y"
+    day_names: 
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_month_names: 
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+  support: 
+    array: 
+      skip_last_comma: false
+      sentence_connector: and
+  datetime: 
+    distance_in_words: 
+      less_than_x_minutes: 
+        one: less than a minute
+        other: less than {{count}} minutes
+      x_days: 
+        one: 1 day
+        other: "{{count}} days"
+      x_seconds: 
+        one: 1 second
+        other: "{{count}} seconds"
+      less_than_x_seconds: 
+        one: less than 1 second
+        other: less than {{count}} seconds
+      x_months: 
+        one: 1 month
+        other: "{{count}} months"
+      x_minutes: 
+        one: 1 minute
+        other: "{{count}} minutes"
+      about_x_hours: 
+        one: about 1 hour
+        other: about {{count}} hours
+      about_x_years: 
+        one: about 1 year
+        other: about {{count}} years
+      about_x_months: 
+        one: about 1 month
+        other: about {{count}} months
+      over_x_years: 
+        one: over 1 year
+        other: over {{count}} years
+      half_a_minute: half a minute
+  login: 
+    sign_in: Sign in
+    forgot_password: Forgot password or username?
+    remember_me: Remember me
+    invalid_login: Invalid login or password
+    password: Password
+    login: Login
+    signing_in: Signing in
+  getting_started:
+    heading: Getting started
+    complete_these_steps: Complete the following steps to get started.
+    create_game: Create a game.
+    create_users: Create users.
+    add_match: Add the first match.
+  footer:
+    project_home: Project home
+    feedback: Feedback
+    issue_tracker: Issue tracker
+    source_code: Source code
+  menu:
+    games: Games
+    users: Users
+    accounts: Accounts
+    dashboard: Dashboard
+    matches: Matches
+    teams: Teams
+    compare: Compare
+    add_match: Add match
+  login:
+    unimpersonate: Unimpersonate
+    profile: Profile
+    manage_account: Manage account
+    log_out: Log out
+  forms:
+    create: Create
+    creating: Creating
+    update: Update
+    updating: Updating
+  header:
+    add_one_more: Add one more user
+    add_x_more_users: Add {users_needed} more users
+  dashboard:
+    dashboard: Dashboard
+    leader: Leader
+    no_matches: There are no matches in the database yet.
+    news: News
+    totals:
+      totals: Totals
+      matches: Matches
+      points: Points
+      all_time_high: All time high
+      all_time_low: All time low
+      by: by
+    leader_boards:
+      rankings: Rankings
+      newbies: Newbies
+      newbie_limit: less than {limit} matches
+      person: Person
+      ranking: Ranking
+      played: Played
+      won: Won
+      lost: Lost
+      win_percentage: Win %
+      goal_diff_avg: Goal difference average
+      diff_avg: Diff. avg
+      show_users_matches: Show this users's matches
+      position_arrow_help: "Numbers in parenthesis: user's position 7 days ago. The arrow indicates position movement."
+      compare: Compare
+    recent_matches:
+      recent_matches: Recent matches
+      team_one: Team one
+      score: Score
+      team_two: Team two
+  matches:
+    matches: Matches
+    no_matches: There are no matches in the database yet.
+    matches_per_day: Matches per day
+    feeds:
+      all: All matches
+      link_all: Atom feed (all matches)
+      filtered: Filtered
+      link_filtered: Atom feed (filtered)
+    show_teams_matches: Show this team's matches
+    comment: Comment on this match
+    played_at: Played at
+    winner: Winner
+    loser: Loser
+    player: Player
+    score: Score
+    before: Before
+    awarded: Awarded
+    after: After
+    comments: Comments
+    add_comment: Add comment
+    per_day:
+      per_day: Matches played per day
+      chart: Chart showing matches per day
+      date: Date
+      matches: Matches
+    add:
+      team: Team
+      score: Score
+      add: Add
+      adding: Adding
+      cancel: Cancel
+    team_one: Team one
+    team_two: Team two
+    created: Created
+    matches_for_x_y: Showing matches for <b>{first}</b> and <b>{second}</b>
+    matches_for_x: Showing matches for <b>{first}</b>
+    by_user: by {user}
+    delete: Delete
+    delete_match_warning: Delete match. Are you sure?\n\nBe aware that deleting a match may take a while.
+    show_all_matches: Show all matches
+    show_user_details: Show user details
+    show_team_details: Show team details
+    added: Match added successfully.
+    not_added: The match could not be saved. Please try again.
+    today: Today
+    yesterday: Yesterday
+  comments:
+    comment: Comment
+    added: Comment added successfully.
+    add_error: Unable to save comment.
+    updated: Changes saved successfully.
+    update_error: Please enter a comment.
+    save_changes: Save changes
+    cancel: Cancel
+  compare:
+    compare: Compare
+    select_users: Please select users to compare to the right.
+    ranking_chart: Ranking chart
+    update: Update
+  time_periods:
+    days_30: 30 days
+    days_90: 90 days
+    days_180: 180 days
+    days_360: 360 days
+  games:
+    switch:
+      switch: Switch game
+      yours: Your games
+      other: Other games
+      new: New game...
+    name: Name
+    team_size: Team size
+    actions: Actions
+    x_on_x: "{team_size}-on-{team_size}"
+    edit: Edit
+    no_games: There are no games in the system. Please <a href="{new_game_path}">create a game</a> to get started.
+    administration: Administration
+    create: Create game
+    edit_game: Edit game
+    created: Game created.
+    updated: Changes to game saved successfully!
+    form:
+      basics: Basics
+      name: Name
+      team_size: Team size
+      cannot_change: This value cannot be changed because there are matches in the database.
+      team_size_help: Number of players on each team
+      details: Details
+      player_roles: Player roles
+      player_roles_help: "Player roles, one per line. E.g.: Offense, Defense."
+      rules: Rules
+      newbie_limit: Newbie limit
+      newbie_limit_help: Number of matches a user must play to be part of normal rankings.
+  users:
+    users: Users
+    edit_user: Edit user
+    remove_user: Remove user
+    remove_user_sure: Remove user. Are you sure?
+    super_admin: Super Admin
+    admin: Admin
+    normal: Normal
+    create_user: Create user
+    edit: Edit
+    disable: Disable
+    enable: Enable
+    remove: Remove
+    are_you_sure: Are you sure?
+    administration: Administration
+    user_created: User created successfully.
+    user_saved: User saved successfully.
+    user_removed: User deleted.
+    your_user_removed: You have removed your account.
+    form:
+      basics: Basics
+      login: Login
+      full_name: Full name
+      display_name: Display name
+      display_name_help: "A short version of the user's name, such as first name or nick name"
+      email: Email
+      time_zone: Time zone
+      password: Password
+      password_help: Fill out the password fields to change password.
+      confirm_password: Confirm password
+      picture: Picture
+      picture_help: This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.
+      advanced: Advanced
+      account_admin: Account administrator
+      account_admin_help: Allow the user to edit users and account settings.
+      super_admin: Super administrator
+      update: Update
+      updating: Updating
+      create_user: Create user
+      creating_user: Creating user
+  teams:
+    teams: Teams
+    members: Members
+    total_ranking: Total ranking
+    matches_won: Matches won
+    matches_played: Matches played
+    winning_percentage: Winning percentage
+    percent_of_matches: % of matches
+    show_teams_matches: Show this team's matches
+    ranking_chart: Ranking chart
+    update: Update
+    played: Played
+    win_percentage: Win %
+    won: Won
+    lost: Lost
+    opponents: Opponents
+    matches: Matches
+    player_and_player: "{first} and {second}"
+    show_matches: Show matches
+  accounts:
+    accounts: Accounts
+    name: Name
+    domain: Domain
+    users: Users
+    matches: Matches
+    created: Created
+    settings: Account settings
+    basics: Basics
+    name: Name
+    time_zone: Time zone
+    time_zone_help: Default time zone for users in the account.
+    update: Update

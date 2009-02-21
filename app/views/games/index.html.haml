@@ -2,20 +2,20 @@
   .list
     %table
       %tr
-        %th= 'Name'[]
-        %th= 'Team size'[]
-        %th= 'Actions'[]
+        %th= t('games.name')
+        %th= t('games.team_size')
+        %th= t('games.actions')
       
       - @games.each do |game|
         %tr{ :class => cycle('even', 'odd') }
           %td= link_to h(game.name), session_path('switch_game', :current_game => { :id => game.id }), :method => :put
-          %td= '{team_size}-on-{team_size}'[:team_size, game.team_size, game.team_size]
-          %td= link_to 'Edit', edit_game_path(game)
+          %td= t('games.x_on_x').gsub('{team_size}', game.team_size.to_s)
+          %td= link_to t('games.edit'), edit_game_path(game)
 
 - else
   .list
-    = 'There are no games in the system. Please <a href="{new_game_path}">create a game</a> to get started.'[:no_games, new_game_path]
+    = t('games.no_games').gsub('{new_game_path}', new_game_path)
 
 - content_for :sidebar do
-  %h3= 'Administration'
-  = link_to 'Create game', new_game_path
+  %h3= t('games.administration')
+  = link_to t('games.create'), new_game_path

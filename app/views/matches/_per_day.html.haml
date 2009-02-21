@@ -1,12 +1,12 @@
 #matches_per_day
-  %h3= 'Matches played per day'[] 
-  = image_tag matches_per_day_chart(matches_per_day), :class => 'chart', :alt => 'Chart showing matches per day'[] if matches_per_day.size > 1
+  %h3= t('matches.per_day.per_day')
+  = image_tag matches_per_day_chart(matches_per_day), :class => 'chart', :alt => t('matches.per_day.chart') if matches_per_day.size > 1
 
   .list
     %table
       %tr
-        %th.date= 'Date'[]
-        %th.matches_played= 'Matches'[]
+        %th.date= t('matches.per_day.date')
+        %th.matches_played= t('matches.per_day.matches')
 
       - matches_per_day.each do |day|
         %tr{ :class => cycle('even', 'odd') }
