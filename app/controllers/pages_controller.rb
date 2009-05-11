@@ -1,6 +1,4 @@
 class PagesController < ApplicationController
-  session :off
-
   layout 'public'
 
   def index
