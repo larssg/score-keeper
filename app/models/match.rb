@@ -143,7 +143,7 @@ class Match < ActiveRecord::Base
   def update_positions
     self.positions = self.game.ranked_game_participators
     # Using update_all to avoid callbacks being called
-    Match.update_all("matches.position_ids = '#{self.position_ids}'", "matches.id = #{self.id}")
+    Match.update_all("position_ids = '#{self.position_ids}'", "id = #{self.id}")
   end
 
   def update_after_destroy
