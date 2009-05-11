@@ -1,5 +1,4 @@
 class AccountsController < ApplicationController
-  session :off, :only => [ :new, :create ]
   before_filter :domain_required, :except => [ :new, :create ]
   before_filter :login_required, :except => [ :new, :create ]
   before_filter :must_be_admin, :except => [ :new, :create, :edit, :update ]
