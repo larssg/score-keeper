@@ -48,10 +48,6 @@ textarea {
       font-weight: bold; }
     #hd #links #user {
       display: inline; }
-    #hd #links #languages {
-      padding-left: 10px;
-      display: inline;
-      display: none; }
 
 #menu {
   background-color: #77BBDD; }
