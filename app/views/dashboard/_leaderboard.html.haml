@@ -1,9 +1,9 @@
-.list
+.list.hslice
   %h3
-    = title
+    .entry-title= title
     - if details.length > 0
       %span.details= details
-  %table{ :id => board_id }
+  %table.entry-content{ :id => board_id }
     %thead
       %tr
         %th= '&nbsp;'

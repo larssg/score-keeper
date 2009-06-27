@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(:version => 20081006194834) do
     t.datetime "updated_at"
   end
 
-  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
   add_index "comments", ["match_id"], :name => "index_comments_on_game_id"
+  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "game_participations", :force => true do |t|
     t.integer  "user_id"
@@ -55,8 +55,6 @@ ActiveRecord::Schema.define(:version => 20081006194834) do
     t.integer  "matches_count", :default => 0
   end
 
-  add_index "games", ["account_id"], :name => "index_games_on_account_id"
-
   create_table "logs", :force => true do |t|
     t.integer  "account_id"
     t.integer  "user_id"
@@ -70,8 +68,8 @@ ActiveRecord::Schema.define(:version => 20081006194834) do
   end
 
   add_index "logs", ["account_id"], :name => "index_logs_on_account_id"
-  add_index "logs", ["published_at"], :name => "index_logs_on_published_at"
   add_index "logs", ["game_id"], :name => "index_logs_on_game_id"
+  add_index "logs", ["published_at"], :name => "index_logs_on_published_at"
 
   create_table "matches", :force => true do |t|
     t.datetime "played_at"
@@ -87,10 +85,10 @@ ActiveRecord::Schema.define(:version => 20081006194834) do
     t.integer  "game_id"
   end
 
-  add_index "matches", ["played_on"], :name => "index_games_on_played_on"
   add_index "matches", ["account_id"], :name => "index_games_on_account_id"
   add_index "matches", ["game_id"], :name => "index_matches_on_game_id"
   add_index "matches", ["played_at"], :name => "index_matches_on_played_at"
+  add_index "matches", ["played_on"], :name => "index_games_on_played_on"
   add_index "matches", ["team_one"], :name => "index_matches_on_team_one"
   add_index "matches", ["team_two"], :name => "index_matches_on_team_two"
 
@@ -105,9 +103,9 @@ ActiveRecord::Schema.define(:version => 20081006194834) do
     t.integer  "game_participation_id"
   end
 
-  add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
   add_index "memberships", ["game_id"], :name => "index_memberships_on_game_id"
   add_index "memberships", ["game_participation_id"], :name => "index_memberships_on_game_participation_id"
+  add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
 
   create_table "mugshots", :force => true do |t|
     t.integer  "size"
@@ -142,9 +140,9 @@ ActiveRecord::Schema.define(:version => 20081006194834) do
     t.integer  "account_id"
   end
 
-  add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
-  add_index "teams", ["opponent_ids"], :name => "index_teams_on_opponent_ids"
   add_index "teams", ["account_id"], :name => "index_teams_on_account_id"
+  add_index "teams", ["opponent_ids"], :name => "index_teams_on_opponent_ids"
+  add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
 
   create_table "users", :force => true do |t|
     t.string   "login"

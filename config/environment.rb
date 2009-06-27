@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.2.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -27,8 +27,7 @@ Rails::Initializer.run do |config|
   config.gem 'color-tools', :lib => 'color'
   config.gem 'haml'
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
-  config.gem 'rspec', :lib => 'spec'
-  config.gem 'rspec-rails', :lib => 'spec/rails'
+  config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
   config.gem 'jeremymcanally-context', :lib => 'context', :source => 'http://gems.github.com'
   config.gem 'jeremymcanally-matchy', :lib => 'matchy', :source => 'http://gems.github.com'
 
