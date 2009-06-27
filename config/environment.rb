@@ -27,8 +27,7 @@ Rails::Initializer.run do |config|
   config.gem 'color-tools', :lib => 'color'
   config.gem 'haml'
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
-  config.gem 'rspec', :lib => 'spec'
-  config.gem 'rspec-rails', :lib => 'spec/rails'
+  config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
   config.gem 'jeremymcanally-context', :lib => 'context', :source => 'http://gems.github.com'
   config.gem 'jeremymcanally-matchy', :lib => 'matchy', :source => 'http://gems.github.com'
 
