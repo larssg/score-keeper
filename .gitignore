@@ -11,6 +11,8 @@ doc/app
 config/database.yml
 config/deploy.rb
 public/mugshots
+public/stylesheets/cache
+public/javascripts/cache
 .project
 .loadpath
 nbproject

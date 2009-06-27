@@ -72,4 +72,5 @@ Rails::Initializer.run do |config|
 
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory is automatically loaded
+  config.cache_store = :mem_cache_store, '127.0.0.1:12001'
 end
