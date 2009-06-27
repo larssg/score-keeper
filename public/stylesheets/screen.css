@@ -160,7 +160,7 @@ h2#page_title {
   font-weight: bold;
   margin-top: 1em;
   margin-bottom: 0;
-  background: transparent url(../images/h2_bg.gif) repeat-x scroll 0px 4px; }
+  background: transparent url(/images/h2_bg.gif) repeat-x scroll 0px 4px; }
   h2#page_title span {
     background: #FFFFFF none repeat scroll 0% 0%;
     padding-right: 20px;
@@ -202,7 +202,7 @@ table.form {
     table.form td textarea {
       height: 7em; }
     table.form td input.required {
-      background-image: url(../images/required_bg.gif);
+      background-image: url('/images/required_bg.gif');
       background-repeat: no-repeat;
       background-position: top right; }
     table.form td input.small {
@@ -235,7 +235,7 @@ table.form {
       padding-left: 5px;
       padding-right: 5px; }
       .list table th.header {
-        background-image: url(../images/sort_none.gif);
+        background-image: url('/images/sort_none.gif');
         cursor: pointer;
         font-weight: bold;
         background-repeat: no-repeat;
@@ -243,10 +243,10 @@ table.form {
         padding-right: 20px;
         margin-left: -1px; }
       .list table th.headerSortUp {
-        background-image: url(../images/sort_asc.gif);
+        background-image: url('/images/sort_asc.gif');
         background-color: #3399CC; }
       .list table th.headerSortDown {
-        background-image: url(../images/sort_desc.gif);
+        background-image: url('/images/sort_desc.gif');
         background-color: #3399CC; }
       .list table th a {
         color: #CCEEFF; }
