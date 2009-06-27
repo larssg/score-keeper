@@ -13,7 +13,7 @@
           %span.color{ :style => "background-color: #{colors[isp.last]}" }
           %span.name= link_to isp.first.name, game_user_path(@game, isp.first)
 
-    = graph(formatted_game_comparison_url(current_game, @selected_player_ids.join('-'), :chart, :period => @time_period))
+    = graph(game_comparison_url(current_game, @selected_player_ids.join('-'), :period => @time_period, :format => :chart))
 - else
   #graph= 'Please select users to compare to the right.'[]
 
