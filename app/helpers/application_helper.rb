@@ -1,8 +1,4 @@
-# Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  @@stylesheet_base_name = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'stylesheets', 'base*.css')].first) rescue nil
-  @@javascript_base_name = File.basename(Dir[File.join(RAILS_ROOT, 'public', 'javascripts', 'base*.js')].first) rescue nil
-
   def title(page_title, options = {})
     @page_title = page_title
     @page_title_options = options
@@ -14,23 +10,7 @@ module ApplicationHelper
     title << ' - ' + h(current_account.name)
     title
   end
-
-  def stylesheet_link_merged
-    if request.host.include?('scorekeepr.dk')
-      content_tag 'link', ' ', { :href => "/stylesheets/#{@@stylesheet_base_name}", :media => 'screen, projection', :rel => 'stylesheet', :type => 'text/css' }
-    else
-      stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
-    end
-  end
-
-  def javascript_include_merged
-    if request.host.include?('scorekeepr.dk')
-      content_tag 'script', ' ', { :src => "/javascripts/#{@@javascript_base_name}", :type => 'text/javascript' }
-    else
-      javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
-    end
-  end
-
+  
   def user_area(&block)
     return unless logged_in?
     concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
