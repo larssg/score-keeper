@@ -6,7 +6,7 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection'
+    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection', :cache => 'cache/all'
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
@@ -32,5 +32,5 @@
           .content= yield
 
       = render :partial => 'shared/footer'
-    = javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
+    = javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application', :cache => 'cache/all'
     = render :partial => 'shared/google_analytics' unless Rails.env == 'development'
