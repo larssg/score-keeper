@@ -622,8 +622,8 @@ table.form {
     margin-top: 1.5em; }
   #sidebar .content #matches_per_day .matches_played {
     text-align: right; }
-  #sidebar .content #matches_per_day img.chart {
-    margin-top: 1em; }
+  #sidebar .content #matches_per_day .list {
+    margin-top: 0.5em; }
   #sidebar .content #opponents h3 {
     margin-top: 1.5em; }
   #sidebar .content #opponents .even {
