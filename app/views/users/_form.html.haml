@@ -1,88 +1,88 @@
-%h3= t('users.form.basics')
+%h3= 'Basics'[]
 %table.form
   %tr
-    %td.label= f.label t('users.form.login')
+    %td.label= f.label :login
     %td.field= f.text_field :login, :class => 'text required'
-
+    
   %tr
-    %td.label= f.label :name, t('users.form.full_name')
+    %td.label= f.label :name, 'Full name'[]
     %td.field= f.text_field :name, :class => 'text required'
 
   %tr
-    %td.label= f.label :display_name, t('users.form.display_name')
+    %td.label= f.label :display_name, 'Display name'[]
     %td.field
       = f.text_field :display_name, :class => 'text'
-      .notes= t('users.form.display_name_help')
-
+      .notes= "A short version of the user's name, such as first name or nick name."[]
+      
   %tr
-    %td.label= f.label :email, t('users.form.email')
+    %td.label= f.label :email, 'Email'[]
     %td.field
       = f.text_field :email, :class => 'text required'
 
   %tr
-    %td.label= t('users.form.time_zone')
+    %td.label= 'Time zone'[]
     %td.field
       = f.time_zone_select :time_zone, nil, :class => 'required'
-
+      
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag t('users.form.update'), :disable_with => t('users.form.updating') + '&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
 
-%h3= t('users.form.password')
+%h3= 'Password'[]
 %table.form
   %tr
-    %td.label= f.label :password, t('users.form.password')
+    %td.label= f.label :password
     %td.field
       = f.password_field :password, :class => 'password' + (@user.new_record? ? ' required' : '')
       - unless @user.new_record?
-        .notes= t('users.form.password_help')
-
+        .notes= 'Fill out the password fields to change password.'[]
+    
   %tr
-    %td.label= f.label :password_confirmation, t('users.form.confirm_password')
+    %td.label= f.label :password_confirmation, 'Confirm password'[]
     %td.field= f.password_field :password_confirmation, :class => 'password' + (@user.new_record? ? ' required' : '')
 
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag t('users.form.update'), :disable_with => t('users.form.updating') + '&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
 
 - fields_for :mugshot do |fi|
-  %h3= t('users.form.picture')
+  %h3= 'Picture'[]
   %table.form
     %tr
-      %td.label= f.label :uploaded_data, t('users.form.picture')
+      %td.label= f.label :uploaded_data, 'Picture'
       %td.field
         = fi.file_field :uploaded_data
-        .notes= t('users.form.picture_help')
+        .notes= 'This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.'[]
 
     - unless @user.new_record?
       %tr
         %td.label &nbsp;
-        %td.submit= submit_tag t('users.form.update'), :disable_with => t('users.form.updating') + '&hellip;'
+        %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
 
 - if account_admin?
-  %h3= t('users.form.advanced')
+  %h3= 'Advanced'[]
   %table.form
     %tr
-      %td.label= f.label :is_account_admin, t('users.form.account_admin')
+      %td.label= f.label :is_account_admin, 'Account administrator'[]
       %td.field
         = f.check_box :is_account_admin
-        .notes= t('users.form.account_admin_help')
+        .notes= 'Allow the user to edit users and account settings.'[]
 
     - if admin?
       %tr
-        %td.label= f.label :is_admin, t('users.form.super_admin')
+        %td.label= f.label :is_admin, 'Super administrator'[]
         %td.field= f.check_box :is_admin
-
+        
     - unless @user.new_record?
       %tr
         %td.label &nbsp;
-        %td.submit= submit_tag t('users.form.update'), :disable_with => t('users.form.updating') + '&hellip;'
-
+        %td.submit= submit_tag 'Update'[], :disable_with => 'Updating'[] + '&hellip;'
+        
 - if @user.new_record?
-  %h3= t('users.form.create_user')
+  %h3= 'Create user'[]
   %table.form
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag t('users.form.create_user'), :disable_with => t('users.form.creating_user') + '&hellip;'
+      %td.submit= submit_tag 'Create user'[], :disable_with => 'Creating user'[] + '&hellip;'

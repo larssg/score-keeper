@@ -13,7 +13,7 @@ class GamesController < ApplicationController
   def create
     @game = current_account.games.build(params[:game])
     if @game.save
-      flash[:notice] = t('games.created')
+      flash[:notice] = 'Game created.'[]
       redirect_to games_url
     else
       render :action => 'new'
@@ -27,7 +27,7 @@ class GamesController < ApplicationController
   def update
     @game = current_account.games.find(params[:id])
     if @game.update_attributes(params[:game])
-      flash[:notice] = t('games.updated')
+      flash[:notice] = 'Changes to game saved successfully!'[]
       redirect_to games_url
     else
       render :action => 'edit'
@@ -35,9 +35,7 @@ class GamesController < ApplicationController
   end
 
   def game_added_warning
-    @game = current_account.games.find_by_id(params[:id])
-    head :ok and return if @game.nil?
-
+    @game = current_account.games.find(params[:id])
     @latest_membership = current_user.memberships.find(:first, :conditions => ['memberships.game_id = ? AND created_at >= ?', @game.id, 10.minutes.ago], :order => 'created_at DESC')
 
     if @latest_membership && @latest_membership.team.match.creator != current_user

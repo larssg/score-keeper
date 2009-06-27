@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   include AccountLocation
 
   before_filter :set_time_zone
-  before_filter :set_locale
 
   helper :all # include all helpers, all the time
 
@@ -98,10 +97,10 @@ class ApplicationController < ActionController::Base
 
   def time_periods
     [
-     [t('time_periods.days_30'), 30],
-     [t('time_periods.days_90'), 90],
-     [t('time_periods.days_180'), 180],
-     [t('time_periods.days_360'), 360]
+     ['30 days'[], 30],
+     ['90 days'[], 90],
+     ['180 days'[], 180],
+     ['360 days'[], 360]
     ]
   end
   helper_method :time_periods
@@ -167,8 +166,8 @@ class ApplicationController < ActionController::Base
     Time.zone = current_user.time_zone if logged_in?
   end
 
-  def set_locale
-    session[:locale] = params[:locale] if params[:locale]
-    I18n.locale = session[:locale] || I18n.default_locale
+  def set_language
+    session[:language] = params[:language] || session[:language]
+    Gibberish.use_language(session[:language]) { yield }
   end
 end

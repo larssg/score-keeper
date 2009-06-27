@@ -1,4 +1,4 @@
-- title t('users.users'), :show => true
+- title 'Users'[], :show => true
 
 #userlist.clear
   - all_users.each_with_index do |user, index|
@@ -9,16 +9,16 @@
             = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), edit_user_path(user)
         .login= user.login
         .name= link_to user.name, edit_user_path(user)
-        .role= user.is_admin? ? t('users.super_admin') : (user.is_account_admin? ? t('users.admin') : t('users.normal'))
+        .role= user.is_admin? ? 'Super Admin'[] : (user.is_account_admin? ? 'Admin'[] : 'Normal'[])
         .email= mail_to user.email
-        .created_at= I18n.l(user.created_at, :format => 'short')
+        .created_at= user.created_at.to_s :long
         - if account_admin?
           .admin
-            = link_to t('users.edit'), edit_user_path(user)
-            = link_to user.enabled? ? t('users.disable') : t('users.enable'), user_path(user, :user => { :enabled => !user.enabled? }), :method => :put
-            = link_to t('users.remove'), user_path(user), :method => :delete, :confirm => t('users.are_you_sure')
+            = link_to 'Edit'[], edit_user_path(user)
+            = link_to user.enabled? ? 'Disable'[] : 'Enable'[], user_path(user, :user => { :enabled => !user.enabled? }), :method => :put
+            = link_to 'Remove'[], user_path(user), :method => :delete, :confirm => 'Are you sure?'
 
 - if account_admin?
   - content_for :sidebar do
-    %h3= t('users.administration')
-    = link_to t('users.create_user'), new_user_path
+    %h3= 'Administration'
+    = link_to 'Create user', new_user_path

@@ -1,14 +1,10 @@
-- translated = t('teams.player_and_player')
-- translated = translated.gsub('{first}', h(@team_members.first.name))
-- translated = translated.gsub('{second}', h(@team_members.last.name))
-
-- title translated, :show => true
+- title '{first_name} and {second_name}'[:user_and_user, h(@team_members.first.name), h(@team_members.last.name)], :show => true
 
 #graph
-  %h3= t('teams.ranking_chart')
+  %h3= 'Ranking chart'[]
   - form_tag game_team_path(current_game, @ids.join(',')), :method => :get do
     = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
-    = submit_tag t('teams.update')
+    = submit_tag 'Update'[]
 
   .legend
     - @team_members.sort_by(&:id).each_with_index do |player, index|
@@ -27,34 +23,34 @@
             = link_to image_tag(user.mugshot.public_filename(:thumb), :alt => h(user.name)), game_user_path(current_game, user)
           = link_to h(user.name), game_user_path(current_game, user)
 
-    .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => t('teams.show_teams_matches')) + ' ' + t('teams.show_matches'), game_matches_path(current_game, :filter => @ids.join(','))
+    .matchlink= link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]) + ' ' + 'Show matches'[], game_matches_path(current_game, :filter => @ids.join(','))
 
     %table.for_against
       %tr
         %td.for
-          %label= t('teams.played') + ':'
+          %label= 'Played'[] + ':'
           = @opponents.sum { |o| o.matches.to_i }
         %td.against
-          %label= t('teams.win_percentage') + ':'
+          %label= 'Win %'[] + ':'
           = number_to_percentage((@opponents.sum { |o| o.wins.to_f } / @opponents.sum { |o| o.matches.to_f }) * 100, :precision => 1)
 
       %tr
         %td.for
-          %label= t('teams.won') + ':'
+          %label= 'Won'[] + ':'
           = @opponents.sum { |o| o.wins.to_i }
         %td.against
-          %label= t('teams.lost') + ':'
+          %label= 'Lost'[] + ':'
           = @opponents.sum { |o| o.matches.to_i } - @opponents.sum { |o| o.wins.to_i }
     
     #opponents
-      %h3= t('teams.opponents')
+      %h3= 'Opponents'[]
       - @opponents.each do |opponent|
         .opponent{ :class => cycle('even', 'odd') }
           .members
             = link_to Team.team_members(opponent.team_ids).collect { |user| h(user.display_name) }.join(', '), game_team_path(current_game, opponent.team_ids)
-          %label= t('teams.matches') + ':'
+          %label= 'Matches'[] + ':'
           = opponent.matches
-          %label= t('teams.won') + ':'
+          %label= 'Won'[] + ':'
           = opponent.wins
 
 - content_for :head do

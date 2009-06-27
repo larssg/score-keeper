@@ -1,16 +1,16 @@
 - form_tag sessions_path do
   %label
-    = label_tag :login, t('login.login')
+    = label_tag :login, 'Login'[]
     = text_field_tag 'login'
-
+    
   %label
-    = label_tag :password, t('login.password')
+    = label_tag :password, 'Password'[]
     = password_field_tag 'password'
-
+    
   %label
-    = label_tag :remember_me, t('login.remember_me') + ':'
+    = label_tag :remember_me, 'Remember me'[] + ':'
     = check_box_tag 'remember_me'
-
+    
   %p
-    = submit_tag t('login.sign_in'), :disable_with => t('login.signing_in') + '&hellip;'
-    = link_to t('login.forgot_password'), forgot_password_path
+    = submit_tag 'Sign in'[], :disable_with => 'Signing in'[] + '&hellip;'
+    = link_to 'Forgot password or username?'[], forgot_password_path

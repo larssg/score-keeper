@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def page_title
-    title = 'Score Keeper'
+    title = 'Score Keeper'[]
     title << ': ' + @page_title unless @page_title.blank?
     title << ' - ' + h(current_account.name)
     title
@@ -77,6 +77,6 @@ module ApplicationHelper
   end
 
   def create_or_update_button(object)
-    submit_tag (object.new_record? ? t('forms.create') : t('forms.update')), :disable_with => (object.new_record? ? t('forms.creating') : t('forms.updating')) + '&hellip;'
+    submit_tag (object.new_record? ? 'Create'[] : 'Update'[]), :disable_with => (object.new_record? ? 'Creating'[] : 'Updating'[]) + '&hellip;'
   end
 end

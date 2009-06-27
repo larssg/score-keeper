@@ -10,13 +10,13 @@
         %th= '&nbsp;'
         - if start_at == 1
           %th= '&nbsp;'
-        %th= t('dashboard.leader_boards.person')
-        %th= t('dashboard.leader_boards.ranking')
-        %th= t('dashboard.leader_boards.played')
-        %th= t('dashboard.leader_boards.won')
-        %th= t('dashboard.leader_boards.lost')
-        %th= t('dashboard.leader_boards.win_percentage')
-        %th{ :title => t('dashboard.leader_boards.goal_diff_avg') }= t('dashboard.leader_boards.diff_avg')
+        %th= 'Person'[]
+        %th= 'Ranking'[]
+        %th= 'Played'[]
+        %th= 'Won'[]
+        %th= 'Lost'[]
+        %th= 'Win %'[]
+        %th{ :title => 'Goal difference average'[] }= 'Diff. avg.'[]
 
     %tbody
       - game_participations.each_with_index do |game_participation, index|
@@ -31,7 +31,7 @@
               - else
                 &nbsp;
           %td
-            = link_to image_tag('icons/game.png', :class => 'team', :alt => t('dashboard.leader_boards.show_users_matches')), game_matches_path(@game, :filter => game_participation.user_id)
+            = link_to image_tag('icons/game.png', :class => 'team', :alt => "Show this user's matches"[]), game_matches_path(@game, :filter => game_participation.user_id)
             = user_link_full(@game, game_participation.user)
           %td= game_participation.ranking
           %td= game_participation.matches_played
@@ -42,5 +42,5 @@
       - reset_cycle
 
   - if start_at == 1
-    .notes= t('dashboard.leader_boards.position_arrow_help')
-  = submit_tag t('dashboard.leader_boards.compare'), :class => 'submit'
+    .notes= "Numbers in parenthesis: user's position 7 days ago. The arrow indicates position movement."[]
+  = submit_tag 'Compare', :class => 'submit'

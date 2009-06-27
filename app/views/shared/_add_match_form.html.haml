@@ -1,16 +1,16 @@
 - form_for :match, nil, :url => game_matches_path(current_game) do |f|
   .team
-    %label= t('matches.add.team') + ':'
+    %label= 'Team'[] + ':'
     - (0...current_game.team_size).each do |position|
       = f.collection_select 'team1', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user', :name => 'match[team1][]', :id => "match_team1_#{position + 1}" }
-    %label= f.label :score1, t('matches.add.score') + ':'
+    %label= f.label :score1, 'Score'[] + ':'
     = f.text_field 'score1', :class => 'score', :autocomplete => 'off'
   .team
-    %label= t('matches.add.team') + ':'
+    %label= 'Team'[] + ':'
     - (0...current_game.team_size).each do |position|
       = f.collection_select 'team2', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user', :name => 'match[team2][]', :id => "match_team2_#{position + 1}" }
-    %label= f.label :score2, t('matches.add.score') + ':'
+    %label= f.label :score2, 'Score'[] + ':'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
-    = submit_tag t('matches.add.add'), :disable_with => t('matches.add.adding') + '&hellip;'
-    = link_to_function t('matches.add.cancel'), "scoreKeeper.newMatch.toggle();"
+    = submit_tag 'Add'[], :disable_with => 'Adding'[] + '&hellip;'
+    = link_to_function 'Cancel'[], "scoreKeeper.newMatch.toggle();"
 .game_added_warning{ :style => 'display: none' }

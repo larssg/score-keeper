@@ -75,7 +75,7 @@ class SessionsController < ApplicationController
       end
       successful_login
     else
-      failed_login(t('login.invalid_login', :default => 'Invalid login or password'))
+      failed_login('Invalid login or password')
     end
   end
 

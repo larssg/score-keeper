@@ -1,4 +1,4 @@
-- title t('users.edit_user'), :show => true
+- title 'Edit user', :show => true
 
 = error_messages_for :user
 
@@ -7,6 +7,6 @@
 
 - if account_admin?
   - content_for :sidebar do
-    %h3= t('users.administration')
+    %h3= 'Administration'
     %p
-      = link_to t('users.remove_user'), user_path(@user), :method => :delete, :confirm => t('users.remove_user_sure')
+      = link_to 'Remove user'[], user_path(@user), :method => :delete, :confirm => 'Delete user. Are you sure?'

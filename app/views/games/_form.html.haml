@@ -1,43 +1,43 @@
-%h3= t('games.form.basics')
+%h3= 'Basics'[]
 %table.form
   %tr
-    %td.label= f.label :name, t('games.form.name')
+    %td.label= f.label :name
     %td.field= f.text_field :name, :class => 'text required'
     
   %tr
-    %td.label= f.label :team_size, t('games.team_size')
+    %td.label= f.label :team_size
     %td.field
       - if @game.matches.size > 0
-        = t('games.x_on_x').gsub('{team_size}', @game.team_size.to_s)
-        .notes= t('games.form.cannot_change')
+        = '{team_size}-on-{team_size}'[:team_size, @game.team_size, @game.team_size]
+        .notes= 'This value cannot be changed because there are matches in the database.'[]
       - else
         - (1..3).each do |team_size|
           %div.radio
-            = f.radio_button(:team_size, team_size, :id => "game_team_size_#{team_size}", :class => 'radio') + f.label("team_size_#{team_size}", t('games.x_on_x').gsub('{team_size}', team_size.to_s))
-        .notes= t('games.form.team_size_help')
+            = f.radio_button(:team_size, team_size, :id => "game_team_size_#{team_size}", :class => 'radio') + f.label("team_size_#{team_size}", "#{team_size}-on-#{team_size}")
+        .notes= 'Number of players on each team.'[]
 
   %tr
     %td.label &nbsp;
     %td.submit= create_or_update_button @game
     
-%h3= t('games.form.details')
+%h3= 'Details'[]
 %table.form
   %tr
-    %td.label= t('games.form.player_roles')
+    %td.label= 'Player roles'[]
     %td.field
       = f.text_area :player_roles
-      .notes= t('games.form.player_roles_help')
+      .notes= 'Player roles, one per line. E.g.: Offense, Defense.'
 
   %tr
-    %td.label= t('games.form.rules')
+    %td.label= 'Rules'[]
     %td.field
       = f.text_area :rules
 
   %tr
-    %td.label= t('games.form.newbie_limit')
+    %td.label= 'Newbie limit'[]
     %td.field
       = f.text_field :newbie_limit, :class => 'text required small'
-      .notes= t('games.form.newbie_limit_help')
+      .notes= 'Number of matches a user must play to be part of normal rankings.'[]
 
   %tr
     %td.label &nbsp;

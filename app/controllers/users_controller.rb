@@ -69,7 +69,7 @@ class UsersController < ApplicationController
 
     @user.save!
 
-    flash[:notice] = t('users.user_created')
+    flash[:notice] = 'User created successfully'
     redirect_to users_path
   rescue ActiveRecord::RecordInvalid
     render :action => 'new'
@@ -92,7 +92,7 @@ class UsersController < ApplicationController
 
     if @user.update_attributes(params[:user])
       redirect_to users_url
-      flash[:notice] = t('users.user_saved')
+      flash[:notice] = "User saved successfully."
     else
       render :action => "edit"
     end
@@ -105,10 +105,10 @@ class UsersController < ApplicationController
         self.current_user.forget_me if logged_in?
         cookies.delete :auth_token
         reset_session
-        flash[:notice] = t('users.your_user_removed')
+        flash[:notice] = "You have removed your account."
         redirect_back_or_default('/')
       else
-        flash[:notice] = t('users.user_removed')
+        flash[:notice] = 'User deleted.'
         redirect_to users_path
       end
     else

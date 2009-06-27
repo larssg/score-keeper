@@ -1,23 +1,23 @@
 - title match_title(@match), :show => true
 
 #match
-  %label= t('matches.played_at') + ':'
+  %label= 'Played at' + ':'
   = @match.played_at.to_s :long
 
   .rankings
     - [@match.winner, @match.loser].each_with_index do |team, team_index|
       .team.column.span-12{ :class => (team_index == 1 ? 'last' : nil) }
-        %h3= team.winner? ? t('matches.winner') : t('matches.loser')
+        %h3= team.winner? ? 'Winner'[] : 'Loser'[]
         .list
           %table
         
             %thead
               %tr
-                %th= t('matches.player')
-                %th.score= t('matches.score')
-                %th= t('matches.before')
-                %th= t('matches.awarded')
-                %th= t('matches.after')
+                %th= 'Player'
+                %th.score= 'Score'
+                %th= 'Before'
+                %th= 'Awarded'
+                %th= 'After'
           
             %tbody
               - team.memberships.each_with_index do |membership, index|
@@ -29,7 +29,7 @@
                   %td= membership.points_awarded
                   %td= membership.current_ranking
   
-%h3= t('matches.comments')
+%h3= 'Comments'
 #comments
   - @comments.each_with_index do |comment, index|
     .comment{ :class => cycle('even', 'odd') }
@@ -49,4 +49,4 @@
     = render :partial => 'comments/form', :locals => { :f => f }
       
     %p
-      = submit_tag t('matches.add_comment')
+      = submit_tag 'Add comment'

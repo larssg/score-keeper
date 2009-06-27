@@ -4,7 +4,7 @@ describe GamesController do
   before(:each) do
     controller.stub!(:domain_required).and_return(true)
   end
-
+  
   describe "with no games in the database" do
     before(:each) do
       @user = Factory(:user)
@@ -28,7 +28,7 @@ describe GamesController do
       controller.stub!(:current_account).and_return(@game.account)
       login_as @user
     end
-
+    
     # Delete this example and add some real ones
     it "should list the games" do
       get :index

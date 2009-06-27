@@ -40,10 +40,10 @@ class MatchesController < ApplicationController
     @match.game_id = params[:game_id]
     @match.creator = current_user
     if @match.save
-      flash[:notice] = t('matches.added')
+      flash[:notice] = 'Match added successfully.'[]
       redirect_back_or_default root_url
     else
-      flash[:warning] = t('matches.not_added')
+      flash[:warning] = 'The match could not be saved. Please try again.'[]
       redirect_back_or_default root_url
     end
   end

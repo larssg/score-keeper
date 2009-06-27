@@ -1,21 +1,21 @@
-- title t('accounts.settings'), :show => true
+- title 'Account settings', :show => true
 
 = error_messages_for :account
 
 - form_for current_account do |f|
-  %h3= t('accounts.basics')
+  %h3= 'Basics'[]
   %table.form
     %tr
-      %td.label= t('accounts.name')
+      %td.label= 'Name'[]
       %td.field
         = f.text_field :name, :class => 'text required'
 
     %tr
-      %td.label= t('accounts.time_zone')
+      %td.label= 'Time zone'[]
       %td.field
         = f.time_zone_select :time_zone, nil, :class => 'required'
-        .notes= t('accounts.time_zone_help')
+        .notes= 'Default time zone for users in the account.'[]
     
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag t('accounts.update')
+      %td.submit= submit_tag 'Update'
