@@ -13,7 +13,8 @@
           %span.color{ :style => "background-color: #{colors[isp.last]}" }
           %span.name= link_to isp.first.name, game_user_path(@game, isp.first)
 
-    = graph(game_comparison_url(current_game, @selected_player_ids.join('-'), :period => @time_period, :format => :chart))
+    = render :partial => 'shared/graph', :locals => { :url => game_comparison_url(current_game, @selected_player_ids.join('-'), :period => @time_period, :format => :chart) }
+    
 - else
   #graph= 'Please select users to compare to the right.'[]
 
@@ -25,6 +26,3 @@
         = label_tag "user_#{player.id}", player.name
         
     = submit_tag 'Compare'[]
-    
-- content_for :head do
-  = javascript_include_tag 'swfobject'

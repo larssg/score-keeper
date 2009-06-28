@@ -12,7 +12,7 @@
         %span.color{ :style => "background-color: #{colors[index]}" }
         %span.name= player.name
 
-  = graph(formatted_game_comparison_url(current_game, @ids.join('-'), :chart, :period => @time_period))
+  = render :partial => 'shared/graph', :locals => { :url => game_comparison_url(current_game, @ids.join('-'), :chart, :period => @time_period, :format => :graph) }
 
 - content_for :sidebar do
   .team
@@ -52,6 +52,3 @@
           = opponent.matches
           %label= 'Won'[] + ':'
           = opponent.wins
-
-- content_for :head do
-  = javascript_include_tag 'swfobject'

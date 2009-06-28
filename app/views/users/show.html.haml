@@ -6,8 +6,8 @@
     - form_tag game_user_path(current_game, @user), :method => :get do
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'[]
-    = graph(game_user_matches_url(@game, @user.id, :period => @time_period, :format => :chart))
-    
+    = render :partial => 'shared/graph', :locals => { :url => game_user_matches_url(@game, @user.id, :period => @time_period, :format => :chart) }
+
 - if @game.team_size == 2
   .list
     %h3= 'Team mates'[]
@@ -93,6 +93,3 @@
               = link_to @all_time_low.current_ranking, game_match_path(@game, @all_time_low.team.match), :class => 'match'
 
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
-
-- content_for :head do
-  = javascript_include_tag 'swfobject'
