@@ -23,6 +23,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'gchartrb', :lib => 'google_chart'
   config.gem 'hpricot'
+  config.gem 'cucumber'
   config.gem 'webrat'
   config.gem 'color-tools', :lib => 'color'
   config.gem 'haml'
@@ -30,8 +31,6 @@ Rails::Initializer.run do |config|
       :source => 'http://gems.github.com'
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
   config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
-  config.gem 'jeremymcanally-context', :lib => 'context', :source => 'http://gems.github.com'
-  config.gem 'jeremymcanally-matchy', :lib => 'matchy', :source => 'http://gems.github.com'
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
