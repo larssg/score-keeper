@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   @@colors = []
 
   def current_account
-    return @current_account unless @current_account.nil?
+    return @current_account unless @current_account.nil?
     
     if impersonating?
       @current_account = current_user.account
