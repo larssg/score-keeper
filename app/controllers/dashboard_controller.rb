@@ -50,6 +50,7 @@ class DashboardController < ApplicationController
   end
 
   def last_update_cache_key
+    return nil if last_update.nil?
     last_update.gsub(' ', '-')
   end
    
