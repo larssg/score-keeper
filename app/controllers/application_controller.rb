@@ -10,21 +10,22 @@ class ApplicationController < ActionController::Base
   @@colors = []
 
   def current_account
-    if @current_account.nil?
-      if session[:real_user_id].nil?
-        unless account_subdomain.nil?
-          @current_account ||= Account.find_by_domain(account_subdomain)
-          redirect_to account_url(current_user.account.domain) if logged_in? && current_user.account_id != @current_account.id
-        end
-      else
-        @current_account ||= current_user.account
-      end
+    return @current_account unless @current_account.nil?
+    
+    if impersonating?
+      @current_account = current_user.account
+    else
+      @current_account = Account.find_by_domain(account_subdomain) unless account_subdomain.nil?
     end
     @current_account
   end
   helper_method :current_account
 
   protected
+  def impersonating?
+    !(session[:real_user_id].nil?)
+  end
+  
   def login_from_feed_token
     if params[:feed_token] && !logged_in? && request.format.to_s == 'application/atom+xml'
       self.current_user = User.find_by_feed_token(params[:feed_token])
@@ -52,10 +53,19 @@ class ApplicationController < ActionController::Base
   helper_method :find_user
 
   def domain_required
-    return unless session[:real_user_id].nil? # Impersonating a user
+    # Impersonating a user - don't validate doman
+    return if impersonating?
+    
+    # No subdomain - redirect to public root (scorekeepr.dk)
     redirect_to public_root_url and return false if account_subdomain.blank?
+    
+    # Subdomain and current account's subdomain do not match - redirect to current account's subdomain
     redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_account.domain != account_subdomain
+    
+    # User not logged in and no domain exists with the current subdomain
     redirect_to public_root_url(:host => account_domain) and return false if !logged_in? && Account.find_by_domain(account_subdomain).nil?
+    
+    # We are where we're supposed to be!
     true
   end
 
