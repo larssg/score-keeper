@@ -4,7 +4,7 @@
 %html{ :xmlns => 'http://www.w3.org/1999/xhtml', :lang => "en" }
   %head
     %title= page_title
-    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection', :cache => 'cache/all'
+    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'sprites', 'screen', :media => 'screen, projection', :cache => 'cache/all'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
     = yield :head
@@ -15,14 +15,14 @@
         #links
           = render :partial => 'shared/login'
 
-        #logo= link_to image_tag('logo.gif'), root_url
+        #logo= link_to css_image_tag('logo.gif'), root_url
 
       #menu.clear
         .column.span-20= render :partial => 'shared/menu'
         - unless current_game.nil? || current_game.new_record?
           #add_match.column.span-4.last
             - if enabled_users.size >= current_game.team_size * 2
-              = link_to_function image_tag('icons/add.png') + ' ' + 'Add match'[], "scoreKeeper.newMatch.toggle()"
+              = link_to_function css_image_tag('icons/add.png') + ' ' + 'Add match'[], "scoreKeeper.newMatch.toggle()"
             - else
               - if current_game.team_size * 2 - enabled_users.size == 1
                 #user_minimum= 'Add one more user'[:add_one_more_user]

@@ -6,7 +6,7 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen', :media => 'screen, projection', :cache => 'cache/all'
+    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'sprites', 'screen', :media => 'screen, projection', :cache => 'cache/all'
     = stylesheet_link_tag 'print', :media => 'print'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
@@ -18,7 +18,7 @@
         #hd
           #links
 
-          #logo= link_to image_tag('logo.gif'), root_url
+          #logo= link_to css_image_tag('logo.gif'), root_url
   
         - unless @page_title.blank?
           %h2#page_title= @page_title

@@ -1,0 +1,14 @@
+.sprite-add { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -20px no-repeat; }
+.sprite-arrow_down { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -56px no-repeat; }
+.sprite-arrow_right { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -92px no-repeat; }
+.sprite-arrow_up { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -128px no-repeat; }
+.sprite-blank { display: table-cell; display: inline-block; width: 1px; height: 1px; background: url('/images/sprites.png') -30px -164px no-repeat; }
+.sprite-chart_bar { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -185px no-repeat; }
+.sprite-comment { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -221px no-repeat; }
+.sprite-game { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -257px no-repeat; }
+.sprite-logo { display: table-cell; display: inline-block; width: 241px; height: 38px; background: url('/images/sprites.png') -30px -293px no-repeat; }
+.sprite-medal_gold_2 { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -351px no-repeat; }
+.sprite-rss { display: table-cell; display: inline-block; width: 17px; height: 17px; background: url('/images/sprites.png') -30px -387px no-repeat; }
+.sprite-sort_asc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.png') -30px -424px no-repeat; }
+.sprite-sort_desc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.png') -30px -448px no-repeat; }
+.sprite-sort_none { display: table-cell; display: inline-block; width: 21px; height: 9px; background: url('/images/sprites.png') -30px -472px no-repeat; }

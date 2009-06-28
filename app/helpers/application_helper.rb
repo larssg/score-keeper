@@ -59,4 +59,14 @@ module ApplicationHelper
   def create_or_update_button(object)
     submit_tag (object.new_record? ? 'Create'[] : 'Update'[]), :disable_with => (object.new_record? ? 'Creating'[] : 'Updating'[]) + '&hellip;'
   end
+  
+  def css_image_tag(url, options = {})
+    extension = File.extname(url)
+    key = File.basename(url, extension)
+
+    css_class = "sprite-#{key} css-sprite"
+    css_class += " " + options.delete(:class) if options[:class]
+
+    content_tag(:span, '', options.merge(:class => css_class))
+  end
 end
