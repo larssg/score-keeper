@@ -8,7 +8,7 @@ module MatchesHelper
   end
   
   def match_feed_url(game, options = {})
-    formatted_game_matches_url(game, :atom, {:feed_token => current_user.feed_token}.merge(options))
+    game_matches_url(game, { :feed_token => current_user.feed_token }.merge(options), :format => :atom)
   end
   
   def human_date(date)
