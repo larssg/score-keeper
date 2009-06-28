@@ -17,6 +17,9 @@
   %body.public
     .container
       #hd
+        = css_image_tag('icons/header_right.gif', :id => 'header-right')
+        = css_image_tag('icons/header_left.gif', :id => 'header-left')
+      
         #logo= link_to css_image_tag('logo.gif'), root_url
 
       - unless @page_title.blank?

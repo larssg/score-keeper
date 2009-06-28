@@ -1,6 +1,12 @@
 .css-sprite {
   vertical-align: text-bottom; }
 
+#header-right {
+  float: right; }
+
+#header-left {
+  float: left; }
+
 a {
   color: #3589AF;
   text-decoration: none; }
@@ -24,18 +30,12 @@ textarea {
   margin: 0; }
 
 #hd {
-  background-color: #3399CC;
-  background-image: url('/images/header_right.gif');
-  background-repeat: no-repeat;
-  background-position: right top; }
+  background-color: #3399CC; }
   #hd #logo {
     margin: 0;
     padding: 21px;
     padding-top: 14px;
     padding-bottom: 8px;
-    background-image: url('/images/header_left.gif');
-    background-repeat: no-repeat;
-    background-position: left top;
     border-bottom: 1px solid #FFFFFF; }
     #hd #logo a {
       margin: 0; }

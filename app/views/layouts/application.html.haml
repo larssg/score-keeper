@@ -12,6 +12,9 @@
   %body
     .container
       #hd.column.span-24
+        = css_image_tag('icons/header_right.gif', :id => 'header-right')
+        = css_image_tag('icons/header_left.gif', :id => 'header-left')
+      
         #links
           = render :partial => 'shared/login'
 

@@ -6,9 +6,11 @@
 .sprite-chart_bar { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -185px no-repeat; }
 .sprite-comment { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -221px no-repeat; }
 .sprite-game { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -257px no-repeat; }
-.sprite-logo { display: table-cell; display: inline-block; width: 241px; height: 38px; background: url('/images/sprites.png') -30px -293px no-repeat; }
-.sprite-medal_gold_2 { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -351px no-repeat; }
-.sprite-rss { display: table-cell; display: inline-block; width: 17px; height: 17px; background: url('/images/sprites.png') -30px -387px no-repeat; }
-.sprite-sort_asc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.png') -30px -424px no-repeat; }
-.sprite-sort_desc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.png') -30px -448px no-repeat; }
-.sprite-sort_none { display: table-cell; display: inline-block; width: 21px; height: 9px; background: url('/images/sprites.png') -30px -472px no-repeat; }
+.sprite-header_left { display: table-cell; display: inline-block; width: 5px; height: 5px; background: url('/images/sprites.png') -30px -293px no-repeat; }
+.sprite-header_right { display: table-cell; display: inline-block; width: 5px; height: 5px; background: url('/images/sprites.png') -30px -318px no-repeat; }
+.sprite-logo { display: table-cell; display: inline-block; width: 241px; height: 38px; background: url('/images/sprites.png') -30px -343px no-repeat; }
+.sprite-medal_gold_2 { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.png') -30px -401px no-repeat; }
+.sprite-rss { display: table-cell; display: inline-block; width: 17px; height: 17px; background: url('/images/sprites.png') -30px -437px no-repeat; }
+.sprite-sort_asc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.png') -30px -474px no-repeat; }
+.sprite-sort_desc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.png') -30px -498px no-repeat; }
+.sprite-sort_none { display: table-cell; display: inline-block; width: 21px; height: 9px; background: url('/images/sprites.png') -30px -522px no-repeat; }
