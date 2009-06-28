@@ -136,7 +136,9 @@ class User < ActiveRecord::Base
     end
 
     # Fix stats
-    Match.reset_rankings(self.account)
+    self.account.games.each do |game|
+      Match.reset_rankings(game)
+    end
   end
 
   # before filter
