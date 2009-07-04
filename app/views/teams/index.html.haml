@@ -15,7 +15,7 @@
       - @teams.each do |team|
         %tr{ :class => cycle('even', 'odd') }
           %td.user
-            = link_to css_image_tag('icons/game.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(current_game, :filter => team[:team_ids])
+            = link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(current_game, :filter => team[:team_ids])
             = link_to css_image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(current_game, team[:team_ids])
             = team[:players].collect { |u| user_link(current_game, u)}.join(', ')
 

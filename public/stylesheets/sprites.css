@@ -14,3 +14,4 @@
 .sprite-sort_asc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.9f8e117683295cf49d5eb81e1c75f5001b72845a.cache.png') -1px -208px no-repeat; }
 .sprite-sort_desc { display: table-cell; display: inline-block; width: 21px; height: 4px; background: url('/images/sprites.9f8e117683295cf49d5eb81e1c75f5001b72845a.cache.png') -1px -213px no-repeat; }
 .sprite-sort_none { display: table-cell; display: inline-block; width: 21px; height: 9px; background: url('/images/sprites.9f8e117683295cf49d5eb81e1c75f5001b72845a.cache.png') -1px -218px no-repeat; }
+.sprite-table { display: table-cell; display: inline-block; width: 16px; height: 16px; background: url('/images/sprites.9f8e117683295cf49d5eb81e1c75f5001b72845a.cache.png') -1px -228px no-repeat; }
