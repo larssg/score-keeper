@@ -9,5 +9,10 @@
     %optgroup{:label => 'Other games'[]}
       - current_users_games[:not_played].each do |game|
         %option{:value => game.id}= h(game.name)
-        
+
+  - if current_users_games[:locked].size > 0
+    %optgroup{:label => 'Locked games'}
+      - current_users_games[:locked].each do |game|
+        %option{:value => game.id}= h(game.name)
+
   %option{ :value => 'new' }= 'New game...'[]

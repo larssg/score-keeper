@@ -88,6 +88,8 @@ class Match < ActiveRecord::Base
   end
 
   def validate
+    errors.add :game, 'is locked' if self.game.locked
+    
     user_ids = []
 
     if self.teams.length == 2

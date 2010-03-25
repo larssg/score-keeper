@@ -8,7 +8,10 @@
       
       - @games.each do |game|
         %tr{ :class => cycle('even', 'odd') }
-          %td= link_to h(game.name), session_path('switch_game', :current_game => { :id => game.id }), :method => :put
+          %td
+            = link_to h(game.name), session_path('switch_game', :current_game => { :id => game.id }), :method => :put
+            - if game.locked?
+              (locked)
           %td= '{team_size}-on-{team_size}'[:team_size, game.team_size, game.team_size]
           %td= link_to 'Edit', edit_game_path(game)
 

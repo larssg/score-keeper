@@ -92,9 +92,11 @@ class ApplicationController < ActionController::Base
   def current_users_games
     if @current_users_games.nil?
       current_user.cache_game_ids = '' if current_user.cache_game_ids.blank?
-      @current_users_games = {:played => [], :not_played => []}
+      @current_users_games = {:played => [], :not_played => [], :locked => []}
       current_account.all_games.each do |game|
-        if current_user.cache_game_ids.split(',').include?(game.id.to_s)
+        if game.locked?
+          @current_users_games[:locked] << game
+        elsif current_user.cache_game_ids.split(',').include?(game.id.to_s)
           @current_users_games[:played] << game
         else
           @current_users_games[:not_played] << game

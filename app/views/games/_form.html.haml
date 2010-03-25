@@ -15,6 +15,12 @@
           %div.radio
             = f.radio_button(:team_size, team_size, :id => "game_team_size_#{team_size}", :class => 'radio') + f.label("team_size_#{team_size}", "#{team_size}-on-#{team_size}")
         .notes= 'Number of players on each team.'[]
+        
+  %tr
+    %td.label= f.label :locked
+    %td.field
+      = f.check_box :locked
+      .notes Used to prevent users from adding new matches to the game.
 
   %tr
     %td.label &nbsp;

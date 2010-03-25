@@ -3,6 +3,7 @@ tmp/cache/*
 tmp/pids/*
 tmp/sessions/*
 tmp/sockets/*
+tmp/sass-cache/*
 .DS_Store
 coverage
 public/cache/**/*

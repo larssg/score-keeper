@@ -56,6 +56,10 @@ textarea {
   background-color: #77BBDD; }
   #menu a:hover {
     text-decoration: none; }
+  #menu .locked {
+    padding-right: 21px;
+    padding-top: 9px;
+    color: #FFFFFF; }
   #menu #add_match {
     text-align: right; }
     #menu #add_match a {
@@ -642,17 +646,17 @@ table.form {
       margin-bottom: 1em; }
       #sidebar .content #recent_comments .comment .user {
         font-weight: bold; }
-  #sidebar .content .user .edit_user_link,   #sidebar .content .team .edit_user_link {
+  #sidebar .content .user .edit_user_link, #sidebar .content .team .edit_user_link {
     float: right; }
-  #sidebar .content .user .matchlink,   #sidebar .content .team .matchlink {
+  #sidebar .content .user .matchlink, #sidebar .content .team .matchlink {
     margin-top: 1.5em; }
-    #sidebar .content .user .matchlink a,     #sidebar .content .team .matchlink a {
+    #sidebar .content .user .matchlink a, #sidebar .content .team .matchlink a {
       text-decoration: none; }
-      #sidebar .content .user .matchlink a img,       #sidebar .content .team .matchlink a img {
+      #sidebar .content .user .matchlink a img, #sidebar .content .team .matchlink a img {
         vertical-align: text-bottom; }
-  #sidebar .content .user #counts,   #sidebar .content .team #counts {
+  #sidebar .content .user #counts, #sidebar .content .team #counts {
     margin-top: 1.5em; }
-    #sidebar .content .user #counts label,     #sidebar .content .team #counts label {
+    #sidebar .content .user #counts label, #sidebar .content .team #counts label {
       display: block;
       font-weight: bold; }
   #sidebar .content .team .mugshot {
