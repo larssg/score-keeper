@@ -15,9 +15,9 @@ class Log < ActiveRecord::Base
   end
 
   def self.clear_item_log(account, item)
-    find_by_item(account, item).each { |item| item.destroy }
+    find_by_item(account, item).each { |log| log.destroy }
     if (item.class.class_name == "Match")
-      find_by_item(account, item, 'Clean sheet').each { |item| item.destroy }
+      find_by_item(account, item, 'Clean sheet').each { |log| log.destroy }
     end
   end
 end
