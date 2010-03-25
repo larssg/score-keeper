@@ -54,6 +54,10 @@ class Game < ActiveRecord::Base
   def game_participation_for(user)
     game_participations.find_by_user_id(user.id)
   end
+  
+  def cache_key
+    updated_at.to_s(:db).gsub(' ', '-')
+  end
 
   protected
   def format_player_roles
