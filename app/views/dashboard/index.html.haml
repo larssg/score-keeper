@@ -18,7 +18,7 @@
     #no_data= 'There are no matches in the database yet.'[]
 
 - content_for :sidebar do
-  - cache([game, game.cache_key, 'sidebar']) do
+  - cache([game, game.cache_key, Time.zone.today.to_s(:db), 'sidebar']) do
     - unless leader.nil?
       #leader
         %h3= 'Leader'[]
