@@ -187,6 +187,15 @@ class Match < ActiveRecord::Base
                              :game => self.game,
                              :message => "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% won #{self.winner.score} to #{self.loser.score} over %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
                              :published_at => self.played_at)
+                             
+    if self.game.track_clean_sheets? && self.teams.first.score == 0 || self.teams.last.score == 0
+      self.account.logs.create(:linked_model => "Clean sheet",
+                               :linked_id => self.id,
+                               :user => self.creator,
+                               :game => self.game,
+                               :message => "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% kept a clean sheet against %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
+                               :published_at => self.played_at)
+    end                         
   end
 
   protected

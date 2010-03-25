@@ -9,11 +9,16 @@ class Log < ActiveRecord::Base
     self.published_at = Time.now if self.published_at.blank?
   end
 
-  def self.find_by_item(account, item)
-    account.logs.find(:all, :conditions => { :linked_model => item.class.class_name, :linked_id => item.id })
+  def self.find_by_item(account, item, model_name = nil)
+    model_name = item.class.class_name if model_name.nil?
+    account.logs.find(:all, :conditions => { :linked_model => model_name, :linked_id => item.id })
   end
 
   def self.clear_item_log(account, item)
     find_by_item(account, item).each { |item| item.destroy }
+    if (item.class.class_name == "Match")
+      find_by_item(account, item, 'Clean sheet').each { |item| item.destroy }
+    end
   end
 end
+  
