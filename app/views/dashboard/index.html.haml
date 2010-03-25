@@ -1,7 +1,5 @@
 - title 'Dashboard'[]
 
-= game.updated_at
-
 - cache([game, game.cache_key, 'dashboard']) do
   - if logs.size > 0
     = render :partial => 'logs', :locals => { :logs => logs }
