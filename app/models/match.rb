@@ -8,7 +8,7 @@ class Match < ActiveRecord::Base
   attr_accessor :filter
 
   belongs_to :account
-  belongs_to :game, :counter_cache => true
+  belongs_to :game, :counter_cache => true, :touch => true
   has_many :teams
   has_many :comments
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'

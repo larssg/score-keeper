@@ -18,5 +18,7 @@ class Comment < ActiveRecord::Base
                                    :game => self.match.game,
                                    :message => "#{self.user.name} said: #{self.body}",
                                    :published_at => self.created_at)
+
+    self.match.game.touch
   end
 end

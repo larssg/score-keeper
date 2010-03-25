@@ -17,7 +17,6 @@ class DashboardController < ApplicationController
   helper_method :game
   helper_method :logs
   helper_method :last_update
-  helper_method :last_update_cache_key
   helper_method :recent_matches
   helper_method :rankings
   helper_method :newbies
@@ -47,11 +46,6 @@ class DashboardController < ApplicationController
   def last_update
     return nil if logs.nil? || logs.first.nil?
     logs.first.published_at.to_s(:db)
-  end
-
-  def last_update_cache_key
-    return nil if last_update.nil?
-    last_update.gsub(' ', '-')
   end
    
   def recent_matches

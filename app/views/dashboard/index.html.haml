@@ -1,6 +1,8 @@
 - title 'Dashboard'[]
 
-- cache([game, last_update_cache_key, 'dashboard']) do
+= game.updated_at
+
+- cache([game, game.updated_at, 'dashboard']) do
   - if logs.size > 0
     = render :partial => 'logs', :locals => { :logs => logs }
 
@@ -16,10 +18,9 @@
     = render :partial => 'recent_matches', :locals => { :recent_matches => recent_matches }
   - else
     #no_data= 'There are no matches in the database yet.'[]
-    
-  
+
 - content_for :sidebar do
-  - cache([game, last_update_cache_key, 'sidebar']) do
+  - cache([game, game.updated_at, 'sidebar']) do
     - unless leader.nil?
       #leader
         %h3= 'Leader'[]
