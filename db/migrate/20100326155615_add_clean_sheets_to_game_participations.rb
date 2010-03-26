@@ -3,8 +3,11 @@ class AddCleanSheetsToGameParticipations < ActiveRecord::Migration
     add_column :game_participations, :clean_sheets, :integer, :default => 0
     
     Team.find_each(:conditions => 'score = 0') do |team|
-      team.other.memberships.each do |membership|
-        membership.game_participation.increment!(:clean_sheets)
+      other = team.other
+      unless other.nil?
+        other.memberships.each do |membership|
+          membership.game_participation.increment!(:clean_sheets)
+        end
       end
     end
   end
