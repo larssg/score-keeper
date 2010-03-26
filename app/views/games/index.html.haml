@@ -11,7 +11,7 @@
           %td
             = link_to h(game.name), session_path('switch_game', :current_game => { :id => game.id }), :method => :put
             - if game.locked?
-              (locked)
+              = css_image_tag('icons/lock.gif')
           %td= '{team_size}-on-{team_size}'[:team_size, game.team_size, game.team_size]
           %td= link_to 'Edit', edit_game_path(game)
 
