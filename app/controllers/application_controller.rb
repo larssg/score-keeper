@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  include HoptoadNotifier::Catcher
   include AuthenticatedSystem
   include AccountLocation
 

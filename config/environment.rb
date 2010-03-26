@@ -21,6 +21,7 @@ Rails::Initializer.run do |config|
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "aws-s3", :lib => "aws/s3"
+  config.gem 'hoptoad_notifier'
   config.gem 'gchartrb', :lib => 'google_chart'
   config.gem 'hpricot'
   config.gem 'cucumber'
