@@ -45,11 +45,16 @@
     .matchlink= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], game_matches_path(@game, :filter => @user.id)
 
     #counts
-      %p.position
-        %label= 'Position'[] + ':'
-        = @user.position(@game)
-        
       %table.for_against
+        %tr
+          %td.for
+            %label Position:
+            = @user.position(@game)
+          - if @game.track_clean_sheets?
+            %td.against
+              %label Clean sheets:
+              = @game_participation.clean_sheets
+      
         %tr
           %td.for
             %label= 'Ranking'[] + ':'

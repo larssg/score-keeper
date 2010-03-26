@@ -134,6 +134,7 @@ class Match < ActiveRecord::Base
         participation.points_for += team.score
         participation.points_against += team.other.score
         participation.matches_played = self.game.memberships.count(:conditions => { :user_id => membership.user_id })
+        participation.increment(:clean_sheets) if team.other.score == 0
 
         participation.save
       end
@@ -157,6 +158,7 @@ class Match < ActiveRecord::Base
         participation.points_for -= team.score
         participation.points_against -= team.other.score
         participation.decrement(:matches_played)
+        participation.decrement(:clean_sheets) if team.other.score == 0
 
         participation.save
       end
