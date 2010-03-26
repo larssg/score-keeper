@@ -91,12 +91,13 @@ namespace :css_sprites do
   task :generate => :environment do
     generator = CssSprites.new(File.join(Rails.root, 'public', 'images', 'icons'), '/images/{sprites.png}')
     
-    sprite_css = File.join(Rails.root, 'public', 'stylesheets', 'sprites.css')
+    sprite_css = generator.generate_css
 
     sha1 = Digest::SHA1.hexdigest(sprite_css)
     image_filename = "sprites.#{sha1}.cache.png"
 
-    File.open(sprite_css, 'w') { |f| f.write(generator.generate_css.gsub('{sprites.png}', image_filename)) }
+    css_filename = File.join(Rails.root, 'public', 'stylesheets', 'sprites.css')
+    File.open(css_filename, 'w') { |f| f.write(sprite_css.gsub('{sprites.png}', image_filename)) }
     
     sprite_image = File.join(Rails.root, 'public', 'images', image_filename)
     generator.generate_sprite(sprite_image)
