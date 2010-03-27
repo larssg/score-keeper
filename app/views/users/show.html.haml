@@ -47,7 +47,7 @@
     #counts
       %table.for_against
         %tr
-          %td.for
+          %td.for{ :colspan => (@game.track_clean_sheets? ? nil : 2) }
             %label Position:
             = @user.position(@game)
           - if @game.track_clean_sheets?
