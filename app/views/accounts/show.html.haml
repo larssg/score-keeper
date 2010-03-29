@@ -2,11 +2,11 @@
 .list
   %table
     %tr
-      %th= 'Name'
-      %th= 'Display name'
-      %th= 'E-mail'
-      %th= 'Matches'
-      %th= 'Actions'
+      %th Name
+      %th Display name
+      %th E-mail
+      %th Matches
+      %th Actions
     - @account_users.each do |user|
       %tr{ :class => cycle('even', 'odd') }
         %td= h(user.name)

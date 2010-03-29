@@ -1,4 +1,4 @@
-%h3= 'Basics'[]
+%h3 Basics
 %table.form
   %tr
     %td.label= f.label :name
@@ -20,7 +20,7 @@
     %td.label &nbsp;
     %td.submit= create_or_update_button @game
     
-%h3= 'Details'[]
+%h3 Details
 %table.form
   %tr
     %td.label= f.label :track_clean_sheets
@@ -35,21 +35,21 @@
       .notes Used to prevent users from adding new matches to the game.
 
   %tr
-    %td.label= 'Player roles'[]
+    %td.label Player roles
     %td.field
       = f.text_area :player_roles
-      .notes= 'Player roles, one per line. E.g.: Offense, Defense.'
+      .notes Player roles, one per line. E.g.: Offense, Defense.
 
   %tr
-    %td.label= 'Rules'[]
+    %td.label Rules
     %td.field
       = f.text_area :rules
 
   %tr
-    %td.label= 'Newbie limit'[]
+    %td.label Newbie limit
     %td.field
       = f.text_field :newbie_limit, :class => 'text required small'
-      .notes= 'Number of matches a user must play to be part of normal rankings.'[]
+      .notes Number of matches a user must play to be part of normal rankings.
 
   %tr
     %td.label &nbsp;

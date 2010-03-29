@@ -1,7 +1,7 @@
 #logs
   = link_to css_image_tag('rss.gif'), log_feed_url(current_game), :class => 'rss'
   
-  %h3= 'Events'[]
+  %h3 Events
   .list
     - logs.each do |log|
       %span.log{ :class => log == logs.last ? 'last' : nil }

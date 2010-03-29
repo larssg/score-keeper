@@ -7,6 +7,6 @@
 
 - if account_admin?
   - content_for :sidebar do
-    %h3= 'Administration'
+    %h3 Administration
     %p
-      = link_to 'Remove user'[], user_path(@user), :method => :delete, :confirm => 'Delete user. Are you sure?'
+      = link_to 'Remove user', user_path(@user), :method => :delete, :confirm => 'Delete user. Are you sure?'

@@ -1,7 +1,7 @@
 - sorted_teams = Match.sort_teams_by_filter(match.teams, params[:filter])
 
 %td.members
-  = link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(:game_id => match.game_id, :filter => sorted_teams.first.team_ids)
+  = link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"), game_matches_path(:game_id => match.game_id, :filter => sorted_teams.first.team_ids)
   = render :partial => 'matches/members', :locals => { :team => sorted_teams.first }
 
 %td.score{ :nowrap => 'nowrap' }
@@ -17,8 +17,8 @@
     = css_image_tag('icons/blank.gif')
 
 %td.members
-  = link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(:game_id => match.game_id, :filter => sorted_teams.last.team_ids)
+  = link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"), game_matches_path(:game_id => match.game_id, :filter => sorted_teams.last.team_ids)
   = render :partial => 'matches/members', :locals => { :team => sorted_teams.last }
   
 %td.comments
-  = link_to css_image_tag('icons/comment.png', :class => 'comments', :alt => 'Comment on this match'[]) + " (#{match.comments_count})", game_match_path(match.game_id, match)
+  = link_to css_image_tag('icons/comment.png', :class => 'comments', :alt => 'Comment on this match') + " (#{match.comments_count})", game_match_path(match.game_id, match)

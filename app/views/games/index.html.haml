@@ -2,9 +2,9 @@
   .list
     %table
       %tr
-        %th= 'Name'[]
-        %th= 'Team size'[]
-        %th= 'Actions'[]
+        %th Name
+        %th Team size
+        %th Actions
       
       - @games.each do |game|
         %tr{ :class => cycle('even', 'odd') }
@@ -20,5 +20,5 @@
     = 'There are no games in the system. Please <a href="{new_game_path}">create a game</a> to get started.'[:no_games, new_game_path]
 
 - content_for :sidebar do
-  %h3= 'Administration'
+  %h3 Administration
   = link_to 'Create game', new_game_path

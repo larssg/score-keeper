@@ -1,7 +1,7 @@
-- title 'Matches'[], :show => true
+- title 'Matches', :show => true
 
 - if @matches.length == 0
-  = 'There are no matches in the database yet.'[]
+  There are no matches in the database yet.
 - else
   - if @filter
     #filter
@@ -14,11 +14,11 @@
     .list
       %table
         %tr
-          %th= 'Team one'[]
-          %th.score= 'Score'[]
-          %th= 'Team two'[]
+          %th Team one
+          %th.score Score
+          %th Team two
           %th &nbsp;
-          %th= 'Created'[]
+          %th Created
           %th &nbsp;
 
         - @matches.each do |match|
@@ -29,25 +29,25 @@
               = match.played_at.to_s :short
               = ' by {user}'[:by_user, link_to(find_user(match.creator_id).login, game_user_path(current_game, find_user(match.creator_id)))] unless match.creator_id.nil?
 
-            %td= link_to 'Delete', game_match_path(match.game_id, match), :method => :delete, :confirm => "Delete match. Are you sure?\n\nBe aware that deleting a match may take a while."[] if logged_in?
+            %td= link_to 'Delete', game_match_path(match.game_id, match), :method => :delete, :confirm => "Delete match. Are you sure?\n\nBe aware that deleting a match may take a while." if logged_in?
 
   = will_paginate @matches
 
   #feeds
-    = link_to css_image_tag('rss.gif') + ' ' + 'Atom feed (all matches)'[], match_feed_url(current_game), :class => 'rss'
+    = link_to css_image_tag('rss.gif') + ' ' + 'Atom feed (all matches)', match_feed_url(current_game), :class => 'rss'
     - unless params[:filter].blank?
-      = link_to css_image_tag('rss.gif') + ' ' + 'Atom feed (filtered)'[], match_feed_url(current_game, :filter => params[:filter]), :class => 'rss'
+      = link_to css_image_tag('rss.gif') + ' ' + 'Atom feed (filtered)', match_feed_url(current_game, :filter => params[:filter]), :class => 'rss'
 
 - content_for :head do
-  = auto_discovery_link_tag :atom, match_feed_url(current_game), :title => 'All matches'[]
+  = auto_discovery_link_tag :atom, match_feed_url(current_game), :title => 'All matches'
 
   - unless params[:filter].blank?
-    = auto_discovery_link_tag :atom, match_feed_url(current_game, :filter => params[:filter]), :title => 'Filtered'[]
+    = auto_discovery_link_tag :atom, match_feed_url(current_game, :filter => params[:filter]), :title => 'Filtered'
 
 - if @filter
   - content_for :sidebar do
     %p= link_to 'Show all matches', game_matches_path(current_game), :class => 'clear'
     - if @filter.length == 1
-      = link_to 'Show user details'[], game_user_path(current_game, @filter.first)
+      = link_to 'Show user details', game_user_path(current_game, @filter.first)
     - elsif @filter.length > 1
-      %p= link_to css_image_tag('icons/chart_bar.png') + ' ' + 'Show team details'[], game_team_path(current_game, @filter.collect(&:id).join(','))
+      %p= link_to css_image_tag('icons/chart_bar.png') + ' ' + 'Show team details', game_team_path(current_game, @filter.collect(&:id).join(','))

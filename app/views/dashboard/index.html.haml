@@ -1,56 +1,55 @@
-- title 'Dashboard'[]
+- title 'Dashboard'
 
 - if logs.size > 0
   = render :partial => 'logs', :locals => { :logs => logs }
 
 - cache([game, game.cache_key, 'dashboard']) do
-
   - form_tag game_comparisons_path(current_game), :method => :get do
     #leaderboards
       - if rankings.size > 0
-        = render :partial => 'leaderboard', :locals => { :game_participations => rankings, :start_at => 1, :title => 'Rankings'[], :details => '', :board_id => 'rankings' }
+        = render :partial => 'leaderboard', :locals => { :game_participations => rankings, :start_at => 1, :title => 'Rankings', :details => '', :board_id => 'rankings' }
 
       - if newbies.size > 0
-        = render :partial => 'leaderboard', :locals => { :game_participations => newbies, :start_at => rankings.size + 1, :title => 'Newbies'[], :details => "- less than {limit} matches"[:less_than_matches, game.newbie_limit], :board_id => 'newbies' }
+        = render :partial => 'leaderboard', :locals => { :game_participations => newbies, :start_at => rankings.size + 1, :title => 'Newbies', :details => "- less than {limit} matches"[:less_than_matches, game.newbie_limit], :board_id => 'newbies' }
 
   - if recent_matches.size > 0
     = render :partial => 'recent_matches', :locals => { :recent_matches => recent_matches }
   - else
-    #no_data= 'There are no matches in the database yet.'[]
+    #no_data There are no matches in the database yet.
 
 - content_for :sidebar do
   - cache([game, game.cache_key, Time.zone.today.to_s(:db), 'sidebar']) do
     - unless leader.nil?
       #leader
-        %h3= 'Leader'[]
+        %h3 Leader
         .mugshot= link_to image_tag(leader.user.mugshot.public_filename(:thumb), :alt => leader.user.name), game_user_path(game, leader.user) if leader.user.mugshot
         = user_link_full game, leader.user
 
     #counts
-      %h3= 'Totals'[]
+      %h3 Totals
   
       %table
         %tr
           %td
-            %label= 'Matches'[] + ':'
+            %label Matches:
             = match_count
           %td
-            %label= 'Points'[] + ':'
+            %label Points:
             = points
         - unless all_time_high.nil? && all_time_low.nil?
           %tr
             %td
               - unless all_time_high.nil?
-                %label= 'All time high'[] + ':'
+                %label All time high:
                 = link_to all_time_high.current_ranking, game_match_path(game, all_time_high.team.match), :class => 'match'
-                = 'by'[]
+                by
                 %br
                 = user_link game, find_user(all_time_high.user_id)
             %td
               - unless all_time_low.nil?
-                %label= 'All time low'[] + ':'
+                %label All time low:
                 = link_to all_time_low.current_ranking, game_match_path(game, all_time_low.team.match), :class => 'match'
-                = 'by'[]
+                by
                 %br
                 = user_link game, find_user(all_time_low.user_id)
 
@@ -59,7 +58,7 @@
       
       - if news.size > 0
         #news
-          %h3= 'News'[]
+          %h3 News
           %ul
             - news.each do |news|
               %li

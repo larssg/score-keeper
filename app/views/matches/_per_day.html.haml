@@ -1,10 +1,10 @@
 #matches_per_day
-  %h3= 'Matches played per day'[] 
+  %h3= 'Matches played per day' 
   .list
     %table
       %tr
-        %th.date= 'Date'[]
-        %th.matches_played= 'Matches'[]
+        %th.date= 'Date'
+        %th.matches_played= 'Matches'
 
       - matches_per_day.each do |day|
         %tr{ :class => cycle('even', 'odd') }

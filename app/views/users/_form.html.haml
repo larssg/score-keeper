@@ -1,88 +1,88 @@
-%h3= 'Basics'[]
+%h3 Basics
 %table.form
   %tr
     %td.label= f.label :login
     %td.field= f.text_field :login, :class => 'text required'
     
   %tr
-    %td.label= f.label :name, 'Full name'[]
+    %td.label= f.label :name, 'Full name'
     %td.field= f.text_field :name, :class => 'text required'
 
   %tr
-    %td.label= f.label :display_name, 'Display name'[]
+    %td.label= f.label :display_name, 'Display name'
     %td.field
       = f.text_field :display_name, :class => 'text'
-      .notes= "A short version of the user's name, such as first name or nick name."[]
+      .notes A short version of the user's name, such as first name or nick name.
       
   %tr
-    %td.label= f.label :email, 'Email'[]
+    %td.label= f.label :email, 'Email'
     %td.field
       = f.text_field :email, :class => 'text required'
 
   %tr
-    %td.label= 'Time zone'[]
+    %td.label= 'Time zone'
     %td.field
       = f.time_zone_select :time_zone, nil, :class => 'required'
       
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
 
-%h3= 'Password'[]
+%h3 Password
 %table.form
   %tr
     %td.label= f.label :password
     %td.field
       = f.password_field :password, :class => 'password' + (@user.new_record? ? ' required' : '')
       - unless @user.new_record?
-        .notes= 'Fill out the password fields to change password.'[]
+        .notes Fill out the password fields to change password.
     
   %tr
-    %td.label= f.label :password_confirmation, 'Confirm password'[]
+    %td.label= f.label :password_confirmation, 'Confirm password'
     %td.field= f.password_field :password_confirmation, :class => 'password' + (@user.new_record? ? ' required' : '')
 
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
 
 - fields_for :mugshot do |fi|
-  %h3= 'Picture'[]
+  %h3 Picture
   %table.form
     %tr
       %td.label= f.label :uploaded_data, 'Picture'
       %td.field
         = fi.file_field :uploaded_data
-        .notes= 'This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.'[]
+        .notes This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.
 
     - unless @user.new_record?
       %tr
         %td.label &nbsp;
-        %td.submit= submit_tag 'Update', :disable_with => 'Updating'[] + '&hellip;'
+        %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
 
 - if account_admin?
-  %h3= 'Advanced'[]
+  %h3 Advanced
   %table.form
     %tr
-      %td.label= f.label :is_account_admin, 'Account administrator'[]
+      %td.label= f.label :is_account_admin, 'Account administrator'
       %td.field
         = f.check_box :is_account_admin
-        .notes= 'Allow the user to edit users and account settings.'[]
+        .notes Allow the user to edit users and account settings.
 
     - if admin?
       %tr
-        %td.label= f.label :is_admin, 'Super administrator'[]
+        %td.label= f.label :is_admin, 'Super administrator'
         %td.field= f.check_box :is_admin
         
     - unless @user.new_record?
       %tr
         %td.label &nbsp;
-        %td.submit= submit_tag 'Update'[], :disable_with => 'Updating'[] + '&hellip;'
+        %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
         
 - if @user.new_record?
-  %h3= 'Create user'[]
+  %h3 Create user
   %table.form
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Create user'[], :disable_with => 'Creating user'[] + '&hellip;'
+      %td.submit= submit_tag 'Create user', :disable_with => 'Creating user&hellip;'

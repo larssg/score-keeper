@@ -1,7 +1,7 @@
 - if current_game.nil? || enabled_users.size < current_game.team_size * 2 || current_account.matches.size == 0
   #getting_started
-    %h3= 'Getting started'[]
-    .help= 'Complete the following steps to get started.'[]
+    %h3 Getting started
+    .help Complete the following steps to get started.
   
     .step{ :class => current_account.games.count == 0 ? 'next' : nil }
       %span 1.

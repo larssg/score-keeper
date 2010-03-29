@@ -1,38 +1,38 @@
 - form_for @account do |f|
-  %h3= 'Basics'[]
+  %h3 Basics
   %table.form
     %tr
-      %td.label= f.label :domain, 'Subdomain'[]
+      %td.label= f.label :domain, 'Subdomain'
       %td.field
         http://
         = f.text_field :domain, :class => 'text domain'
         = '.' + account_domain
 
     %tr
-      %td.label= f.label :time_zone, 'Time zone'[]
+      %td.label= f.label :time_zone, 'Time zone'
       %td.field
         = f.time_zone_select :time_zone, nil
   
-  %h3= 'First user'[]
+  %h3 First user
   - fields_for @user do |u|
     %table.form
       %tr
-        %td.label= u.label :login, 'Username'[]
+        %td.label= u.label :login, 'Username'
         %td.field
           = u.text_field :login, :class => 'text'
 
       %tr
-        %td.label= u.label :email, 'Email'[]
+        %td.label= u.label :email, 'Email'
         %td.field
           = u.text_field :email, :class => 'text'
 
       %tr
-        %td.label= u.label :password, 'Password'[]
+        %td.label= u.label :password, 'Password'
         %td.field
           = u.password_field :password, :class => 'text'
 
       %tr
-        %td.label= u.label :password_confirmation, 'Confirm Password'[]
+        %td.label= u.label :password_confirmation, 'Confirm Password'
         %td.field
           = u.password_field :password_confirmation, :class => 'text'
 

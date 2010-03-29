@@ -3,18 +3,18 @@
 = error_messages_for :account
 
 - form_for current_account do |f|
-  %h3= 'Basics'[]
+  %h3 Basics
   %table.form
     %tr
-      %td.label= 'Name'[]
+      %td.label Name
       %td.field
         = f.text_field :name, :class => 'text required'
 
     %tr
-      %td.label= 'Time zone'[]
+      %td.label Time zone
       %td.field
         = f.time_zone_select :time_zone, nil, :class => 'required'
-        .notes= 'Default time zone for users in the account.'[]
+        .notes Default time zone for users in the account.
     
     %tr
       %td.label &nbsp;

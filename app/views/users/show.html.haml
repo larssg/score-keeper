@@ -2,31 +2,31 @@
 
 - if @game_participation.matches_played > 0
   #graph
-    %h3= 'Ranking chart'[]
+    %h3 Ranking chart
     - form_tag game_user_path(current_game, @user), :method => :get do
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
-      = submit_tag 'Update'[]
+      = submit_tag 'Update'
     = render :partial => 'shared/graph', :locals => { :url => game_user_matches_url(@game, @user.id, :period => @time_period, :format => :chart) }
 
 - if @game.team_size == 2
   .list
-    %h3= 'Team mates'[]
+    %h3 Team mates
 
     %table{ :id => 'teammates' }
       %thead
         %tr
           %th &nbsp;
           %th &nbsp;
-          %th= 'Team mate'[]
-          %th= 'Ranking'[]
-          %th= 'Matches played'[]
-          %th= 'Matches won'[]
-          %th= 'Percentage won'[]
+          %th Team mate
+          %th Ranking
+          %th Matches played
+          %th Matches won
+          %th Percentage won
 
       %tbody
         - @teams.each do |team|
           %tr{ :class => cycle('even', 'odd') }
-            %td= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"[]), game_matches_path(@game, :filter => team[:team].team_ids)
+            %td= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this team's matches"), game_matches_path(@game, :filter => team[:team].team_ids)
             %td= link_to css_image_tag('icons/chart_bar.png', :class => 'team'), game_team_path(@game, team[:team].team_ids)
             %td= link_to team[:team_mate].name, game_user_path(@game, team[:team_mate])
             %td= team[:team_mate_game_participation].ranking.to_i
@@ -37,12 +37,12 @@
 - content_for :sidebar do
   .user
     - if account_admin?
-      .edit_user_link= link_to 'Edit'[], edit_user_path(@user)
+      .edit_user_link= link_to 'Edit', edit_user_path(@user)
 
     - if @user.mugshot
       .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
     
-    .matchlink= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this user's matches"[]) + ' ' + 'Show matches'[], game_matches_path(@game, :filter => @user.id)
+    .matchlink= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this user's matches") + ' ' + 'Show matches', game_matches_path(@game, :filter => @user.id)
 
     #counts
       %table.for_against
@@ -57,44 +57,44 @@
       
         %tr
           %td.for
-            %label= 'Ranking'[] + ':'
+            %label Ranking:
             = @game_participation.ranking
           %td.against
-            %label= 'Played matches'[] + ':'
+            %label Played matches:
             = @game_participation.matches_played
 
         %tr
           %td.for
-            %label= 'Matches won'[] + ':'
+            %label Matches won:
             = @game_participation.matches_won
           %td.against
-            %label= 'Matches lost'[] + ':'
+            %label Matches lost:
             = @game_participation.matches_lost
 
         %tr
           %td.for
-            %label= 'Goals for'[] + ':'
+            %label Goals for:
             = @game_participation.points_for
           %td.against
-            %label= 'Goals against'[] + ':'
+            %label Goals against:
             = @game_participation.points_against
             
         %tr
           %td.for
-            %label= 'Goal diff.'[] + ':'
+            %label Goal diff.:
             = @game_participation.difference
             
           %td.against
-            %label= 'Average diff.'[] + ':'
+            %label Average diff.:
             = @game_participation.difference_average
 
         - if @all_time_high && @all_time_low
           %tr
             %td.for
-              %label= 'Best ranking'[] + ':'
+              %label Best ranking:
               = link_to @all_time_high.current_ranking, game_match_path(@game, @all_time_high.team.match), :class => 'match'
             %td.against
-              %label= 'Worst ranking'[] + ':'
+              %label Worst ranking:
               = link_to @all_time_low.current_ranking, game_match_path(@game, @all_time_low.team.match), :class => 'match'
 
       = render :partial => 'matches/per_day', :locals => { :matches_per_day => @matches_per_day }
