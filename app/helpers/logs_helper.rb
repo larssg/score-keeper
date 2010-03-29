@@ -24,7 +24,9 @@ module LogsHelper
   
   def log_feed_url(game, options = {}, user = nil)
     user ||= current_user
-    game_logs_url(game, {:feed_token => user.feed_token}.merge(options), :format => :atom)
+    options[:feed_token] = user.feed_token
+    options[:format] = :atom
+    game_logs_url(game, options)
   end
   
   def format_message(game_id, message)
