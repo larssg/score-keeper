@@ -1,8 +1,9 @@
 - title 'Dashboard'[]
 
+- if logs.size > 0
+  = render :partial => 'logs', :locals => { :logs => logs }
+
 - cache([game, game.cache_key, 'dashboard']) do
-  - if logs.size > 0
-    = render :partial => 'logs', :locals => { :logs => logs }
 
   - form_tag game_comparisons_path(current_game), :method => :get do
     #leaderboards
