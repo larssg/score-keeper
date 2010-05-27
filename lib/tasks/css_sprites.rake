@@ -84,6 +84,11 @@ class CssSprites
       system(command)
     end
   end
+  
+  def optimise_image(filename)
+    command = "optipng -o7 #{filename}"
+    system(command)
+  end
 end
 
 namespace :css_sprites do
@@ -96,10 +101,17 @@ namespace :css_sprites do
     sha1 = Digest::SHA1.hexdigest(sprite_css)
     image_filename = "sprites.#{sha1}.cache.png"
 
+    puts "Writing sprites.css..."
     css_filename = File.join(Rails.root, 'public', 'stylesheets', 'sprites.css')
     File.open(css_filename, 'w') { |f| f.write(sprite_css.gsub('{sprites.png}', image_filename)) }
     
+    puts "Generating sprite image..."
     sprite_image = File.join(Rails.root, 'public', 'images', image_filename)
     generator.generate_sprite(sprite_image)
+    
+    puts "Optimising sprite image..."
+    generator.optimise_image(sprite_image)
+    
+    puts "Done."
   end
 end
