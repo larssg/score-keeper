@@ -1,3 +1,4 @@
 Haml::Template.options = {
-  :attr_wrapper => '"'
+  :attr_wrapper => '"',
+  :format => :html5
 }
