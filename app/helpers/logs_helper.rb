@@ -37,7 +37,7 @@ module LogsHelper
       else
         part
       end
-    end.join('')
+    end.join('').html_safe
   end
 
   protected
