@@ -24,7 +24,7 @@
           %td= check_box_tag 'user[]', game_participation.user_id, false, :id => "compare_user_#{game_participation.user_id}"
           %td= index + start_at
           - if start_at == 1
-            %td
+            %td<
               - if game_participation.user.created_at <= 7.days.ago
                 = position_icon(positions[game_participation.user_id])
                 = '(' + positions[game_participation.user_id][:then].to_s + ')' unless positions[game_participation.user_id].blank?
