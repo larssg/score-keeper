@@ -1,37 +1,36 @@
-ActionController::Routing::Routes.draw do |map|
-  map.root :controller => 'dashboard', :action => 'index'
+ScoreKeeper::Application.routes.draw do
+  match '/' => 'dashboard#index'
+  match 'signup' => 'users#new', :as => :signup
+  match 'login' => 'sessions#new', :as => :login
+  match 'logout' => 'sessions#destroy', :as => :logout
+  resources :games do
+    resources :matches do
+      resources :comments
+    end
 
-  map.signup 'signup', :controller => 'users', :action => 'new'
-  map.login 'login', :controller => 'sessions', :action => 'new'
-  map.logout 'logout', :controller => 'sessions', :action => 'destroy'
-  
-  map.resources :games, { :member => 'game_added_warning' } do |games|
-    games.resources :matches do |matches|
-      matches.resources :comments
+    resources :teams
+    resources :logs
+    resources :users do
+      resources :matches
     end
-    
-    games.resources :teams
-  
-    games.resources :logs
-    
-    games.resources :users do |user|
-      user.resources :matches
-    end
-    
-    games.resources :comparisons
+
+    resources :comparisons
   end
 
-  map.resources :users
-  map.resources :sessions, :member => { :impersonate => :put }, :collection => { :unimpersonate => :put }
-  
-  map.forgot_password 'forgot_password', :controller => 'users', :action => 'forgot_password'
-  map.token_login 'token_login/:token', :controller => 'sessions', :action => 'token_login'
-  
-  map.resources :accounts
-  
-  map.connect 'p/:action', :controller => 'pages'
-  map.public_root 'p', :controller => 'pages', :action => 'index'
-  
-  map.connect ':controller/:action/:id.:format'
-  map.connect ':controller/:action/:id'
+  resources :users
+  resources :sessions do
+    collection do
+      put :unimpersonate
+    end
+    member do
+      put :impersonate
+    end
+  end
+
+  match 'forgot_password' => 'users#forgot_password', :as => :forgot_password
+  match 'token_login/:token' => 'sessions#token_login', :as => :token_login
+  resources :accounts
+  match 'p/:action' => 'pages#index'
+  match 'p' => 'pages#index', :as => :public_root
+  match '/:controller(/:action(/:id))'
 end
