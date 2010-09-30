@@ -16,6 +16,25 @@ Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use (only works if using vendor/rails)
   # config.frameworks -= [ :active_resource, :action_mailer ]
 
+  # Specify gems that this application depends on. 
+  # They can then be installed with rake gem:install on new installations.
+  # config.gem "bj"
+  # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
+  # config.gem "aws-s3", :lib => "aws/s3"
+  config.gem 'hoptoad_notifier'
+  config.gem 'newrelic_rpm'
+  
+  config.gem 'gchartrb', :lib => 'google_chart'
+  config.gem 'hpricot'
+  config.gem 'cucumber'
+  config.gem 'webrat'
+  config.gem 'color-tools', :lib => 'color'
+  config.gem 'haml'
+  config.gem 'mislav-will_paginate', :version => '~> 2.3.8', :lib => 'will_paginate', 
+      :source => 'http://gems.github.com'
+  config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
+  config.gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
+
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
 
