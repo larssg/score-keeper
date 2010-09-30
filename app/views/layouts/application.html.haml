@@ -67,6 +67,6 @@
 
       .column.span-24= render :partial => 'shared/footer'
 
-    = javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application', :cache => 'cache/all'
+    = javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application'
     = yield :footer
     = render :partial => 'shared/google_analytics' unless Rails.env == 'development'
