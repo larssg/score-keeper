@@ -37,6 +37,7 @@ GEM
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
     color-tools (1.3.0)
+    dalli (1.0.3)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     gchartrb (0.8)
@@ -105,6 +106,7 @@ PLATFORMS
 DEPENDENCIES
   capistrano
   color-tools
+  dalli
   gchartrb
   haml
   hoptoad_notifier
