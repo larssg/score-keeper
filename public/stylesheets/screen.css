@@ -62,11 +62,12 @@ textarea {
     color: white; }
   #menu #add_match {
     text-align: right; }
-    #menu #add_match a {
+    #menu #add_match #add_match_button {
       display: block;
       padding-right: 21px;
       padding-top: 9px;
-      color: white; }
+      color: white;
+      cursor: pointer; }
     #menu #add_match #user_minimum {
       padding-right: 21px;
       padding-top: 9px;
