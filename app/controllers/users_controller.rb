@@ -22,24 +22,24 @@ class UsersController < ApplicationController
     @matches_per_day = @game_participation.memberships.count(:group => 'matches.played_on', :limit => 10, :order => 'matches.played_on DESC', :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
 
     @team_counts = @user.teams.count(:group => :team_ids, :conditions => ['memberships.game_id = ?', @game.id]).sort_by { |t| t[1] }.reverse
-    @team_wins = @user.teams.count(:group => :team_ids, :conditions => ['memberships.game_id = ? AND won = ?', @game.id, true])
+    @team_wins = @user.teams.joins(:memberships).where(:won => true, :memberships => { :game_id => @game.id }).group('team_ids').count
     @teams = current_account.teams.find(:all, :group => :team_ids, :conditions => { :team_ids => @team_counts.collect { |tc| tc[0] } })
 
-    @teams = @teams.collect do |t|
+    @teams = @teams.collect do |team|
       {
-        :team => t,
-        :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
-        :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0]
+        :team => team,
+        :played => @team_counts.select { |tc| tc[0] == team.team_ids }[0],
+        :wins => @team_wins[team.team_ids] / 2
       }
     end
-
+    
     if @game.team_size == 2
       @teams.each do |team|
         team_mate = team[:team].team_mate_for(@user)
         team[:team_mate] = team_mate
         team[:team_mate_game_participation] = @game.game_participation_for(team_mate)
         team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
-        team[:wins] = team[:wins].blank? ? 0 : team[:wins][1].blank? ? 0 : team[:wins][1].to_i
+        team[:wins] = team[:wins].blank? ? 0 : team[:wins]
         team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
       end
     end
