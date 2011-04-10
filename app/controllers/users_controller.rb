@@ -3,8 +3,6 @@ class UsersController < ApplicationController
   before_filter :login_required, :except => [ :forgot_password ]
   before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
 
-  filter_parameter_logging :password
-
   def index
     @users = all_users
     @user = current_account.users.build
@@ -65,9 +63,6 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     @user.account = current_account
 
-#    mugshot = Mugshot.create(params[:mugshot])
-#    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil? || !(mugshot.size > 0)
-
     if current_user.is_admin? && params[:user][:is_admin]
       @user.is_admin = true
     end
@@ -89,8 +84,6 @@ class UsersController < ApplicationController
 
   def update
     @user = current_account.users.find(params[:id])
-    mugshot = Mugshot.create(params[:mugshot])
-    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil?
     @user.is_account_admin = params[:user][:is_account_admin] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:is_account_admin].nil?
     @user.is_admin = params[:user][:is_admin] if current_user.is_admin? && params[:user][:is_admin]
     @user.enabled = params[:user][:enabled] if (current_user.is_account_admin? || current_user.is_admin?) && !params[:user][:enabled].nil?

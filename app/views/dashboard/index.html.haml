@@ -22,7 +22,7 @@
     - unless leader.nil?
       #leader
         %h3 Leader
-        .mugshot= link_to image_tag(leader.user.mugshot.public_filename(:thumb), :alt => leader.user.name), game_user_path(game, leader.user) if leader.user.mugshot
+        .mugshot= link_to image_tag(leader.user.avatar.url(:thumb), :alt => leader.user.name), game_user_path(game, leader.user) if leader.user.avatar
         = user_link_full game, leader.user
 
     #counts

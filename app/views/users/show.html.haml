@@ -47,8 +47,8 @@
     - if account_admin?
       .edit_user_link= link_to 'Edit', edit_user_path(@user)
 
-    - if @user.mugshot
-      .mugshot= image_tag @user.mugshot.public_filename(:thumb), :alt => h(@user.name)
+    - if @user.avatar
+      .mugshot= image_tag @user.avatar(:thumb), :alt => h(@user.name)
     
     .matchlink= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this user's matches") + ' ' + 'Show matches', game_matches_path(@game, :filter => @user.id)
 

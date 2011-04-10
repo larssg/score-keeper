@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
   has_many :games, :through => :game_participations
   has_many :memberships
   has_many :comments
-  belongs_to :mugshot
   has_many :logs
   has_many :teams, :through => :memberships
   belongs_to :last_game, :class_name => "Game", :foreign_key => "last_game_id"
@@ -29,16 +28,17 @@ class User < ActiveRecord::Base
   validates_presence_of :time_zone
 
   before_save :encrypt_password
+  before_save :set_display_name
   before_validation :set_time_zone
+  before_validation :set_name_from_login
   after_create :set_feed_token
+  before_destroy :remove_matches
+  
+  has_attached_file :avatar, :styles => { :thumb => '60x60>' }
 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone
-
-  before_destroy :remove_matches
-  before_validation :set_name_from_login
-  before_save :set_display_name
+  attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone, :avatar
 
   def set_display_name
     return if self.name.blank?

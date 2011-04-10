@@ -47,19 +47,18 @@
       %td.label &nbsp;
       %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
 
-- fields_for :mugshot do |fi|
-  %h3 Picture
-  %table.form
-    %tr
-      %td.label= f.label :uploaded_data, 'Picture'
-      %td.field
-        = fi.file_field :uploaded_data
-        .notes This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.
+%h3 Picture
+%table.form
+  %tr
+    %td.label= f.label :avatar, 'Picture'
+    %td.field
+      = f.file_field :avatar
+      .notes This picture will be shown on the user detail page, on comments and on the dashboard. It will be automatically resized.
 
-    - unless @user.new_record?
-      %tr
-        %td.label &nbsp;
-        %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
+  - unless @user.new_record?
+    %tr
+      %td.label &nbsp;
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
 
 - if account_admin?
   %h3 Advanced

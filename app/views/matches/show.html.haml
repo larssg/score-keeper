@@ -33,7 +33,7 @@
 #comments
   - @comments.each_with_index do |comment, index|
     .comment{ :class => cycle('even', 'odd') }
-      .mugshot= link_to image_tag(comment.user.mugshot.public_filename(:thumb), :alt => comment.user.name), game_user_path(@match.game_id, comment.user) if comment.user.mugshot
+      .mugshot= link_to image_tag(comment.user.avatar(:thumb), :alt => comment.user.name), game_user_path(@match.game_id, comment.user) if comment.user.avatar
       .info
         %span.index= '#' + (index + 1).to_s + '&nbsp;'
         %span.user= link_to(h(comment.user.name), game_user_path(@match.game_id, comment.user), :name => "c#{comment.id}") + '&nbsp;'.html_safe

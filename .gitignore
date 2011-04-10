@@ -11,7 +11,7 @@ doc/api
 doc/app
 config/database.yml
 config/deploy.rb
-public/mugshots
+public/system
 public/stylesheets/cache
 public/javascripts/cache
 .project
