@@ -6,9 +6,9 @@
   - if @filter
     #filter
       - if @filter.length > 1
-        = 'Showing matches for <b>{first}</b> and <b>{second}</b>'[:filter_by_two, h(@filter[0].display_name), h(@filter[1].display_name)]
+        = "Showing matches for <b>#{@filter[0].display_name}</b> and <b>#{@filter[1].display_name}</b>"
       - else
-        = 'Showing matches for <b>{first}</b>'[:filter_by_one, h(@filter[0].display_name)]
+        = "Showing matches for <b>#{@filter[0].display_name}</b>"
 
   #matches
     .list
@@ -27,7 +27,7 @@
 
             %td
               = match.played_at.to_s :short
-              = ' by {user}'[:by_user, link_to(find_user(match.creator_id).login, game_user_path(current_game, find_user(match.creator_id)))] unless match.creator_id.nil?
+              = ' by ' + link_to(find_user(match.creator_id).login, game_user_path(current_game, find_user(match.creator_id))) unless match.creator_id.nil?
 
             %td= link_to 'Delete', game_match_path(match.game_id, match), :method => :delete, :confirm => "Delete match. Are you sure?\n\nBe aware that deleting a match may take a while." if logged_in?
 

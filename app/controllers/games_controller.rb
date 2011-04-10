@@ -27,7 +27,7 @@ class GamesController < ApplicationController
   def update
     @game = current_account.games.find(params[:id])
     if @game.update_attributes(params[:game])
-      flash[:notice] = 'Changes to game saved successfully!'[]
+      flash[:notice] = 'Changes to game saved successfully!'
       redirect_to games_url
     else
       render :action => 'edit'

@@ -41,7 +41,7 @@ class AccountsController < ApplicationController
 
   def update
     if current_account.update_attributes(params[:account])
-      flash[:notice] = 'Account saved.'[]
+      flash[:notice] = 'Account saved.'
       redirect_to root_url
     else
       @account = current_account

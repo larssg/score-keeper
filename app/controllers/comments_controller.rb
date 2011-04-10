@@ -33,11 +33,11 @@ class CommentsController < ApplicationController
   def update
     @comment = current_user.comments.find(params[:id])
     if @comment.update_attributes(params[:comment])
-      flash[:notice] = 'Changes saved successfully.'[]
+      flash[:notice] = 'Changes saved successfully.'
     elsif @comment.body.blank?
-      flash[:warning] = 'Please enter a comment.'[]
+      flash[:warning] = 'Please enter a comment.'
     else
-      flash[:error] = 'An error occured while saving the comment. Please try again.'[]
+      flash[:error] = 'An error occured while saving the comment. Please try again.'
     end
     redirect_to game_match_url(@comment.match.game, @comment.match)
   end

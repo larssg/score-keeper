@@ -146,7 +146,7 @@ class UsersController < ApplicationController
                                                       :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
 
     values = [game_participation.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
-    x_labels = ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
+    x_labels = ['Start'] + memberships.collect { |m| m.played_at.to_time.to_s :db }
 
     steps = (memberships.size / 20).to_i
 

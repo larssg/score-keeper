@@ -107,10 +107,10 @@ class ApplicationController < ActionController::Base
 
   def time_periods
     [
-     ['30 days'[], 30],
-     ['90 days'[], 90],
-     ['180 days'[], 180],
-     ['360 days'[], 360]
+     ['30 days', 30],
+     ['90 days', 90],
+     ['180 days', 180],
+     ['360 days', 360]
     ]
   end
   helper_method :time_periods

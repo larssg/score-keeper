@@ -31,12 +31,12 @@
                 Locked
             - else
               - if enabled_users.size >= current_game.team_size * 2
-                #add_match_button= css_image_tag('icons/add.png') + ' ' + 'Add match'[]
+                #add_match_button= css_image_tag('icons/add.png') + ' ' + 'Add match'
               - else
                 - if current_game.team_size * 2 - enabled_users.size == 1
-                  #user_minimum= 'Add one more user'[:add_one_more_user]
+                  #user_minimum= 'Add one more user'
                 - else
-                  #user_minimum= 'Add {users_needed} more users'[:add_x_more_ser, current_game.team_size * 2 - enabled_users.size]
+                  #user_minimum= "Add #{current_game.team_size * 2 - enabled_users.size} more users"
       
       = render :partial => 'shared/submenu'
   

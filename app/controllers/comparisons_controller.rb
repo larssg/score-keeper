@@ -79,7 +79,7 @@ class ComparisonsController < ApplicationController
       }
     end
     
-    x_labels = ['Start'[]] + dates.collect { |d| d.to_s :db }
+    x_labels = ['Start'] + dates.collect { |d| d.to_s :db }
 
     steps = (data.size / 20).to_i
 
