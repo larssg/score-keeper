@@ -6,10 +6,10 @@
       - unless @page_title.blank?
         = ' - '
         = @page_title
-    = stylesheet_link_tag 'lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'sprites', 'screen', :media => 'screen, projection'
-    = stylesheet_link_tag 'print', :media => 'print'
+    = include_stylesheets :common, :media => 'all'
     /[if IE]
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
+    = include_javascripts :common
     = yield :head
 
   %body.login
@@ -32,5 +32,4 @@
           .content= yield
 
       = render :partial => 'shared/footer'
-    = javascript_include_tag 'swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'rails', 'application', :cache => 'cache/all'
     = render :partial => 'shared/google_analytics' unless Rails.env == 'development'

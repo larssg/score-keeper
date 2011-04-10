@@ -1,0 +1,20 @@
+javascript_compressor: closure
+
+javascripts:
+  common:
+    - public/javascripts/swfobject.js
+    - public/javascripts/jquery.js
+    - public/javascripts/jquery-ui.js
+    - public/javascripts/jquery-fx.js
+    - public/javascripts/jquery.tablesorter.js
+    - public/javascripts/rails.js
+    - public/javascripts/application.js
+
+stylesheets:
+  common:
+    - public/stylesheets/lib/reset.css
+    - public/stylesheets/lib/typography.css
+    - public/stylesheets/lib/grid.css
+    - public/stylesheets/lib/forms.css
+    - public/stylesheets/sprites.css
+    - public/stylesheets/screen.css
