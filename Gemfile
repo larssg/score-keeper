@@ -16,6 +16,10 @@ gem "will_paginate", "~> 3.0.pre2"
 
 gem "paperclip", "~> 2.3"
 
+gem 'dalli'
+
 gem 'jquery-rails', '>= 0.2.6'
-# gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
-# gem "thoughtbot-shoulda", :lib => "shoulda", :source => "http://gems.github.com"
+
+group :development do
+  gem 'capistrano'
+end
