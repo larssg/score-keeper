@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
     @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
     
-    @json = chart_json
+    @json = chart_json(@time_period)
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "No user was found with that ID (#{params[:id]})."
     redirect_to root_url
@@ -134,8 +134,7 @@ class UsersController < ApplicationController
   end
 
   protected
-  def chart_json
-    time_period = params[:period].to_i
+  def chart_json(time_period)
     from = time_period.days.ago
 
     game_participation = current_game.game_participations.find_by_user_id(@user.id)
