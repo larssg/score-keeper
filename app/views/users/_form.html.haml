@@ -27,7 +27,7 @@
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'.html_safe
 
 %h3 Password
 %table.form
@@ -45,7 +45,7 @@
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'.html_safe
 
 %h3 Picture
 %table.form
@@ -58,7 +58,7 @@
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
+      %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'.html_safe
 
 - if account_admin?
   %h3 Advanced
@@ -84,4 +84,4 @@
   %table.form
     %tr
       %td.label &nbsp;
-      %td.submit= submit_tag 'Create user', :disable_with => 'Creating user&hellip;'
+      %td.submit= submit_tag 'Create user', :disable_with => 'Creating user&hellip;'.html_safe

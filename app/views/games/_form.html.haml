@@ -9,12 +9,12 @@
     %td.field
       - if @game.matches.size > 0
         = '{team_size}-on-{team_size}'[:team_size, @game.team_size, @game.team_size]
-        .notes= 'This value cannot be changed because there are matches in the database.'[]
+        .notes= 'This value cannot be changed because there are matches in the database.'
       - else
         - (1..3).each do |team_size|
           %div.radio
             = f.radio_button(:team_size, team_size, :id => "game_team_size_#{team_size}", :class => 'radio') + f.label("team_size_#{team_size}", "#{team_size}-on-#{team_size}")
-        .notes= 'Number of players on each team.'[]
+        .notes= 'Number of players on each team.'
 
   %tr
     %td.label &nbsp;
