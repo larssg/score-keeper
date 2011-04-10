@@ -12,7 +12,7 @@ class Comment < ActiveRecord::Base
 
     Log.clear_item_log(self.match.account, self)
 
-    self.match.account.logs.create(:linked_model => self.class.class_name,
+    self.match.account.logs.create(:linked_model => self.class.name,
                                    :linked_id => self.id,
                                    :user => self.user,
                                    :game => self.match.game,
