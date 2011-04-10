@@ -123,7 +123,7 @@ class UsersController < ApplicationController
       unless user.blank?
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
         user.set_login_token
-        UserMailer.send_forgot_password_info(user)
+        UserMailer.forgot_password_info(user).deliver
         redirect_to login_url
         return
       else
