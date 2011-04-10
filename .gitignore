@@ -12,6 +12,7 @@ doc/app
 config/database.yml
 config/deploy.rb
 public/system
+public/assets
 public/stylesheets/cache
 public/javascripts/cache
 .project
