@@ -1,1 +1,0 @@
-require 'yui_compressor_fu'
