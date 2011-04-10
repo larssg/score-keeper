@@ -45,12 +45,54 @@ var scoreKeeper = {
         gameId: function() {
             return $('#dashboard_data .game_id').html();
         }
+    },
+    
+    tableSort: function() {
+        $('#rankings').tablesorter({
+            sortList: [[1, 0]],
+            widgets: ['zebra'],
+            headers: {
+                0: { sorter: false },
+                2: { sorter: false },
+                3: { sorter: false }
+            }
+        });
+
+        $('#newbies').tablesorter({
+            sortList: [[1, 0]],
+            widgets: ['zebra'],
+            headers: {
+                0: { sorter: false },
+                2: { sorter: false }
+            }
+        });
+
+        $('#teams').tablesorter({
+            sortList: [[1, 1]],
+            widgets: ['zebra'],
+            headers: {
+                0: { sorter: false },
+                5: { sorter: false }
+            }
+        });
+
+        $('#teammates').tablesorter({
+            sortList: [[6, 1]],
+            widgets: ['zebra'],
+            headers: {
+                0: { sorter: false },
+                1: { sorter: false },
+                2: { sorter: false }
+            }
+        });
     }
 };
 
 $(document).ready(function() {
     $('body.login #login').focus();
     scoreKeeper.matchUpdate.init();
+    
+    scoreKeeper.tableSort();
 
     $('#add_match_button').click(function() {
       scoreKeeper.newMatch.toggle();

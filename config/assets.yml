@@ -4,11 +4,9 @@ javascripts:
   common:
     - public/javascripts/swfobject.js
     - public/javascripts/jquery.js
+    - public/javascripts/jquery.tablesorter.js
     - public/javascripts/rails.js
     - public/javascripts/application.js
-
-  special:
-    - public/javascripts/jquery.tablesorter.js
 
 stylesheets:
   common:
