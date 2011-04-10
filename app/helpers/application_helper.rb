@@ -42,22 +42,6 @@ module ApplicationHelper
     link_to h(user.name), game_user_path(game, user), :class => 'user'
   end
 
-  def graph_div()
-    content_tag :div, '', :id => 'flashcontent'
-  end
-  
-  def graph_js(url)
-    footer = '<script type="text/javascript">'
-    footer << 'var so = new SWFObject("' + url_for('/flash/open-flash-chart.swf') + '", "chart", "100%", "450", "9", "#FFFFFF");'
-    footer << 'so.addVariable("width", "100%");'
-    footer << 'so.addVariable("height", "450");'
-    footer << 'so.addVariable("data", "' + url + '");'
-    footer << 'so.addParam("allowScriptAccess", "sameDomain");'
-    footer << 'so.write("flashcontent");'
-    footer << '</script>'
-    footer
-  end
-
   def create_or_update_button(object)
     submit_tag (object.new_record? ? 'Create' : 'Update'), :disable_with => (object.new_record? ? 'Creating' : 'Updating') + '&hellip;'.html_safe
   end

@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   after_create :set_feed_token
   before_destroy :remove_matches
   
+  default_scope order('name, display_name')
+  
   has_attached_file :avatar, :styles => { :thumb => '60x60>' }
 
   # prevents a user from submitting a crafted form that bypasses activation
@@ -43,10 +45,6 @@ class User < ActiveRecord::Base
   def set_display_name
     return if self.name.blank?
     self.display_name = self.name.split[0] if self.display_name.blank?
-  end
-
-  def self.find_all
-    find(:all, :order => 'name, display_name')
   end
 
   def all_time_high(game)

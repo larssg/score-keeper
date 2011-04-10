@@ -46,8 +46,8 @@ class TeamsController < ApplicationController
 
   def show
     @time_period = params[:period] ? params[:period].to_i : 30
-    @ids = params[:id].split(',').collect { |id| id.to_i }.sort
-    @team_members = current_account.users.find(:all, :conditions => { :id => @ids }, :limit => 2)
-    @opponents = current_account.teams.opponents(@ids.join(','))
+    @ids = params[:id].split(',').collect(&:to_i).sort
+    @team_members = current_account.users.where(:id => @ids).limit(2)
+    @opponents = current_account.teams.opponents(@ids.join(',')).all
   end
 end

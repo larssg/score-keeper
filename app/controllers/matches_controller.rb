@@ -26,7 +26,7 @@ class MatchesController < ApplicationController
 
   def show
     @match = current_account.matches.find(params[:id])
-    @comments = @match.comments.find(:all, :order => 'created_at')
+    @comments = @match.comments.all
     @comment = @match.comments.build
   end
 

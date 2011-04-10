@@ -10,6 +10,8 @@ class Game < ActiveRecord::Base
   validates_inclusion_of :team_size, :in => (1..3)
 
   before_save :format_player_roles
+  
+  default_scope order('name')
 
   def ranked_game_participators
     @ranked_users ||= self.game_participations.find(:all,

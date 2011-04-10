@@ -12,8 +12,6 @@
         %span.color{ :style => "background-color: #{colors[index]}" }
         %span.name= player.name
 
-  = render :partial => 'shared/graph', :locals => { :url => game_comparison_url(current_game, @ids.join('-'), :chart, :period => @time_period, :format => :graph) }
-
 - content_for :sidebar do
   .team
     .members.clear

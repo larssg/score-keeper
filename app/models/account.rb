@@ -15,11 +15,11 @@ class Account < ActiveRecord::Base
   attr_accessible :name, :domain, :time_zone
 
   def all_users
-    @all_users ||= self.users.find(:all, :order => 'name, display_name')
+    @all_users ||= self.users.all
   end
 
   def all_games
-    @all_games ||= self.games.find(:all, :order => 'name')
+    @all_games ||= self.games.all
   end
 
   def enabled_users

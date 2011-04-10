@@ -31,10 +31,7 @@ class Team < ActiveRecord::Base
   end
 
   def self.opponents(team_ids)
-    Team.find(:all,
-              :conditions => { :team_ids => team_ids },
-              :group => 'opponent_ids',
-              :select => 'SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids')
+    where(:team_ids => team_ids).group(:opponent_ids).select('SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids')
   end
 
   def self.team_members(user_ids)

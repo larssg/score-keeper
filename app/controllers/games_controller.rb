@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_filter :login_required
 
   def index
-    @games = current_account.games.all(:order => 'name')
+    @games = current_account.all_games
   end
 
   def new
