@@ -29,7 +29,7 @@ class UsersController < ApplicationController
       {
         :team => team,
         :played => @team_counts.select { |tc| tc[0] == team.team_ids }[0],
-        :wins => @team_wins[team.team_ids] / 2
+        :wins => @team_wins[team.team_ids].to_i / 2
       }
     end
     
