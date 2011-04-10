@@ -2,7 +2,7 @@
 
 #graph
   %h3= 'Ranking chart'
-  - form_tag game_team_path(current_game, @ids.join(',')), :method => :get do
+  = form_tag game_team_path(current_game, @ids.join(',')), :method => :get do
     = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
     = submit_tag 'Update'
 

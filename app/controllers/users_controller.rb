@@ -6,6 +6,7 @@ class UsersController < ApplicationController
   filter_parameter_logging :password
 
   def index
+    @users = all_users
     @user = current_account.users.build
   end
 
@@ -27,9 +28,11 @@ class UsersController < ApplicationController
     @teams = current_account.teams.find(:all, :group => :team_ids, :conditions => { :team_ids => @team_counts.collect { |tc| tc[0] } })
 
     @teams = @teams.collect do |t|
-      { :team => t,
+      {
+        :team => t,
         :played => @team_counts.select { |tc| tc[0] == t.team_ids }[0],
-        :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0] }
+        :wins => @team_wins.select { |tw| tw[0] == t.team_ids }[0]
+      }
     end
 
     if @game.team_size == 2
@@ -44,6 +47,8 @@ class UsersController < ApplicationController
     end
 
     @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
+    
+    @json = chart_json
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "No user was found with that ID (#{params[:id]})."
     redirect_to root_url
@@ -60,8 +65,8 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     @user.account = current_account
 
-    mugshot = Mugshot.create(params[:mugshot])
-    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil? || !(mugshot.size > 0)
+#    mugshot = Mugshot.create(params[:mugshot])
+#    @user.mugshot = mugshot unless mugshot.nil? || mugshot.size.nil? || !(mugshot.size > 0)
 
     if current_user.is_admin? && params[:user][:is_admin]
       @user.is_admin = true
@@ -125,7 +130,7 @@ class UsersController < ApplicationController
       unless user.blank?
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
         user.set_login_token
-        UserNotifier.deliver_forgot_password(user)
+        UserMailer.send_forgot_password_info(user)
         redirect_to login_url
         return
       else
@@ -136,6 +141,68 @@ class UsersController < ApplicationController
   end
 
   protected
+  def chart_json
+    time_period = params[:period].to_i
+    from = time_period.days.ago
+
+    game_participation = current_game.game_participations.find_by_user_id(@user.id)
+    memberships = game_participation.memberships.find(:all,
+                                                      :conditions => ['matches.played_at >= ?', from],
+                                                      :order => 'memberships.id',
+                                                      :select => 'memberships.current_ranking, memberships.created_at, matches.played_at AS played_at',
+                                                      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
+
+    values = [game_participation.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
+    x_labels = ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
+
+    steps = (memberships.size / 20).to_i
+
+    {
+      :elements => [
+        {
+          :type => 'line',
+          :colour => "#3399CC",
+          'dot-style' => {
+            'dot-size' => 4,
+            :tip => "#val#<br>#x_label#",
+            :type => 'dot'
+          },
+          :values => values
+        }
+      ],
+      :y_legend => {
+        :text => 'Ranking',
+        :style => '{color: #000000; font-size: 12px}'
+      },
+      :y_axis => {
+        :min => current_game.y_min,
+        :max => current_game.y_max,
+        :steps => 100,
+        :colour => '#808080',
+        'grid-colour' => '#dddddd'
+      },
+      :x_axis => {
+        :steps => steps,
+        :labels => {
+          :labels => x_labels,
+          'steps' => steps,
+          :rotate => 315
+        },
+        :colour => '#808080',
+        'grid-colour' => '#dddddd'
+      },
+      :bg_colour => '#ffffff',
+      :tooltip => {
+        :shadow => false,
+        :body => "{font-size: 10px; font-weight: normal; color: #000000;}",
+        :title => "{font-size: 14px; color: #000;}",
+        :background => "#ffffff",
+        :colour => "#3399cc",
+        :stroke => 3
+      }
+    }.to_json
+  end
+
   def must_be_account_admin_or_self
     redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_account_admin? || current_user.is_admin?
   end

@@ -1,7 +1,7 @@
-<% form_for @comment, :url => game_match_comment_path(@comment.match.game_id, @comment.match_id, @comment.id) do |f| %>
+<%= form_for @comment, :url => game_match_comment_path(@comment.match.game_id, @comment.match_id, @comment.id) do |f| %>
   <%= render :partial => 'comments/form', :locals => { :f => f } %>
   <p>
     <%= submit_tag 'Save changes' %>
-    <%= link_to_remote 'Cancel', :update => "content_#{@comment.id}", :url => game_match_comment_path(@comment.match.game_id, @comment.match_id, @comment.id) %>
+    <%= link_to 'Cancel', :remote => true, :update => "content_#{@comment.id}", :url => game_match_comment_path(@comment.match.game_id, @comment.match_id, @comment.id) %>
   </p>
 <% end %>

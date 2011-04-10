@@ -1,25 +1,26 @@
 - if @selected_player_ids.size > 0
   #graph
     %h3 Ranking chart
-    - form_tag game_comparisons_path(current_game), :method => :get do
+    = form_tag game_comparisons_path(current_game), :method => :get do
       - @selected_player_ids.each do |player_id|
         = hidden_field_tag 'user[]', player_id
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'
-    
-    .legend
-      - @indexed_sorted_players.each do |isp|
-        .player
-          %span.color{ :style => "background-color: #{colors[isp.last]}" }
-          %span.name= link_to isp.first.name, game_user_path(@game, isp.first)
 
-    = render :partial => 'shared/graph', :locals => { :url => game_comparison_url(current_game, @selected_player_ids.join('-'), :period => @time_period, :format => :chart) }
-    
+    %script{ :type => 'text/javascript' }
+      function open_flash_chart_data() {
+      = raw "return '#{@json}';"
+      }
+
+    #chart
+    :javascript
+      swfobject.embedSWF("/flash/open-flash-chart.swf", "chart", "100%", "450", "9.0.0");
+
 - else
-  #graph Please select users to compare to the right.
+  #graph Please select users to compare.
 
 - content_for :sidebar do
-  - form_tag game_comparisons_path(@game), :method => :get, :id => 'compare_users' do
+  = form_tag game_comparisons_path(@game), :method => :get, :id => 'compare_users' do
     - @players.each do |player|
       .player
         = check_box_tag 'user[]', player.id, @selected_player_ids.include?(player.id), :id => "user_#{player.id}"

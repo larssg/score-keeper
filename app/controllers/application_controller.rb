@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
   include AccountLocation
 
   before_filter :set_time_zone
@@ -116,17 +115,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :time_periods
 
-  def setup_ranking_graph
-    chart = FlashChart.new
-    chart.title ' '
-    chart.set_y_max y_max
-    chart.set_y_min y_min
-    chart.y_label_steps y_axis_steps(y_min, y_max)
-    chart.set_y_legend('Ranking'[], 12, '#000000')
-
-    chart
-  end
-
   def colors
     if @@colors.size == 0
       [0.8, 0.4, 1.0, 0.6].each do |saturation|
@@ -141,16 +129,6 @@ class ApplicationController < ActionController::Base
     @@colors
   end
   helper_method :colors
-
-  def y_max
-    max = [Membership.all_time_high(current_game).current_ranking, 2000].max
-    (max / 100.0).ceil * 100 # Round up to nearest 100
-  end
-
-  def y_min
-    min = [Membership.all_time_low(current_game).current_ranking, 2000].min
-    (min / 100.0).floor * 100 # Round down to nearest 100
-  end
 
   def y_axis_steps(min, max)
     (max - min) / 100
@@ -170,6 +148,98 @@ class ApplicationController < ActionController::Base
 
   def must_be_impersonating
     redirect_to root_url unless impersonating?
+  end
+
+  def logged_in?
+    current_user != :false
+  end
+  helper_method :logged_in?
+
+  def current_user
+    @current_user ||= (login_from_session || login_from_cookie || :false)
+  end
+  helper_method :current_user
+
+  # Store the given user id in the session.
+  def current_user=(new_user)
+    session[:user_id] = (new_user.nil? || new_user.is_a?(Symbol)) ? nil : new_user.id
+    @current_user = new_user || :false
+  end
+
+  # Check if the user is authorized
+  #
+  # Override this method in your controllers if you want to restrict access
+  # to only a few actions or if you want to check if the user
+  # has the correct rights.
+  #
+  # Example:
+  #
+  #  # only allow nonbobs
+  #  def authorized?
+  #    current_user.login != "bob"
+  #  end
+  def authorized?
+    logged_in?
+  end
+
+  # Filter method to enforce a login requirement.
+  #
+  # To require logins for all actions, use this in your controllers:
+  #
+  #   before_filter :login_required
+  #
+  # To require logins for specific actions, use this in your controllers:
+  #
+  #   before_filter :login_required, :only => [ :edit, :update ]
+  #
+  # To skip this in a subclassed controller:
+  #
+  #   skip_before_filter :login_required
+  #
+  def login_required
+    authorized? || access_denied
+  end
+
+  # Redirect as appropriate when an access request fails.
+  #
+  # The default action is to redirect to the login screen.
+  #
+  # Override this method in your controllers if you want to have special
+  # behavior in case the user is not authorized
+  # to access the requested action.  For example, a popup window might
+  # simply close itself.
+  def access_denied
+    store_location
+    redirect_to login_path
+  end
+
+  # Store the URI of the current request in the session.
+  #
+  # We can return to this location by calling #redirect_back_or_default.
+  def store_location
+    session[:return_to] = request.request_uri
+  end
+
+  # Redirect to the URI stored by the most recent store_location call or
+  # to the passed default.
+  def redirect_back_or_default(default)
+    redirect_to(session[:return_to] || default)
+    session[:return_to] = nil
+  end
+
+  # Called from #current_user.  First attempt to login by the user id stored in the session.
+  def login_from_session
+    self.current_user = User.find(session[:user_id]) if session[:user_id]
+  end
+
+  # Called from #current_user.  Finaly, attempt to login by an expiring token in the cookie.
+  def login_from_cookie
+    user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])
+    if user && user.remember_token?
+      user.remember_me
+      cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
+      self.current_user = user
+    end
   end
 
   private

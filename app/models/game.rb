@@ -59,6 +59,16 @@ class Game < ActiveRecord::Base
     updated_at.to_s(:db).gsub(' ', '-')
   end
 
+  def y_max
+    max = [Membership.all_time_high(self).current_ranking, 2000].max
+    (max / 100.0).ceil * 100 # Round up to nearest 100
+  end
+
+  def y_min
+    min = [Membership.all_time_low(self).current_ranking, 2000].min
+    (min / 100.0).floor * 100 # Round down to nearest 100
+  end
+
   protected
   def format_player_roles
     return if !self.attributes.has_key?(:player_roles) || player_roles.blank?

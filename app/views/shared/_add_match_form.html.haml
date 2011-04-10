@@ -1,4 +1,4 @@
-- form_for :match, nil, :url => game_matches_path(current_game) do |f|
+= form_for nil, :as => :match, :url => { :game_id => current_game.id, :controller => 'matches', :action => 'create' } do |f|
   .team
     %label Team:
     - (0...current_game.team_size).each do |position|
@@ -11,6 +11,6 @@
       = f.collection_select 'team2', enabled_users, :id, :name, { :prompt => current_game.role(position) }, { :class => 'user', :name => 'match[team2][]', :id => "match_team2_#{position + 1}" }
     %label= f.label :score2, 'Score:'
     = f.text_field 'score2', :class => 'score', :autocomplete => 'off'
-    = submit_tag 'Add', :disable_with => 'Adding&hellip;'
+    = submit_tag 'Add', :disable_with => 'Adding&hellip;'.html_safe
     = link_to_function 'Cancel', "scoreKeeper.newMatch.toggle();"
 .game_added_warning{ :style => 'display: none' }

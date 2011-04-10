@@ -14,7 +14,7 @@ class Match < ActiveRecord::Base
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
 
   before_save :set_played_on_and_at
-  before_validation_on_create :build_teams
+  before_validation(:on => :create) { build_teams }
   after_create :update_winners
   after_create :update_rankings
   after_create :update_positions
@@ -183,14 +183,14 @@ class Match < ActiveRecord::Base
 
   def log
     return if self.account.blank?
-    self.account.logs.create(:linked_model => self.class.class_name,
+    self.account.logs.create(:linked_model => self.class.name,
                              :linked_id => self.id,
                              :user => self.creator,
                              :game => self.game,
                              :message => "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% won #{self.winner.score} to #{self.loser.score} over %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
                              :published_at => self.played_at)
                              
-    if self.game.track_clean_sheets? && self.teams.first.score == 0 || self.teams.last.score == 0
+    if self.game.track_clean_sheets? && (self.teams.first.score == 0 || self.teams.last.score == 0)
       self.account.logs.create(:linked_model => "Clean sheet",
                                :linked_id => self.id,
                                :user => self.creator,

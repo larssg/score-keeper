@@ -6,13 +6,13 @@ namespace :package do
     }
 
     file_dirs = {
-      :css => File.join(RAILS_ROOT, 'public', 'stylesheets'),
-      :js => File.join(RAILS_ROOT, 'public', 'javascripts')
+      :css => File.join(Rails.root, 'public', 'stylesheets'),
+      :js => File.join(Rails.root, 'public', 'javascripts')
     }
 
     latest_mtime = 0
     files.keys.each do |type|
-      temp_file = File.join(RAILS_ROOT, 'tmp', "temp.#{type}")
+      temp_file = File.join(Rails.root, 'tmp', "temp.#{type}")
 
       File.open(temp_file, 'w') do |f|
         files[type].each do |file|

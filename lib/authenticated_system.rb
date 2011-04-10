@@ -90,13 +90,6 @@ module AuthenticatedSystem
       self.current_user = User.find(session[:user_id]) if session[:user_id]
     end
 
-    # Called from #current_user.  Now, attempt to login by basic authentication information.
-    def login_from_basic_auth
-      authenticate_with_http_basic do |username, password|
-        self.current_user = User.authenticate(username, password)
-      end
-    end
-
     # Called from #current_user.  Finaly, attempt to login by an expiring token in the cookie.
     def login_from_cookie
       user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])

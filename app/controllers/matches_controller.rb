@@ -21,7 +21,6 @@ class MatchesController < ApplicationController
     respond_to do |format|
       format.html # index.haml
       format.atom { render :layout => false } # index.atom.builder
-      format.chart { render_chart if params[:user_id] }
     end
   end
 
@@ -71,28 +70,5 @@ class MatchesController < ApplicationController
       flash[:warning] = 'Unable to delete match.'[]
       redirect_back_or_default game_matches_url(params[:game_id])
     end
-  end
-
-  protected
-  def render_chart
-    time_period = params[:period].to_i
-    from = time_period.days.ago
-    chart = setup_ranking_graph
-
-    game_participation = current_game.game_participations.find_by_user_id(@user.id)
-    memberships = game_participation.memberships.find(:all,
-                                                      :conditions => ['matches.played_at >= ?', from],
-                                                      :order => 'memberships.id',
-                                                      :select => 'memberships.current_ranking, memberships.created_at, matches.played_at AS played_at',
-                                                      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
-    chart.set_data [game_participation.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
-    chart.set_x_labels ['Start'[]] + memberships.collect { |m| m.played_at.to_time.to_s :db }
-    chart.line 2, '#3399CC'
-
-    steps = (memberships.size / 20).to_i
-    chart.set_x_label_style(10, '', 2, steps)
-    chart.set_x_axis_steps steps
-
-    render :text => chart.render
   end
 end

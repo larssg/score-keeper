@@ -1,8 +1,13 @@
 class Mugshot < ActiveRecord::Base
-  has_attachment :content_type => :image,
-  :storage => :file_system,
-  :max_size => 2.megabytes,
-  :thumbnails => { :thumb => '60x60>' }
-
-  validates_as_attachment
+  def public_filename(version = nil)
+    if version.nil?
+      obj = self
+    else
+      obj = Mugshot.where(:thumbnail => version).where(:parent_id => id).first
+    end
+    
+    id_as_string = "%08d" % id
+    
+    "/mugshots/#{id_as_string[0,4]}/#{id_as_string[4,4]}/#{obj.filename}"
+  end
 end

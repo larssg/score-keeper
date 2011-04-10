@@ -3,10 +3,18 @@
 - if @game_participation.matches_played > 0
   #graph
     %h3 Ranking chart
-    - form_tag game_user_path(current_game, @user), :method => :get do
+    = form_tag game_user_path(current_game, @user), :method => :get do
       = select_tag('period', options_for_select(time_periods, @time_period), :onchange => 'this.form.submit();')
       = submit_tag 'Update'
-    = render :partial => 'shared/graph', :locals => { :url => game_user_matches_url(@game, @user.id, :period => @time_period, :format => :chart) }
+
+    %script{ :type => 'text/javascript' }
+      function open_flash_chart_data() {
+      = raw "return '#{@json}';"
+      }
+
+    #chart
+    :javascript
+      swfobject.embedSWF("/flash/open-flash-chart.swf", "chart", "100%", "450", "9.0.0");
 
 - if @game.team_size == 2
   .list

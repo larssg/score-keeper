@@ -8,10 +8,10 @@
   float: left; }
 
 a {
-  color: #3589AF;
+  color: #3589af;
   text-decoration: none; }
   a:hover {
-    color: #3589AF;
+    color: #3589af;
     text-decoration: underline; }
 
 img {
@@ -30,13 +30,13 @@ textarea {
   margin: 0; }
 
 #hd {
-  background-color: #3399CC; }
+  background-color: #3399cc; }
   #hd #logo {
     margin: 0;
     padding: 21px;
     padding-top: 14px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #FFFFFF; }
+    border-bottom: 1px solid white; }
     #hd #logo a {
       margin: 0; }
   #hd #links {
@@ -44,33 +44,33 @@ textarea {
     padding: 21px;
     padding-bottom: 0;
     padding-left: 0;
-    color: #FFFFFF; }
+    color: white; }
     #hd #links a {
-      color: #FFFFFF; }
+      color: white; }
     #hd #links .current_user {
       font-weight: bold; }
     #hd #links #user {
       display: inline; }
 
 #menu {
-  background-color: #77BBDD; }
+  background-color: #77bbdd; }
   #menu a:hover {
     text-decoration: none; }
   #menu .locked {
     padding-right: 21px;
     padding-top: 9px;
-    color: #FFFFFF; }
+    color: white; }
   #menu #add_match {
     text-align: right; }
     #menu #add_match a {
       display: block;
       padding-right: 21px;
       padding-top: 9px;
-      color: #FFFFFF; }
+      color: white; }
     #menu #add_match #user_minimum {
       padding-right: 21px;
       padding-top: 9px;
-      color: #FFFFFF; }
+      color: white; }
   #menu ul {
     display: block;
     margin: 0;
@@ -83,28 +83,28 @@ textarea {
     #menu ul li {
       display: inline;
       float: left;
-      background: url('/images/tab_right.gif') no-repeat right top;
+      background: url("/images/tab_right.gif") no-repeat right top;
       margin-right: 4px; }
       #menu ul li:hover {
-        background-image: url('/images/tab_active_right.gif'); }
+        background-image: url("/images/tab_active_right.gif"); }
       #menu ul li a {
-        background-color: #3399CC;
+        background-color: #3399cc;
         border-bottom: none;
-        color: #FFFFFF;
+        color: white;
         font-size: 13px;
         font-weight: bold;
         display: block;
         float: left;
-        background: url('/images/tab_left.gif') no-repeat left top;
+        background: url("/images/tab_left.gif") no-repeat left top;
         padding: 5px 15px; }
         #menu ul li a:hover {
-          background-image: url('/images/tab_active_left.gif');
-          color: #7C7C7C; }
+          background-image: url("/images/tab_active_left.gif");
+          color: #7c7c7c; }
     #menu ul li.current {
-      background-image: url('/images/tab_active_right.gif'); }
+      background-image: url("/images/tab_active_right.gif"); }
       #menu ul li.current a {
-        background-image: url('/images/tab_active_left.gif');
-        color: #7C7C7C; }
+        background-image: url("/images/tab_active_left.gif");
+        color: #7c7c7c; }
     #menu ul li.admin {
       margin-left: 3em; }
     #menu ul li.current_game {
@@ -138,16 +138,16 @@ textarea {
       padding-left: 8px;
       padding-right: 8px; }
       #submenu li a:hover {
-        color: #000000;
+        color: black;
         text-decoration: none; }
     #submenu li.current a {
-      color: #000000; }
+      color: black; }
 
 #add_match_form {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
-  border-bottom: 1px solid #CCCCCC; }
+  border-bottom: 1px solid #cccccc; }
   #add_match_form label {
     padding-right: 0.5em;
     padding-left: 0.5em; }
@@ -167,7 +167,7 @@ h2#page_title {
   margin-bottom: 0;
   background: transparent url(/images/h2_bg.gif) repeat-x scroll 0px 4px; }
   h2#page_title span {
-    background: #FFFFFF none repeat scroll 0% 0%;
+    background: white none repeat scroll 0% 0%;
     padding-right: 20px;
     padding-bottom: 5px; }
 
@@ -186,19 +186,19 @@ h3 {
     font-weight: normal; }
 
 table.form {
-  border: 1px solid #CCCCCC;
+  border: 1px solid #cccccc;
   width: 100%; }
   table.form td {
     border: 0;
-    background: #F6FBFB none repeat scroll 0% 0%;
+    background: #f6fbfb none repeat scroll 0% 0%;
     padding: 6px; }
     table.form td .notes {
-      color: #66666E;
+      color: #66666e;
       font-size: 11px;
       padding: 3px 0px; }
     table.form td input.text, table.form td input.password, table.form td textarea, table.form td select {
       color: #555555;
-      border-color: #666666 rgb(204, 204, 204) rgb(204, 204, 204);
+      border-color: #666666 #cccccc #cccccc;
       border-style: solid;
       border-width: 1px;
       padding: 2px;
@@ -207,15 +207,15 @@ table.form {
     table.form td textarea {
       height: 7em; }
     table.form td input.required {
-      background-image: url('/images/required_bg.gif');
+      background-image: url("/images/required_bg.gif");
       background-repeat: no-repeat;
       background-position: top right; }
     table.form td input.small {
       width: 4em; }
     table.form td .fieldWithErrors input {
-      background-color: #FFFF80; }
+      background-color: #ffff80; }
   table.form td.label {
-    color: #66666E;
+    color: #66666e;
     font-weight: bold;
     padding-left: 10px;
     padding-right: 20px;
@@ -233,14 +233,14 @@ table.form {
     width: 100%; }
     .list table th {
       border: 0;
-      border-bottom: 1px solid #3399CC;
-      background-color: #77BBDD;
+      border-bottom: 1px solid #3399cc;
+      background-color: #77bbdd;
       padding: 3px;
-      color: #FFFFFF;
+      color: white;
       padding-left: 5px;
       padding-right: 5px; }
       .list table th.header {
-        background-image: url('/images/icons/sort_none.gif');
+        background-image: url("/images/icons/sort_none.gif");
         cursor: pointer;
         font-weight: bold;
         background-repeat: no-repeat;
@@ -248,13 +248,13 @@ table.form {
         padding-right: 20px;
         margin-left: -1px; }
       .list table th.headerSortUp {
-        background-image: url('/images/icons/sort_asc.gif');
-        background-color: #3399CC; }
+        background-image: url("/images/icons/sort_asc.gif");
+        background-color: #3399cc; }
       .list table th.headerSortDown {
-        background-image: url('/images/icons/sort_desc.gif');
-        background-color: #3399CC; }
+        background-image: url("/images/icons/sort_desc.gif");
+        background-color: #3399cc; }
       .list table th a {
-        color: #CCEEFF; }
+        color: #cceeff; }
     .list table td {
       border: 0;
       padding: 3px;
@@ -267,7 +267,7 @@ table.form {
         padding: 0;
         vertical-align: text-bottom; }
     .list table tr.odd td {
-      background-color: #EEEEEE; }
+      background-color: #eeeeee; }
   .list .notes {
     font-size: 11px;
     color: #999999;
@@ -283,32 +283,32 @@ table.form {
   border-bottom: 1px solid #333333; }
 #bd div.pagination span, #bd div.pagination a {
   display: inline;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   padding-left: 3px;
   padding-right: 3px;
   padding-top: 1px;
   padding-bottom: 1px; }
 #bd div.pagination a:hover {
   text-decoration: none;
-  background-color: #DDDDDD; }
+  background-color: #dddddd; }
 #bd div.pagination .current {
   font-weight: bold;
-  background-color: #DDDDDD; }
+  background-color: #dddddd; }
 #bd div.pagination .disabled {
-  border: 1px solid #FFFFFF;
+  border: 1px solid white;
   color: #999999; }
 #bd #errorExplanation {
   margin-top: 1em;
   border: 1px solid #999999; }
   #bd #errorExplanation h2 {
     display: block;
-    background-color: #FF0000;
+    background-color: red;
     line-height: normal;
     font-size: 15px;
     font-weight: bold;
     padding: 6px;
     margin: 0;
-    color: #FFFFFF; }
+    color: white; }
   #bd #errorExplanation p {
     font-weight: bold;
     margin: 0;
@@ -338,16 +338,16 @@ table.form {
   #bd #messages .notice, #bd #messages .warning, #bd #messages .error {
     padding: 10px;
     margin-bottom: 10px;
-    color: #000000; }
+    color: black; }
   #bd #messages .notice {
-    background-color: #CFC;
-    border: solid 1px #6C6; }
+    background-color: #ccffcc;
+    border: solid 1px #66cc66; }
   #bd #messages .warning {
-    background-color: #DD9A24;
-    border: solid 1px #DD9A24; }
+    background-color: #dd9a24;
+    border: solid 1px #dd9a24; }
   #bd #messages .error {
-    background-color: #FCC;
-    border: solid 1px #C66; }
+    background-color: #ffcccc;
+    border: solid 1px #cc6666; }
 #bd #no_data {
   margin-top: 1.5em; }
 #bd #logs a.rss {
@@ -406,13 +406,13 @@ table.form {
     #bd #match .team .list .team-2, #bd #match .team .list .team-3 {
       font-size: 2em; }
 #bd #comments {
-  border-top: 1px solid #CCCCCC; }
+  border-top: 1px solid #cccccc; }
   #bd #comments .even {
-    background-color: #F5F5F5; }
+    background-color: #f5f5f5; }
   #bd #comments .comment {
     margin: 0;
     padding: 1em;
-    border-bottom: 1px solid #CCCCCC;
+    border-bottom: 1px solid #cccccc;
     padding-bottom: 0; }
     #bd #comments .comment a:hover {
       text-decoration: none; }
@@ -494,20 +494,6 @@ table.form {
   white-space: nowrap; }
 #bd #graph {
   margin-top: 1.5em; }
-  #bd #graph .legend {
-    margin-top: 1em; }
-    #bd #graph .legend .player {
-      display: block;
-      float: left;
-      margin-right: 10px; }
-      #bd #graph .legend .player span.color {
-        display: block;
-        float: left;
-        width: 1em;
-        height: 1em;
-        margin-top: 4px; }
-      #bd #graph .legend .player span.name {
-        padding-left: 3px; }
   #bd #graph #chart {
     margin-top: 0.5em; }
 #bd .user .mugshot {
@@ -541,7 +527,7 @@ table.form {
   margin-top: 1.5em; }
   #bd #userlist .user {
     padding: 10px;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #cccccc;
     margin-bottom: 10px; }
     #bd #userlist .user .image {
       width: 60px;
@@ -549,7 +535,7 @@ table.form {
       margin-right: 10px;
       float: left;
       text-align: center;
-      background-color: #EEEEEE; }
+      background-color: #eeeeee; }
     #bd #userlist .user .login, #bd #userlist .user .role {
       float: right; }
     #bd #userlist .user .name {
@@ -578,17 +564,17 @@ table.form {
     font-size: 100%;
     display: block;
     padding: 3px;
-    background-color: #77BBDD;
-    border-bottom: 1px solid #3399CC;
+    background-color: #77bbdd;
+    border-bottom: 1px solid #3399cc;
     margin-bottom: 5px;
-    color: #FFFFFF; }
+    color: white; }
   #sidebar .content #getting_started {
     margin: 0;
-    background-color: #CFC;
-    border: solid 1px #6C6;
+    background-color: #ccffcc;
+    border: solid 1px #66cc66;
     padding: 10px;
     margin-bottom: 1.5em;
-    color: #000000; }
+    color: black; }
     #sidebar .content #getting_started .help {
       margin-bottom: 1em; }
     #sidebar .content #getting_started .step {
@@ -596,14 +582,14 @@ table.form {
       #sidebar .content #getting_started .step a {
         color: #888888; }
     #sidebar .content #getting_started .next {
-      color: #000000; }
+      color: black; }
       #sidebar .content #getting_started .next a {
-        color: #000000; }
+        color: black; }
   #sidebar .content #leader {
     padding: 20px;
     margin-bottom: 20px;
     text-align: center;
-    background-color: #EEEEEE;
+    background-color: #eeeeee;
     border: 1px solid #999999; }
     #sidebar .content #leader h3 {
       padding: 0;
@@ -632,9 +618,9 @@ table.form {
   #sidebar .content #opponents h3 {
     margin-top: 1.5em; }
   #sidebar .content #opponents .even {
-    background-color: #F0F0F0; }
+    background-color: #f0f0f0; }
   #sidebar .content #opponents .odd {
-    background-color: #F9F9F9; }
+    background-color: #f9f9f9; }
   #sidebar .content #opponents .opponent {
     padding: 5px; }
     #sidebar .content #opponents .opponent label {
@@ -694,14 +680,14 @@ input#openid_url {
   padding-left: 18px; }
 
 body.login {
-  background-color: #E5E5E5; }
+  background-color: #e5e5e5; }
   body.login a {
-    color: #6666CC; }
+    color: #6666cc; }
     body.login a:hover {
       text-decoration: underline; }
   body.login .container {
-    border: 10px solid #CCCCCC;
-    background-color: #FFFFFF; }
+    border: 10px solid #cccccc;
+    background-color: white; }
     body.login .container #hd {
       background-image: none; }
       body.login .container #hd #logo {
@@ -717,7 +703,7 @@ body.login .container {
   width: 470px; }
 
 body.public a {
-  color: #6666CC; }
+  color: #6666cc; }
 body.public h1 {
   margin-top: 1em;
   font-size: 19px; }
@@ -726,14 +712,14 @@ body.public h2 {
 body.public h3 {
   font-size: 15px; }
   body.public h3 a {
-    color: #000000; }
+    color: black; }
 body.public #sign_up a {
   display: block;
-  background-color: #CFC;
-  border: solid 1px #6C6;
+  background-color: #ccffcc;
+  border: solid 1px #66cc66;
   text-align: center;
   padding: 1.5em;
-  color: #000000;
+  color: black;
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 1.5em; }
@@ -760,7 +746,7 @@ body.public #news {
   body.public #news .right .article {
     padding-left: 5px; }
 body.public #domain_login .notes {
-  color: #66666E;
+  color: #66666e;
   font-size: 11px; }
 body.public #domain_login .submit {
   margin-top: 1em; }
@@ -780,7 +766,7 @@ body.public #new_account {
     body.public #new_account .field .fieldWithErrors {
       display: inline; }
       body.public #new_account .field .fieldWithErrors input {
-        border: 2px solid #FF0000; }
+        border: 2px solid red; }
     body.public #new_account .field #subdomain input {
       width: 10em; }
 

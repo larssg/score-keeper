@@ -5,9 +5,6 @@ class SessionsController < ApplicationController
   before_filter :must_be_admin, :only => [ :impersonate ]
   before_filter :must_be_impersonating, :only => [ :unimpersonate ]
 
-  filter_parameter_logging :password
-
-  # render new.rhtml
   def new
   end
 

@@ -1,4 +1,4 @@
-- form_tag sessions_path do
+= form_tag sessions_path do
   %label
     = label_tag :login, 'Login'
     = text_field_tag 'login'
@@ -12,5 +12,5 @@
     = check_box_tag 'remember_me'
     
   %p
-    = submit_tag 'Sign in', :disable_with => 'Signing in&hellip;'
+    = submit_tag 'Sign in', :disable_with => 'Signing in&hellip;'.html_safe
     = link_to 'Forgot password or username?', forgot_password_path

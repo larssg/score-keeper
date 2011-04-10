@@ -11,7 +11,7 @@ class AccountsController < ApplicationController
 
   def show
     @account = Account.find(params[:id])
-    @account_users = @account.users.find(:all, :order => 'name')
+    @account_users = @account.users.order('name').all
   end
 
   def new
