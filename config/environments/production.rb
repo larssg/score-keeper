@@ -25,7 +25,7 @@ ScoreKeeper::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :dalli_store
+  config.cache_store = :dalli_store, '127.0.0.1'
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
