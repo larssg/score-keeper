@@ -89,7 +89,6 @@ var scoreKeeper = {
 };
 
 $(document).ready(function() {
-    $('body.login #login').focus();
     scoreKeeper.matchUpdate.init();
     
     scoreKeeper.tableSort();

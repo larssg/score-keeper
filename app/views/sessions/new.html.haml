@@ -1,7 +1,7 @@
 = form_tag sessions_path do
   %label
     = label_tag :login, 'Login'
-    = text_field_tag 'login'
+    = text_field_tag 'login', '', :autofocus => :autofocus
     
   %label
     = label_tag :password, 'Password'
