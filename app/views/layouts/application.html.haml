@@ -9,6 +9,7 @@
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
     = include_javascripts :common
     = yield :head
+    = render :partial => 'shared/google_analytics' unless Rails.env == 'development'
 
   %body
     .container
@@ -69,4 +70,3 @@
       .column.span-24= render :partial => 'shared/footer'
 
     = yield :footer
-    = render :partial => 'shared/google_analytics' unless Rails.env == 'development'

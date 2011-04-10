@@ -11,6 +11,7 @@
       = stylesheet_link_tag 'lib/ie', :media => 'screen, projection'
     = include_javascripts :common
     = yield :head
+    = render :partial => 'shared/google_analytics' unless Rails.env == 'development'
 
   %body.login
     .border
@@ -32,4 +33,3 @@
           .content= yield
 
       = render :partial => 'shared/footer'
-    = render :partial => 'shared/google_analytics' unless Rails.env == 'development'
