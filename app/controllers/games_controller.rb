@@ -13,7 +13,7 @@ class GamesController < ApplicationController
   def create
     @game = current_account.games.build(params[:game])
     if @game.save
-      flash[:notice] = 'Game created.'[]
+      flash[:notice] = 'Game created.'
       redirect_to games_url
     else
       render :action => 'new'
