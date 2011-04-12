@@ -7,10 +7,10 @@
   = form_tag game_comparisons_path(current_game), :method => :get do
     #leaderboards
       - if rankings.size > 0
-        = render :partial => 'leaderboard', :locals => { :game_participations => rankings, :start_at => 1, :title => 'Rankings', :details => '', :board_id => 'rankings' }
+        = render 'leaderboard', :game_participations => rankings, :start_at => 1, :title => 'Rankings', :details => '', :board_id => 'rankings'
 
       - if newbies.size > 0
-        = render :partial => 'leaderboard', :locals => { :game_participations => newbies, :start_at => rankings.size + 1, :title => 'Newbies', :details => "- less than #{game.newbie_limit} matches", :board_id => 'newbies' }
+        = render 'leaderboard', :game_participations => newbies, :start_at => rankings.size + 1, :title => 'Newbies', :details => "- less than #{game.newbie_limit} matches", :board_id => 'newbies'
 
   - if recent_matches.size > 0
     = render :partial => 'recent_matches', :locals => { :recent_matches => recent_matches }
