@@ -13,7 +13,7 @@
             - if game.locked?
               = css_image_tag('icons/lock.gif')
           %td= "#{game.team_size}-on-#{game.team_size}"
-          %td= link_to 'Edit', edit_game_path(game)
+          %td= link_to 'Edit', edit_game_path(game), 'data-pjax' => '#main'
 
 - else
   .list
@@ -21,4 +21,4 @@
 
 - content_for :sidebar do
   %h3 Administration
-  = link_to 'Create game', new_game_path
+  = link_to 'Create game', new_game_path, 'data-pjax' => '#main'

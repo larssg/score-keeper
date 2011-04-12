@@ -7,6 +7,7 @@ javascripts:
     - public/javascripts/jquery.js
     - public/javascripts/jquery.tablesorter.js
     - public/javascripts/jquery.formalize.js
+    - public/javascripts/jquery.pjax.js
     - public/javascripts/rails.js
     - public/javascripts/application.js
 

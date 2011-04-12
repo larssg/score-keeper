@@ -101,4 +101,6 @@ $(document).ready(function() {
     if ($('#messages').length > 0) {
         setTimeout(function() { $('#messages').fadeOut('slow'); }, 8000);
     }
+    
+    $('a[data-pjax]').pjax();
 });

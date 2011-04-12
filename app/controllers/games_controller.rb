@@ -8,6 +8,10 @@ class GamesController < ApplicationController
 
   def new
     @game = current_account.games.build
+    
+    if request.headers['X-PJAX']
+      render :layout => false
+    end
   end
 
   def create
@@ -22,6 +26,10 @@ class GamesController < ApplicationController
 
   def edit
     @game = current_account.games.find(params[:id])
+    
+    if request.headers['X-PJAX']
+      render :layout => false
+    end
   end
 
   def update
