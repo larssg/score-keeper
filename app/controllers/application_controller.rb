@@ -20,6 +20,11 @@ class ApplicationController < ActionController::Base
   helper_method :current_account
 
   protected
+  def pjax?
+    request.headers['X-PJAX']
+  end
+  helper_method :pjax?
+  
   def impersonating?
     !(session[:real_user_id].nil?)
   end
