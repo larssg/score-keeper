@@ -28,6 +28,9 @@ class Match < ActiveRecord::Base
   validates_presence_of :team_two
 
   validates_presence_of :score1, :score2, :team1, :team2
+  
+  validate :not_locked
+  validate :unique_participants
 
   def self.per_page
     20
@@ -85,23 +88,6 @@ class Match < ActiveRecord::Base
 
   def positions=(game_participations)
     self.position_ids = game_participations.collect(&:user_id).join(',')
-  end
-
-  def validate
-    errors.add :game, 'is locked' if self.game.locked
-    
-    user_ids = []
-
-    if self.teams.length == 2
-      self.teams.each do |team|
-        team.memberships.each do |membership|
-          unless user_ids.index(membership.user_id).nil?
-            errors.add(:people, 'cannot contain the same user twice'[])
-          end
-          user_ids << membership.user_id
-        end
-      end
-    end
   end
 
   def self.reset_rankings(game)
@@ -201,6 +187,25 @@ class Match < ActiveRecord::Base
   end
 
   protected
+  def not_locked
+    errors.add :game, 'is locked' if self.game.locked
+  end
+  
+  def unique_participants
+    user_ids = []
+
+    if self.teams.length == 2
+      self.teams.each do |team|
+        team.memberships.each do |membership|
+          unless user_ids.index(membership.user_id).nil?
+            errors.add(:people, 'cannot contain the same user twice'[])
+          end
+          user_ids << membership.user_id
+        end
+      end
+    end
+  end
+  
   def remove_log
     Log.clear_item_log(self.account, self)
   end
