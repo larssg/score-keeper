@@ -13,12 +13,12 @@
             - if game.locked?
               = css_image_tag('icons/lock.gif')
           %td= "#{game.team_size}-on-#{game.team_size}"
-          %td= link_to 'Edit', edit_game_path(game), 'data-pjax' => '#main'
+          %td= link_to 'Edit', edit_game_path(game)
 
 - else
   .list
-    = "There are no games in the system. Please <a href="#{new_game_path}">create a game</a> to get started."
+    = "There are no games in the system. Please <a href=\"#{new_game_path}\">create a game</a> to get started.".html_safe
 
 - content_for :sidebar do
   %h3 Administration
-  = link_to 'Create game', new_game_path, 'data-pjax' => '#main'
+  = link_to 'Create game', new_game_path
