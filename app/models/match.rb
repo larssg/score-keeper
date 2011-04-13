@@ -22,8 +22,10 @@ class Match < ActiveRecord::Base
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
   after_destroy :remove_log
+  
+  validates :account_id, :presence => true
 
-  validates_presence_of :game
+  validates_presence_of :game_id
   validates_presence_of :team_one
   validates_presence_of :team_two
 
