@@ -70,6 +70,10 @@ class Game < ActiveRecord::Base
     min = [Membership.all_time_low(self).current_ranking, 2000].min
     (min / 100.0).floor * 100 # Round down to nearest 100
   end
+  
+  def matches_per_day(limit = 10)
+    matches.group(:played_on).limit(limit).order('matches.played_on DESC').count
+  end
 
   protected
   def format_player_roles

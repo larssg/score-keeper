@@ -63,9 +63,7 @@ class DashboardController < ApplicationController
   end
 
   def matches_per_day
-    @matches_per_day ||= @game.matches.count(:group => :played_on,
-                                           :limit => 10,
-                                           :order => 'matches.played_on DESC')
+    @matches_per_day ||= @game.matches_per_day
   end
 
   def leader
