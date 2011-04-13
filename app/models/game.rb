@@ -11,6 +11,8 @@ class Game < ActiveRecord::Base
 
   before_save :format_player_roles
   
+  before_destroy :delete_teams_and_comments
+  
   default_scope order('name')
 
   def ranked_game_participators
@@ -76,6 +78,13 @@ class Game < ActiveRecord::Base
   end
 
   protected
+  def delete_teams_and_comments
+    matches.each do |match|
+      Team.delete_all("match_id = #{match.id}")
+      Comment.delete_all("match_id = #{match.id}")
+    end
+  end
+  
   def format_player_roles
     return if !self.attributes.has_key?(:player_roles) || player_roles.blank?
     player_roles = self.player_roles.split("\n").collect { |pr| pr.strip }.select { |pr| pr.size > 0 }.join("\n")
