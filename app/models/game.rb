@@ -1,9 +1,9 @@
 class Game < ActiveRecord::Base
   belongs_to :account, :counter_cache => true
-  has_many :matches
-  has_many :logs
-  has_many :game_participations
-  has_many :memberships
+  has_many :matches, :dependent => :destroy
+  has_many :logs, :dependent => :delete_all
+  has_many :game_participations, :dependent => :delete_all
+  has_many :memberships, :dependent => :delete_all
   has_many :users, :through => :game_participations
 
   validates_presence_of :name, :team_size

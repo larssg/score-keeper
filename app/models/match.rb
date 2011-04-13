@@ -9,8 +9,8 @@ class Match < ActiveRecord::Base
 
   belongs_to :account
   belongs_to :game, :counter_cache => true, :touch => true
-  has_many :teams
-  has_many :comments
+  has_many :teams, :dependent => :delete_all
+  has_many :comments, :dependent => :delete_all
   belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
 
   before_save :set_played_on_and_at

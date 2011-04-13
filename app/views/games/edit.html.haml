@@ -4,3 +4,8 @@
 
 = form_for @game do |f|
   = render :partial => 'form', :locals => { :f => f }
+
+- if current_user.is_account_admin?
+  - content_for :sidebar do
+    %h3 Administration
+    = link_to 'Delete game', @game, :method => :delete, :confirm => 'Delete game. Are you sure?'

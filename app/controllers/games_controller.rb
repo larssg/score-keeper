@@ -35,6 +35,16 @@ class GamesController < ApplicationController
       render :action => 'edit'
     end
   end
+  
+  def destroy
+    game = current_account.games.find(params[:id])
+    if current_user.is_account_admin?
+      game.destroy
+      redirect_to games_url, :notice => 'Game deleted.'
+    else
+      redirect_to games_url, :notice => 'Only the account administrator can delete games.'
+    end
+  end
 
   def game_added_warning
     @game = current_account.games.find(params[:id])
