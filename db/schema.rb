@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110414081016) do
+ActiveRecord::Schema.define(:version => 20110414081434) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20110414081016) do
 
   add_index "memberships", ["game_id"], :name => "index_memberships_on_game_id"
   add_index "memberships", ["game_participation_id"], :name => "index_memberships_on_game_participation_id"
+  add_index "memberships", ["team_id"], :name => "index_memberships_on_team_id"
   add_index "memberships", ["user_id"], :name => "index_memberships_on_person_id"
 
   create_table "news_items", :force => true do |t|
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(:version => 20110414081016) do
   end
 
   add_index "teams", ["account_id"], :name => "index_teams_on_account_id"
+  add_index "teams", ["match_id"], :name => "index_teams_on_match_id"
   add_index "teams", ["opponent_ids"], :name => "index_teams_on_opponent_ids"
   add_index "teams", ["team_ids"], :name => "index_teams_on_team_ids"
 
