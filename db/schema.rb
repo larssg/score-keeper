@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110410212131) do
+ActiveRecord::Schema.define(:version => 20110414081016) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -152,7 +152,6 @@ ActiveRecord::Schema.define(:version => 20110410212131) do
     t.boolean  "is_admin",                                :default => false
     t.string   "name"
     t.string   "display_name"
-    t.integer  "mugshot_id"
     t.integer  "comments_count",                          :default => 0
     t.integer  "account_id"
     t.boolean  "is_account_admin",                        :default => false
