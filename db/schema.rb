@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110414081434) do
+ActiveRecord::Schema.define(:version => 20110414205011) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(:version => 20110414081434) do
     t.string   "time_zone",   :default => "Copenhagen"
     t.integer  "games_count", :default => 0
   end
+
+  add_index "accounts", ["domain"], :name => "index_accounts_on_domain"
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id"
@@ -170,5 +172,6 @@ ActiveRecord::Schema.define(:version => 20110414081434) do
   end
 
   add_index "users", ["account_id"], :name => "index_users_on_account_id"
+  add_index "users", ["feed_token"], :name => "index_users_on_feed_token"
 
 end
