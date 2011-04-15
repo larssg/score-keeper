@@ -57,7 +57,10 @@
         %tr
           %td.for{ :colspan => (@game.track_clean_sheets? ? nil : 2) }
             %label Position:
-            = @user.position(@game)
+            - if @user.enabled?
+              = @user.position(@game)
+            - else
+              None
           - if @game.track_clean_sheets?
             %td.against
               %label Clean sheets:
