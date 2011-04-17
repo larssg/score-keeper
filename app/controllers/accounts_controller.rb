@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
 
   def index
     order = %w(name created_at).include?(params[:order]) ? params[:order] : 'name'
-    @accounts = Account.find(:all, :order => order)
+    @accounts = Account.order(order)
   end
 
   def show
