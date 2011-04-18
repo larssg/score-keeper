@@ -25,5 +25,5 @@
       .player
         = check_box_tag 'user[]', player.id, @selected_player_ids.include?(player.id), :id => "user_#{player.id}"
         = label_tag "user_#{player.id}", player.name
-        
+
     = submit_tag 'Compare'

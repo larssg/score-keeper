@@ -13,7 +13,7 @@ class DashboardController < ApplicationController
       end
     end
   end
-  
+
   helper_method :game
   helper_method :logs
   helper_method :last_update
@@ -41,13 +41,13 @@ class DashboardController < ApplicationController
   def logs
     return nil if game.nil?
     @logs ||= game.logs.find(:all, :order => 'published_at DESC', :limit => 5)
-  end 
-  
+  end
+
   def last_update
     return nil if logs.nil? || logs.first.nil?
     logs.first.published_at.to_s(:db)
   end
-   
+
   def recent_matches
     @recent_matches ||= @game.matches.find_recent(nil,
                                                   :limit => 10,
@@ -90,7 +90,7 @@ class DashboardController < ApplicationController
 
   def positions
     return @positions unless @positions.nil?
-    
+
     # Get positions 7 days ago
     @positions = {}
     last_month = @game.matches.find(:first,

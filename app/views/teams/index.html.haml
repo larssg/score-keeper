@@ -10,7 +10,7 @@
         %th Matches played
         %th Winning percentage
         %th{ :colspan => current_game.team_size } % of matches
-        
+
     %tbody
       - @teams.each do |team|
         %tr{ :class => cycle('even', 'odd') }

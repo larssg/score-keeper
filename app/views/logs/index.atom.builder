@@ -6,7 +6,7 @@ atom_feed(:url => log_feed_url(@game)) do |feed|
     feed.entry(log, :url => log_uri(log), :published => log.published_at, :updated => log.published_at) do |entry|
       message = format_message(log.game_id, log.message)
       entry.title(strip_tags(message))
-      
+
       content = [message, log.published_at.to_s(:short)].join('<br />')
       entry.content(content, :type => 'html')
 

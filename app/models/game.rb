@@ -10,9 +10,9 @@ class Game < ActiveRecord::Base
   validates_inclusion_of :team_size, :in => (1..3)
 
   before_save :format_player_roles
-  
+
   before_destroy :delete_teams_and_comments
-  
+
   default_scope order('name')
 
   def ranked_game_participators
@@ -58,7 +58,7 @@ class Game < ActiveRecord::Base
   def game_participation_for(user)
     game_participations.find_by_user_id(user.id)
   end
-  
+
   def cache_key
     updated_at.to_s(:db).gsub(' ', '-')
   end
@@ -72,7 +72,7 @@ class Game < ActiveRecord::Base
     min = [Membership.all_time_low(self).try(:current_ranking), 2000].compact.min
     (min / 100.0).floor * 100 # Round down to nearest 100
   end
-  
+
   def matches_per_day(limit = 10)
     matches.group(:played_on).limit(limit).order('matches.played_on DESC').count
   end
@@ -84,7 +84,7 @@ class Game < ActiveRecord::Base
       Comment.delete_all("match_id = #{match.id}")
     end
   end
-  
+
   def format_player_roles
     return if !self.attributes.has_key?(:player_roles) || player_roles.blank?
     player_roles = self.player_roles.split("\n").collect { |pr| pr.strip }.select { |pr| pr.size > 0 }.join("\n")

@@ -39,7 +39,7 @@
         %td.against
           %label Lost:
           = @opponents.sum { |o| o.matches.to_i } - @opponents.sum { |o| o.wins.to_i }
-    
+
     #opponents
       %h3 Opponents
       - @opponents.each do |opponent|

@@ -5,7 +5,7 @@ class Comment < ActiveRecord::Base
   validates_presence_of :body
 
   after_save :log
-  
+
   default_scope order('created_at')
 
   protected

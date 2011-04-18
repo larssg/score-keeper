@@ -33,9 +33,9 @@ class User < ActiveRecord::Base
   before_validation :set_name_from_login
   after_create :set_feed_token
   before_destroy :remove_matches
-  
+
   default_scope order('name, display_name')
-  
+
   has_attached_file :avatar, :styles => { :thumb => '60x60>' }
 
   # prevents a user from submitting a crafted form that bypasses activation

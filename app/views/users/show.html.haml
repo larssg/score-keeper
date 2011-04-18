@@ -49,7 +49,7 @@
 
     - if @user.avatar
       .mugshot= image_tag @user.avatar(:thumb), :alt => h(@user.name)
-    
+
     .matchlink= link_to css_image_tag('icons/table.png', :class => 'team', :alt => "Show this user's matches") + ' ' + 'Show matches', game_matches_path(@game, :filter => @user.id)
 
     #counts
@@ -65,7 +65,7 @@
             %td.against
               %label Clean sheets:
               = @game_participation.clean_sheets
-      
+
         %tr
           %td.for
             %label Ranking:
@@ -89,12 +89,12 @@
           %td.against
             %label Goals against:
             = @game_participation.points_against
-            
+
         %tr
           %td.for
             %label Goal diff.:
             = @game_participation.difference
-            
+
           %td.against
             %label Average diff.:
             = @game_participation.difference_average

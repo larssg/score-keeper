@@ -33,7 +33,7 @@ class UsersController < ApplicationController
           :wins => @team_wins[team.team_ids].to_i / 2
         }
       end
-    
+
       if @game.team_size == 2
         @teams.each do |team|
           team_mate = team[:team].team_mate_for(@user)
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
 
       @teams = @teams.sort_by { |t| t[:win_percentage].to_f }.reverse
     end
-    
+
     @json = chart_json(@time_period, @game_participation)
   rescue ActiveRecord::RecordNotFound
     flash[:warning] = "No user was found with that ID (#{params[:id]})."

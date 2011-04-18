@@ -7,7 +7,7 @@ module LogsHelper
       h(log.message)
     end
   end
-  
+
   def icon_link(game_id, icon, message, url)
     link_to(css_image_tag("icons/#{icon}.png"), url) + ' ' + format_message(game_id, message)
   end
@@ -21,14 +21,14 @@ module LogsHelper
       game_match_url(log.game_id, log.linked_id)
     end
   end
-  
+
   def log_feed_url(game, options = {}, user = nil)
     user ||= current_user
     options[:feed_token] = user.feed_token
     options[:format] = :atom
     game_logs_url(game, options)
   end
-  
+
   def format_message(game_id, message)
     message.split('%').collect do |part|
       if part.to_i > 0

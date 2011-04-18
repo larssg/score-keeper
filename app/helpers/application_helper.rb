@@ -10,7 +10,7 @@ module ApplicationHelper
     title << ' - ' + h(current_account.name)
     title
   end
-  
+
   def user_area(&block)
     return unless logged_in?
     concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
@@ -45,7 +45,7 @@ module ApplicationHelper
   def create_or_update_button(object)
     submit_tag (object.new_record? ? 'Create' : 'Update'), :disable_with => (object.new_record? ? 'Creating' : 'Updating') + '&hellip;'.html_safe
   end
-  
+
   def css_image_tag(url, options = {})
     extension = File.extname(url)
     key = File.basename(url, extension)

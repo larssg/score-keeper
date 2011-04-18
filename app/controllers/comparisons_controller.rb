@@ -18,7 +18,7 @@ class ComparisonsController < ApplicationController
       @indexed_sorted_players << [player, index]
     end
     @indexed_sorted_players = @indexed_sorted_players.sort_by { |ip| ip.first.name }
-    
+
     @json = chart_json(@game, @selected_player_ids, @time_period)
   end
 
@@ -78,7 +78,7 @@ class ComparisonsController < ApplicationController
         :values => values
       }
     end
-    
+
     x_labels = ['Start'] + dates.collect { |d| d.to_s :db }
 
     steps = (data.size / 20).to_i

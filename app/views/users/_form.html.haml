@@ -3,7 +3,7 @@
   %tr
     %td.label= f.label :login
     %td.field= f.text_field :login, :class => 'text required'
-    
+
   %tr
     %td.label= f.label :name, 'Full name'
     %td.field= f.text_field :name, :class => 'text required'
@@ -13,7 +13,7 @@
     %td.field
       = f.text_field :display_name, :class => 'text'
       .notes A short version of the user's name, such as first name or nick name.
-      
+
   %tr
     %td.label= f.label :email, 'Email'
     %td.field
@@ -23,7 +23,7 @@
     %td.label= 'Time zone'
     %td.field
       = f.time_zone_select :time_zone, nil, :class => 'required'
-      
+
   - unless @user.new_record?
     %tr
       %td.label &nbsp;
@@ -37,7 +37,7 @@
       = f.password_field :password, :class => 'password' + (@user.new_record? ? ' required' : '')
       - unless @user.new_record?
         .notes Fill out the password fields to change password.
-    
+
   %tr
     %td.label= f.label :password_confirmation, 'Confirm password'
     %td.field= f.password_field :password_confirmation, :class => 'password' + (@user.new_record? ? ' required' : '')
@@ -73,12 +73,12 @@
       %tr
         %td.label= f.label :is_admin, 'Super administrator'
         %td.field= f.check_box :is_admin
-        
+
     - unless @user.new_record?
       %tr
         %td.label &nbsp;
         %td.submit= submit_tag 'Update', :disable_with => 'Updating&hellip;'
-        
+
 - if @user.new_record?
   %h3 Create user
   %table.form
