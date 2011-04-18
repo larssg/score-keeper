@@ -200,7 +200,7 @@ class Match < ActiveRecord::Base
       self.teams.each do |team|
         team.memberships.each do |membership|
           unless user_ids.index(membership.user_id).nil?
-            errors.add(:people, 'cannot contain the same user twice'[])
+            errors.add(:people, 'cannot contain the same user twice')
           end
           user_ids << membership.user_id
         end
