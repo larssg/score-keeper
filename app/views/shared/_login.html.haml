@@ -5,6 +5,9 @@
     %span.current_user= link_to current_user.login, edit_user_path(current_user)
 
   |
+  = link_to 'Feedback', 'http://feedback.scorekeepr.dk/', :target => '_blank'
+
+  |
   - unless session[:real_user_id].blank?
     = link_to 'Unimpersonate', unimpersonate_sessions_path, :method => :put
     |
