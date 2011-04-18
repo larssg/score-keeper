@@ -34,7 +34,7 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.find(params[:id])
     if @comment.update_attributes(params[:comment])
       flash[:notice] = 'Changes saved successfully.'
-    elsif @comment.body.blank?
+    elsif @comment.body?
       flash[:warning] = 'Please enter a comment.'
     else
       flash[:error] = 'An error occured while saving the comment. Please try again.'
