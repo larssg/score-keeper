@@ -64,12 +64,12 @@ class Game < ActiveRecord::Base
   end
 
   def y_max
-    max = [Membership.all_time_high(self).current_ranking, 2000].max
+    max = [Membership.all_time_high(self).try(:current_ranking).current_ranking, 2000].compact.max
     (max / 100.0).ceil * 100 # Round up to nearest 100
   end
 
   def y_min
-    min = [Membership.all_time_low(self).current_ranking, 2000].min
+    min = [Membership.all_time_low(self).try(:current_ranking), 2000].compact.min
     (min / 100.0).floor * 100 # Round down to nearest 100
   end
   
