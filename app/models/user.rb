@@ -44,6 +44,7 @@ class User < ActiveRecord::Base
 
   def set_display_name
     return if self.name.blank?
+
     self.display_name = self.name.split[0] if self.display_name.blank?
   end
 
@@ -142,6 +143,7 @@ class User < ActiveRecord::Base
   # before filter
   def encrypt_password
     return if password.blank?
+
     self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
     self.crypted_password = encrypt(password)
   end

@@ -35,6 +35,7 @@ class Game < ActiveRecord::Base
 
   def role(position)
     return roles[position].strip if roles.size > position
+
     ''
   end
 
@@ -87,6 +88,7 @@ class Game < ActiveRecord::Base
 
   def format_player_roles
     return if !self.attributes.has_key?(:player_roles) || player_roles.blank?
+
     player_roles = self.player_roles.split("\n").collect { |pr| pr.strip }.select { |pr| pr.size > 0 }.join("\n")
   end
 end

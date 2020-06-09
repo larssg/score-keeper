@@ -13,16 +13,19 @@ module ApplicationHelper
 
   def user_area(&block)
     return unless logged_in?
+
     concat content_tag(:div, capture(&block), :class => 'authenticated'), block.binding
   end
 
   def account_admin_area(&block)
     return unless account_admin?
+
     concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
   end
 
   def admin_area(&block)
     return unless admin?
+
     concat content_tag(:div, capture(&block), :class => 'admin'), block.binding
   end
 
