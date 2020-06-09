@@ -119,7 +119,8 @@
                 }
               } else {
                 returnValue = jQuery.buildFragment([match[1]], [document_]);
-                selector = (returnValue.cacheable ? jQuery.clone(returnValue.fragment) : returnValue.fragment).childNodes;
+                selector = (returnValue.cacheable ? jQuery.clone(returnValue.fragment) : returnValue.fragment)
+                  .childNodes;
               }
 
               return jQuery.merge(this, selector);
@@ -1029,7 +1030,10 @@
         i = 0,
         length = arguments_.length,
         count = length,
-        deferred = length <= 1 && firstParameter && jQuery.isFunction(firstParameter.promise) ? firstParameter : jQuery.Deferred();
+        deferred =
+          length <= 1 && firstParameter && jQuery.isFunction(firstParameter.promise)
+            ? firstParameter
+            : jQuery.Deferred();
       function resolveFunc(i) {
         return function (value) {
           arguments_[i] = arguments.length > 1 ? sliceDeferred.call(arguments, 0) : value;
@@ -2695,7 +2699,9 @@
       // Events bubbling up the document may have been marked as prevented
       // by a handler lower down the tree; reflect the correct value.
       this.isDefaultPrevented =
-        source.defaultPrevented || source.returnValue === false || (source.getPreventDefault && source.getPreventDefault())
+        source.defaultPrevented ||
+        source.returnValue === false ||
+        (source.getPreventDefault && source.getPreventDefault())
           ? returnTrue
           : returnFalse;
 
@@ -2835,7 +2841,11 @@
             var element = e.target,
               type = element.type;
 
-            if ((type === "text" || type === "password") && jQuery(element).closest("form").length && e.keyCode === 13) {
+            if (
+              (type === "text" || type === "password") &&
+              jQuery(element).closest("form").length &&
+              e.keyCode === 13
+            ) {
               trigger("submit", this, arguments);
             }
           });
@@ -3706,7 +3716,9 @@
               while ((element = element.previousSibling) && element.nodeType !== 1) {}
 
               checkSet[i] =
-                isPartStringNotTag || (element && element.nodeName.toLowerCase() === part) ? element || false : element === part;
+                isPartStringNotTag || (element && element.nodeName.toLowerCase() === part)
+                  ? element || false
+                  : element === part;
             }
           }
 
@@ -3818,7 +3830,8 @@
           for (var i = 0, element; (element = currentLoop[i]) != null; i++) {
             if (element) {
               if (
-                not ^ (element.className && (" " + element.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0)
+                not ^
+                (element.className && (" " + element.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0)
               ) {
                 if (!inplace) {
                   result.push(element);
@@ -4980,7 +4993,11 @@
       var matched = [],
         current = element[dir];
 
-      while (current && current.nodeType !== 9 && (until === undefined || current.nodeType !== 1 || !jQuery(current).is(until))) {
+      while (
+        current &&
+        current.nodeType !== 9 &&
+        (until === undefined || current.nodeType !== 1 || !jQuery(current).is(until))
+      ) {
         if (current.nodeType === 1) {
           matched.push(current);
         }
@@ -5687,10 +5704,15 @@
             jQuery.nodeName(returnValue[i], "script") &&
             (!returnValue[i].type || returnValue[i].type.toLowerCase() === "text/javascript")
           ) {
-            scripts.push(returnValue[i].parentNode ? returnValue[i].parentNode.removeChild(returnValue[i]) : returnValue[i]);
+            scripts.push(
+              returnValue[i].parentNode ? returnValue[i].parentNode.removeChild(returnValue[i]) : returnValue[i]
+            );
           } else {
             if (returnValue[i].nodeType === 1) {
-              returnValue.splice.apply(returnValue, [i + 1, 0].concat(jQuery.makeArray(returnValue[i].getElementsByTagName("script"))));
+              returnValue.splice.apply(
+                returnValue,
+                [i + 1, 0].concat(jQuery.makeArray(returnValue[i].getElementsByTagName("script")))
+              );
             }
             fragment.appendChild(returnValue[i]);
           }
@@ -5973,7 +5995,9 @@
     jQuery.cssHooks.opacity = {
       get: function (element, computed) {
         // IE uses filters for opacity
-        return ropacity.test((computed && element.currentStyle ? element.currentStyle.filter : element.style.filter) || "")
+        return ropacity.test(
+          (computed && element.currentStyle ? element.currentStyle.filter : element.style.filter) || ""
+        )
           ? parseFloat(RegExp.$1) / 100 + ""
           : computed
           ? "1"
@@ -6898,7 +6922,12 @@
           // a server error. Possible fixes are to modify rack's
           // deserialization algorithm or to provide an option or flag
           // to force array serialization to be shallow.
-          buildParameters(prefix + "[" + (typeof v === "object" || jQuery.isArray(v) ? i : "") + "]", v, traditional, add);
+          buildParameters(
+            prefix + "[" + (typeof v === "object" || jQuery.isArray(v) ? i : "") + "]",
+            v,
+            traditional,
+            add
+          );
         }
       });
     } else if (!traditional && object != null && typeof object === "object") {
@@ -8169,7 +8198,8 @@
         currentCSSTop = jQuery.css(element, "top"),
         currentCSSLeft = jQuery.css(element, "left"),
         calculatePosition =
-          (position === "absolute" || position === "fixed") && jQuery.inArray("auto", [currentCSSTop, currentCSSLeft]) > -1,
+          (position === "absolute" || position === "fixed") &&
+          jQuery.inArray("auto", [currentCSSTop, currentCSSLeft]) > -1,
         properties = {},
         currentPosition = {},
         currentTop,
@@ -8284,7 +8314,11 @@
   });
 
   function getWindow(element) {
-    return jQuery.isWindow(element) ? element : element.nodeType === 9 ? element.defaultView || element.parentWindow : false;
+    return jQuery.isWindow(element)
+      ? element
+      : element.nodeType === 9
+      ? element.defaultView || element.parentWindow
+      : false;
   }
 
   // Create innerHeight, innerWidth, outerHeight and outerWidth methods
