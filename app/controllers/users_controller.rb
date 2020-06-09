@@ -122,7 +122,7 @@ class UsersController < ApplicationController
       user = current_account.users.find_by_login(params[:username]) if params[:username]
       user ||= current_account.users.find_by_email(params[:email]) if params[:email]
 
-      unless user.blank?
+      if user.present?
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
         user.set_login_token
         UserMailer.forgot_password_info(user).deliver

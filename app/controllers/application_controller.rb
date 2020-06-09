@@ -148,7 +148,7 @@ class ApplicationController < ActionController::Base
   end
 
   def impersonating?
-    !session[:real_user_id].blank?
+    session[:real_user_id].present?
   end
 
   def must_be_impersonating

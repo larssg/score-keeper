@@ -6,7 +6,7 @@ module ApplicationHelper
 
   def page_title
     title = 'Score Keeper'
-    title << ': ' + @page_title unless @page_title.blank?
+    title << ': ' + @page_title if @page_title.present?
     title << ' - ' + h(current_account.name)
     title
   end
