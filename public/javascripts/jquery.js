@@ -1283,7 +1283,7 @@ jQuery.extend({
 		if ( document.defaultView && document.defaultView.getComputedStyle ) {
 			div.style.width = "1px";
 			div.style.marginRight = "0";
-			jQuery.support.reliableMarginRight = ( parseInt(document.defaultView.getComputedStyle(div, null).marginRight, 10) || 0 ) === 0;
+			jQuery.support.reliableMarginRight = ( Number.parseInt(document.defaultView.getComputedStyle(div, null).marginRight, 10) || 0 ) === 0;
 		}
 
 		body.removeChild( div ).style.display = "none";
@@ -1610,7 +1610,7 @@ function dataAttr( elem, key, data ) {
 				data = data === "true" ? true :
 				data === "false" ? false :
 				data === "null" ? null :
-				!jQuery.isNaN( data ) ? parseFloat( data ) :
+				!jQuery.isNaN( data ) ? Number.parseFloat( data ) :
 					rbrace.test( data ) ? jQuery.parseJSON( data ) :
 					data;
 			} catch( e ) {}
@@ -5939,7 +5939,7 @@ jQuery.each(["height", "width"], function( i, name ) {
 		set: function( elem, value ) {
 			if ( rnumpx.test( value ) ) {
 				// ignore negative width and height values #1599
-				value = parseFloat(value);
+				value = Number.parseFloat(value);
 
 				if ( value >= 0 ) {
 					return value + "px";
@@ -5957,7 +5957,7 @@ if ( !jQuery.support.opacity ) {
 		get: function( elem, computed ) {
 			// IE uses filters for opacity
 			return ropacity.test((computed && elem.currentStyle ? elem.currentStyle.filter : elem.style.filter) || "") ?
-				(parseFloat(RegExp.$1) / 100) + "" :
+				(Number.parseFloat(RegExp.$1) / 100) + "" :
 				computed ? "1" : "";
 		},
 
@@ -6070,14 +6070,14 @@ function getWH( elem, name, extra ) {
 
 	jQuery.each( which, function() {
 		if ( !extra ) {
-			val -= parseFloat(jQuery.css( elem, "padding" + this )) || 0;
+			val -= Number.parseFloat(jQuery.css( elem, "padding" + this )) || 0;
 		}
 
 		if ( extra === "margin" ) {
-			val += parseFloat(jQuery.css( elem, "margin" + this )) || 0;
+			val += Number.parseFloat(jQuery.css( elem, "margin" + this )) || 0;
 
 		} else {
-			val -= parseFloat(jQuery.css( elem, "border" + this + "Width" )) || 0;
+			val -= Number.parseFloat(jQuery.css( elem, "border" + this + "Width" )) || 0;
 		}
 	});
 
@@ -7661,7 +7661,7 @@ jQuery.fn.extend({
 						start = e.cur();
 
 					if ( parts ) {
-						var end = parseFloat( parts[2] ),
+						var end = Number.parseFloat( parts[2] ),
 							unit = parts[3] || ( jQuery.cssNumber[ name ] ? "" : "px" );
 
 						// We need to compute starting value
@@ -7814,7 +7814,7 @@ jQuery.fx.prototype = {
 		// Empty strings, null, undefined and "auto" are converted to 0,
 		// complex values such as "rotate(1rad)" are returned as is,
 		// simple values such as "10px" are parsed to Float.
-		return isNaN( parsed = parseFloat( r ) ) ? !r || r === "auto" ? 0 : r : parsed;
+		return isNaN( parsed = Number.parseFloat( r ) ) ? !r || r === "auto" ? 0 : r : parsed;
 	},
 
 	// Start an animation from one number to another
@@ -8091,8 +8091,8 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 				left += elem.offsetLeft;
 
 				if ( jQuery.offset.doesNotAddBorder && !(jQuery.offset.doesAddBorderForTableAndCells && rtable.test(elem.nodeName)) ) {
-					top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
-					left += parseFloat( computedStyle.borderLeftWidth ) || 0;
+					top  += Number.parseFloat( computedStyle.borderTopWidth  ) || 0;
+					left += Number.parseFloat( computedStyle.borderLeftWidth ) || 0;
 				}
 
 				prevOffsetParent = offsetParent;
@@ -8100,8 +8100,8 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 			}
 
 			if ( jQuery.offset.subtractsBorderForOverflowNotVisible && computedStyle.overflow !== "visible" ) {
-				top  += parseFloat( computedStyle.borderTopWidth  ) || 0;
-				left += parseFloat( computedStyle.borderLeftWidth ) || 0;
+				top  += Number.parseFloat( computedStyle.borderTopWidth  ) || 0;
+				left += Number.parseFloat( computedStyle.borderLeftWidth ) || 0;
 			}
 
 			prevComputedStyle = computedStyle;
@@ -8123,7 +8123,7 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 
 jQuery.offset = {
 	initialize: function() {
-		var body = document.body, container = document.createElement("div"), innerDiv, checkDiv, table, td, bodyMarginTop = parseFloat( jQuery.css(body, "marginTop") ) || 0,
+		var body = document.body, container = document.createElement("div"), innerDiv, checkDiv, table, td, bodyMarginTop = Number.parseFloat( jQuery.css(body, "marginTop") ) || 0,
 			html = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div><table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";
 
 		jQuery.extend( container.style, { position: "absolute", top: 0, left: 0, margin: 0, border: 0, width: "1px", height: "1px", visibility: "hidden" } );
@@ -8162,8 +8162,8 @@ jQuery.offset = {
 		jQuery.offset.initialize();
 
 		if ( jQuery.offset.doesNotIncludeMarginInBodyOffset ) {
-			top  += parseFloat( jQuery.css(body, "marginTop") ) || 0;
-			left += parseFloat( jQuery.css(body, "marginLeft") ) || 0;
+			top  += Number.parseFloat( jQuery.css(body, "marginTop") ) || 0;
+			left += Number.parseFloat( jQuery.css(body, "marginLeft") ) || 0;
 		}
 
 		return { top: top, left: left };
@@ -8189,8 +8189,8 @@ jQuery.offset = {
 			curPosition = curElem.position();
 		}
 
-		curTop  = calculatePosition ? curPosition.top  : parseInt( curCSSTop,  10 ) || 0;
-		curLeft = calculatePosition ? curPosition.left : parseInt( curCSSLeft, 10 ) || 0;
+		curTop  = calculatePosition ? curPosition.top  : Number.parseInt( curCSSTop,  10 ) || 0;
+		curLeft = calculatePosition ? curPosition.left : Number.parseInt( curCSSLeft, 10 ) || 0;
 
 		if ( jQuery.isFunction( options ) ) {
 			options = options.call( elem, i, curOffset );
@@ -8230,12 +8230,12 @@ jQuery.fn.extend({
 		// Subtract element margins
 		// note: when an element has margin: auto the offsetLeft and marginLeft
 		// are the same in Safari causing offset.left to incorrectly be 0
-		offset.top  -= parseFloat( jQuery.css(elem, "marginTop") ) || 0;
-		offset.left -= parseFloat( jQuery.css(elem, "marginLeft") ) || 0;
+		offset.top  -= Number.parseFloat( jQuery.css(elem, "marginTop") ) || 0;
+		offset.left -= Number.parseFloat( jQuery.css(elem, "marginLeft") ) || 0;
 
 		// Add offsetParent borders
-		parentOffset.top  += parseFloat( jQuery.css(offsetParent[0], "borderTopWidth") ) || 0;
-		parentOffset.left += parseFloat( jQuery.css(offsetParent[0], "borderLeftWidth") ) || 0;
+		parentOffset.top  += Number.parseFloat( jQuery.css(offsetParent[0], "borderTopWidth") ) || 0;
+		parentOffset.left += Number.parseFloat( jQuery.css(offsetParent[0], "borderLeftWidth") ) || 0;
 
 		// Subtract the two offsets
 		return {
@@ -8313,14 +8313,14 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 	// innerHeight and innerWidth
 	jQuery.fn["inner" + name] = function() {
 		return this[0] ?
-			parseFloat( jQuery.css( this[0], type, "padding" ) ) :
+			Number.parseFloat( jQuery.css( this[0], type, "padding" ) ) :
 			null;
 	};
 
 	// outerHeight and outerWidth
 	jQuery.fn["outer" + name] = function( margin ) {
 		return this[0] ?
-			parseFloat( jQuery.css( this[0], type, margin ? "margin" : "border" ) ) :
+			Number.parseFloat( jQuery.css( this[0], type, margin ? "margin" : "border" ) ) :
 			null;
 	};
 
@@ -8357,7 +8357,7 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 		// Get or set width or height on the element
 		} else if ( size === undefined ) {
 			var orig = jQuery.css( elem, type ),
-				ret = parseFloat( orig );
+				ret = Number.parseFloat( orig );
 
 			return jQuery.isNaN( ret ) ? orig : ret;
 
