@@ -98,7 +98,7 @@ end
 
 options = Hash.new
 opts = OptionParser.new
-opts.on("-d", "--daemon"){|v| options[:daemon] = true }
+opts.on("-d", "--daemon"){|_v| options[:daemon] = true }
 opts.on("-p", "--pid PIDFILE"){|v| options[:pid] = v }
 opts.parse!(ARGV)
 
