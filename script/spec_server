@@ -71,7 +71,7 @@ require 'dispatcher'
 def restart_test_server
   puts "restarting"
   config       = ::Config::CONFIG
-  ruby         = File::join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
+  ruby         = File.join(config['bindir'], config['ruby_install_name']) + config['EXEEXT']
   command_line = [ruby, $0, ARGV].flatten.join(' ')
   exec(command_line)
 end
