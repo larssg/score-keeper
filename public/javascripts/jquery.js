@@ -570,7 +570,7 @@
           // Use insertBefore instead of appendChild to circumvent an IE6 bug.
           // This arises when a base node is used (#2709).
           head.insertBefore(script, head.firstChild);
-          head.removeChild(script);
+          script.remove();
         }
       },
 
@@ -1161,7 +1161,7 @@
           _scriptEval = false;
         }
 
-        root.removeChild(script);
+        script.remove();
       }
 
       return _scriptEval;
@@ -4368,7 +4368,7 @@
         };
       }
 
-      root.removeChild(form);
+      form.remove();
 
       // release memory in IE
       root = form = null;
@@ -5205,7 +5205,7 @@
           }
 
           if (elem.parentNode) {
-            elem.parentNode.removeChild(elem);
+            elem.remove();
           }
         }
       }
@@ -5222,7 +5222,7 @@
 
         // Remove any remaining nodes
         while (elem.firstChild) {
-          elem.removeChild(elem.firstChild);
+          elem.firstChild.remove();
         }
       }
 
@@ -5660,7 +5660,7 @@
 
             for (var j = tbody.length - 1; j >= 0; --j) {
               if (jQuery.nodeName(tbody[j], "tbody") && !tbody[j].childNodes.length) {
-                tbody[j].parentNode.removeChild(tbody[j]);
+                tbody[j].remove();
               }
             }
           }
@@ -5759,7 +5759,7 @@
     }
 
     if (elem.parentNode) {
-      elem.parentNode.removeChild(elem);
+      elem.remove();
     }
   }
 
@@ -7210,7 +7210,7 @@
 
               // Remove the script
               if (head && script.parentNode) {
-                head.removeChild(script);
+                script.remove();
               }
 
               // Dereference the script
@@ -8138,7 +8138,7 @@
 
       this.doesNotIncludeMarginInBodyOffset = body.offsetTop !== bodyMarginTop;
 
-      body.removeChild(container);
+      container.remove();
       jQuery.offset.initialize = jQuery.noop;
     },
 
