@@ -1,5 +1,5 @@
 class ComparisonsController < ApplicationController
-  before_filter :login_required
+  before_action :login_required
 
   def index
     @game = params[:game_id].to_i == current_game.id ? current_game : current_account.games.find(params[:game_id])

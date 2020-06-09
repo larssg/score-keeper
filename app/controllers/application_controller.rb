@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include AccountLocation
 
-  before_filter :set_time_zone
+  before_action :set_time_zone
 
   helper :all # include all helpers, all the time
 

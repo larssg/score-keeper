@@ -1,8 +1,8 @@
 class AccountsController < ApplicationController
-  before_filter :domain_required, :except => [ :new, :create ]
-  before_filter :login_required, :except => [ :new, :create ]
-  before_filter :must_be_admin, :except => [ :new, :create, :edit, :update ]
-  before_filter :must_be_account_admin, :only => [ :edit, :update ]
+  before_action :domain_required, :except => [ :new, :create ]
+  before_action :login_required, :except => [ :new, :create ]
+  before_action :must_be_admin, :except => [ :new, :create, :edit, :update ]
+  before_action :must_be_account_admin, :only => [ :edit, :update ]
 
   def index
     order = %w(name created_at).include?(params[:order]) ? params[:order] : 'name'

@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
-  before_filter :domain_required
-  before_filter :login_required
+  before_action :domain_required
+  before_action :login_required
 
   def show
     @comment = current_user.comments.find(params[:id])
