@@ -64,6 +64,7 @@ class Match < ActiveRecord::Base
 
   def self.find_filter_users(filter)
     return unless filter
+
     User.find(:all, :conditions => ['id IN (?)', filter.split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
   end
 
@@ -94,6 +95,7 @@ class Match < ActiveRecord::Base
 
   def self.reset_rankings(game)
     return if game.nil?
+
     game.game_participations.update_all("game_participations.ranking = 2000, game_participations.matches_played = 0")
     game.matches.all.each do |match|
       match.update_rankings
@@ -108,6 +110,7 @@ class Match < ActiveRecord::Base
 
   def update_rankings
     return if self.teams.count < 2
+
     transfer = (0.01 * self.loser.ranking_total.to_f).round
     self.loser.award_points(-1 * transfer)
     self.winner.award_points(transfer)
@@ -171,6 +174,7 @@ class Match < ActiveRecord::Base
 
   def log
     return if self.account.blank?
+
     self.account.logs.create(:linked_model => self.class.name,
                              :linked_id => self.id,
                              :user => self.creator,

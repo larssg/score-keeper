@@ -17,6 +17,7 @@ module MatchesHelper
     date = date.to_time
     return 'Today' if date.in_time_zone.to_date == Time.now.in_time_zone.to_date
     return 'Yesterday' if date.in_time_zone.to_date == 1.day.ago.in_time_zone.to_date
+
     date.to_date.to_s :long
   end
 end

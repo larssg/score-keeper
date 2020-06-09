@@ -12,6 +12,7 @@ module DashboardHelper
     elsif now > before
       return css_image_tag('arrow_down.png')
     end
+
     ''
   end
 end
