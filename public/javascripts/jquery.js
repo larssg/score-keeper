@@ -36,7 +36,7 @@ var jQuery = function( selector, context ) {
 
 	// A simple way to check for HTML strings or ID strings
 	// (both of which we optimize for)
-	quickExpr = /^(?:[^<]*(<[\w\W]+>)[^>]*$|#([\w\-]+)$)/,
+	quickExpr = /^(?:[^<]*(<[\W\w]+>)[^>]*$|#([\w\-]+)$)/,
 
 	// Check if a string has a non-whitespace character in it
 	rnotwhite = /\S/,
@@ -52,14 +52,14 @@ var jQuery = function( selector, context ) {
 	rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
 
 	// JSON RegExp
-	rvalidchars = /^[\],:{}\s]*$/,
-	rvalidescape = /\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,
-	rvalidtokens = /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+	rvalidchars = /^[\s,:\]{}]*$/,
+	rvalidescape = /\\(?:["/\\bfnrt]|u[\dA-Fa-f]{4})/g,
+	rvalidtokens = /"[^\n\r"\\]*"|true|false|null|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?/g,
 	rvalidbraces = /(?:^|:|,)(?:\s*\[)+/g,
 
 	// Useragent RegExp
-	rwebkit = /(webkit)[ \/]([\w.]+)/,
-	ropera = /(opera)(?:.*version)?[ \/]([\w.]+)/,
+	rwebkit = /(webkit)[ /]([\w.]+)/,
+	ropera = /(opera)(?:.*version)?[ /]([\w.]+)/,
 	rmsie = /(msie) ([\w.]+)/,
 	rmozilla = /(mozilla)(?:.*? rv:([\w.]+))?/,
 
@@ -867,8 +867,8 @@ if ( indexOf ) {
 
 // IE doesn't match non-breaking spaces with \s
 if ( rnotwhite.test( "\xA0" ) ) {
-	trimLeft = /^[\s\xA0]+/;
-	trimRight = /[\s\xA0]+$/;
+	trimLeft = /^\s+/;
+	trimRight = /\s+$/;
 }
 
 // All jQuery objects should point back to these
@@ -1321,7 +1321,7 @@ jQuery.extend({
 
 
 
-var rbrace = /^(?:\{.*\}|\[.*\])$/;
+var rbrace = /^(?:{.*}|\[.*])$/;
 
 jQuery.extend({
 	cache: {},
@@ -1741,7 +1741,7 @@ jQuery.fn.extend({
 
 
 
-var rclass = /[\n\t\r]/g,
+var rclass = /[\t\n\r]/g,
 	rspaces = /\s+/,
 	rreturn = /\r/g,
 	rspecialurl = /^(?:href|src|style)$/,
@@ -2134,7 +2134,7 @@ var rnamespaces = /\.(.*)$/,
 	rformElems = /^(?:textarea|input|select)$/i,
 	rperiod = /\./g,
 	rspace = / /g,
-	rescape = /[^\w\s.|`]/g,
+	rescape = /[^\s\w.`|]/g,
 	fcleanup = function( nm ) {
 		return nm.replace(rescape, "\\$&");
 	};
@@ -3322,7 +3322,7 @@ jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblcl
  */
 (function(){
 
-var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^\[\]]*\]|['"][^'"]*['"]|[^\[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g,
+var chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*]|["'][^"']*["']|[^"'[\]]+)+]|\\.|[^ (+,>[\\~]+)+|[+>~])(\s*,\s*)?([\n\r.]*)/g,
 	done = 0,
 	toString = Object.prototype.toString,
 	hasDuplicate = false,
@@ -3648,12 +3648,12 @@ var Expr = Sizzle.selectors = {
 	match: {
 		ID: /#((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
 		CLASS: /\.((?:[\w\u00c0-\uFFFF\-]|\\.)+)/,
-		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF\-]|\\.)+)['"]*\]/,
-		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(['"])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*\]/,
-		TAG: /^((?:[\w\u00c0-\uFFFF\*\-]|\\.)+)/,
+		NAME: /\[name=["']*((?:[\w\u00c0-\uFFFF\-]|\\.)+)["']*]/,
+		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF\-]|\\.)+)\s*(?:(\S?=)\s*(?:(["'])(.*?)\3|(#?(?:[\w\u00c0-\uFFFF\-]|\\.)*)|)|)\s*]/,
+		TAG: /^((?:[\w*\u00c0-\uFFFF\-]|\\.)+)/,
 		CHILD: /:(only|nth|last|first)-child(?:\(\s*(even|odd|(?:[+\-]?\d+|(?:[+\-]?\d*)?n\s*(?:[+\-]\s*\d+)?))\s*\))?/,
 		POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^\-]|$)/,
-		PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/
+		PSEUDO: /:((?:[\w\u00c0-\uFFFF\-]|\\.)+)(?:\((["']?)((?:\([^)]+\)|[^()]*)+)\2\))?/
 	},
 
 	leftMatch: {},
@@ -4163,8 +4163,8 @@ var origPOS = Expr.match.POS,
 	};
 
 for ( var type in Expr.match ) {
-	Expr.match[ type ] = new RegExp( Expr.match[ type ].source + (/(?![^\[]*\])(?![^\(]*\))/.source) );
-	Expr.leftMatch[ type ] = new RegExp( /(^(?:.|\r|\n)*?)/.source + Expr.match[ type ].source.replace(/\\(\d+)/g, fescape) );
+	Expr.match[ type ] = new RegExp( Expr.match[ type ].source + (/(?![^[]*])(?![^(]*\))/.source) );
+	Expr.leftMatch[ type ] = new RegExp( /(^[\n\r.]*?)/.source + Expr.match[ type ].source.replace(/\\(\d+)/g, fescape) );
 }
 
 var makeArray = function( array, results ) {
@@ -4537,7 +4537,7 @@ if ( document.querySelectorAll ) {
 
 		Sizzle.matchesSelector = function( node, expr ) {
 			// Make sure that attribute selectors are quoted
-			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
+			expr = expr.replace(/=\s*([^"'\]]*)\s*]/g, "='$1']");
 
 			if ( !Sizzle.isXML( node ) ) {
 				try { 
@@ -4726,7 +4726,7 @@ var runtil = /Until$/,
 	rparentsprev = /^(?:parents|prevUntil|prevAll)/,
 	// Note: This RegExp should be improved, or likely pulled from Sizzle
 	rmultiselector = /,/,
-	isSimple = /^.[^:#\[\.,]*$/,
+	isSimple = /^.[^#,.:[]*$/,
 	slice = Array.prototype.slice,
 	POS = jQuery.expr.match.POS,
 	// methods guaranteed to produce a unique set when starting from a unique set
@@ -5035,7 +5035,7 @@ function winnow( elements, qualifier, keep ) {
 
 var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rleadingWhitespace = /^\s+/,
-	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
+	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,
 	rtagName = /<([\w:]+)/,
 	rtbody = /<tbody/i,
 	rhtml = /<|&#?\w+;/,
@@ -5742,7 +5742,7 @@ function evalScript( i, elem ) {
 
 var ralpha = /alpha\([^)]*\)/i,
 	ropacity = /opacity=([^)]*)/,
-	rdashAlpha = /-([a-z])/ig,
+	rdashAlpha = /-([a-z])/gi,
 	// fixed for IE9, see #8346
 	rupper = /([A-Z]|^ms)/g,
 	rnumpx = /^-?\d+(?:px)?$/i,
@@ -6101,25 +6101,25 @@ if ( jQuery.expr && jQuery.expr.filters ) {
 
 
 var r20 = /%20/g,
-	rbracket = /\[\]$/,
+	rbracket = /\[]$/,
 	rCRLF = /\r?\n/g,
 	rhash = /#.*$/,
-	rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg, // IE leaves an \r character at EOL
+	rheaders = /^(.*?):[\t ]*([^\n\r]*)\r?$/gm, // IE leaves an \r character at EOL
 	rinput = /^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
 	// #7653, #8125, #8152: local protocol detection
-	rlocalProtocol = /^(?:about|app|app\-storage|.+\-extension|file|widget):$/,
+	rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|widget):$/,
 	rnoContent = /^(?:GET|HEAD)$/,
 	rprotocol = /^\/\//,
 	rquery = /\?/,
 	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
 	rselectTextarea = /^(?:select|textarea)/i,
 	rspacesAjax = /\s+/,
-	rts = /([?&])_=[^&]*/,
-	rucHeaders = /(^|\-)([a-z])/g,
+	rts = /([&?])_=[^&]*/,
+	rucHeaders = /(^|-)([a-z])/g,
 	rucHeadersFunc = function( _, $1, $2 ) {
 		return $1 + $2.toUpperCase();
 	},
-	rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/,
+	rurl = /^([\w+.\-]+:)(?:\/\/([^#/:?]*)(?::(\d+))?)?/,
 
 	// Keep a copy of the old load method
 	_load = jQuery.fn.load,
@@ -7082,7 +7082,7 @@ function ajaxConvert( s, response ) {
 
 
 var jsc = jQuery.now(),
-	jsre = /(\=)\?(&|$)|\?\?/i;
+	jsre = /(=)\?(&|$)|\?\?/i;
 
 // Default jsonp settings
 jQuery.ajaxSetup({
@@ -7475,7 +7475,7 @@ if ( jQuery.support.ajax ) {
 
 var elemdisplay = {},
 	rfxtypes = /^(?:toggle|show|hide)$/,
-	rfxnum = /^([+\-]=)?([\d+.\-]+)([a-z%]*)$/i,
+	rfxnum = /^([+\-]=)?([\d+.\-]+)([%a-z]*)$/i,
 	timerId,
 	fxAttrs = [
 		// height animations
