@@ -1,162 +1,208 @@
 .css-sprite {
-  vertical-align: text-bottom; }
+  vertical-align: text-bottom;
+}
 
 #header-right {
-  float: right; }
+  float: right;
+}
 
 #header-left {
-  float: left; }
+  float: left;
+}
 
 a {
   color: #3589af;
-  text-decoration: none; }
-  a:hover {
-    color: #3589af;
-    text-decoration: underline; }
+  text-decoration: none;
+}
+a:hover {
+  color: #3589af;
+  text-decoration: underline;
+}
 
 img {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+}
 
 th {
-  text-align: left; }
+  text-align: left;
+}
 
 table {
   margin: 0;
-  border-collapse: collapse; }
+  border-collapse: collapse;
+}
 
 textarea {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
 
 #hd {
-  background-color: #3399cc; }
-  #hd #logo {
-    margin: 0;
-    padding: 21px;
-    padding-top: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid white; }
-    #hd #logo a {
-      margin: 0; }
-  #hd #links {
-    float: right;
-    padding: 21px;
-    padding-bottom: 0;
-    padding-left: 0;
-    color: white; }
-    #hd #links a {
-      color: white; }
-    #hd #links .current_user {
-      font-weight: bold; }
-    #hd #links #user {
-      display: inline; }
+  background-color: #3399cc;
+}
+#hd #logo {
+  margin: 0;
+  padding: 21px;
+  padding-top: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid white;
+}
+#hd #logo a {
+  margin: 0;
+}
+#hd #links {
+  float: right;
+  padding: 21px;
+  padding-bottom: 0;
+  padding-left: 0;
+  color: white;
+}
+#hd #links a {
+  color: white;
+}
+#hd #links .current_user {
+  font-weight: bold;
+}
+#hd #links #user {
+  display: inline;
+}
 
 #menu {
-  background-color: #77bbdd; }
-  #menu a:hover {
-    text-decoration: none; }
-  #menu .locked {
-    padding-right: 21px;
-    padding-top: 9px;
-    color: white; }
-  #menu #add_match {
-    text-align: right; }
-    #menu #add_match #add_match_button {
-      display: block;
-      padding-right: 21px;
-      padding-top: 9px;
-      color: white;
-      cursor: pointer; }
-    #menu #add_match #user_minimum {
-      padding-right: 21px;
-      padding-top: 9px;
-      color: white; }
-  #menu ul {
-    display: block;
-    margin: 0;
-    padding: 21px;
-    padding-top: 10px;
-    padding-bottom: 0;
-    list-style-type: none;
-    line-height: normal;
-    height: 26px; }
-    #menu ul li {
-      display: inline;
-      float: left;
-      background: url("/images/tab_right.gif") no-repeat right top;
-      margin-right: 4px; }
-      #menu ul li:hover {
-        background-image: url("/images/tab_active_right.gif"); }
-      #menu ul li a {
-        background-color: #3399cc;
-        border-bottom: none;
-        color: white;
-        font-size: 13px;
-        font-weight: bold;
-        display: block;
-        float: left;
-        background: url("/images/tab_left.gif") no-repeat left top;
-        padding: 5px 15px; }
-        #menu ul li a:hover {
-          background-image: url("/images/tab_active_left.gif");
-          color: #7c7c7c; }
-    #menu ul li.current {
-      background-image: url("/images/tab_active_right.gif"); }
-      #menu ul li.current a {
-        background-image: url("/images/tab_active_left.gif");
-        color: #7c7c7c; }
-    #menu ul li.admin {
-      margin-left: 3em; }
-    #menu ul li.current_game {
-      margin-left: 1em;
-      background: none; }
-      #menu ul li.current_game select {
-        width: 150px; }
-  #menu #login_form {
-    display: none;
-    font-size: 85%; }
-    #menu #login_form input {
-      margin-right: 10px; }
-    #menu #login_form input.login, #menu #login_form input.password {
-      width: 80px; }
-    #menu #login_form .submit {
-      margin-right: 0; }
+  background-color: #77bbdd;
+}
+#menu a:hover {
+  text-decoration: none;
+}
+#menu .locked {
+  padding-right: 21px;
+  padding-top: 9px;
+  color: white;
+}
+#menu #add_match {
+  text-align: right;
+}
+#menu #add_match #add_match_button {
+  display: block;
+  padding-right: 21px;
+  padding-top: 9px;
+  color: white;
+  cursor: pointer;
+}
+#menu #add_match #user_minimum {
+  padding-right: 21px;
+  padding-top: 9px;
+  color: white;
+}
+#menu ul {
+  display: block;
+  margin: 0;
+  padding: 21px;
+  padding-top: 10px;
+  padding-bottom: 0;
+  list-style-type: none;
+  line-height: normal;
+  height: 26px;
+}
+#menu ul li {
+  display: inline;
+  float: left;
+  background: url("/images/tab_right.gif") no-repeat right top;
+  margin-right: 4px;
+}
+#menu ul li:hover {
+  background-image: url("/images/tab_active_right.gif");
+}
+#menu ul li a {
+  background-color: #3399cc;
+  border-bottom: none;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  display: block;
+  float: left;
+  background: url("/images/tab_left.gif") no-repeat left top;
+  padding: 5px 15px;
+}
+#menu ul li a:hover {
+  background-image: url("/images/tab_active_left.gif");
+  color: #7c7c7c;
+}
+#menu ul li.current {
+  background-image: url("/images/tab_active_right.gif");
+}
+#menu ul li.current a {
+  background-image: url("/images/tab_active_left.gif");
+  color: #7c7c7c;
+}
+#menu ul li.admin {
+  margin-left: 3em;
+}
+#menu ul li.current_game {
+  margin-left: 1em;
+  background: none;
+}
+#menu ul li.current_game select {
+  width: 150px;
+}
+#menu #login_form {
+  display: none;
+  font-size: 85%;
+}
+#menu #login_form input {
+  margin-right: 10px;
+}
+#menu #login_form input.login,
+#menu #login_form input.password {
+  width: 80px;
+}
+#menu #login_form .submit {
+  margin-right: 0;
+}
 
 #submenu {
   display: block;
   margin: 0;
   padding: 5px;
   padding-left: 12px;
-  border-bottom: 1px solid #999999; }
-  #submenu li {
-    display: inline;
-    list-style: none; }
-    #submenu li a {
-      color: #999999;
-      font-weight: bold;
-      padding: 5px;
-      padding-left: 8px;
-      padding-right: 8px; }
-      #submenu li a:hover {
-        color: black;
-        text-decoration: none; }
-    #submenu li.current a {
-      color: black; }
+  border-bottom: 1px solid #999999;
+}
+#submenu li {
+  display: inline;
+  list-style: none;
+}
+#submenu li a {
+  color: #999999;
+  font-weight: bold;
+  padding: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#submenu li a:hover {
+  color: black;
+  text-decoration: none;
+}
+#submenu li.current a {
+  color: black;
+}
 
 #add_match_form {
   background-color: #eeeeee;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
-  border-bottom: 1px solid #cccccc; }
-  #add_match_form label {
-    padding-right: 0.5em;
-    padding-left: 0.5em; }
-  #add_match_form .score {
-    margin-right: 0.5em;
-    width: 3em; }
-  #add_match_form .game_added_warning {
-    margin-left: 0.5em; }
+  border-bottom: 1px solid #cccccc;
+}
+#add_match_form label {
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+}
+#add_match_form .score {
+  margin-right: 0.5em;
+  width: 3em;
+}
+#add_match_form .game_added_warning {
+  margin-left: 0.5em;
+}
 
 h2#page_title {
   display: none;
@@ -166,113 +212,143 @@ h2#page_title {
   font-weight: bold;
   margin-top: 1em;
   margin-bottom: 0;
-  background: transparent url(/images/h2_bg.gif) repeat-x scroll 0px 4px; }
-  h2#page_title span {
-    background: white none repeat scroll 0% 0%;
-    padding-right: 20px;
-    padding-bottom: 5px; }
+  background: transparent url(/images/h2_bg.gif) repeat-x scroll 0px 4px;
+}
+h2#page_title span {
+  background: white none repeat scroll 0% 0%;
+  padding-right: 20px;
+  padding-bottom: 5px;
+}
 
 .visible h2#page_title {
-  display: block; }
+  display: block;
+}
 
 h3 {
   font-size: 13px;
   margin: 0;
   padding: 0;
   margin-bottom: 5px;
-  font-weight: bold; }
-  h3 .details {
-    font-size: 11px;
-    color: #999999;
-    font-weight: normal; }
+  font-weight: bold;
+}
+h3 .details {
+  font-size: 11px;
+  color: #999999;
+  font-weight: normal;
+}
 
 table.form {
   border: 1px solid #cccccc;
-  width: 100%; }
-  table.form td {
-    border: 0;
-    background: #f6fbfb none repeat scroll 0% 0%;
-    padding: 6px; }
-    table.form td .notes {
-      color: #66666e;
-      font-size: 11px;
-      padding: 3px 0px; }
-    table.form td input.text, table.form td input.password, table.form td textarea, table.form td select {
-      color: #555555;
-      border-color: #666666 #cccccc #cccccc;
-      border-style: solid;
-      border-width: 1px;
-      padding: 2px;
-      font-size: 12px;
-      margin: 0; }
-    table.form td textarea {
-      height: 7em; }
-    table.form td input.required {
-      background-image: url("/images/required_bg.gif");
-      background-repeat: no-repeat;
-      background-position: top right; }
-    table.form td input.small {
-      width: 4em; }
-    table.form td .fieldWithErrors input {
-      background-color: #ffff80; }
-  table.form td.label {
-    color: #66666e;
-    font-weight: bold;
-    padding-left: 10px;
-    padding-right: 20px;
-    text-align: right;
-    width: 25%;
-    vertical-align: top; }
-  table.form td.field {
-    width: 75%; }
-    table.form td.field label {
-      display: inline; }
+  width: 100%;
+}
+table.form td {
+  border: 0;
+  background: #f6fbfb none repeat scroll 0% 0%;
+  padding: 6px;
+}
+table.form td .notes {
+  color: #66666e;
+  font-size: 11px;
+  padding: 3px 0px;
+}
+table.form td input.text,
+table.form td input.password,
+table.form td textarea,
+table.form td select {
+  color: #555555;
+  border-color: #666666 #cccccc #cccccc;
+  border-style: solid;
+  border-width: 1px;
+  padding: 2px;
+  font-size: 12px;
+  margin: 0;
+}
+table.form td textarea {
+  height: 7em;
+}
+table.form td input.required {
+  background-image: url("/images/required_bg.gif");
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+table.form td input.small {
+  width: 4em;
+}
+table.form td .fieldWithErrors input {
+  background-color: #ffff80;
+}
+table.form td.label {
+  color: #66666e;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 20px;
+  text-align: right;
+  width: 25%;
+  vertical-align: top;
+}
+table.form td.field {
+  width: 75%;
+}
+table.form td.field label {
+  display: inline;
+}
 
 .list {
-  margin-top: 1.5em; }
-  .list table {
-    width: 100%; }
-    .list table th {
-      border: 0;
-      border-bottom: 1px solid #3399cc;
-      background-color: #77bbdd;
-      padding: 3px;
-      color: white;
-      padding-left: 5px;
-      padding-right: 5px; }
-      .list table th.header {
-        background-image: url("/images/icons/sort_none.gif");
-        cursor: pointer;
-        font-weight: bold;
-        background-repeat: no-repeat;
-        background-position: center right;
-        padding-right: 20px;
-        margin-left: -1px; }
-      .list table th.headerSortUp {
-        background-image: url("/images/icons/sort_asc.gif");
-        background-color: #3399cc; }
-      .list table th.headerSortDown {
-        background-image: url("/images/icons/sort_desc.gif");
-        background-color: #3399cc; }
-      .list table th a {
-        color: #cceeff; }
-    .list table td {
-      border: 0;
-      padding: 3px;
-      padding-left: 5px;
-      padding-right: 5px;
-      text-align: left;
-      vertical-align: top; }
-      .list table td img {
-        margin: 0;
-        padding: 0;
-        vertical-align: text-bottom; }
-    .list table tr.odd td {
-      background-color: #eeeeee; }
-  .list .notes {
-    font-size: 11px;
-    color: #999999;
-    font-weight: normal; }
+  margin-top: 1.5em;
+}
+.list table {
+  width: 100%;
+}
+.list table th {
+  border: 0;
+  border-bottom: 1px solid #3399cc;
+  background-color: #77bbdd;
+  padding: 3px;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.list table th.header {
+  background-image: url("/images/icons/sort_none.gif");
+  cursor: pointer;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center right;
+  padding-right: 20px;
+  margin-left: -1px;
+}
+.list table th.headerSortUp {
+  background-image: url("/images/icons/sort_asc.gif");
+  background-color: #3399cc;
+}
+.list table th.headerSortDown {
+  background-image: url("/images/icons/sort_desc.gif");
+  background-color: #3399cc;
+}
+.list table th a {
+  color: #cceeff;
+}
+.list table td {
+  border: 0;
+  padding: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: left;
+  vertical-align: top;
+}
+.list table td img {
+  margin: 0;
+  padding: 0;
+  vertical-align: text-bottom;
+}
+.list table tr.odd td {
+  background-color: #eeeeee;
+}
+.list .notes {
+  font-size: 11px;
+  color: #999999;
+  font-weight: normal;
+}
 
 #bd form h3 {
   font-size: 19px;
@@ -281,225 +357,308 @@ table.form {
   margin-bottom: 5px;
   margin-top: 1em;
   padding-bottom: 5px;
-  border-bottom: 1px solid #333333; }
-#bd div.pagination span, #bd div.pagination a {
+  border-bottom: 1px solid #333333;
+}
+#bd div.pagination span,
+#bd div.pagination a {
   display: inline;
   border: 1px solid #eeeeee;
   padding-left: 3px;
   padding-right: 3px;
   padding-top: 1px;
-  padding-bottom: 1px; }
+  padding-bottom: 1px;
+}
 #bd div.pagination a:hover {
   text-decoration: none;
-  background-color: #dddddd; }
+  background-color: #dddddd;
+}
 #bd div.pagination .current {
   font-weight: bold;
-  background-color: #dddddd; }
+  background-color: #dddddd;
+}
 #bd div.pagination .disabled {
   border: 1px solid white;
-  color: #999999; }
+  color: #999999;
+}
 #bd #errorExplanation {
   margin-top: 1em;
-  border: 1px solid #999999; }
-  #bd #errorExplanation h2 {
-    display: block;
-    background-color: red;
-    line-height: normal;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 6px;
-    margin: 0;
-    color: white; }
-  #bd #errorExplanation p {
-    font-weight: bold;
-    margin: 0;
-    padding: 6px; }
-  #bd #errorExplanation ul {
-    padding: 0;
-    padding-left: 6px;
-    margin-bottom: 0;
-    margin-top: 0; }
-    #bd #errorExplanation ul li {
-      padding-bottom: 6px; }
+  border: 1px solid #999999;
+}
+#bd #errorExplanation h2 {
+  display: block;
+  background-color: red;
+  line-height: normal;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px;
+  margin: 0;
+  color: white;
+}
+#bd #errorExplanation p {
+  font-weight: bold;
+  margin: 0;
+  padding: 6px;
+}
+#bd #errorExplanation ul {
+  padding: 0;
+  padding-left: 6px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+#bd #errorExplanation ul li {
+  padding-bottom: 6px;
+}
 #bd #leaderboards .list h3 {
   margin: 0;
   font-size: 13px;
   font-weight: bold;
-  border: 0; }
+  border: 0;
+}
 #bd #leaderboards .notes {
-  float: right; }
+  float: right;
+}
 #bd #leaderboards input.submit {
-  margin-top: 3px; }
+  margin-top: 3px;
+}
 #bd #dashboard_data {
-  display: none; }
+  display: none;
+}
 #bd .bottom_space {
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+}
 #bd #messages {
-  margin-top: 1.5em; }
-  #bd #messages .notice, #bd #messages .warning, #bd #messages .error {
-    padding: 10px;
-    margin-bottom: 10px;
-    color: black; }
-  #bd #messages .notice {
-    background-color: #ccffcc;
-    border: solid 1px #66cc66; }
-  #bd #messages .warning {
-    background-color: #dd9a24;
-    border: solid 1px #dd9a24; }
-  #bd #messages .error {
-    background-color: #ffcccc;
-    border: solid 1px #cc6666; }
+  margin-top: 1.5em;
+}
+#bd #messages .notice,
+#bd #messages .warning,
+#bd #messages .error {
+  padding: 10px;
+  margin-bottom: 10px;
+  color: black;
+}
+#bd #messages .notice {
+  background-color: #ccffcc;
+  border: solid 1px #66cc66;
+}
+#bd #messages .warning {
+  background-color: #dd9a24;
+  border: solid 1px #dd9a24;
+}
+#bd #messages .error {
+  background-color: #ffcccc;
+  border: solid 1px #cc6666;
+}
 #bd #no_data {
-  margin-top: 1.5em; }
+  margin-top: 1.5em;
+}
 #bd #logs a.rss {
   float: right;
   margin: 0;
   padding: 0;
   vertical-align: text-bottom;
   position: relative;
-  top: -4px; }
+  top: -4px;
+}
 #bd #logs .list {
   margin: 0;
   border-top: 1px solid #999999;
   border-bottom: 1px solid #999999;
-  padding-top: 2px; }
-  #bd #logs .list .log {
-    display: block;
-    padding-bottom: 2px; }
+  padding-top: 2px;
+}
+#bd #logs .list .log {
+  display: block;
+  padding-bottom: 2px;
+}
 #bd #logs img {
   margin: 0;
   padding: 0;
-  vertical-align: text-bottom; }
-#bd #rankings input, #bd #newbies input {
-  margin: 0; }
+  vertical-align: text-bottom;
+}
+#bd #rankings input,
+#bd #newbies input {
+  margin: 0;
+}
 #bd label {
-  display: block; }
-  #bd label input {
-    display: block;
-    margin-bottom: 10px; }
+  display: block;
+}
+#bd label input {
+  display: block;
+  margin-bottom: 10px;
+}
 #bd .radio label {
   display: inline;
-  font-weight: normal; }
+  font-weight: normal;
+}
 #bd #filter {
-  margin-top: 1.5em; }
+  margin-top: 1.5em;
+}
 #bd #matches .score {
-  text-align: center; }
+  text-align: center;
+}
 #bd #matches .comments {
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 #bd #feeds {
   padding-top: 10px;
-  padding-bottom: 20px; }
-  #bd #feeds a.rss {
-    display: inline;
-    margin-right: 10px; }
+  padding-bottom: 20px;
+}
+#bd #feeds a.rss {
+  display: inline;
+  margin-right: 10px;
+}
 #bd #match {
   margin-top: 1.5em;
-  margin-bottom: 1.5em; }
-  #bd #match .team h3 {
-    margin: 0;
-    margin-top: 1.5em; }
-  #bd #match .team .list {
-    margin-top: 5px;
-    margin-bottom: 1.5em; }
-    #bd #match .team .list .score {
-      text-align: center;
-      vertical-align: middle; }
-    #bd #match .team .list .team-2, #bd #match .team .list .team-3 {
-      font-size: 2em; }
+  margin-bottom: 1.5em;
+}
+#bd #match .team h3 {
+  margin: 0;
+  margin-top: 1.5em;
+}
+#bd #match .team .list {
+  margin-top: 5px;
+  margin-bottom: 1.5em;
+}
+#bd #match .team .list .score {
+  text-align: center;
+  vertical-align: middle;
+}
+#bd #match .team .list .team-2,
+#bd #match .team .list .team-3 {
+  font-size: 2em;
+}
 #bd #comments {
-  border-top: 1px solid #cccccc; }
-  #bd #comments .even {
-    background-color: #f5f5f5; }
-  #bd #comments .comment {
-    margin: 0;
-    padding: 1em;
-    border-bottom: 1px solid #cccccc;
-    padding-bottom: 0; }
-    #bd #comments .comment a:hover {
-      text-decoration: none; }
-    #bd #comments .comment p {
-      margin-bottom: 1em; }
-    #bd #comments .comment .mugshot {
-      float: right;
-      padding-bottom: 1em; }
-    #bd #comments .comment .info {
-      margin-bottom: 1em; }
-      #bd #comments .comment .info div {
-        display: inline; }
-      #bd #comments .comment .info .user {
-        font-weight: bold; }
-      #bd #comments .comment .info .medal img {
-        margin: 0;
-        padding: 0;
-        vertical-align: text-bottom; }
-    #bd #comments .comment .edit {
-      margin-bottom: 1em; }
-    #bd #comments .comment textarea {
-      height: 5em; }
-  #bd #comments #new_comment {
-    margin-top: 1em; }
-    #bd #comments #new_comment textarea {
-      height: 6em; }
+  border-top: 1px solid #cccccc;
+}
+#bd #comments .even {
+  background-color: #f5f5f5;
+}
+#bd #comments .comment {
+  margin: 0;
+  padding: 1em;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 0;
+}
+#bd #comments .comment a:hover {
+  text-decoration: none;
+}
+#bd #comments .comment p {
+  margin-bottom: 1em;
+}
+#bd #comments .comment .mugshot {
+  float: right;
+  padding-bottom: 1em;
+}
+#bd #comments .comment .info {
+  margin-bottom: 1em;
+}
+#bd #comments .comment .info div {
+  display: inline;
+}
+#bd #comments .comment .info .user {
+  font-weight: bold;
+}
+#bd #comments .comment .info .medal img {
+  margin: 0;
+  padding: 0;
+  vertical-align: text-bottom;
+}
+#bd #comments .comment .edit {
+  margin-bottom: 1em;
+}
+#bd #comments .comment textarea {
+  height: 5em;
+}
+#bd #comments #new_comment {
+  margin-top: 1em;
+}
+#bd #comments #new_comment textarea {
+  height: 6em;
+}
 #bd .edit_comment {
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+}
 #bd .filter a.clear {
-  font-size: 85%; }
+  font-size: 85%;
+}
 #bd .pagination {
-  padding-top: 10px; }
+  padding-top: 10px;
+}
 #bd .match {
-  margin-bottom: 20px; }
-  #bd .match label {
-    font-weight: bold; }
+  margin-bottom: 20px;
+}
+#bd .match label {
+  font-weight: bold;
+}
 #bd #new_match h3 {
   display: block;
   margin: 0;
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+}
 #bd #new_match label {
   display: block;
-  padding-bottom: 5px; }
-  #bd #new_match label span {
-    display: block; }
-  #bd #new_match label .score {
-    margin: 0;
-    width: 2em; }
-  #bd #new_match label select {
-    width: 220px; }
+  padding-bottom: 5px;
+}
+#bd #new_match label span {
+  display: block;
+}
+#bd #new_match label .score {
+  margin: 0;
+  width: 2em;
+}
+#bd #new_match label select {
+  width: 220px;
+}
 #bd .columns {
-  clear: both; }
-  #bd .columns .left-column {
-    float: left;
-    width: 49%;
-    padding-right: 1%; }
-  #bd .columns .right-column {
-    float: left;
-    width: 48.9%;
-    padding-left: 1%; }
+  clear: both;
+}
+#bd .columns .left-column {
+  float: left;
+  width: 49%;
+  padding-right: 1%;
+}
+#bd .columns .right-column {
+  float: left;
+  width: 48.9%;
+  padding-left: 1%;
+}
 #bd #logs {
-  margin-top: 1.5em; }
+  margin-top: 1.5em;
+}
 #bd #recent_matches .members {
-  width: 40%; }
+  width: 40%;
+}
 #bd #recent_matches .score {
   width: 20%;
-  text-align: center; }
+  text-align: center;
+}
 #bd #recent_matches .comments {
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 #bd a.rss img {
   position: relative;
-  top: 3px; }
+  top: 3px;
+}
 #bd tr.user .admin {
-  display: inline; }
-#bd table.teams td, #bd table.teams th {
-  width: 20%; }
+  display: inline;
+}
+#bd table.teams td,
+#bd table.teams th {
+  width: 20%;
+}
 #bd table.teams .user {
   width: 0%;
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 #bd #graph {
-  margin-top: 1.5em; }
-  #bd #graph #chart {
-    margin-top: 0.5em; }
+  margin-top: 1.5em;
+}
+#bd #graph #chart {
+  margin-top: 0.5em;
+}
 #bd .user .mugshot {
   text-align: center;
-  padding-bottom: 1em; }
+  padding-bottom: 1em;
+}
 #bd .user p.position {
   padding: 0;
   padding-top: 10px;
@@ -509,211 +668,291 @@ table.form {
   border-bottom: 1px solid #999999;
   font-size: 250%;
   font-weight: bold;
-  text-align: center; }
-  #bd .user p.position label {
-    font-size: 13px; }
+  text-align: center;
+}
+#bd .user p.position label {
+  font-size: 13px;
+}
 #bd .user table.for_against {
-  width: 100%; }
-  #bd .user table.for_against td {
-    border: 0;
-    padding: 0;
-    margin: 0;
-    padding-right: 2px;
-    padding-bottom: 1em; }
-  #bd .user table.for_against td.against {
-    padding-right: 0;
-    padding-left: 2px;
-    text-align: right; }
+  width: 100%;
+}
+#bd .user table.for_against td {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  padding-right: 2px;
+  padding-bottom: 1em;
+}
+#bd .user table.for_against td.against {
+  padding-right: 0;
+  padding-left: 2px;
+  text-align: right;
+}
 #bd #userlist {
-  margin-top: 1.5em; }
-  #bd #userlist .user {
-    padding: 10px;
-    border: 1px solid #cccccc;
-    margin-bottom: 10px; }
-    #bd #userlist .user .image {
-      width: 60px;
-      height: 60px;
-      margin-right: 10px;
-      float: left;
-      text-align: center;
-      background-color: #eeeeee; }
-    #bd #userlist .user .login, #bd #userlist .user .role {
-      float: right; }
-    #bd #userlist .user .name {
-      font-weight: bold; }
+  margin-top: 1.5em;
+}
+#bd #userlist .user {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  margin-bottom: 10px;
+}
+#bd #userlist .user .image {
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+  float: left;
+  text-align: center;
+  background-color: #eeeeee;
+}
+#bd #userlist .user .login,
+#bd #userlist .user .role {
+  float: right;
+}
+#bd #userlist .user .name {
+  font-weight: bold;
+}
 #bd .edit_user {
-  margin-top: 1.5em; }
+  margin-top: 1.5em;
+}
 #bd .edit_account {
-  margin-top: 1.5em; }
+  margin-top: 1.5em;
+}
 
 #sidebar input {
   display: block;
-  width: 200px; }
+  width: 200px;
+}
 #sidebar label {
-  display: block; }
+  display: block;
+}
 #sidebar a img {
   float: none;
   margin: 0;
-  vertical-align: text-bottom; }
+  vertical-align: text-bottom;
+}
 #sidebar .content {
   padding-top: 1.5em;
   padding-left: 1em;
-  padding-bottom: 1.5em; }
-  #sidebar .content h2 {
-    margin: 0;
-    padding: 0;
-    font-size: 100%;
-    display: block;
-    padding: 3px;
-    background-color: #77bbdd;
-    border-bottom: 1px solid #3399cc;
-    margin-bottom: 5px;
-    color: white; }
-  #sidebar .content #getting_started {
-    margin: 0;
-    background-color: #ccffcc;
-    border: solid 1px #66cc66;
-    padding: 10px;
-    margin-bottom: 1.5em;
-    color: black; }
-    #sidebar .content #getting_started .help {
-      margin-bottom: 1em; }
-    #sidebar .content #getting_started .step {
-      color: #888888; }
-      #sidebar .content #getting_started .step a {
-        color: #888888; }
-    #sidebar .content #getting_started .next {
-      color: black; }
-      #sidebar .content #getting_started .next a {
-        color: black; }
-  #sidebar .content #leader {
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    background-color: #eeeeee;
-    border: 1px solid #999999; }
-    #sidebar .content #leader h3 {
-      padding: 0;
-      margin: 0; }
-  #sidebar .content #news h3 {
-    margin-top: 1.5em; }
-  #sidebar .content #news ul {
-    margin: 0; }
-    #sidebar .content #news ul li {
-      margin: 0;
-      list-style: none;
-      margin-top: 0.5em; }
-      #sidebar .content #news ul li a {
-        display: block; }
-      #sidebar .content #news ul li span {
-        font-size: 11px;
-        color: #999999;
-        position: relative;
-        top: -5px; }
-  #sidebar .content #matches_per_day h3 {
-    margin-top: 1.5em; }
-  #sidebar .content #matches_per_day .matches_played {
-    text-align: right; }
-  #sidebar .content #matches_per_day .list {
-    margin-top: 0.5em; }
-  #sidebar .content #opponents h3 {
-    margin-top: 1.5em; }
-  #sidebar .content #opponents .even {
-    background-color: #f0f0f0; }
-  #sidebar .content #opponents .odd {
-    background-color: #f9f9f9; }
-  #sidebar .content #opponents .opponent {
-    padding: 5px; }
-    #sidebar .content #opponents .opponent label {
-      display: inline;
-      font-weight: bold; }
-  #sidebar .content #recent_comments {
-    margin-top: 1.5em; }
-    #sidebar .content #recent_comments .comment {
-      margin-bottom: 1em; }
-      #sidebar .content #recent_comments .comment .user {
-        font-weight: bold; }
-  #sidebar .content .user .edit_user_link, #sidebar .content .team .edit_user_link {
-    float: right; }
-  #sidebar .content .user .matchlink, #sidebar .content .team .matchlink {
-    margin-top: 1.5em; }
-    #sidebar .content .user .matchlink a, #sidebar .content .team .matchlink a {
-      text-decoration: none; }
-      #sidebar .content .user .matchlink a img, #sidebar .content .team .matchlink a img {
-        vertical-align: text-bottom; }
-  #sidebar .content .user #counts, #sidebar .content .team #counts {
-    margin-top: 1.5em; }
-    #sidebar .content .user #counts label, #sidebar .content .team #counts label {
-      display: block;
-      font-weight: bold; }
-  #sidebar .content .team .mugshot {
-    width: 109px;
-    float: left; }
-    #sidebar .content .team .mugshot a {
-      display: block; }
-  #sidebar .content .team .for_against {
-    margin-top: 1.5em; }
-  #sidebar .content #compare_users input {
-    width: auto;
-    margin: 0; }
-  #sidebar .content #compare_users .player {
-    padding-bottom: 5px; }
-    #sidebar .content #compare_users .player input, #sidebar .content #compare_users .player label {
-      display: inline; }
-    #sidebar .content #compare_users .player label {
-      vertical-align: top;
-      font-weight: normal; }
-  #sidebar .content table {
-    width: 100%; }
+  padding-bottom: 1.5em;
+}
+#sidebar .content h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  display: block;
+  padding: 3px;
+  background-color: #77bbdd;
+  border-bottom: 1px solid #3399cc;
+  margin-bottom: 5px;
+  color: white;
+}
+#sidebar .content #getting_started {
+  margin: 0;
+  background-color: #ccffcc;
+  border: solid 1px #66cc66;
+  padding: 10px;
+  margin-bottom: 1.5em;
+  color: black;
+}
+#sidebar .content #getting_started .help {
+  margin-bottom: 1em;
+}
+#sidebar .content #getting_started .step {
+  color: #888888;
+}
+#sidebar .content #getting_started .step a {
+  color: #888888;
+}
+#sidebar .content #getting_started .next {
+  color: black;
+}
+#sidebar .content #getting_started .next a {
+  color: black;
+}
+#sidebar .content #leader {
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #eeeeee;
+  border: 1px solid #999999;
+}
+#sidebar .content #leader h3 {
+  padding: 0;
+  margin: 0;
+}
+#sidebar .content #news h3 {
+  margin-top: 1.5em;
+}
+#sidebar .content #news ul {
+  margin: 0;
+}
+#sidebar .content #news ul li {
+  margin: 0;
+  list-style: none;
+  margin-top: 0.5em;
+}
+#sidebar .content #news ul li a {
+  display: block;
+}
+#sidebar .content #news ul li span {
+  font-size: 11px;
+  color: #999999;
+  position: relative;
+  top: -5px;
+}
+#sidebar .content #matches_per_day h3 {
+  margin-top: 1.5em;
+}
+#sidebar .content #matches_per_day .matches_played {
+  text-align: right;
+}
+#sidebar .content #matches_per_day .list {
+  margin-top: 0.5em;
+}
+#sidebar .content #opponents h3 {
+  margin-top: 1.5em;
+}
+#sidebar .content #opponents .even {
+  background-color: #f0f0f0;
+}
+#sidebar .content #opponents .odd {
+  background-color: #f9f9f9;
+}
+#sidebar .content #opponents .opponent {
+  padding: 5px;
+}
+#sidebar .content #opponents .opponent label {
+  display: inline;
+  font-weight: bold;
+}
+#sidebar .content #recent_comments {
+  margin-top: 1.5em;
+}
+#sidebar .content #recent_comments .comment {
+  margin-bottom: 1em;
+}
+#sidebar .content #recent_comments .comment .user {
+  font-weight: bold;
+}
+#sidebar .content .user .edit_user_link,
+#sidebar .content .team .edit_user_link {
+  float: right;
+}
+#sidebar .content .user .matchlink,
+#sidebar .content .team .matchlink {
+  margin-top: 1.5em;
+}
+#sidebar .content .user .matchlink a,
+#sidebar .content .team .matchlink a {
+  text-decoration: none;
+}
+#sidebar .content .user .matchlink a img,
+#sidebar .content .team .matchlink a img {
+  vertical-align: text-bottom;
+}
+#sidebar .content .user #counts,
+#sidebar .content .team #counts {
+  margin-top: 1.5em;
+}
+#sidebar .content .user #counts label,
+#sidebar .content .team #counts label {
+  display: block;
+  font-weight: bold;
+}
+#sidebar .content .team .mugshot {
+  width: 109px;
+  float: left;
+}
+#sidebar .content .team .mugshot a {
+  display: block;
+}
+#sidebar .content .team .for_against {
+  margin-top: 1.5em;
+}
+#sidebar .content #compare_users input {
+  width: auto;
+  margin: 0;
+}
+#sidebar .content #compare_users .player {
+  padding-bottom: 5px;
+}
+#sidebar .content #compare_users .player input,
+#sidebar .content #compare_users .player label {
+  display: inline;
+}
+#sidebar .content #compare_users .player label {
+  vertical-align: top;
+  font-weight: normal;
+}
+#sidebar .content table {
+  width: 100%;
+}
 
 #ft {
   color: #999999;
   text-align: center;
   font-size: 85%;
-  clear: both; }
-  #ft a {
-    color: #999999; }
-  #ft .content {
-    padding: 5px; }
+  clear: both;
+}
+#ft a {
+  color: #999999;
+}
+#ft .content {
+  padding: 5px;
+}
 
 input#openid_url {
   background: white url(/images/openid.gif) no-repeat scroll 0pt 50%;
-  padding-left: 18px; }
+  padding-left: 18px;
+}
 
 body.login {
-  background-color: #e5e5e5; }
-  body.login a {
-    color: #6666cc; }
-    body.login a:hover {
-      text-decoration: underline; }
-  body.login .container {
-    border: 10px solid #cccccc;
-    background-color: white; }
-    body.login .container #hd {
-      background-image: none; }
-      body.login .container #hd #logo {
-        background-image: none;
-        border-bottom: none; }
-    body.login .container #bd .content {
-      padding-top: 15px;
-      padding-bottom: 5px;
-      padding-left: 20px;
-      padding-right: 20px; }
+  background-color: #e5e5e5;
+}
+body.login a {
+  color: #6666cc;
+}
+body.login a:hover {
+  text-decoration: underline;
+}
+body.login .container {
+  border: 10px solid #cccccc;
+  background-color: white;
+}
+body.login .container #hd {
+  background-image: none;
+}
+body.login .container #hd #logo {
+  background-image: none;
+  border-bottom: none;
+}
+body.login .container #bd .content {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
 body.login .container {
-  width: 470px; }
+  width: 470px;
+}
 
 body.public a {
-  color: #6666cc; }
+  color: #6666cc;
+}
 body.public h1 {
   margin-top: 1em;
-  font-size: 19px; }
+  font-size: 19px;
+}
 body.public h2 {
-  font-size: 17px; }
+  font-size: 17px;
+}
 body.public h3 {
-  font-size: 15px; }
-  body.public h3 a {
-    color: black; }
+  font-size: 15px;
+}
+body.public h3 a {
+  color: black;
+}
 body.public #sign_up a {
   display: block;
   background-color: #ccffcc;
@@ -723,55 +962,78 @@ body.public #sign_up a {
   color: black;
   font-size: 17px;
   font-weight: bold;
-  margin-bottom: 1.5em; }
-  body.public #sign_up a:hover {
-    text-decoration: none; }
-  body.public #sign_up a span {
-    display: block;
-    font-size: 11px;
-    color: #666666; }
+  margin-bottom: 1.5em;
+}
+body.public #sign_up a:hover {
+  text-decoration: none;
+}
+body.public #sign_up a span {
+  display: block;
+  font-size: 11px;
+  color: #666666;
+}
 body.public #login input {
-  width: 212px; }
+  width: 212px;
+}
 body.public #login input.submit {
-  width: 100%; }
+  width: 100%;
+}
 body.public #login label {
-  padding-top: 5px; }
+  padding-top: 5px;
+}
 body.public #news {
-  color: #666666; }
-  body.public #news .article h3 a {
-    color: #666666; }
-  body.public #news .article .date {
-    margin-bottom: 1.5em; }
-  body.public #news .left .article {
-    padding-right: 5px; }
-  body.public #news .right .article {
-    padding-left: 5px; }
+  color: #666666;
+}
+body.public #news .article h3 a {
+  color: #666666;
+}
+body.public #news .article .date {
+  margin-bottom: 1.5em;
+}
+body.public #news .left .article {
+  padding-right: 5px;
+}
+body.public #news .right .article {
+  padding-left: 5px;
+}
 body.public #domain_login .notes {
   color: #66666e;
-  font-size: 11px; }
+  font-size: 11px;
+}
 body.public #domain_login .submit {
-  margin-top: 1em; }
+  margin-top: 1em;
+}
 body.public #new_account {
-  margin-bottom: 1em; }
-  body.public #new_account input.text {
-    border: 1px solid #999999; }
-  body.public #new_account input.domain {
-    width: 14em; }
-  body.public #new_account .field {
-    margin-bottom: 0.5em; }
-    body.public #new_account .field label {
-      width: 10em;
-      display: block;
-      float: left;
-      font-weight: normal; }
-    body.public #new_account .field .fieldWithErrors {
-      display: inline; }
-      body.public #new_account .field .fieldWithErrors input {
-        border: 2px solid red; }
-    body.public #new_account .field #subdomain input {
-      width: 10em; }
+  margin-bottom: 1em;
+}
+body.public #new_account input.text {
+  border: 1px solid #999999;
+}
+body.public #new_account input.domain {
+  width: 14em;
+}
+body.public #new_account .field {
+  margin-bottom: 0.5em;
+}
+body.public #new_account .field label {
+  width: 10em;
+  display: block;
+  float: left;
+  font-weight: normal;
+}
+body.public #new_account .field .fieldWithErrors {
+  display: inline;
+}
+body.public #new_account .field .fieldWithErrors input {
+  border: 2px solid red;
+}
+body.public #new_account .field #subdomain input {
+  width: 10em;
+}
 
 .clear {
-  clear: both; }
-  .clear hr {
-    display: none; }
+  clear: both;
+}
+.clear hr {
+  display: none;
+}
