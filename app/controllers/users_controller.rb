@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     @game = current_account.games.find(params[:game_id])
     @user = current_account.users.find(params[:id])
 
-    @game_participation = @user.game_participations.find_by_game_id(@game.id)
+    @game_participation = @user.game_participations.find_by(game_id: @game.id)
 
     redirect_to root_url and return if @game_participation.nil?
 
@@ -119,8 +119,8 @@ class UsersController < ApplicationController
 
   def forgot_password
     if params[:username] || params[:email]
-      user = current_account.users.find_by_login(params[:username]) if params[:username]
-      user ||= current_account.users.find_by_email(params[:email]) if params[:email]
+      user = current_account.users.find_by(login: params[:username]) if params[:username]
+      user ||= current_account.users.find_by(email: params[:email]) if params[:email]
 
       if user.blank?
         flash.now[:error] = 'No user was found with the specified username or e-mail.'

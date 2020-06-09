@@ -56,7 +56,7 @@ class Game < ActiveRecord::Base
   end
 
   def game_participation_for(user)
-    game_participations.find_by_user_id(user.id)
+    game_participations.find_by(user_id: user.id)
   end
 
   def cache_key
