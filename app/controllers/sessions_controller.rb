@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
   end
 
   def token_login
-    user = User.find_by_login_token(params[:token])
+    user = User.find_by(login_token: params[:token])
     if user.blank?
       flash[:error] = 'The link you tried to use is either wrong or has already been used.'
       redirect_to login_url

@@ -13,27 +13,30 @@ class ApplicationController < ActionController::Base
     if impersonating?
       @current_account = current_user.account
     else
-      @current_account = Account.find_by_domain(account_subdomain) unless account_subdomain.nil?
+      unless account_subdomain.nil?
+        @current_account = Account.find_by(domain: account_subdomain)
+      end
     end
     @current_account
   end
   helper_method :current_account
 
   protected
+
   def pjax?
     request.headers['X-PJAX']
   end
   helper_method :pjax?
 
   def impersonating?
-    !(session[:real_user_id].nil?)
+    !session[:real_user_id].nil?
   end
 
   def login_from_feed_token
     if params[:feed_token] && !logged_in? && request.format.to_s == 'application/atom+xml'
-      self.current_user = User.find_by_feed_token(params[:feed_token])
+      self.current_user = User.find_by(feed_token: params[:feed_token])
       yield
-      self.current_user = :false
+      self.current_user = false
     else
       yield
     end
@@ -60,13 +63,17 @@ class ApplicationController < ActionController::Base
     return if impersonating?
 
     # No subdomain - redirect to public root (scorekeepr.dk)
-    redirect_to public_root_url and return false if account_subdomain.blank?
+    redirect_to(public_root_url) && (return false) if account_subdomain.blank?
 
     # Subdomain and current account's subdomain do not match - redirect to current account's subdomain
-    redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_account.domain != account_subdomain
+    if logged_in? && current_account.domain != account_subdomain
+      redirect_to(account_url(current_user.account.domain)) && (return false)
+    end
 
     # User not logged in and no domain exists with the current subdomain
-    redirect_to public_root_url(:host => account_domain) and return false if !logged_in? && Account.find_by_domain(account_subdomain).nil?
+    if !logged_in? && Account.find_by(domain: account_subdomain).nil?
+      redirect_to(public_root_url(host: account_domain)) && (return false)
+    end
 
     # We are where we're supposed to be!
     true
@@ -239,7 +246,7 @@ class ApplicationController < ActionController::Base
 
   # Called from #current_user.  Finaly, attempt to login by an expiring token in the cookie.
   def login_from_cookie
-    user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])
+    user = cookies[:auth_token] && User.find_by(remember_token: cookies[:auth_token])
     if user && user.remember_token?
       user.remember_me
       cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
