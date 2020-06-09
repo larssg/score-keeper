@@ -7213,12 +7213,12 @@ jQuery.ajaxTransport( "script", function(s) {
 				script.src = s.url;
 
 				// Attach handlers for all browsers
-				script.onload = script.onreadystatechange = function( _, isAbort ) {
+				script.addEventListener('load', script.onreadystatechange = function( _, isAbort ) {
 
 					if ( !script.readyState || /loaded|complete/.test( script.readyState ) ) {
 
 						// Handle memory leak in IE
-						script.onload = script.onreadystatechange = null;
+						script.addEventListener('load', script.onreadystatechange = null);
 
 						// Remove the script
 						if ( head && script.parentNode ) {
@@ -7233,7 +7233,7 @@ jQuery.ajaxTransport( "script", function(s) {
 							callback( 200, "success" );
 						}
 					}
-				};
+				});
 				// Use insertBefore instead of appendChild  to circumvent an IE6 bug.
 				// This arises when a base node is used (#2709 and #4378).
 				head.insertBefore( script, head.firstChild );
