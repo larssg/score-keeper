@@ -137,7 +137,7 @@ jQuery.pjax.active = false;
 // So we have to special case. The joys.
 jQuery.pjax.firstLoad = true;
 
-if (jQuery.browser.webkit && parseInt(jQuery.browser.version) < 534) jQuery.pjax.firstLoad = false;
+if (jQuery.browser.webkit && Number.parseInt(jQuery.browser.version) < 534) jQuery.pjax.firstLoad = false;
 
 // Bind our popstate handler which takes care of the back and
 // forward buttons, but only once we've called pjax().
