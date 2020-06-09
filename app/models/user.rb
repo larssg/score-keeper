@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :logs
   has_many :teams, :through => :memberships
-  belongs_to :last_game, :class_name => "Game", :foreign_key => "last_game_id"
+  belongs_to :last_game, :class_name => "Game"
 
   validates_presence_of     :email
   validates_length_of       :email,    :within => 3..100
