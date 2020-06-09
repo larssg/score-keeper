@@ -95,7 +95,7 @@ class Match < ActiveRecord::Base
   def self.reset_rankings(game)
     return if game.nil?
     game.game_participations.update_all("game_participations.ranking = 2000, game_participations.matches_played = 0")
-    game.matches.all.each do |match|
+    game.matches.all.find_each do |match|
       match.update_rankings
       match.teams.each do |team|
         team.memberships.each do |membership|
