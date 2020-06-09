@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class ComparisonsController < ApplicationController
   before_action :login_required
 
   def index
     @game = params[:game_id].to_i == current_game.id ? current_game : current_account.games.find(params[:game_id])
-    @players = @game.game_participations.find(:all, :include => :user, :order => 'users.name').collect { |gp| gp.user }.select { |u| u.enabled? }
+    @players = @game.game_participations.find(:all, include: :user, order: 'users.name').collect(&:user).select(&:enabled?)
     @time_period = params[:period] ? params[:period].to_i : 30
 
     @selected_player_ids = params[:user] ? params[:user].collect(&:to_i).sort : []

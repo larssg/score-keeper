@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class LogsController < ApplicationController
-  around_action :login_from_feed_token, :only => [ :index ]
+  around_action :login_from_feed_token, only: [:index]
   before_action :domain_required
   before_action :login_required
 

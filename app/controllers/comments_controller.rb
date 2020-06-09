@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class CommentsController < ApplicationController
   before_action :domain_required
   before_action :login_required
 
   def show
     @comment = current_user.comments.find(params[:id])
-    render :layout => false
+    render layout: false
   end
 
   def create

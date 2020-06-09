@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GamesController < ApplicationController
   before_action :domain_required
   before_action :login_required

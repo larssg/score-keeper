@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class AccountsController < ApplicationController
-  before_action :domain_required, :except => [ :new, :create ]
-  before_action :login_required, :except => [ :new, :create ]
-  before_action :must_be_admin, :except => [ :new, :create, :edit, :update ]
-  before_action :must_be_account_admin, :only => [ :edit, :update ]
+  before_action :domain_required, except: %i[new create]
+  before_action :login_required, except: %i[new create]
+  before_action :must_be_admin, except: %i[new create edit update]
+  before_action :must_be_account_admin, only: %i[edit update]
 
   def index
-    order = %w(name created_at).include?(params[:order]) ? params[:order] : 'name'
+    order = %w[name created_at].include?(params[:order]) ? params[:order] : 'name'
     @accounts = Account.order(order)
   end
 
