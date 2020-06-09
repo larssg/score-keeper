@@ -63,13 +63,17 @@ class ApplicationController < ActionController::Base
     return if impersonating?
 
     # No subdomain - redirect to public root (scorekeepr.dk)
-    redirect_to public_root_url and return false if account_subdomain.blank?
+    redirect_to(public_root_url) && (return false) if account_subdomain.blank?
 
     # Subdomain and current account's subdomain do not match - redirect to current account's subdomain
-    redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_account.domain != account_subdomain
+    if logged_in? && current_account.domain != account_subdomain
+      redirect_to(account_url(current_user.account.domain)) && (return false)
+    end
 
     # User not logged in and no domain exists with the current subdomain
-    redirect_to public_root_url(:host => account_domain) and return false if !logged_in? && Account.find_by(domain: account_subdomain).nil?
+    if !logged_in? && Account.find_by(domain: account_subdomain).nil?
+      redirect_to(public_root_url(host: account_domain)) && (return false)
+    end
 
     # We are where we're supposed to be!
     true
