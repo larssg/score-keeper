@@ -775,7 +775,7 @@
                 if (!e[config.sortMultiSortKey]) {
                   // flush the sort list
                   config.sortList = [];
-                  if (config.sortForce != null) {
+                  if (config.sortForce != undefined) {
                     var a = config.sortForce;
                     for (var j = 0; j < a.length; j++) {
                       if (a[j][0] != i) {
