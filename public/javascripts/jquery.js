@@ -1549,7 +1549,7 @@ jQuery.fn.extend({
 						name = attr[i].name;
 
 						if ( name.indexOf( "data-" ) === 0 ) {
-							name = name.substr( 5 );
+							name = name.slice(5);
 							dataAttr( this[0], name, data[ name ] );
 						}
 					}
@@ -3526,7 +3526,7 @@ Sizzle.find = function( expr, context, isXML ) {
 			var left = match[1];
 			match.splice( 1, 1 );
 
-			if ( left.substr( left.length - 1 ) !== "\\" ) {
+			if ( left.slice(left.length - 1) !== "\\" ) {
 				match[1] = (match[1] || "").replace( rBackslash, "" );
 				set = Expr.find[ type ]( match, context, isXML );
 
@@ -3565,7 +3565,7 @@ Sizzle.filter = function( expr, set, inplace, not ) {
 
 				match.splice(1,1);
 
-				if ( left.substr( left.length - 1 ) === "\\" ) {
+				if ( left.slice(left.length - 1) === "\\" ) {
 					continue;
 				}
 
@@ -4140,9 +4140,9 @@ var Expr = Sizzle.selectors = {
 				type === "^=" ?
 				value.indexOf(check) === 0 :
 				type === "$=" ?
-				value.substr(value.length - check.length) === check :
+				value.slice(value.length - check.length) === check :
 				type === "|=" ?
-				value === check || value.substr(0, check.length + 1) === check + "-" :
+				value === check || value.slice(0, Math.max(0, check.length + 1)) === check + "-" :
 				false;
 		},
 
@@ -6189,7 +6189,7 @@ function addToPrefiltersOrTransports( structure ) {
 				// any existing element
 				placeBefore = /^\+/.test( dataType );
 				if ( placeBefore ) {
-					dataType = dataType.substr( 1 ) || "*";
+					dataType = dataType.slice(1) || "*";
 				}
 				list = structure[ dataType ] = structure[ dataType ] || [];
 				// then we add to the structure accordingly
