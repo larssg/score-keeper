@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class LogsController < ApplicationController
-  around_filter :login_from_feed_token, :only => [ :index ]
-  before_filter :domain_required
-  before_filter :login_required
+  around_action :login_from_feed_token, only: [:index]
+  before_action :domain_required
+  before_action :login_required
 
   def index
     @game = current_account.games.find(params[:game_id])

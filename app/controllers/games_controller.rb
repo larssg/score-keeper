@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class GamesController < ApplicationController
-  before_filter :domain_required
-  before_filter :login_required
+  before_action :domain_required
+  before_action :login_required
 
   def index
     @games = current_account.all_games

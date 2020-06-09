@@ -1,9 +1,9 @@
 # This controller handles the login/logout function of the site.
 class SessionsController < ApplicationController
   layout 'login'
-  before_filter :domain_required
-  before_filter :must_be_admin, :only => [ :impersonate ]
-  before_filter :must_be_impersonating, :only => [ :unimpersonate ]
+  before_action :domain_required
+  before_action :must_be_admin, :only => [ :impersonate ]
+  before_action :must_be_impersonating, :only => [ :unimpersonate ]
 
   def new
   end
