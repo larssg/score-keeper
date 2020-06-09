@@ -32,6 +32,7 @@ class DashboardController < ApplicationController
   protected
   def game
     return @game unless @game.nil?
+
     if params[:game_id] && params[:game_id].to_i != current_game.id
       @game = current_account.games.find(params[:game_id])
     end
@@ -40,11 +41,13 @@ class DashboardController < ApplicationController
 
   def logs
     return nil if game.nil?
+
     @logs ||= game.logs.find(:all, :order => 'published_at DESC', :limit => 5)
   end
 
   def last_update
     return nil if logs.nil? || logs.first.nil?
+
     logs.first.published_at.to_s(:db)
   end
 
@@ -76,6 +79,7 @@ class DashboardController < ApplicationController
 
   def points
     return @points unless @points.nil?
+
     total_points_for = @game.game_participations.sum(:points_for)
     @points ||= total_points_for.nil? ? 0 : total_points_for / @game.team_size
   end
