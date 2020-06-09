@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_filter :domain_required
   before_filter :login_required, :except => [ :forgot_password ]
-  before_filter :must_be_account_admin_or_self, :only => [ :edit, :update ]
+  before_filter :must_be_account_admin_or_self, :only => %i[edit update]
 
   def index
     @users = all_users
