@@ -12,6 +12,7 @@ class GameParticipation < ActiveRecord::Base
 
   def winning_percentage
     return 0.0 if matches_played == 0
+
     ((matches_won.to_f / matches_played.to_f) * 1000).to_i / 10.to_f
   end
 
@@ -21,6 +22,7 @@ class GameParticipation < ActiveRecord::Base
 
   def difference_average
     return 0.0 if matches_played == 0
+
     ((10 * difference) / matches_played) / 10.0
   end
 

@@ -78,6 +78,7 @@ end
 
 def daemonize(pid_file = nil)
   return yield if $DEBUG
+
   pid = Process.fork{
     Process.setsid
     Dir.chdir(RAILS_ROOT)
