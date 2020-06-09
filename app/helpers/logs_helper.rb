@@ -16,7 +16,7 @@ module LogsHelper
     if log.linked_model == 'Match'
       game_match_url(log.game_id, log.linked_id)
     elsif log.linked_model == 'Comment'
-      game_match_url(log.game_id, Comment.find(log.linked_id).match_id, :anchor => "c#{log.linked_id}")
+      game_match_url(log.game_id, Comment.find(log.linked_id).match_id, anchor: "c#{log.linked_id}")
     elsif log.linked_model = 'Clean sheet'
       game_match_url(log.game_id, log.linked_id)
     end
@@ -41,11 +41,8 @@ module LogsHelper
   end
 
   protected
+
   def icons
-    {
-      'Match' => :game,
-      'Comment' => :comment,
-      'Clean sheet' => :clean_sheet
-    }
+    { 'Match' => :game, 'Comment' => :comment, 'Clean sheet' => :clean_sheet }
   end
 end

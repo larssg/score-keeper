@@ -1,2 +1,1 @@
-module ComparisonsHelper
-end
+module ComparisonsHelper; end

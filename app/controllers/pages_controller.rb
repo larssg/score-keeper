@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   layout 'public'
 
   def index
-    @news = NewsItem.all(:order => 'posted_at DESC', :limit => 2)
+    @news = NewsItem.all(order: 'posted_at DESC', limit: 2)
   end
 
   def login

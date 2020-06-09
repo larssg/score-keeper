@@ -1,4 +1,3 @@
 require 'test_helper'
 
-class GamesControllerTest < ActionController::TestCase
-end
+class GamesControllerTest < ActionController::TestCase; end

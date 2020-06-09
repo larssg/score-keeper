@@ -1,23 +1,25 @@
 require 'test_helper'
 
 class MatchTest < ActiveSupport::TestCase
-  test "deleting a game properly updates rankings, win totals, etc." do
+  test 'deleting a game properly updates rankings, win totals, etc.' do
     game = Factory(:game)
     users = (0..3).collect { Factory(:user) }
 
     # Create 10 games
-    matches = (0..9).collect {
-      game.matches.create!(
-        :account => game.account,
-        :team1 => [users[0].id.to_s, users[1].id.to_s],
-        :score1 => 10,
-        :team2 => [users[2].id.to_s, users[3].id.to_s],
-        :score2 => 4)
-    }
+    matches =
+      (0..9).collect do
+        game.matches.create!(
+          account: game.account,
+          team1: [users[0].id.to_s, users[1].id.to_s],
+          score1: 10,
+          team2: [users[2].id.to_s, users[3].id.to_s],
+          score2: 4
+        )
+      end
 
     # Validate data
     assert_equal 4, User.count
-    
+
     assert_equal 10, Match.count
 
     users.each do |user|
@@ -33,7 +35,7 @@ class MatchTest < ActiveSupport::TestCase
         ranking_sums[index] = ranking_sums[index].to_i + membership.current_ranking
       end
     end
-    
+
     assert_equal winner_rankings, ranking_sums
 
     # Check losers
@@ -45,16 +47,16 @@ class MatchTest < ActiveSupport::TestCase
         ranking_sums[index] = ranking_sums[index].to_i + membership.current_ranking
       end
     end
-    
+
     assert_equal loser_rankings, ranking_sums
-    
+
     ### Delete match
     deleted_match_id = matches[-2].id
     matches[-2].destroy
-  
+
     # Validate data
     assert !Match.exists?(deleted_match_id)
-    
+
     assert_equal 9, Match.count
 
     users.each do |user|
@@ -70,7 +72,7 @@ class MatchTest < ActiveSupport::TestCase
         ranking_sums[index] = ranking_sums[index].to_i + membership.current_ranking
       end
     end
-    
+
     assert_equal winner_rankings, ranking_sums
 
     # Check losers
@@ -82,7 +84,7 @@ class MatchTest < ActiveSupport::TestCase
         ranking_sums[index] = ranking_sums[index].to_i + membership.current_ranking
       end
     end
-    
+
     assert_equal loser_rankings, ranking_sums
   end
 end

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MatchesController < ApplicationController
-  around_filter :login_from_feed_token, :only => [ :index ]
+  around_filter :login_from_feed_token, only: [:index]
   before_filter :domain_required
   before_filter :login_required
 
@@ -8,19 +10,20 @@ class MatchesController < ApplicationController
       # used for /users/xxx/matches.graph
       @user = current_account.users.find(params[:user_id])
     else
-      @matches = current_game.matches.paginate(
+      @matches =
+        current_game.matches.paginate(
           Match.recent_options(
-                               params[:filter],
-                               :game => current_game,
-                               :include => { :teams => :memberships },
-                               :page => params[:page]))
+            params[:filter],
+            game: current_game, include: { teams: :memberships }, page: params[:page]
+          )
+        )
       @filter = current_account.matches.find_filter_users(params[:filter])
       @game = current_game
     end
 
     respond_to do |format|
-      format.html # index.haml
-      format.atom { render :layout => false } # index.atom.builder
+      format.html
+      format.atom { render layout: false } # index.atom.builder # index.haml
     end
   end
 
@@ -57,7 +60,7 @@ class MatchesController < ApplicationController
       flash[:notice] = 'Match updated.'
       redirect_to matches_url
     else
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 

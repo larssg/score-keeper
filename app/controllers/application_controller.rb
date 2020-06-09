@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_account
 
   protected
+
   def pjax?
     request.headers['X-PJAX']
   end
@@ -60,13 +61,15 @@ class ApplicationController < ActionController::Base
     return if impersonating?
 
     # No subdomain - redirect to public root (scorekeepr.dk)
-    redirect_to public_root_url and return false if account_subdomain.blank?
+    redirect_to(public_root_url) && (return false) if account_subdomain.blank?
 
     # Subdomain and current account's subdomain do not match - redirect to current account's subdomain
-    redirect_to account_url(current_user.account.domain) and return false if logged_in? && current_account.domain != account_subdomain
+    redirect_to(account_url(current_user.account.domain)) && (return false) if logged_in? &&
+                                                                               current_account.domain != account_subdomain
 
     # User not logged in and no domain exists with the current subdomain
-    redirect_to public_root_url(:host => account_domain) and return false if !logged_in? && Account.find_by_domain(account_subdomain).nil?
+    redirect_to(public_root_url(host: account_domain)) && (return false) if !logged_in? &&
+                                                                            Account.find_by_domain(account_subdomain).nil?
 
     # We are where we're supposed to be!
     true
@@ -75,10 +78,16 @@ class ApplicationController < ActionController::Base
   def current_game
     if @current_game.nil?
       return unless current_account
-      @current_game ||= current_account.games.first(:conditions => { :id => session[:current_game_id] }) if session[:current_game_id]
+
+      if session[:current_game_id]
+        @current_game ||=
+          current_account.games.first(conditions: { id: session[:current_game_id] })
+      end
       @current_game ||= current_account.games.first
       if @current_game.nil?
-        redirect_to games_url unless %w(games sessions users accounts).include?(controller_name)
+        unless %w[games sessions users accounts].include?(controller_name)
+          redirect_to games_url
+        end
       else
         session[:current_game_id] ||= @current_game.id
       end
@@ -95,7 +104,7 @@ class ApplicationController < ActionController::Base
   def current_users_games
     if @current_users_games.nil?
       current_user.cache_game_ids = '' if current_user.cache_game_ids.blank?
-      @current_users_games = {:played => [], :not_played => [], :locked => []}
+      @current_users_games = { played: [], not_played: [], locked: [] }
       current_account.all_games.each do |game|
         if game.locked?
           @current_users_games[:locked] << game
@@ -111,12 +120,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_users_games
 
   def time_periods
-    [
-     ['30 days', 30],
-     ['90 days', 90],
-     ['180 days', 180],
-     ['360 days', 360]
-    ]
+    [['30 days', 30], ['90 days', 90], ['180 days', 180], ['360 days', 360]]
   end
   helper_method :time_periods
 
@@ -242,12 +246,13 @@ class ApplicationController < ActionController::Base
     user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])
     if user && user.remember_token?
       user.remember_me
-      cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
+      cookies[:auth_token] = { value: user.remember_token, expires: user.remember_token_expires_at }
       self.current_user = user
     end
   end
 
   private
+
   def set_time_zone
     Time.zone = current_user.time_zone if logged_in?
   end
