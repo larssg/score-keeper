@@ -14,32 +14,34 @@ class SessionsController < ApplicationController
 
   def update
     unless params[:current_game].blank? || params[:current_game][:id].blank?
-      redirect_to new_game_url and return if params[:current_game][:id] == 'new'
+      redirect_to(new_game_url) && return if params[:current_game][:id] == 'new'
 
       self.current_game = current_account.games.find(params[:current_game][:id])
-      self.current_user.update_attribute :last_game, self.current_game unless impersonating?
+      unless impersonating?
+        current_user.update_attribute :last_game, current_game
+      end
     end
     redirect_back_or_default('/')
   end
 
   def destroy
-    self.current_user.forget_me if logged_in?
+    current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = "You have been logged out."
+    flash[:notice] = 'You have been logged out.'
     redirect_back_or_default('/')
   end
 
   def token_login
     user = User.find_by_login_token(params[:token])
-    unless user.blank?
+    if user.blank?
+      flash[:error] = 'The link you tried to use is either wrong or has already been used.'
+      redirect_to login_url
+    else
       self.current_user = user
       user.update_attribute :login_token, nil
       flash[:notice] = 'You have logged in using a one time login. Please change your password to something you can remember.'
       redirect_to edit_user_url(user)
-    else
-      flash[:error] = 'The link you tried to use is either wrong or has already been used.'
-      redirect_to login_url
     end
   end
 
