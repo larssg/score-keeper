@@ -53,7 +53,7 @@ class MatchTest < ActiveSupport::TestCase
     matches[-2].destroy
   
     # Validate data
-    assert !Match.exists?(deleted_match_id)
+    assert_not Match.exists?(deleted_match_id)
     
     assert_equal 9, Match.count
 
