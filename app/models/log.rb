@@ -11,14 +11,13 @@ class Log < ActiveRecord::Base
 
   def self.find_by_item(account, item, model_name = nil)
     model_name = item.class.name if model_name.nil?
-    account.logs.find(:all, :conditions => { :linked_model => model_name, :linked_id => item.id })
+    account.logs.find(:all, conditions: { linked_model: model_name, linked_id: item.id })
   end
 
   def self.clear_item_log(account, item)
     find_by_item(account, item).each { |log| log.destroy }
-    if (item.class.name == "Match")
+    if (item.class.name == 'Match')
       find_by_item(account, item, 'Clean sheet').each { |log| log.destroy }
     end
   end
 end
-  

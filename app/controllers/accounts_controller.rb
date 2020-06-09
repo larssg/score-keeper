@@ -1,11 +1,11 @@
 class AccountsController < ApplicationController
-  before_filter :domain_required, :except => [ :new, :create ]
-  before_filter :login_required, :except => [ :new, :create ]
-  before_filter :must_be_admin, :except => [ :new, :create, :edit, :update ]
-  before_filter :must_be_account_admin, :only => [ :edit, :update ]
+  before_filter :domain_required, except: [:new, :create]
+  before_filter :login_required, except: [:new, :create]
+  before_filter :must_be_admin, except: [:new, :create, :edit, :update]
+  before_filter :must_be_account_admin, only: [:edit, :update]
 
   def index
-    order = %w(name created_at).include?(params[:order]) ? params[:order] : 'name'
+    order = %w[name created_at].include?(params[:order]) ? params[:order] : 'name'
     @accounts = Account.order(order)
   end
 
@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
   def new
     @account = Account.new
     @user = User.new
-    render :layout => 'public'
+    render layout: 'public'
   end
 
   def create
@@ -28,10 +28,10 @@ class AccountsController < ApplicationController
     if @account.save
       self.current_user = @user
       redirect_to account_url(@account.domain)
-      flash[:notice] = "Thanks for signing up!"
+      flash[:notice] = 'Thanks for signing up!'
     else
       flash[:notice] = 'An error occured - please try again.'
-      render :action => 'new', :layout => 'public'
+      render action: 'new', layout: 'public'
     end
   end
 
@@ -45,12 +45,14 @@ class AccountsController < ApplicationController
       redirect_to root_url
     else
       @account = current_account
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 
   protected
+
   def must_be_account_admin
-    redirect_to root_url unless (current_user.account_id.to_s == params[:id] && current_user.is_account_admin?) || current_user.is_admin?
+    redirect_to root_url unless (current_user.account_id.to_s == params[:id] && current_user.is_account_admin?) ||
+      current_user.is_admin?
   end
 end

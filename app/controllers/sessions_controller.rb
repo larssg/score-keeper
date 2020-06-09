@@ -2,11 +2,10 @@
 class SessionsController < ApplicationController
   layout 'login'
   before_filter :domain_required
-  before_filter :must_be_admin, :only => [ :impersonate ]
-  before_filter :must_be_impersonating, :only => [ :unimpersonate ]
+  before_filter :must_be_admin, only: [:impersonate]
+  before_filter :must_be_impersonating, only: [:unimpersonate]
 
-  def new
-  end
+  def new; end
 
   def create
     password_authentication(params[:login], params[:password])
@@ -25,7 +24,7 @@ class SessionsController < ApplicationController
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
-    flash[:notice] = "You have been logged out."
+    flash[:notice] = 'You have been logged out.'
     redirect_back_or_default('/')
   end
 
@@ -37,7 +36,8 @@ class SessionsController < ApplicationController
     else
       self.current_user = user
       user.update_attribute :login_token, nil
-      flash[:notice] = 'You have logged in using a one time login. Please change your password to something you can remember.'
+      flash[:notice] =
+        'You have logged in using a one time login. Please change your password to something you can remember.'
       redirect_to edit_user_url(user)
     end
   end
@@ -62,13 +62,15 @@ class SessionsController < ApplicationController
   end
 
   private
+
   def password_authentication(login, password)
     self.current_user = current_account.users.authenticate(login, password)
     if logged_in?
-      if params[:remember_me] == "1"
+      if params[:remember_me] == '1'
         self.current_user.remember_me
         cookies[:auth_token] = {
-          :value => self.current_user.remember_token, :expires => self.current_user.remember_token_expires_at }
+          value: self.current_user.remember_token, expires: self.current_user.remember_token_expires_at
+        }
       end
       successful_login
     else

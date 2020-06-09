@@ -25,15 +25,19 @@ class GameParticipation < ActiveRecord::Base
   end
 
   def ranking_at(time)
-    membership = self.memberships.find(:first,
-                                       :conditions => [ 'matches.played_at <= ?', time ],
-                                       :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',
-                                       :order => 'matches.played_at DESC')
+    membership =
+      self.memberships.find(
+        :first,
+        conditions: ['matches.played_at <= ?', time],
+        joins: 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',
+        order: 'matches.played_at DESC'
+      )
 
     membership.nil? ? 2000 : membership.current_ranking
   end
 
   protected
+
   def update_game_participation_cache_on_user
     self.user.update_attribute :cache_game_ids, self.user.game_participations.collect(&:game_id).join(',')
   end

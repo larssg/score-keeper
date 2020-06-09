@@ -1,2 +1,1 @@
-module GamesHelper
-end
+module GamesHelper; end
