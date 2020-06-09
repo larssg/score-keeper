@@ -102,79 +102,84 @@ class UsersController < ApplicationController
     @user = current_account.users.find(params[:id])
     if @user.destroy
       if @user.id == current_user
-        self.current_user.forget_me if logged_in?
+        current_user.forget_me if logged_in?
         cookies.delete :auth_token
         reset_session
-        flash[:notice] = "You have removed your account."
+        flash[:notice] = 'You have removed your account.'
         redirect_back_or_default('/')
       else
         flash[:notice] = 'User deleted.'
         redirect_to users_path
       end
     else
-      flash[:error] = "Unable to destroy account"
-      render :action => 'edit'
+      flash[:error] = 'Unable to destroy account'
+      render action: 'edit'
     end
   end
 
   def forgot_password
     if params[:username] || params[:email]
-      user = current_account.users.find_by(login: params[:username]) if params[:username]
-      user ||= current_account.users.find_by(email: params[:email]) if params[:email]
+      if params[:username]
+        user = current_account.users.find_by(login: params[:username])
+      end
+      if params[:email]
+        user ||= current_account.users.find_by(email: params[:email])
+      end
 
-      unless user.blank?
+      if user.blank?
+        flash.now[:error] = 'No user was found with the specified username or e-mail.'
+      else
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
         user.set_login_token
         UserMailer.forgot_password_info(user).deliver
         redirect_to login_url
         return
-      else
-        flash.now[:error] = 'No user was found with the specified username or e-mail.'
       end
     end
-    render :layout => 'login'
+    render layout: 'login'
   end
 
   protected
+
   def chart_json(time_period, game_participation)
     from = time_period.days.ago
 
     memberships = game_participation.memberships.find(:all,
-                                                      :conditions => ['matches.played_at >= ?', from],
-                                                      :order => 'memberships.id',
-                                                      :select => 'memberships.current_ranking, memberships.created_at, matches.played_at AS played_at',
-                                                      :joins => 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
+                                                      conditions: ['matches.played_at >= ?', from],
+                                                      order: 'memberships.id',
+                                                      select: 'memberships.current_ranking, memberships.created_at, matches.played_at AS played_at',
+                                                      joins: 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id')
 
-    values = [game_participation.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
+    values = [game_participation.ranking_at(from)] + memberships.collect(&:current_ranking)
     x_labels = ['Start'] + memberships.collect { |m| m.played_at.to_time.to_s :db }
 
     steps = (memberships.size / 20).to_i
 
     {
-      :elements => [
+      elements: [
         {
           :type => 'line',
-          :colour => "#3399CC",
+          :colour => '#3399CC',
           'dot-style' => {
             'dot-size' => 4,
-            :tip => "#val#<br>#x_label#",
+            :tip => '#val#<br>#x_label#',
             :type => 'dot'
           },
           :values => values
         }
       ],
-      :y_legend => {
-        :text => 'Ranking',
-        :style => '{color: #000000; font-size: 12px}'
+      y_legend: {
+        text: 'Ranking',
+        style: '{color: #000000; font-size: 12px}'
       },
-      :y_axis => {
+      y_axis: {
         :min => current_game.y_min,
         :max => current_game.y_max,
         :steps => 100,
         :colour => '#808080',
         'grid-colour' => '#dddddd'
       },
-      :x_axis => {
+      x_axis: {
         :steps => steps,
         :labels => {
           :labels => x_labels,
