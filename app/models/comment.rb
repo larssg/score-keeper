@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Comment < ActiveRecord::Base
   belongs_to :match, :counter_cache => true
   belongs_to :user, :counter_cache => true

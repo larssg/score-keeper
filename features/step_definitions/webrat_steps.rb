@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 
 # Commonly used webrat steps

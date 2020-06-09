@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Factory.sequence :game_name do |n|
   "Game #{n}"
 end

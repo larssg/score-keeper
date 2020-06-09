@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # from http://blog.unquiet.net/archives/2005/11/06/helpful-rake-tasks-for-using-rails-with-subversion/
 
 desc "Configure Subversion for Rails"

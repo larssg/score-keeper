@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Match < ActiveRecord::Base
   attr_accessor :postpone_ranking_update
 
