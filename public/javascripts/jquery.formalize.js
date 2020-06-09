@@ -108,17 +108,20 @@ var FORMALIZE = (function ($, window, document, undefined) {
           var element = $(this);
           var text = element.attr("placeholder");
 
-          element.focus(function () {
-            if (element.val() === text) {
-              element.val("").removeClass("placeholder_text");
-            }
-          }).blur(function () {
-            FORMALIZE.misc.add_placeholder();
-          });
+          element
+            .focus(function () {
+              if (element.val() === text) {
+                element.val("").removeClass("placeholder_text");
+              }
+            })
+            .blur(function () {
+              FORMALIZE.misc.add_placeholder();
+            });
 
           // Prevent <form> from accidentally
           // submitting the placeholder text.
-          element.closest("form")
+          element
+            .closest("form")
             .submit(function () {
               if (element.val() === text) {
                 element.val("").removeClass("placeholder_text");
