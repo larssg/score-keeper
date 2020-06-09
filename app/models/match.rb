@@ -70,9 +70,9 @@ class Match < ActiveRecord::Base
   def self.sort_teams_by_filter(teams, filter)
     return teams if teams.size < 2
     if filter.blank?
-      return (teams.first.score > teams.last.score) ? teams : teams.reverse
+      return teams.first.score > teams.last.score ? teams : teams.reverse
     else
-      return (teams.first.matches_filter(filter)) ? teams : teams.reverse
+      return teams.first.matches_filter(filter) ? teams : teams.reverse
     end
   end
 
