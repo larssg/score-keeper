@@ -1,14 +1,19 @@
 #hd {
-  display: none; }
+  display: none;
+}
 
 #ft {
-  display: none; }
+  display: none;
+}
 
 #sidebar {
-  display: none; }
+  display: none;
+}
 
 #yui-main {
   width: 100%;
-  margin: 0; }
-  #yui-main .yui-b {
-    margin: 0; }
+  margin: 0;
+}
+#yui-main .yui-b {
+  margin: 0;
+}
