@@ -107,34 +107,35 @@ class User < ActiveRecord::Base
   end
 
   def set_time_zone
-    if self.time_zone.blank?
-      self.time_zone = self.account.time_zone unless self.account.nil?
+    if time_zone.blank?
+      self.time_zone = account.time_zone unless account.nil?
       self.time_zone ||= 'Copenhagen'
     end
   end
 
   def set_feed_token
-    self.update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago}")
   end
 
   def set_login_token
-    self.update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago}")
   end
 
   protected
+
   def set_name_from_login
-    self.name ||= self.login.humanize
+    self.name ||= login.humanize
   end
 
   def remove_matches
-    self.memberships.each do |membership|
+    memberships.each do |membership|
       match = membership.team.match
       match.postpone_ranking_update = true
       match.destroy
     end
 
     # Fix stats
-    self.account.games.each do |game|
+    account.games.each do |game|
       Match.reset_rankings(game)
     end
   end
@@ -142,7 +143,10 @@ class User < ActiveRecord::Base
   # before filter
   def encrypt_password
     return if password.blank?
-    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
+
+    if new_record?
+      self.salt = Digest::SHA1.hexdigest("--#{Time.now}--#{login}--")
+    end
     self.crypted_password = encrypt(password)
   end
 
