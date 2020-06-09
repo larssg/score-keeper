@@ -60,7 +60,7 @@ class Game < ActiveRecord::Base
   end
 
   def cache_key
-    updated_at.to_s(:db).gsub(' ', '-')
+    updated_at.to_s(:db).tr(' ', '-')
   end
 
   def y_max
