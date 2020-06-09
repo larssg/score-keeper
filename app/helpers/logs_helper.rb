@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module LogsHelper
   def log_link(log)
     icon = icons[log.linked_model]

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password

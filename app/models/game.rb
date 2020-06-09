@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Game < ActiveRecord::Base
   belongs_to :account, :counter_cache => true
   has_many :matches, :dependent => :destroy

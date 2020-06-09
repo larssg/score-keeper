@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Factory.define(:match) do |m|
   m.association :account
   m.association :game
