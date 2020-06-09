@@ -77,11 +77,11 @@ class Match < ActiveRecord::Base
   end
 
   def winner
-    @winner ||= self.teams.sort_by(&:score).last
+    @winner ||= self.teams.max_by(&:score)
   end
 
   def loser
-    @loser ||= self.teams.sort_by(&:score).first
+    @loser ||= self.teams.min_by(&:score)
   end
 
   def positions
