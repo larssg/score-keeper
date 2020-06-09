@@ -1917,7 +1917,7 @@
           return (element.value || "").replace(rreturn, "");
         }
 
-        return undefined;
+        return;
       }
 
       var isFunction = jQuery.isFunction(value);
@@ -1979,7 +1979,7 @@
     attr: function (element, name, value, pass) {
       // don't get/set attributes on text, comment and attribute nodes
       if (!element || element.nodeType === 3 || element.nodeType === 8 || element.nodeType === 2) {
-        return undefined;
+        return;
       }
 
       if (pass && name in jQuery.attrFn) {
@@ -2066,7 +2066,7 @@
         // Ensure that missing attributes return undefined
         // Blackberry 4.7 returns "" from getAttribute #6938
         if (!element.attributes[name] && element.hasAttribute && !element.hasAttribute(name)) {
-          return undefined;
+          return;
         }
 
         var attribute =
@@ -2419,7 +2419,7 @@
 
         // don't do events on text and comment nodes
         if (!element || element.nodeType === 3 || element.nodeType === 8) {
-          return undefined;
+          return;
         }
 
         // Clean up in case it is reused
@@ -6025,7 +6025,7 @@
       name = name.replace(rupper, "-$1").toLowerCase();
 
       if (!(defaultView = element.ownerDocument.defaultView)) {
-        return undefined;
+        return;
       }
 
       if ((computedStyle = defaultView.getComputedStyle(element, null))) {
