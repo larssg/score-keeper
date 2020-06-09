@@ -258,7 +258,7 @@
       },
 
       slice: function () {
-        return this.pushStack(slice.apply(this, arguments), "slice", slice.call(arguments).join(","));
+        return this.pushStack(Reflect.apply(slice, this, arguments), "slice", slice.call(arguments).join(","));
       },
 
       map: function (callback) {
@@ -2786,7 +2786,7 @@
           event.type = event.data;
 
           // handle event if we actually just moused on to a non sub-element
-          jQuery.event.handle.apply(this, arguments);
+          Reflect.apply(jQuery.event.handle, this, arguments);
         }
 
         // assuming we've left the element since we most likely mousedover a xul element
@@ -2796,7 +2796,7 @@
     // liveHandler will take care of the rest.
     delegate = function (event) {
       event.type = event.data;
-      jQuery.event.handle.apply(this, arguments);
+      Reflect.apply(jQuery.event.handle, this, arguments);
     };
 
   // Create mouseenter and mouseleave events
@@ -3033,7 +3033,7 @@
         name === "one"
           ? jQuery.proxy(fn, function (event) {
               jQuery(this).unbind(event, handler);
-              return fn.apply(this, arguments);
+              return Reflect.apply(fn, this, arguments);
             })
           : fn;
 
@@ -3113,7 +3113,7 @@
           event.preventDefault();
 
           // and execute the function
-          return args[lastToggle].apply(this, arguments) || false;
+          return Reflect.apply(args[lastToggle], this, arguments) || false;
         })
       );
     },
@@ -6252,7 +6252,7 @@
   jQuery.fn.extend({
     load: function (url, params, callback) {
       if (typeof url !== "string" && _load) {
-        return _load.apply(this, arguments);
+        return Reflect.apply(_load, this, arguments);
 
         // Don't do a request if no elements are being requested
       } else if (!this.length) {
@@ -7526,7 +7526,7 @@
       var bool = typeof fn === "boolean";
 
       if (jQuery.isFunction(fn) && jQuery.isFunction(fn2)) {
-        this._toggle.apply(this, arguments);
+        Reflect.apply(this._toggle, this, arguments);
       } else if (fn == null || bool) {
         this.each(function () {
           var state = bool ? fn : jQuery(this).is(":hidden");

@@ -112,7 +112,7 @@ jQuery.pjax = function (options) {
       if ((options.replace || options.push) && window._gaq) _gaq.push(["_trackPageview"]);
 
       // Invoke their success handler if they gave us one.
-      success.apply(this, arguments);
+      Reflect.apply(success, this, arguments);
     },
   };
 
