@@ -847,11 +847,11 @@
                 widgets.push(widget);
             };
             this.formatFloat = function (s) {
-                var i = parseFloat(s);
+                var i = Number.parseFloat(s);
                 return (isNaN(i)) ? 0 : i;
             };
             this.formatInt = function (s) {
-                var i = parseInt(s);
+                var i = Number.parseInt(s);
                 return (isNaN(i)) ? 0 : i;
             };
             this.isDigit = function (s, config) {
