@@ -8,13 +8,13 @@ class Match < ActiveRecord::Base
   attr_accessor :filter
 
   belongs_to :account
-  belongs_to :game, :counter_cache => true, :touch => true
+  belongs_to :game, counter_cache: true, touch: true
   has_many :teams
   has_many :comments
-  belongs_to :creator, :class_name => 'User', :foreign_key => 'creator_id'
+  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
 
   before_save :set_played_on_and_at
-  before_validation(:on => :create) { build_teams }
+  before_validation(on: :create) { build_teams }
   after_create :update_winners
   after_create :update_rankings
   after_create :update_positions
@@ -22,15 +22,15 @@ class Match < ActiveRecord::Base
   before_destroy :update_after_destroy
   after_destroy :reset_rankings_after_destroy
   after_destroy :remove_log
-  
-  validates :account_id, :presence => true
+
+  validates :account_id, presence: true
 
   validates_presence_of :game_id
   validates_presence_of :team_one
   validates_presence_of :team_two
 
   validates_presence_of :score1, :score2, :team1, :team2
-  
+
   validate :not_locked
   validate :unique_participants
 
@@ -39,7 +39,7 @@ class Match < ActiveRecord::Base
   end
 
   def self.recent_options(filter, options = {})
-    default_options = { :order => 'played_at DESC' }
+    default_options = { order: 'played_at DESC' }
 
     game = options.delete(:game)
     if filter.blank?
@@ -47,10 +47,18 @@ class Match < ActiveRecord::Base
     else
       if filter.index(',')
         conditions = ['team_one = ? OR team_two = ?', filter, filter]
-        options[:total_entries] = Match.count(:conditions => conditions)
+        options[:total_entries] = Match.count(conditions: conditions)
       else
-        conditions = ["team_one = ? OR team_one LIKE ? OR team_one LIKE ? OR team_two = ? OR team_two LIKE ? OR team_two LIKE ?", filter, filter + ',%', '%,' + filter, filter, filter + ',%', '%,' + filter]
-        options[:total_entries] = game.memberships.count(:conditions => ['memberships.user_id = ?', filter])
+        conditions = [
+          'team_one = ? OR team_one LIKE ? OR team_one LIKE ? OR team_two = ? OR team_two LIKE ? OR team_two LIKE ?',
+          filter,
+          filter + ',%',
+          '%,' + filter,
+          filter,
+          filter + ',%',
+          '%,' + filter
+        ]
+        options[:total_entries] = game.memberships.count(conditions: ['memberships.user_id = ?', filter])
       end
     end
     options[:conditions] = conditions if conditions
@@ -64,7 +72,7 @@ class Match < ActiveRecord::Base
 
   def self.find_filter_users(filter)
     return unless filter
-    User.find(:all, :conditions => ['id IN (?)', filter.split(',').collect{ |id| id.to_i }], :order => 'display_name, name')
+    User.find(:all, conditions: ['id IN (?)', filter.split(',').collect { |id| id.to_i }], order: 'display_name, name')
   end
 
   def self.sort_teams_by_filter(teams, filter)
@@ -94,12 +102,15 @@ class Match < ActiveRecord::Base
 
   def self.reset_rankings(game)
     return if game.nil?
-    game.game_participations.update_all("game_participations.ranking = 2000, game_participations.matches_played = 0")
+    game.game_participations.update_all('game_participations.ranking = 2000, game_participations.matches_played = 0')
     game.matches.all.each do |match|
       match.update_rankings
       match.teams.each do |team|
         team.memberships.each do |membership|
-          GameParticipation.update_all("game_participations.matches_played = game_participations.matches_played + 1", "game_participations.user_id = #{membership.user_id} AND game_participations.game_id = #{game.id}")
+          GameParticipation.update_all(
+            'game_participations.matches_played = game_participations.matches_played + 1',
+            "game_participations.user_id = #{membership.user_id} AND game_participations.game_id = #{game.id}"
+          )
         end
       end
       match.update_positions
@@ -121,7 +132,7 @@ class Match < ActiveRecord::Base
         participation.increment(:matches_won) if team == self.winner
         participation.points_for += team.score
         participation.points_against += team.other.score
-        participation.matches_played = self.game.memberships.count(:conditions => { :user_id => membership.user_id })
+        participation.matches_played = self.game.memberships.count(conditions: { user_id: membership.user_id })
         participation.increment(:clean_sheets) if team.other.score == 0
 
         participation.save
@@ -163,7 +174,8 @@ class Match < ActiveRecord::Base
   end
 
   def title()
-    [ self.teams.first.display_names.join(' - '),
+    [
+      self.teams.first.display_names.join(' - '),
       "(#{self.teams.first.score} - #{self.teams.last.score})",
       self.teams.last.display_names.join(' - ')
     ].join(' ')
@@ -171,28 +183,35 @@ class Match < ActiveRecord::Base
 
   def log
     return if self.account.blank?
-    self.account.logs.create(:linked_model => self.class.name,
-                             :linked_id => self.id,
-                             :user => self.creator,
-                             :game => self.game,
-                             :message => "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% won #{self.winner.score} to #{self.loser.score} over %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
-                             :published_at => self.played_at)
-                             
+    self.account.logs.create(
+      linked_model: self.class.name,
+      linked_id: self.id,
+      user: self.creator,
+      game: self.game,
+      message:
+        "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% won #{self.winner.score} to #{self.loser.score} over %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
+      published_at: self.played_at
+    )
+
     if self.game.track_clean_sheets? && (self.teams.first.score == 0 || self.teams.last.score == 0)
-      self.account.logs.create(:linked_model => "Clean sheet",
-                               :linked_id => self.id,
-                               :user => self.creator,
-                               :game => self.game,
-                               :message => "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% kept a clean sheet against %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
-                               :published_at => self.played_at)
-    end                         
+      self.account.logs.create(
+        linked_model: 'Clean sheet',
+        linked_id: self.id,
+        user: self.creator,
+        game: self.game,
+        message:
+          "%#{self.winner.memberships.collect { |m| m.user_id }.join('% and %')}% kept a clean sheet against %#{self.loser.memberships.collect { |m| m.user_id }.join('% and %')}%",
+        published_at: self.played_at
+      )
+    end
   end
 
   protected
+
   def not_locked
     errors.add :game, 'is locked' if self.game.locked
   end
-  
+
   def unique_participants
     user_ids = []
 
@@ -207,7 +226,7 @@ class Match < ActiveRecord::Base
       end
     end
   end
-  
+
   def remove_log
     Log.clear_item_log(self.account, self)
   end
@@ -224,16 +243,16 @@ class Match < ActiveRecord::Base
     (@team1 + @team2).each { |user_id| game_participation_for_user(user_id) }
 
     # Build team 1
-    team1 = teams.build(:score => score1, :account => self.account)
+    team1 = teams.build(score: score1, account: self.account)
     @team1.each do |member|
-      team1.memberships.build(:user_id => member, :game => self.game, :game_participation => game_participation_for_user(member))
+      team1.memberships.build(user_id: member, game: self.game, game_participation: game_participation_for_user(member))
     end
     team1.opponent_ids = @team2.collect(&:to_i).sort.join(',')
 
     # Build team 2
-    team2 = teams.build(:score => score2, :account => self.account)
+    team2 = teams.build(score: score2, account: self.account)
     @team2.each do |member|
-      team2.memberships.build(:user_id => member, :game => self.game, :game_participation => game_participation_for_user(member))
+      team2.memberships.build(user_id: member, game: self.game, game_participation: game_participation_for_user(member))
     end
     team2.opponent_ids = @team1.collect(&:to_i).sort.join(',')
 
@@ -243,7 +262,7 @@ class Match < ActiveRecord::Base
 
   def game_participation_for_user(user_id)
     game_participation = self.game.game_participations.find_by_user_id(user_id)
-    game_participation = self.game.game_participations.create(:user_id => user_id) if game_participation.nil?
+    game_participation = self.game.game_participations.create(user_id: user_id) if game_participation.nil?
     game_participation
   end
 end

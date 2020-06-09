@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
 
   def show
     @comment = current_user.comments.find(params[:id])
-    render :layout => false
+    render layout: false
   end
 
   def create
@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
   def edit
     @comment = current_user.comments.find(params[:id])
     respond_to do |format|
-      format.html # edit.html.haml
+      format.html
       format.js # edit.js.haml
     end
   end

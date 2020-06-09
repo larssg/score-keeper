@@ -8,7 +8,7 @@ class GamesController < ApplicationController
 
   def new
     @game = current_account.games.build
-    render :layout => false if pjax?
+    render layout: false if pjax?
   end
 
   def create
@@ -17,13 +17,13 @@ class GamesController < ApplicationController
       flash[:notice] = 'Game created.'
       redirect_to games_url
     else
-      render :action => 'new'
+      render action: 'new'
     end
   end
 
   def edit
     @game = current_account.games.find(params[:id])
-    render :layout => false if pjax?
+    render layout: false if pjax?
   end
 
   def update
@@ -32,7 +32,7 @@ class GamesController < ApplicationController
       flash[:notice] = 'Changes to game saved successfully!'
       redirect_to games_url
     else
-      render :action => 'edit'
+      render action: 'edit'
     end
   end
 
@@ -40,18 +40,22 @@ class GamesController < ApplicationController
     game = current_account.games.find(params[:id])
     if current_user.is_account_admin?
       game.destroy
-      redirect_to games_url, :notice => 'Game deleted.'
+      redirect_to games_url, notice: 'Game deleted.'
     else
-      redirect_to games_url, :notice => 'Only the account administrator can delete games.'
+      redirect_to games_url, notice: 'Only the account administrator can delete games.'
     end
   end
 
   def game_added_warning
     @game = current_account.games.find(params[:id])
-    @latest_membership = current_user.memberships.find(:first, :conditions => ['memberships.game_id = ? AND created_at >= ?', @game.id, 10.minutes.ago], :order => 'created_at DESC')
+    @latest_membership =
+      current_user.memberships.find(
+        :first,
+        conditions: ['memberships.game_id = ? AND created_at >= ?', @game.id, 10.minutes.ago], order: 'created_at DESC'
+      )
 
     if @latest_membership && @latest_membership.team.match.creator != current_user
-      render :layout => false
+      render layout: false
     else
       head :not_found
     end

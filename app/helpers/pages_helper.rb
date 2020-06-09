@@ -1,2 +1,1 @@
-module PagesHelper
-end
+module PagesHelper; end

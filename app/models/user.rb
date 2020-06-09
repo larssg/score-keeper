@@ -5,24 +5,27 @@ class User < ActiveRecord::Base
 
   belongs_to :account
   has_many :game_participations
-  has_many :games, :through => :game_participations
+  has_many :games, through: :game_participations
   has_many :memberships
   has_many :comments
   has_many :logs
-  has_many :teams, :through => :memberships
-  belongs_to :last_game, :class_name => "Game", :foreign_key => "last_game_id"
+  has_many :teams, through: :memberships
+  belongs_to :last_game, class_name: 'Game', foreign_key: 'last_game_id'
 
-  validates_presence_of     :email
-  validates_length_of       :email,    :within => 3..100
-  validates_presence_of     :login
-  validates_length_of       :login,    :within => 2..100
-  validates_uniqueness_of   :login,    :scope => :account_id, :case_sensitive => false, :message => 'is already taken; sorry!'
-  validates_uniqueness_of   :email,    :scope => :account_id, :case_sensitive => false, :message => 'is already being used; do you already have an account?'
+  validates_presence_of :email
+  validates_length_of :email, within: 3..100
+  validates_presence_of :login
+  validates_length_of :login, within: 2..100
+  validates_uniqueness_of :login, scope: :account_id, case_sensitive: false, message: 'is already taken; sorry!'
+  validates_uniqueness_of :email,
+                          scope: :account_id,
+                          case_sensitive: false,
+                          message: 'is already being used; do you already have an account?'
 
-  validates_presence_of     :password,                    :if => :password_required?
-  validates_presence_of     :password_confirmation,       :if => :password_required?
-  validates_length_of       :password, :within => 4..40,  :if => :password_required?
-  validates_confirmation_of :password,                    :if => :password_required?
+  validates_presence_of :password, if: :password_required?
+  validates_presence_of :password_confirmation, if: :password_required?
+  validates_length_of :password, within: 4..40, if: :password_required?
+  validates_confirmation_of :password, if: :password_required?
 
   validates_presence_of :name
   validates_presence_of :time_zone
@@ -36,7 +39,7 @@ class User < ActiveRecord::Base
 
   default_scope order('name, display_name')
 
-  has_attached_file :avatar, :styles => { :thumb => '60x60>' }
+  has_attached_file :avatar, styles: { thumb: '60x60>' }
 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -48,11 +51,14 @@ class User < ActiveRecord::Base
   end
 
   def all_time_high(game)
-    Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking DESC')
+    Membership.find(
+      :first,
+      conditions: { user_id: self.id, game_id: game.id }, order: 'memberships.current_ranking DESC'
+    )
   end
 
   def all_time_low(game)
-    Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking')
+    Membership.find(:first, conditions: { user_id: self.id, game_id: game.id }, order: 'memberships.current_ranking')
   end
 
   def position(game)
@@ -96,13 +102,13 @@ class User < ActiveRecord::Base
 
   def remember_me_until(time)
     self.remember_token_expires_at = time
-    self.remember_token            = encrypt("#{email}--#{remember_token_expires_at}")
+    self.remember_token = encrypt("#{email}--#{remember_token_expires_at}")
     save(false)
   end
 
   def forget_me
     self.remember_token_expires_at = nil
-    self.remember_token            = nil
+    self.remember_token = nil
     save(false)
   end
 
@@ -122,6 +128,7 @@ class User < ActiveRecord::Base
   end
 
   protected
+
   def set_name_from_login
     self.name ||= self.login.humanize
   end

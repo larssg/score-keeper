@@ -7,7 +7,7 @@ class DashboardController < ApplicationController
 
     if params[:last_update]
       if logs.size > 0 && last_update != params[:last_update]
-        render :action => 'index', :layout => false
+        render action: 'index', layout: false
       else
         head 200
       end
@@ -30,6 +30,7 @@ class DashboardController < ApplicationController
   helper_method :news
 
   protected
+
   def game
     return @game unless @game.nil?
     if params[:game_id] && params[:game_id].to_i != current_game.id
@@ -40,7 +41,7 @@ class DashboardController < ApplicationController
 
   def logs
     return nil if game.nil?
-    @logs ||= game.logs.find(:all, :order => 'published_at DESC', :limit => 5)
+    @logs ||= game.logs.find(:all, order: 'published_at DESC', limit: 5)
   end
 
   def last_update
@@ -49,9 +50,7 @@ class DashboardController < ApplicationController
   end
 
   def recent_matches
-    @recent_matches ||= @game.matches.find_recent(nil,
-                                                  :limit => 10,
-                                                  :include => { :teams => :memberships })
+    @recent_matches ||= @game.matches.find_recent(nil, limit: 10, include: { teams: :memberships })
   end
 
   def rankings
@@ -93,9 +92,7 @@ class DashboardController < ApplicationController
 
     # Get positions 7 days ago
     @positions = {}
-    last_month = @game.matches.find(:first,
-                                    :order => 'played_at ASC',
-                                    :conditions => ['played_at >= ?', 7.days.ago])
+    last_month = @game.matches.find(:first, order: 'played_at ASC', conditions: ['played_at >= ?', 7.days.ago])
     unless last_month.blank? || last_month.positions.blank?
       last_month.positions.each_with_index do |user_id, index|
         @positions[user_id] = {}
@@ -108,6 +105,6 @@ class DashboardController < ApplicationController
   end
 
   def news
-    @news ||= NewsItem.find(:all, :order => 'posted_at DESC', :limit => 3)
+    @news ||= NewsItem.find(:all, order: 'posted_at DESC', limit: 3)
   end
 end

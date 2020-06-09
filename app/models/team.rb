@@ -27,11 +27,13 @@ class Team < ActiveRecord::Base
   end
 
   def ranking_total
-    self.memberships.collect{ |m| m.game_participation.ranking }.sum.to_f
+    self.memberships.collect { |m| m.game_participation.ranking }.sum.to_f
   end
 
   def self.opponents(team_ids)
-    where(:team_ids => team_ids).group(:opponent_ids).select('SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids')
+    where(team_ids: team_ids).group(:opponent_ids).select(
+      'SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids'
+    )
   end
 
   def self.team_members(user_ids)
@@ -39,10 +41,11 @@ class Team < ActiveRecord::Base
   end
 
   def award_points(amount)
-    game_participations = GameParticipation.find(:all,
-                                                 :conditions => {
-                                                   :game_id => self.memberships.first.game_id,
-                                                   :user_id => self.memberships.collect(&:user_id) }).sort_by(&:ranking)
+    game_participations =
+      GameParticipation.find(
+        :all,
+        conditions: { game_id: self.memberships.first.game_id, user_id: self.memberships.collect(&:user_id) }
+      ).sort_by(&:ranking)
     award = Team.split_award_points(amount, game_participations.collect(&:ranking))
 
     # Award and save points
@@ -61,11 +64,12 @@ class Team < ActiveRecord::Base
   def self.split_award_points(amount, rankings)
     return [amount] if rankings.size == 1
 
-    throw "Rankings not sorted properly" unless rankings == rankings.sort
+    throw 'Rankings not sorted properly' unless rankings == rankings.sort
 
-    award = rankings.collect do |ranking|
-      (amount * (ranking.to_f / rankings.sum.to_f)).to_i
-    end
+    award =
+      rankings.collect do |ranking|
+        (amount * (ranking.to_f / rankings.sum.to_f)).to_i
+      end
 
     # Fix rounding errors
     award[-1] += amount - award.sum
@@ -75,7 +79,7 @@ class Team < ActiveRecord::Base
   end
 
   def update_cache_values
-    self.team_ids = self.memberships.collect{ |m| m.user_id }.sort.join(',')
+    self.team_ids = self.memberships.collect { |m| m.user_id }.sort.join(',')
   end
 
   def display_names

@@ -1,13 +1,12 @@
 namespace :package do
-  task :build => :environment do
+  task build: :environment do
     files = {
-      :css => ['lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen'],
-      :js => ['swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application']
+      css: ['lib/reset', 'lib/typography', 'lib/grid', 'lib/forms', 'screen'],
+      js: ['swfobject', 'jquery', 'jquery-ui', 'jquery-fx', 'jquery.tablesorter', 'jrails', 'application']
     }
 
     file_dirs = {
-      :css => File.join(Rails.root, 'public', 'stylesheets'),
-      :js => File.join(Rails.root, 'public', 'javascripts')
+      css: File.join(Rails.root, 'public', 'stylesheets'), js: File.join(Rails.root, 'public', 'javascripts')
     }
 
     latest_mtime = 0

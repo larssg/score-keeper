@@ -1,2 +1,1 @@
-module AccountsHelper
-end
+module AccountsHelper; end

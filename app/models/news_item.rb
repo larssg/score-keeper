@@ -1,2 +1,1 @@
-class NewsItem < ActiveRecord::Base
-end
+class NewsItem < ActiveRecord::Base; end

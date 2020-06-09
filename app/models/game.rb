@@ -1,13 +1,13 @@
 class Game < ActiveRecord::Base
-  belongs_to :account, :counter_cache => true
-  has_many :matches, :dependent => :destroy
-  has_many :logs, :dependent => :delete_all
-  has_many :game_participations, :dependent => :delete_all
-  has_many :memberships, :dependent => :delete_all
-  has_many :users, :through => :game_participations
+  belongs_to :account, counter_cache: true
+  has_many :matches, dependent: :destroy
+  has_many :logs, dependent: :delete_all
+  has_many :game_participations, dependent: :delete_all
+  has_many :memberships, dependent: :delete_all
+  has_many :users, through: :game_participations
 
   validates_presence_of :name, :team_size
-  validates_inclusion_of :team_size, :in => (1..3)
+  validates_inclusion_of :team_size, in: (1..3)
 
   before_save :format_player_roles
 
@@ -16,17 +16,24 @@ class Game < ActiveRecord::Base
   default_scope order('name')
 
   def ranked_game_participators
-    @ranked_users ||= self.game_participations.find(:all,
-                                                    :order => 'game_participations.ranking DESC, game_participations.matches_won DESC',
-                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played >= ?', true, self.newbie_limit],
-                                                    :include => :user)
+    @ranked_users ||=
+      self.game_participations.find(
+        :all,
+        order: 'game_participations.ranking DESC, game_participations.matches_won DESC',
+        conditions: ['users.enabled = ? AND game_participations.matches_played >= ?', true, self.newbie_limit],
+        include: :user
+      )
   end
 
   def newbie_game_participators
-    @newbie_users ||= self.game_participations.find(:all,
-                                                    :order => 'game_participations.matches_played DESC, game_participations.ranking DESC, game_participations.matches_won DESC',
-                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played < ?', true, self.newbie_limit],
-                                                    :include => :user)
+    @newbie_users ||=
+      self.game_participations.find(
+        :all,
+        order:
+          'game_participations.matches_played DESC, game_participations.ranking DESC, game_participations.matches_won DESC',
+        conditions: ['users.enabled = ? AND game_participations.matches_played < ?', true, self.newbie_limit],
+        include: :user
+      )
   end
 
   def user_positions
@@ -78,6 +85,7 @@ class Game < ActiveRecord::Base
   end
 
   protected
+
   def delete_teams_and_comments
     matches.each do |match|
       Team.delete_all("match_id = #{match.id}")
