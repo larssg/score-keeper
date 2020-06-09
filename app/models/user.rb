@@ -43,21 +43,21 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone, :avatar
 
   def set_display_name
-    return if self.name.blank?
-    self.display_name = self.name.split[0] if self.display_name.blank?
+    return if name.blank?
+    self.display_name = name.split[0] if display_name.blank?
   end
 
   def all_time_high(game)
-    Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking DESC')
+    Membership.find(:first, :conditions => { :user_id => id, :game_id => game.id }, :order => 'memberships.current_ranking DESC')
   end
 
   def all_time_low(game)
-    Membership.find(:first, :conditions => { :user_id => self.id, :game_id => game.id }, :order => 'memberships.current_ranking')
+    Membership.find(:first, :conditions => { :user_id => id, :game_id => game.id }, :order => 'memberships.current_ranking')
   end
 
   def position(game)
     game.user_positions.each_with_index do |game_participation, index|
-      return index + 1 if game_participation.user_id == self.id
+      return index + 1 if game_participation.user_id == id
     end
   end
 
@@ -107,34 +107,34 @@ class User < ActiveRecord::Base
   end
 
   def set_time_zone
-    if self.time_zone.blank?
-      self.time_zone = self.account.time_zone unless self.account.nil?
+    if time_zone.blank?
+      self.time_zone = account.time_zone unless account.nil?
       self.time_zone ||= 'Copenhagen'
     end
   end
 
   def set_feed_token
-    self.update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
   end
 
   def set_login_token
-    self.update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
   end
 
   protected
   def set_name_from_login
-    self.name ||= self.login.humanize
+    self.name ||= login.humanize
   end
 
   def remove_matches
-    self.memberships.each do |membership|
+    memberships.each do |membership|
       match = membership.team.match
       match.postpone_ranking_update = true
       match.destroy
     end
 
     # Fix stats
-    self.account.games.each do |game|
+    account.games.each do |game|
       Match.reset_rankings(game)
     end
   end
