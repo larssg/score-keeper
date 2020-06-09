@@ -33,15 +33,15 @@ class SessionsController < ApplicationController
 
   def token_login
     user = User.find_by_login_token(params[:token])
-    unless user.blank?
+    if user.blank?
+      flash[:error] = 'The link you tried to use is either wrong or has already been used.'
+      redirect_to login_url
+    else
       self.current_user = user
       user.update_attribute :login_token, nil
       flash[:notice] =
         'You have logged in using a one time login. Please change your password to something you can remember.'
       redirect_to edit_user_url(user)
-    else
-      flash[:error] = 'The link you tried to use is either wrong or has already been used.'
-      redirect_to login_url
     end
   end
 
