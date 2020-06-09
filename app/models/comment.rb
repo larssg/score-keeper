@@ -1,8 +1,10 @@
-class Comment < ActiveRecord::Base
-  belongs_to :match, :counter_cache => true
-  belongs_to :user, :counter_cache => true
+# frozen_string_literal: true
 
-  validates_presence_of :body
+class Comment < ActiveRecord::Base
+  belongs_to :match, counter_cache: true
+  belongs_to :user, counter_cache: true
+
+  validates :body, presence: true
 
   after_save :log
 
