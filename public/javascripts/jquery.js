@@ -579,7 +579,7 @@ jQuery.extend({
 		if ( data && rnotwhite.test(data) ) {
 			// Inspired by code by Andrea Giammarchi
 			// http://webreflection.blogspot.com/2007/08/global-scope-evaluation-and-dom.html
-			var head = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement,
+			var head = document.head || document.querySelectorAll( "head" )[0] || document.documentElement,
 				script = document.createElement( "script" );
 
 			if ( jQuery.support.scriptEval() ) {
@@ -1097,11 +1097,11 @@ jQuery.extend({
 	div.style.display = "none";
 	div.innerHTML = "   <link/><table></table><a href='/a' style='color:red;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
 
-	var all = div.getElementsByTagName("*"),
-		a = div.getElementsByTagName("a")[0],
+	var all = div.querySelectorAll("*"),
+		a = div.querySelectorAll("a")[0],
 		select = document.createElement("select"),
 		opt = select.appendChild( document.createElement("option") ),
-		input = div.getElementsByTagName("input")[0];
+		input = div.querySelectorAll("input")[0];
 
 	// Can't get basic test support
 	if ( !all || !all.length || !a ) {
@@ -1114,11 +1114,11 @@ jQuery.extend({
 
 		// Make sure that tbody elements aren't automatically inserted
 		// IE will insert them into empty tables
-		tbody: !div.getElementsByTagName("tbody").length,
+		tbody: !div.querySelectorAll("tbody").length,
 
 		// Make sure that link elements get serialized correctly by innerHTML
 		// This requires a wrapper element in IE
-		htmlSerialize: !!div.getElementsByTagName("link").length,
+		htmlSerialize: !!div.querySelectorAll("link").length,
 
 		// Get the style information from getAttribute
 		// (IE uses .cssText insted)
@@ -1228,7 +1228,7 @@ jQuery.extend({
 	// document.body must exist before we can do this
 	jQuery(function() {
 		var div = document.createElement("div"),
-			body = document.getElementsByTagName("body")[0];
+			body = document.querySelectorAll("body")[0];
 
 		// Frameset documents with no body should not run this code
 		if ( !body ) {
@@ -1256,7 +1256,7 @@ jQuery.extend({
 		}
 
 		div.innerHTML = "<table><tr><td style='padding:0;border:0;display:none'></td><td>t</td></tr></table>";
-		var tds = div.getElementsByTagName("td");
+		var tds = div.querySelectorAll("td");
 
 		// Check if table cells still have offsetWidth/Height when they are set
 		// to display:none and there are still other visible table cells in a
@@ -3540,7 +3540,7 @@ Sizzle.find = function( expr, context, isXML ) {
 
 	if ( !set ) {
 		set = typeof context.getElementsByTagName !== "undefined" ?
-			context.getElementsByTagName( "*" ) :
+			context.querySelectorAll( "*" ) :
 			[];
 	}
 
@@ -4372,7 +4372,7 @@ Sizzle.getText = function( elems ) {
 	div.appendChild( document.createComment("") );
 
 	// Make sure no comments are found
-	if ( div.getElementsByTagName("*").length > 0 ) {
+	if ( div.querySelectorAll("*").length > 0 ) {
 		Expr.find.TAG = function( match, context ) {
 			var results = context.getElementsByTagName( match[1] );
 
@@ -4567,14 +4567,14 @@ if ( document.querySelectorAll ) {
 
 	// Opera can't find a second classname (in 9.6)
 	// Also, make sure that getElementsByClassName actually exists
-	if ( !div.getElementsByClassName || div.getElementsByClassName("e").length === 0 ) {
+	if ( !div.getElementsByClassName || div.querySelectorAll(".e").length === 0 ) {
 		return;
 	}
 
 	// Safari caches class attributes, doesn't catch changes (in 3.2)
 	div.lastChild.className = "e";
 
-	if ( div.getElementsByClassName("e").length === 1 ) {
+	if ( div.querySelectorAll(".e").length === 1 ) {
 		return;
 	}
 	
@@ -5187,7 +5187,7 @@ jQuery.fn.extend({
 		for ( var i = 0, elem; (elem = this[i]) != null; i++ ) {
 			if ( !selector || jQuery.filter( selector, [ elem ] ).length ) {
 				if ( !keepData && elem.nodeType === 1 ) {
-					jQuery.cleanData( elem.getElementsByTagName("*") );
+					jQuery.cleanData( elem.querySelectorAll("*") );
 					jQuery.cleanData( [ elem ] );
 				}
 
@@ -5204,7 +5204,7 @@ jQuery.fn.extend({
 		for ( var i = 0, elem; (elem = this[i]) != null; i++ ) {
 			// Remove element nodes and prevent memory leaks
 			if ( elem.nodeType === 1 ) {
-				jQuery.cleanData( elem.getElementsByTagName("*") );
+				jQuery.cleanData( elem.querySelectorAll("*") );
 			}
 
 			// Remove any remaining nodes
@@ -5242,7 +5242,7 @@ jQuery.fn.extend({
 				for ( var i = 0, l = this.length; i < l; i++ ) {
 					// Remove element nodes and prevent memory leaks
 					if ( this[i].nodeType === 1 ) {
-						jQuery.cleanData( this[i].getElementsByTagName("*") );
+						jQuery.cleanData( this[i].querySelectorAll("*") );
 						this[i].innerHTML = value;
 					}
 				}
@@ -5376,7 +5376,7 @@ jQuery.fn.extend({
 
 function root( elem, cur ) {
 	return jQuery.nodeName(elem, "table") ?
-		(elem.getElementsByTagName("tbody")[0] ||
+		(elem.querySelectorAll("tbody")[0] ||
 		elem.appendChild(elem.ownerDocument.createElement("tbody"))) :
 		elem;
 }
@@ -5526,7 +5526,7 @@ jQuery.each({
 
 function getAll( elem ) {
 	if ( "getElementsByTagName" in elem ) {
-		return elem.getElementsByTagName( "*" );
+		return elem.querySelectorAll( "*" );
 	
 	} else if ( "querySelectorAll" in elem ) {
 		return elem.querySelectorAll( "*" );
@@ -5667,7 +5667,7 @@ jQuery.extend({
 
 				} else {
 					if ( ret[i].nodeType === 1 ) {
-						ret.splice.apply( ret, [i + 1, 0].concat(jQuery.makeArray(ret[i].getElementsByTagName("script"))) );
+						ret.splice.apply( ret, [i + 1, 0].concat(jQuery.makeArray(ret[i].querySelectorAll("script"))) );
 					}
 					fragment.appendChild( ret[i] );
 				}
@@ -7196,7 +7196,7 @@ jQuery.ajaxTransport( "script", function(s) {
 	if ( s.crossDomain ) {
 
 		var script,
-			head = document.head || document.getElementsByTagName( "head" )[0] || document.documentElement;
+			head = document.head || document.querySelectorAll( "head" )[0] || document.documentElement;
 
 		return {
 
