@@ -591,7 +591,7 @@ jQuery.extend({
 			// Use insertBefore instead of appendChild to circumvent an IE6 bug.
 			// This arises when a base node is used (#2709).
 			head.insertBefore( script, head.firstChild );
-			head.removeChild( script );
+			script.remove();
 		}
 	},
 
@@ -1190,7 +1190,7 @@ jQuery.extend({
 				_scriptEval = false;
 			}
 
-			root.removeChild( script );
+			script.remove();
 		}
 
 		return _scriptEval;
@@ -4357,7 +4357,7 @@ Sizzle.getText = function( elems ) {
 		};
 	}
 
-	root.removeChild( form );
+	form.remove();
 
 	// release memory in IE
 	root = form = null;
@@ -5192,7 +5192,7 @@ jQuery.fn.extend({
 				}
 
 				if ( elem.parentNode ) {
-					elem.parentNode.removeChild( elem );
+					elem.remove();
 				}
 			}
 		}
@@ -5209,7 +5209,7 @@ jQuery.fn.extend({
 
 			// Remove any remaining nodes
 			while ( elem.firstChild ) {
-				elem.removeChild( elem.firstChild );
+				elem.firstChild.remove();
 			}
 		}
 
@@ -5639,7 +5639,7 @@ jQuery.extend({
 
 					for ( var j = tbody.length - 1; j >= 0 ; --j ) {
 						if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length ) {
-							tbody[ j ].parentNode.removeChild( tbody[ j ] );
+							tbody[ j ].remove();
 						}
 					}
 
@@ -5733,7 +5733,7 @@ function evalScript( i, elem ) {
 	}
 
 	if ( elem.parentNode ) {
-		elem.parentNode.removeChild( elem );
+		elem.remove();
 	}
 }
 
@@ -7222,7 +7222,7 @@ jQuery.ajaxTransport( "script", function(s) {
 
 						// Remove the script
 						if ( head && script.parentNode ) {
-							head.removeChild( script );
+							script.remove();
 						}
 
 						// Dereference the script
@@ -8151,7 +8151,7 @@ jQuery.offset = {
 
 		this.doesNotIncludeMarginInBodyOffset = (body.offsetTop !== bodyMarginTop);
 
-		body.removeChild( container );
+		container.remove();
 		jQuery.offset.initialize = jQuery.noop;
 	},
 
