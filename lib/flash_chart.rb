@@ -169,7 +169,7 @@ class FlashChart
     @lines << tmp
   end
   
-  def bar_filled(alpha, colour, colour_outline, text = '', size = -1)
+  def bar_filled(alpha, colour, _colour_outline, text = '', size = -1)
     tmp = '&filled_bar'
     tmp << "_#{(@lines.size + 1)}" if @lines.size > 0
     tmp << "=#{alpha},#{colour},#{text},#{size}&\n"
