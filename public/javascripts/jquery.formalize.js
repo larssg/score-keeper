@@ -57,24 +57,24 @@ var FORMALIZE = (function ($, window, document, undefined) {
         var type_regex = /date|datetime|datetime-local|email|month|number|password|range|search|tel|text|time|url|week/;
 
         $("input").each(function () {
-          var el = $(this);
+          var element = $(this);
 
           // Is it a button?
           if (this.getAttribute("type").match(button_regex)) {
-            el.addClass("ie6_button");
+            element.addClass("ie6_button");
 
             /* Is it disabled? */
             if (this.disabled) {
-              el.addClass("ie6_button_disabled");
+              element.addClass("ie6_button_disabled");
             }
           }
           // Or is it a textual input?
           else if (this.getAttribute("type").match(type_regex)) {
-            el.addClass("ie6_input");
+            element.addClass("ie6_input");
 
             /* Is it disabled? */
             if (this.disabled) {
-              el.addClass("ie6_input_disabled");
+              element.addClass("ie6_input_disabled");
             }
           }
         });
@@ -105,12 +105,12 @@ var FORMALIZE = (function ($, window, document, undefined) {
         FORMALIZE.misc.add_placeholder();
 
         $(":input[placeholder]").each(function () {
-          var el = $(this);
-          var text = el.attr("placeholder");
+          var element = $(this);
+          var text = element.attr("placeholder");
 
-          el.focus(function () {
-            if (el.val() === text) {
-              el.val("").removeClass("placeholder_text");
+          element.focus(function () {
+            if (element.val() === text) {
+              element.val("").removeClass("placeholder_text");
             }
           }).blur(function () {
             FORMALIZE.misc.add_placeholder();
@@ -118,10 +118,10 @@ var FORMALIZE = (function ($, window, document, undefined) {
 
           // Prevent <form> from accidentally
           // submitting the placeholder text.
-          el.closest("form")
+          element.closest("form")
             .submit(function () {
-              if (el.val() === text) {
-                el.val("").removeClass("placeholder_text");
+              if (element.val() === text) {
+                element.val("").removeClass("placeholder_text");
               }
             })
             .bind("reset", function () {
@@ -141,11 +141,11 @@ var FORMALIZE = (function ($, window, document, undefined) {
         }
 
         $(":input[placeholder]").each(function () {
-          var el = $(this);
-          var text = el.attr("placeholder");
+          var element = $(this);
+          var text = element.attr("placeholder");
 
-          if (!el.val() || el.val() === text) {
-            el.val(text).addClass("placeholder_text");
+          if (!element.val() || element.val() === text) {
+            element.val(text).addClass("placeholder_text");
           }
         });
       },
