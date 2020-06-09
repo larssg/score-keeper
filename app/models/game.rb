@@ -86,7 +86,8 @@ class Game < ActiveRecord::Base
   end
 
   def format_player_roles
-    return if !attributes.has_key?(:player_roles) || player_roles.blank?
-    player_roles = self.player_roles.split("\n").collect { |pr| pr.strip }.select { |pr| pr.size > 0 }.join("\n")
+    return if !attributes.key?(:player_roles) || player_roles.blank?
+
+    player_roles = self.player_roles.split("\n").collect(&:strip).reject(&:empty?).join("\n")
   end
 end

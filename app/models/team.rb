@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Team < ActiveRecord::Base
   belongs_to :account
   has_many :memberships
@@ -8,14 +10,17 @@ class Team < ActiveRecord::Base
     if filter.index(',')
       return true if team_ids == filter
     else
-      return true if team_ids.index(filter + ',') || team_ids.index(',' + filter)
+      if team_ids.index(filter + ',') || team_ids.index(',' + filter)
+        return true
+      end
     end
     false
   end
 
   def team_mate_for(user)
     return nil if memberships.size < 2
-    team_mate = memberships.select { |m| m.user_id != user.id }.first.user
+
+    team_mate = memberships.reject { |m| m.user_id == user.id }.first.user
   end
 
   def winner?
@@ -23,26 +28,27 @@ class Team < ActiveRecord::Base
   end
 
   def other
-    match.teams.select { |team| team.id != id }.first
+    match.teams.reject { |team| team.id == id }.first
   end
 
   def ranking_total
-    memberships.collect{ |m| m.game_participation.ranking }.sum.to_f
+    memberships.collect { |m| m.game_participation.ranking }.sum.to_f
   end
 
   def self.opponents(team_ids)
-    where(:team_ids => team_ids).group(:opponent_ids).select('SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids')
+    where(team_ids: team_ids).group(:opponent_ids).select('SUM(won) AS wins, COUNT(*) AS matches, opponent_ids AS team_ids')
   end
 
   def self.team_members(user_ids)
-    user_ids.split(',').collect { |user_id| user_id.to_i }.sort.collect { |user_id| User.find(user_id) }
+    user_ids.split(',').collect(&:to_i).sort.collect { |user_id| User.find(user_id) }
   end
 
   def award_points(amount)
     game_participations = GameParticipation.find(:all,
-                                                 :conditions => {
-                                                   :game_id => memberships.first.game_id,
-                                                   :user_id => memberships.collect(&:user_id) }).sort_by(&:ranking)
+                                                 conditions: {
+                                                   game_id: memberships.first.game_id,
+                                                   user_id: memberships.collect(&:user_id)
+                                                 }).sort_by(&:ranking)
     award = Team.split_award_points(amount, game_participations.collect(&:ranking))
 
     # Award and save points
@@ -61,7 +67,7 @@ class Team < ActiveRecord::Base
   def self.split_award_points(amount, rankings)
     return [amount] if rankings.size == 1
 
-    throw "Rankings not sorted properly" unless rankings == rankings.sort
+    throw 'Rankings not sorted properly' unless rankings == rankings.sort
 
     award = rankings.collect do |ranking|
       (amount * (ranking.to_f / rankings.sum.to_f)).to_i
@@ -75,7 +81,7 @@ class Team < ActiveRecord::Base
   end
 
   def update_cache_values
-    self.team_ids = memberships.collect{ |m| m.user_id }.sort.join(',')
+    self.team_ids = memberships.collect(&:user_id).sort.join(',')
   end
 
   def display_names

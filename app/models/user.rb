@@ -114,14 +114,15 @@ class User < ActiveRecord::Base
   end
 
   def set_feed_token
-    update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago}")
   end
 
   def set_login_token
-    update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago}")
   end
 
   protected
+
   def set_name_from_login
     self.name ||= login.humanize
   end

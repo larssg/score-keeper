@@ -14,9 +14,12 @@ class SessionsController < ApplicationController
 
   def update
     unless params[:current_game].blank? || params[:current_game][:id].blank?
-      redirect_to new_game_url and return if params[:current_game][:id] == 'new'
+      redirect_to(new_game_url) && return if params[:current_game][:id] == 'new'
+
       self.current_game = current_account.games.find(params[:current_game][:id])
-      current_user.update_attribute :last_game, current_game unless impersonating?
+      unless impersonating?
+        current_user.update_attribute :last_game, current_game
+      end
     end
     redirect_back_or_default('/')
   end
@@ -62,13 +65,15 @@ class SessionsController < ApplicationController
   end
 
   private
+
   def password_authentication(login, password)
     self.current_user = current_account.users.authenticate(login, password)
     if logged_in?
-      if params[:remember_me] == "1"
+      if params[:remember_me] == '1'
         current_user.remember_me
         cookies[:auth_token] = {
-          :value => current_user.remember_token, :expires => current_user.remember_token_expires_at }
+          value: current_user.remember_token, expires: current_user.remember_token_expires_at
+        }
       end
       successful_login
     else

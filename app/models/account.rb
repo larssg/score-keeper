@@ -23,15 +23,15 @@ class Account < ActiveRecord::Base
   end
 
   def enabled_users
-    @enabled_users ||= all_users.select { |u| u.enabled? }
+    @enabled_users ||= all_users.select(&:enabled?)
   end
 
   def user_ids
-    @users_ids ||= all_users.collect { |u| u.id }
+    @users_ids ||= all_users.collect(&:id)
   end
 
   def enabled_user_ids
-    @enabled_user_ids ||= enabled_users.collect { |u| u.id }
+    @enabled_user_ids ||= enabled_users.collect(&:id)
   end
 
   def reset_positions!
