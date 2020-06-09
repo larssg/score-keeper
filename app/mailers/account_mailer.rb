@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AccountMailer < ActionMailer::Base
   default :from => "noreply@scorekeepr.dk"
 

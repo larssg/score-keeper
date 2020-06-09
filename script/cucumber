@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 begin
   load File.expand_path(File.dirname(__FILE__) + "/../vendor/plugins/cucumber/bin/cucumber")
 rescue LoadError => e

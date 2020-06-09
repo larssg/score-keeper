@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DashboardHelper
   def position_icon(position)
     return '' if position.blank?
