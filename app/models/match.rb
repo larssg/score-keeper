@@ -162,7 +162,7 @@ class Match < ActiveRecord::Base
     Match.reset_rankings(self.game) unless @postpone_ranking_update
   end
 
-  def title()
+  def title
     [ self.teams.first.display_names.join(' - '),
       "(#{self.teams.first.score} - #{self.teams.last.score})",
       self.teams.last.display_names.join(' - ')
