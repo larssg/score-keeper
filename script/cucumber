@@ -2,7 +2,7 @@
 begin
   load File.expand_path(File.dirname(__FILE__) + "/../vendor/plugins/cucumber/bin/cucumber")
 rescue LoadError => e
-  raise unless e.to_s =~ /cucumber/  
+  raise unless /cucumber/.match?(e.to_s)  
   require "rubygems"
   load File.join(Gem.bindir, "cucumber")
 end
