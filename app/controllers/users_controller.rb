@@ -102,25 +102,29 @@ class UsersController < ApplicationController
     @user = current_account.users.find(params[:id])
     if @user.destroy
       if @user.id == current_user
-        self.current_user.forget_me if logged_in?
+        current_user.forget_me if logged_in?
         cookies.delete :auth_token
         reset_session
-        flash[:notice] = "You have removed your account."
+        flash[:notice] = 'You have removed your account.'
         redirect_back_or_default('/')
       else
         flash[:notice] = 'User deleted.'
         redirect_to users_path
       end
     else
-      flash[:error] = "Unable to destroy account"
-      render :action => 'edit'
+      flash[:error] = 'Unable to destroy account'
+      render action: 'edit'
     end
   end
 
   def forgot_password
     if params[:username] || params[:email]
-      user = current_account.users.find_by(login: params[:username]) if params[:username]
-      user ||= current_account.users.find_by(email: params[:email]) if params[:email]
+      if params[:username]
+        user = current_account.users.find_by(login: params[:username])
+      end
+      if params[:email]
+        user ||= current_account.users.find_by(email: params[:email])
+      end
 
       if user.blank?
         flash.now[:error] = 'No user was found with the specified username or e-mail.'

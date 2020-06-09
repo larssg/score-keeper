@@ -13,27 +13,30 @@ class ApplicationController < ActionController::Base
     if impersonating?
       @current_account = current_user.account
     else
-      @current_account = Account.find_by(domain: account_subdomain) unless account_subdomain.nil?
+      unless account_subdomain.nil?
+        @current_account = Account.find_by(domain: account_subdomain)
+      end
     end
     @current_account
   end
   helper_method :current_account
 
   protected
+
   def pjax?
     request.headers['X-PJAX']
   end
   helper_method :pjax?
 
   def impersonating?
-    !(session[:real_user_id].nil?)
+    !session[:real_user_id].nil?
   end
 
   def login_from_feed_token
     if params[:feed_token] && !logged_in? && request.format.to_s == 'application/atom+xml'
       self.current_user = User.find_by(feed_token: params[:feed_token])
       yield
-      self.current_user = :false
+      self.current_user = false
     else
       yield
     end
