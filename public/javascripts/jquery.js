@@ -213,7 +213,7 @@ jQuery.fn = jQuery.prototype = {
 	// Get the Nth element in the matched element set OR
 	// Get the whole matched element set as a clean array
 	get: function( num ) {
-		return num == null ?
+		return num == undefined ?
 
 			// Return a 'clean' array
 			this.toArray() :
@@ -334,7 +334,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 	for ( ; i < length; i++ ) {
 		// Only deal with non-null/undefined values
-		if ( (options = arguments[ i ]) != null ) {
+		if ( (options = arguments[ i ]) != undefined ) {
 			// Extend the base object
 			for ( name in options ) {
 				src = target[ name ];
@@ -456,7 +456,7 @@ jQuery.extend({
 			var toplevel = false;
 
 			try {
-				toplevel = window.frameElement == null;
+				toplevel = window.frameElement == undefined;
 			} catch(e) {}
 
 			if ( document.documentElement.doScroll && toplevel ) {
@@ -482,11 +482,11 @@ jQuery.extend({
 	},
 
 	isNaN: function( obj ) {
-		return obj == null || !rdigit.test( obj ) || isNaN( obj );
+		return obj == undefined || !rdigit.test( obj ) || isNaN( obj );
 	},
 
 	type: function( obj ) {
-		return obj == null ?
+		return obj == undefined ?
 			String( obj ) :
 			class2type[ toString.call(obj) ] || "object";
 	},
@@ -640,14 +640,14 @@ jQuery.extend({
 	// Use native String.trim function wherever possible
 	trim: trim ?
 		function( text ) {
-			return text == null ?
+			return text == undefined ?
 				"" :
 				trim.call( text );
 		} :
 
 		// Otherwise use our own trimming functionality
 		function( text ) {
-			return text == null ?
+			return text == undefined ?
 				"" :
 				text.toString().replace( trimLeft, "" ).replace( trimRight, "" );
 		},
@@ -656,14 +656,14 @@ jQuery.extend({
 	makeArray: function( array, results ) {
 		var ret = results || [];
 
-		if ( array != null ) {
+		if ( array != undefined ) {
 			// The window, strings (and functions) also have 'length'
 			// The extra typeof function check is to prevent crashes
 			// in Safari 2 (See: #3039)
 			// Tweaked logic slightly to handle Blackberry 4.7 RegExp issues #6930
 			var type = jQuery.type(array);
 
-			if ( array.length == null || type === "string" || type === "function" || type === "regexp" || jQuery.isWindow( array ) ) {
+			if ( array.length == undefined || type === "string" || type === "function" || type === "regexp" || jQuery.isWindow( array ) ) {
 				push.call( ret, array );
 			} else {
 				jQuery.merge( ret, array );
@@ -732,7 +732,7 @@ jQuery.extend({
 		for ( var i = 0, length = elems.length; i < length; i++ ) {
 			value = callback( elems[ i ], i, arg );
 
-			if ( value != null ) {
+			if ( value != undefined ) {
 				ret[ ret.length ] = value;
 			}
 		}
@@ -1023,7 +1023,7 @@ jQuery.extend({
 			// Get a promise for this deferred
 			// If obj is provided, the promise aspect is added to the object
 			promise: function( obj ) {
-				if ( obj == null ) {
+				if ( obj == undefined ) {
 					if ( promise ) {
 						return promise;
 					}
@@ -1974,13 +1974,13 @@ jQuery.fn.extend({
 			}
 
 			// Treat null/undefined as ""; convert numbers to string
-			if ( val == null ) {
+			if ( val == undefined ) {
 				val = "";
 			} else if ( typeof val === "number" ) {
 				val += "";
 			} else if ( jQuery.isArray(val) ) {
 				val = jQuery.map(val, function (value) {
-					return value == null ? "" : value + "";
+					return value == undefined ? "" : value + "";
 				});
 			}
 
@@ -2365,7 +2365,7 @@ jQuery.event = {
 				if ( handler.guid === handleObj.guid ) {
 					// remove the given handler for the given type
 					if ( all || namespace.test( handleObj.namespace ) ) {
-						if ( pos == null ) {
+						if ( pos == undefined ) {
 							eventType.splice( j--, 1 );
 						}
 
@@ -2374,14 +2374,14 @@ jQuery.event = {
 						}
 					}
 
-					if ( pos != null ) {
+					if ( pos != undefined ) {
 						break;
 					}
 				}
 			}
 
 			// remove generic event handler if no more handlers exist
-			if ( eventType.length === 0 || pos != null && eventType.length === 1 ) {
+			if ( eventType.length === 0 || pos != undefined && eventType.length === 1 ) {
 				if ( !special.teardown || special.teardown.call( elem, namespaces ) === false ) {
 					jQuery.removeEvent( elem, type, elemData.handle );
 				}
@@ -2619,7 +2619,7 @@ jQuery.event = {
 		}
 
 		// Calculate pageX/Y if missing and clientX/Y available
-		if ( event.pageX == null && event.clientX != null ) {
+		if ( event.pageX == undefined && event.clientX != undefined ) {
 			var doc = document.documentElement,
 				body = document.body;
 
@@ -2628,8 +2628,8 @@ jQuery.event = {
 		}
 
 		// Add which for key events
-		if ( event.which == null && (event.charCode != null || event.keyCode != null) ) {
-			event.which = event.charCode != null ? event.charCode : event.keyCode;
+		if ( event.which == undefined && (event.charCode != undefined || event.keyCode != undefined) ) {
+			event.which = event.charCode != undefined ? event.charCode : event.keyCode;
 		}
 
 		// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
@@ -2913,7 +2913,7 @@ if ( !jQuery.support.changeBubbles ) {
 			return;
 		}
 
-		if ( data != null || val ) {
+		if ( data != undefined || val ) {
 			e.type = "change";
 			e.liveFired = undefined;
 			jQuery.event.trigger( e, arguments[1], elem );
@@ -3164,7 +3164,7 @@ jQuery.each(["live", "die"], function( i, name ) {
 
 		types = (types || "").split(" ");
 
-		while ( (type = types[ i++ ]) != null ) {
+		while ( (type = types[ i++ ]) != undefined ) {
 			match = rnamespaces.exec( type );
 			namespaces = "";
 
@@ -3298,7 +3298,7 @@ jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblcl
 
 	// Handle event binding
 	jQuery.fn[ name ] = function( data, fn ) {
-		if ( fn == null ) {
+		if ( fn == undefined ) {
 			fn = data;
 			data = null;
 		}
@@ -3435,7 +3435,7 @@ var Sizzle = function( selector, context, results, seed ) {
 					pop = parts.pop();
 				}
 
-				if ( pop == null ) {
+				if ( pop == undefined ) {
 					pop = context;
 				}
 
@@ -3460,14 +3460,14 @@ var Sizzle = function( selector, context, results, seed ) {
 			results.push.apply( results, checkSet );
 
 		} else if ( context && context.nodeType === 1 ) {
-			for ( i = 0; checkSet[i] != null; i++ ) {
+			for ( i = 0; checkSet[i] != undefined; i++ ) {
 				if ( checkSet[i] && (checkSet[i] === true || checkSet[i].nodeType === 1 && Sizzle.contains(context, checkSet[i])) ) {
 					results.push( set[i] );
 				}
 			}
 
 		} else {
-			for ( i = 0; checkSet[i] != null; i++ ) {
+			for ( i = 0; checkSet[i] != undefined; i++ ) {
 				if ( checkSet[i] && checkSet[i].nodeType === 1 ) {
 					results.push( set[i] );
 				}
@@ -3530,7 +3530,7 @@ Sizzle.find = function( expr, context, isXML ) {
 				match[1] = (match[1] || "").replace( rBackslash, "" );
 				set = Expr.find[ type ]( match, context, isXML );
 
-				if ( set != null ) {
+				if ( set != undefined ) {
 					expr = expr.replace( Expr.match[ type ], "" );
 					break;
 				}
@@ -3556,7 +3556,7 @@ Sizzle.filter = function( expr, set, inplace, not ) {
 
 	while ( expr && set.length ) {
 		for ( var type in Expr.filter ) {
-			if ( (match = Expr.leftMatch[ type ].exec( expr )) != null && match[2] ) {
+			if ( (match = Expr.leftMatch[ type ].exec( expr )) != undefined && match[2] ) {
 				var found, item,
 					filter = Expr.filter[ type ],
 					left = match[1];
@@ -3585,12 +3585,12 @@ Sizzle.filter = function( expr, set, inplace, not ) {
 				}
 
 				if ( match ) {
-					for ( var i = 0; (item = curLoop[i]) != null; i++ ) {
+					for ( var i = 0; (item = curLoop[i]) != undefined; i++ ) {
 						if ( item ) {
 							found = filter( item, match, i, curLoop );
 							var pass = not ^ !!found;
 
-							if ( inplace && found != null ) {
+							if ( inplace && found != undefined ) {
 								if ( pass ) {
 									anyFound = true;
 
@@ -3624,7 +3624,7 @@ Sizzle.filter = function( expr, set, inplace, not ) {
 
 		// Improper expression
 		if ( expr === old ) {
-			if ( anyFound == null ) {
+			if ( anyFound == undefined ) {
 				Sizzle.error( expr );
 
 			} else {
@@ -3800,7 +3800,7 @@ var Expr = Sizzle.selectors = {
 				return match;
 			}
 
-			for ( var i = 0, elem; (elem = curLoop[i]) != null; i++ ) {
+			for ( var i = 0, elem; (elem = curLoop[i]) != undefined; i++ ) {
 				if ( elem ) {
 					if ( not ^ (elem.className && (" " + elem.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0) ) {
 						if ( !inplace ) {
@@ -4118,14 +4118,14 @@ var Expr = Sizzle.selectors = {
 			var name = match[1],
 				result = Expr.attrHandle[ name ] ?
 					Expr.attrHandle[ name ]( elem ) :
-					elem[ name ] != null ?
+					elem[ name ] != undefined ?
 						elem[ name ] :
 						elem.getAttribute( name ),
 				value = result + "",
 				type = match[2],
 				check = match[4];
 
-			return result == null ?
+			return result == undefined ?
 				type === "!=" :
 				type === "=" ?
 				value === check :
@@ -5184,7 +5184,7 @@ jQuery.fn.extend({
 
 	// keepData is for internal use only--do not document
 	remove: function( selector, keepData ) {
-		for ( var i = 0, elem; (elem = this[i]) != null; i++ ) {
+		for ( var i = 0, elem; (elem = this[i]) != undefined; i++ ) {
 			if ( !selector || jQuery.filter( selector, [ elem ] ).length ) {
 				if ( !keepData && elem.nodeType === 1 ) {
 					jQuery.cleanData( elem.getElementsByTagName("*") );
@@ -5201,7 +5201,7 @@ jQuery.fn.extend({
 	},
 
 	empty: function() {
-		for ( var i = 0, elem; (elem = this[i]) != null; i++ ) {
+		for ( var i = 0, elem; (elem = this[i]) != undefined; i++ ) {
 			// Remove element nodes and prevent memory leaks
 			if ( elem.nodeType === 1 ) {
 				jQuery.cleanData( elem.getElementsByTagName("*") );
@@ -5217,8 +5217,8 @@ jQuery.fn.extend({
 	},
 
 	clone: function( dataAndEvents, deepDataAndEvents ) {
-		dataAndEvents = dataAndEvents == null ? false : dataAndEvents;
-		deepDataAndEvents = deepDataAndEvents == null ? dataAndEvents : deepDataAndEvents;
+		dataAndEvents = dataAndEvents == undefined ? false : dataAndEvents;
+		deepDataAndEvents = deepDataAndEvents == undefined ? dataAndEvents : deepDataAndEvents;
 
 		return this.map( function () {
 			return jQuery.clone( this, dataAndEvents, deepDataAndEvents );
@@ -5593,7 +5593,7 @@ jQuery.extend({
 
 		var ret = [];
 
-		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+		for ( var i = 0, elem; (elem = elems[i]) != undefined; i++ ) {
 			if ( typeof elem === "number" ) {
 				elem += "";
 			}
@@ -5681,7 +5681,7 @@ jQuery.extend({
 		var data, id, cache = jQuery.cache, internalKey = jQuery.expando, special = jQuery.event.special,
 			deleteExpando = jQuery.support.deleteExpando;
 
-		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+		for ( var i = 0, elem; (elem = elems[i]) != undefined; i++ ) {
 			if ( elem.nodeName && jQuery.noData[elem.nodeName.toLowerCase()] ) {
 				continue;
 			}
@@ -5823,7 +5823,7 @@ jQuery.extend({
 		// Check if we're setting a value
 		if ( value !== undefined ) {
 			// Make sure that NaN and null values aren't set. See: #7116
-			if ( typeof value === "number" && isNaN( value ) || value == null ) {
+			if ( typeof value === "number" && isNaN( value ) || value == undefined ) {
 				return;
 			}
 
@@ -5917,14 +5917,14 @@ jQuery.each(["height", "width"], function( i, name ) {
 						val = currentStyle( elem, name, name );
 					}
 
-					if ( val != null ) {
+					if ( val != undefined ) {
 						// Should return "auto" instead of 0, use 0 for
 						// temporary backwards-compat
 						return val === "" || val === "auto" ? "0px" : val;
 					}
 				}
 
-				if ( val < 0 || val == null ) {
+				if ( val < 0 || val == undefined ) {
 					val = elem.style[ name ];
 
 					// Should return "auto" instead of 0, use 0 for
@@ -6332,7 +6332,7 @@ jQuery.fn.extend({
 		.map(function( i, elem ){
 			var val = jQuery( this ).val();
 
-			return val == null ?
+			return val == undefined ?
 				null :
 				jQuery.isArray( val ) ?
 					jQuery.map( val, function( val, i ){
@@ -6703,7 +6703,7 @@ jQuery.extend({
 		s.dataTypes = jQuery.trim( s.dataType || "*" ).toLowerCase().split( rspacesAjax );
 
 		// Determine if a cross-domain request is in order
-		if ( s.crossDomain == null ) {
+		if ( s.crossDomain == undefined ) {
 			parts = rurl.exec( s.url.toLowerCase() );
 			s.crossDomain = !!( parts &&
 				( parts[ 1 ] != ajaxLocParts[ 1 ] || parts[ 2 ] != ajaxLocParts[ 2 ] ||
@@ -6892,7 +6892,7 @@ function buildParams( prefix, obj, traditional, add ) {
 			}
 		});
 
-	} else if ( !traditional && obj != null && typeof obj === "object" ) {
+	} else if ( !traditional && obj != undefined && typeof obj === "object" ) {
 		// If we see an array here, it is empty and should be treated as an empty
 		// object
 		if ( jQuery.isArray( obj ) || jQuery.isEmptyObject( obj ) ) {
@@ -7099,7 +7099,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	if ( s.dataTypes[ 0 ] === "jsonp" ||
 		originalSettings.jsonpCallback ||
-		originalSettings.jsonp != null ||
+		originalSettings.jsonp != undefined ||
 		s.jsonp !== false && ( jsre.test( s.url ) ||
 				dataIsString && jsre.test( s.data ) ) ) {
 
@@ -7559,7 +7559,7 @@ jQuery.fn.extend({
 		if ( jQuery.isFunction(fn) && jQuery.isFunction(fn2) ) {
 			this._toggle.apply( this, arguments );
 
-		} else if ( fn == null || bool ) {
+		} else if ( fn == undefined || bool ) {
 			this.each(function() {
 				var state = bool ? fn : jQuery(this).is(":hidden");
 				jQuery(this)[ state ? "show" : "hide" ]();
@@ -7644,7 +7644,7 @@ jQuery.fn.extend({
 				}
 			}
 
-			if ( opt.overflow != null ) {
+			if ( opt.overflow != undefined ) {
 				this.style.overflow = "hidden";
 			}
 
@@ -7805,7 +7805,7 @@ jQuery.fx.prototype = {
 
 	// Get the current size
 	cur: function() {
-		if ( this.elem[this.prop] != null && (!this.elem.style || this.elem.style[this.prop] == null) ) {
+		if ( this.elem[this.prop] != undefined && (!this.elem.style || this.elem.style[this.prop] == undefined) ) {
 			return this.elem[ this.prop ];
 		}
 
@@ -7884,7 +7884,7 @@ jQuery.fx.prototype = {
 
 			if ( done ) {
 				// Reset the overflow
-				if ( this.options.overflow != null && !jQuery.support.shrinkWrapBlocks ) {
+				if ( this.options.overflow != undefined && !jQuery.support.shrinkWrapBlocks ) {
 					var elem = this.elem,
 						options = this.options;
 
@@ -7964,7 +7964,7 @@ jQuery.extend( jQuery.fx, {
 		},
 
 		_default: function( fx ) {
-			if ( fx.elem.style && fx.elem.style[ fx.prop ] != null ) {
+			if ( fx.elem.style && fx.elem.style[ fx.prop ] != undefined ) {
 				fx.elem.style[ fx.prop ] = (fx.prop === "width" || fx.prop === "height" ? Math.max(0, fx.now) : fx.now) + fx.unit;
 			} else {
 				fx.elem[ fx.prop ] = fx.now;
@@ -8196,10 +8196,10 @@ jQuery.offset = {
 			options = options.call( elem, i, curOffset );
 		}
 
-		if (options.top != null) {
+		if (options.top != undefined) {
 			props.top = (options.top - curOffset.top) + curTop;
 		}
-		if (options.left != null) {
+		if (options.left != undefined) {
 			props.left = (options.left - curOffset.left) + curLeft;
 		}
 
@@ -8328,7 +8328,7 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 		// Get window width or height
 		var elem = this[0];
 		if ( !elem ) {
-			return size == null ? null : this;
+			return size == undefined ? null : this;
 		}
 
 		if ( jQuery.isFunction( size ) ) {
