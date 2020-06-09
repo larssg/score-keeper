@@ -405,10 +405,9 @@
         var thead = t.getElementsByTagName("THEAD")[0];
         var trs = thead.getElementsByTagName("TR");
 
-        for (var i = 0; i < trs.length; i++) {
-          var cells = trs[i].cells;
-          for (var j = 0; j < cells.length; j++) {
-            var c = cells[j];
+        for (const tr of trs) {
+          var cells = tr.cells;
+          for (const c of cells) {
 
             var rowIndex = c.parentNode.rowIndex;
             var cellId = rowIndex + "-" + c.cellIndex;
@@ -445,8 +444,7 @@
           r = table.tHead.rows,
           c = r[row].cells;
 
-        for (var i = 0; i < c.length; i++) {
-          var cell = c[i];
+        for (const cell of c) {
 
           if (cell.colSpan > 1) {
             arr = arr.concat(checkCellColSpan(table, headerArr, row++));
