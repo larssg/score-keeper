@@ -7,9 +7,9 @@ gem 'mysql2'
 gem 'hoptoad_notifier'
 gem 'newrelic_rpm'
 
-gem 'hpricot'
 gem 'color-tools', :require => 'color'
 gem 'haml'
+gem 'hpricot'
 gem "will_paginate", "~> 3.0.pre2"
 
 gem 'jammit'
