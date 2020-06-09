@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class Game < ActiveRecord::Base
-  belongs_to :account, :counter_cache => true
-  has_many :matches, :dependent => :destroy
-  has_many :logs, :dependent => :delete_all
-  has_many :game_participations, :dependent => :delete_all
-  has_many :memberships, :dependent => :delete_all
-  has_many :users, :through => :game_participations
+  belongs_to :account, counter_cache: true
+  has_many :matches, dependent: :destroy
+  has_many :logs, dependent: :delete_all
+  has_many :game_participations, dependent: :delete_all
+  has_many :memberships, dependent: :delete_all
+  has_many :users, through: :game_participations
 
   validates :name, :team_size, presence: true
-  validates :team_size, inclusion: { :in => (1..3) }
+  validates :team_size, inclusion: { in: (1..3) }
 
   before_save :format_player_roles
 

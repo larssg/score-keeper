@@ -7,31 +7,31 @@ class Account < ActiveRecord::Base
 
   validates :name, :time_zone, presence: true
   validates :domain, uniqueness: true
-  validates :domain, format: { :with => /^[0-9a-z]+$/, :on => :create, :message => "can only contain alphanumeric lowercase characters" }
-  validates :domain, exclusion: { :in => %w(www pop pop3 imap smtp mail support ftp mysql), :on => :create, :message => "is not allowed" }
+  validates :domain, format: { with: /^[0-9a-z]+$/, on: :create, message: 'can only contain alphanumeric lowercase characters' }
+  validates :domain, exclusion: { in: %w[www pop pop3 imap smtp mail support ftp mysql], on: :create, message: 'is not allowed' }
 
   before_validation :set_name_from_domain
 
   attr_accessible :name, :domain, :time_zone
 
   def all_users
-    @all_users ||= self.users.all
+    @all_users ||= users.all
   end
 
   def all_games
-    @all_games ||= self.games.all
+    @all_games ||= games.all
   end
 
   def enabled_users
-    @enabled_users ||= all_users.select { |u| u.enabled? }
+    @enabled_users ||= all_users.select(&:enabled?)
   end
 
   def user_ids
-    @users_ids ||= self.all_users.collect { |u| u.id }
+    @users_ids ||= all_users.collect(&:id)
   end
 
   def enabled_user_ids
-    @enabled_user_ids ||= self.enabled_users.collect { |u| u.id }
+    @enabled_user_ids ||= enabled_users.collect(&:id)
   end
 
   def reset_positions!

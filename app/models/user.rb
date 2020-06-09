@@ -5,24 +5,24 @@ class User < ActiveRecord::Base
 
   belongs_to :account
   has_many :game_participations
-  has_many :games, :through => :game_participations
+  has_many :games, through: :game_participations
   has_many :memberships
   has_many :comments
   has_many :logs
-  has_many :teams, :through => :memberships
-  belongs_to :last_game, :class_name => "Game", :foreign_key => "last_game_id"
+  has_many :teams, through: :memberships
+  belongs_to :last_game, class_name: 'Game', foreign_key: 'last_game_id'
 
-  validates     :email, presence: true
-  validates       :email,    length: { :within => 3..100 }
-  validates     :login, presence: true
-  validates       :login,    length: { :within => 2..100 }
-  validates   :login,    uniqueness: { :scope => :account_id, :case_sensitive => false, :message => 'is already taken; sorry!' }
-  validates   :email,    uniqueness: { :scope => :account_id, :case_sensitive => false, :message => 'is already being used; do you already have an account?' }
+  validates :email, presence: true
+  validates :email, length: { within: 3..100 }
+  validates :login, presence: true
+  validates :login, length: { within: 2..100 }
+  validates   :login,    uniqueness: { scope: :account_id, case_sensitive: false, message: 'is already taken; sorry!' }
+  validates   :email,    uniqueness: { scope: :account_id, case_sensitive: false, message: 'is already being used; do you already have an account?' }
 
-  validates     :password,                    presence: { :if => :password_required? }
-  validates     :password_confirmation,       presence: { :if => :password_required? }
-  validates       :password, length: { :within => 4..40,  :if => :password_required? }
-  validates :password,                    confirmation: { :if => :password_required? }
+  validates     :password,                    presence: { if: :password_required? }
+  validates     :password_confirmation,       presence: { if: :password_required? }
+  validates :password, length: { within: 4..40, if: :password_required? }
+  validates :password, confirmation: { if: :password_required? }
 
   validates :name, presence: true
   validates :time_zone, presence: true
