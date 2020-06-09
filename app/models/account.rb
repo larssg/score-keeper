@@ -5,10 +5,10 @@ class Account < ActiveRecord::Base
   has_many :users
   has_many :logs
 
-  validates_presence_of :name, :time_zone
-  validates_uniqueness_of :domain
-  validates_format_of :domain, :with => /^[0-9a-z]+$/, :on => :create, :message => "can only contain alphanumeric lowercase characters"
-  validates_exclusion_of :domain, :in => %w(www pop pop3 imap smtp mail support ftp mysql), :on => :create, :message => "is not allowed"
+  validates :name, :time_zone, presence: true
+  validates :domain, uniqueness: true
+  validates :domain, format: { :with => /^[0-9a-z]+$/, :on => :create, :message => "can only contain alphanumeric lowercase characters" }
+  validates :domain, exclusion: { :in => %w(www pop pop3 imap smtp mail support ftp mysql), :on => :create, :message => "is not allowed" }
 
   before_validation :set_name_from_domain
 

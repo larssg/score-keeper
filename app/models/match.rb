@@ -25,11 +25,11 @@ class Match < ActiveRecord::Base
   
   validates :account_id, :presence => true
 
-  validates_presence_of :game_id
-  validates_presence_of :team_one
-  validates_presence_of :team_two
+  validates :game_id, presence: true
+  validates :team_one, presence: true
+  validates :team_two, presence: true
 
-  validates_presence_of :score1, :score2, :team1, :team2
+  validates :score1, :score2, :team1, :team2, presence: true
   
   validate :not_locked
   validate :unique_participants

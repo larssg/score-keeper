@@ -6,8 +6,8 @@ class Game < ActiveRecord::Base
   has_many :memberships, :dependent => :delete_all
   has_many :users, :through => :game_participations
 
-  validates_presence_of :name, :team_size
-  validates_inclusion_of :team_size, :in => (1..3)
+  validates :name, :team_size, presence: true
+  validates :team_size, inclusion: { :in => (1..3) }
 
   before_save :format_player_roles
 

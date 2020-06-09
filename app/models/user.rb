@@ -12,20 +12,20 @@ class User < ActiveRecord::Base
   has_many :teams, :through => :memberships
   belongs_to :last_game, :class_name => "Game", :foreign_key => "last_game_id"
 
-  validates_presence_of     :email
-  validates_length_of       :email,    :within => 3..100
-  validates_presence_of     :login
-  validates_length_of       :login,    :within => 2..100
-  validates_uniqueness_of   :login,    :scope => :account_id, :case_sensitive => false, :message => 'is already taken; sorry!'
-  validates_uniqueness_of   :email,    :scope => :account_id, :case_sensitive => false, :message => 'is already being used; do you already have an account?'
+  validates     :email, presence: true
+  validates       :email,    length: { :within => 3..100 }
+  validates     :login, presence: true
+  validates       :login,    length: { :within => 2..100 }
+  validates   :login,    uniqueness: { :scope => :account_id, :case_sensitive => false, :message => 'is already taken; sorry!' }
+  validates   :email,    uniqueness: { :scope => :account_id, :case_sensitive => false, :message => 'is already being used; do you already have an account?' }
 
-  validates_presence_of     :password,                    :if => :password_required?
-  validates_presence_of     :password_confirmation,       :if => :password_required?
-  validates_length_of       :password, :within => 4..40,  :if => :password_required?
-  validates_confirmation_of :password,                    :if => :password_required?
+  validates     :password,                    presence: { :if => :password_required? }
+  validates     :password_confirmation,       presence: { :if => :password_required? }
+  validates       :password, length: { :within => 4..40,  :if => :password_required? }
+  validates :password,                    confirmation: { :if => :password_required? }
 
-  validates_presence_of :name
-  validates_presence_of :time_zone
+  validates :name, presence: true
+  validates :time_zone, presence: true
 
   before_save :encrypt_password
   before_save :set_display_name
