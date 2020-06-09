@@ -583,7 +583,7 @@ jQuery.extend({
 				script = document.createElement( "script" );
 
 			if ( jQuery.support.scriptEval() ) {
-				script.appendChild( document.createTextNode( data ) );
+				script.append( document.createTextNode( data ) );
 			} else {
 				script.text = data;
 			}
@@ -1178,7 +1178,7 @@ jQuery.extend({
 			// tag with appendChild/createTextNode
 			// (IE doesn't support this, fails, and uses .text instead)
 			try {
-				script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
+				script.append( document.createTextNode( "window." + id + "=1;" ) );
 			} catch(e) {}
 
 			root.insertBefore( script, root.firstChild );
@@ -1219,7 +1219,7 @@ jQuery.extend({
 	div.innerHTML = "<input type='radio' name='radiotest' checked='checked'/>";
 
 	var fragment = document.createDocumentFragment();
-	fragment.appendChild( div.firstChild );
+	fragment.append( div.firstChild );
 
 	// WebKit doesn't clone checked state correctly in fragments
 	jQuery.support.checkClone = fragment.cloneNode(true).cloneNode(true).lastChild.checked;
@@ -1236,7 +1236,7 @@ jQuery.extend({
 		}
 
 		div.style.width = div.style.paddingLeft = "1px";
-		body.appendChild( div );
+		body.append( div );
 		jQuery.boxModel = jQuery.support.boxModel = div.offsetWidth === 2;
 
 		if ( "zoom" in div.style ) {
@@ -4369,7 +4369,7 @@ Sizzle.getText = function( elems ) {
 
 	// Create a fake element
 	var div = document.createElement("div");
-	div.appendChild( document.createComment("") );
+	div.append( document.createComment("") );
 
 	// Make sure no comments are found
 	if ( div.getElementsByTagName("*").length > 0 ) {
@@ -5145,7 +5145,7 @@ jQuery.fn.extend({
 	append: function() {
 		return this.domManip(arguments, true, function( elem ) {
 			if ( this.nodeType === 1 ) {
-				this.appendChild( elem );
+				this.append( elem );
 			}
 		});
 	},
@@ -5669,7 +5669,7 @@ jQuery.extend({
 					if ( ret[i].nodeType === 1 ) {
 						ret.splice.apply( ret, [i + 1, 0].concat(jQuery.makeArray(ret[i].getElementsByTagName("script"))) );
 					}
-					fragment.appendChild( ret[i] );
+					fragment.append( ret[i] );
 				}
 			}
 		}
