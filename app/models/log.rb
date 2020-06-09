@@ -6,7 +6,7 @@ class Log < ActiveRecord::Base
   before_save :set_published_at
 
   def set_published_at
-    self.published_at = Time.now if self.published_at.blank?
+    self.published_at = Time.now if published_at.blank?
   end
 
   def self.find_by_item(account, item, model_name = nil)

@@ -16,21 +16,21 @@ class Game < ActiveRecord::Base
   default_scope order('name')
 
   def ranked_game_participators
-    @ranked_users ||= self.game_participations.find(:all,
+    @ranked_users ||= game_participations.find(:all,
                                                     :order => 'game_participations.ranking DESC, game_participations.matches_won DESC',
-                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played >= ?', true, self.newbie_limit],
+                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played >= ?', true, newbie_limit],
                                                     :include => :user)
   end
 
   def newbie_game_participators
-    @newbie_users ||= self.game_participations.find(:all,
+    @newbie_users ||= game_participations.find(:all,
                                                     :order => 'game_participations.matches_played DESC, game_participations.ranking DESC, game_participations.matches_won DESC',
-                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played < ?', true, self.newbie_limit],
+                                                    :conditions => ['users.enabled = ? AND game_participations.matches_played < ?', true, newbie_limit],
                                                     :include => :user)
   end
 
   def user_positions
-    @user_positions ||= self.ranked_game_participators + self.newbie_game_participators
+    @user_positions ||= ranked_game_participators + newbie_game_participators
   end
 
   def role(position)
@@ -86,7 +86,7 @@ class Game < ActiveRecord::Base
   end
 
   def format_player_roles
-    return if !self.attributes.has_key?(:player_roles) || player_roles.blank?
+    return if !attributes.has_key?(:player_roles) || player_roles.blank?
     player_roles = self.player_roles.split("\n").collect { |pr| pr.strip }.select { |pr| pr.size > 0 }.join("\n")
   end
 end

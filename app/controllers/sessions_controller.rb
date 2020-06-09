@@ -16,13 +16,13 @@ class SessionsController < ApplicationController
     unless params[:current_game].blank? || params[:current_game][:id].blank?
       redirect_to new_game_url and return if params[:current_game][:id] == 'new'
       self.current_game = current_account.games.find(params[:current_game][:id])
-      self.current_user.update_attribute :last_game, self.current_game unless impersonating?
+      current_user.update_attribute :last_game, current_game unless impersonating?
     end
     redirect_back_or_default('/')
   end
 
   def destroy
-    self.current_user.forget_me if logged_in?
+    current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
@@ -66,9 +66,9 @@ class SessionsController < ApplicationController
     self.current_user = current_account.users.authenticate(login, password)
     if logged_in?
       if params[:remember_me] == "1"
-        self.current_user.remember_me
+        current_user.remember_me
         cookies[:auth_token] = {
-          :value => self.current_user.remember_token, :expires => self.current_user.remember_token_expires_at }
+          :value => current_user.remember_token, :expires => current_user.remember_token_expires_at }
       end
       successful_login
     else

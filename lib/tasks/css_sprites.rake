@@ -22,14 +22,14 @@ class CssSprites
     return @files unless @files.nil?
     
     @files = []
-    Dir.foreach(self.directory) do |entry|
+    Dir.foreach(directory) do |entry|
       extension = File.extname(entry)
       if %w(.jpg .png .gif).include?(extension)
         @files << {
           :key => File.basename(entry, extension),
           :filename => entry,
-          :path => File.join(self.directory, entry),
-          :dimensions => dimensions(File.join(self.directory, entry))
+          :path => File.join(directory, entry),
+          :dimensions => dimensions(File.join(directory, entry))
         }
       end
     end
@@ -62,7 +62,7 @@ class CssSprites
   def generate_css
     rules = []
     image_map.each do |image|
-      rules << ".sprite-#{image[:key]} { display: table-cell; display: inline-block; width: #{image[:dimensions][0]}px; height: #{image[:dimensions][1]}px; background: url('#{self.output}') -#{image[:offset][0]}px -#{image[:offset][1]}px no-repeat; }"
+      rules << ".sprite-#{image[:key]} { display: table-cell; display: inline-block; width: #{image[:dimensions][0]}px; height: #{image[:dimensions][1]}px; background: url('#{output}') -#{image[:offset][0]}px -#{image[:offset][1]}px no-repeat; }"
     end
     rules.join("\n")
   end
