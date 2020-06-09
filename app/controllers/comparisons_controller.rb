@@ -45,7 +45,7 @@ class ComparisonsController < ApplicationController
     previous = []
     (0..user_ids.size - 1).each do |index|
       people[index] = []
-      previous << (game_participations.select { |gp| gp.user_id == user_ids[index] }.first).ranking_at(from)
+      previous << game_participations.select { |gp| gp.user_id == user_ids[index] }.first.ranking_at(from)
     end
 
     dates = []
@@ -64,7 +64,7 @@ class ComparisonsController < ApplicationController
 
     elements = []
     user_ids.each_with_index do |user_id, index|
-      values = [(game_participations.select { |gp| gp.user_id == user_id }.first).ranking_at(from)] + people[index]
+      values = [game_participations.select { |gp| gp.user_id == user_id }.first.ranking_at(from)] + people[index]
       user_name = find_user(user_id).name
       elements << {
         :type => 'line',

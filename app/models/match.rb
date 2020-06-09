@@ -72,7 +72,7 @@ class Match < ActiveRecord::Base
     if filter.blank?
       return (teams.first.score > teams.last.score) ? teams : teams.reverse
     else
-      return (teams.first.matches_filter(filter)) ? teams : teams.reverse
+      return teams.first.matches_filter(filter) ? teams : teams.reverse
     end
   end
 

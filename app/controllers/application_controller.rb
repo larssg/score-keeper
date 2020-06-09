@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   helper_method :pjax?
 
   def impersonating?
-    !(session[:real_user_id].nil?)
+    !session[:real_user_id].nil?
   end
 
   def login_from_feed_token
