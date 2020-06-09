@@ -118,7 +118,7 @@ jQuery.pjax = function( options ) {
         _gaq.push(['_trackPageview'])
 
       // Invoke their success handler if they gave us one.
-      success.apply(this, arguments)
+      Reflect.apply(success, this, arguments)
     }
   }
 
