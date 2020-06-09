@@ -56,7 +56,7 @@ class UsersController < ApplicationController
           team[:team_mate_game_participation] = @game.game_participation_for(team_mate)
           team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
           team[:wins] = team[:wins].blank? ? 0 : team[:wins]
-          team[:win_percentage] = '%01.1f' % (team[:wins].to_f * 100.0 / team[:played].to_f)
+          team[:win_percentage] = format('%01.1f', (team[:wins].to_f * 100.0 / team[:played].to_f))
         end
       end
 
@@ -104,9 +104,11 @@ class UsersController < ApplicationController
     @user.is_account_admin = params[:user][:is_account_admin] if (
       current_user.is_account_admin? || current_user.is_admin?
     ) && !params[:user][:is_account_admin].nil?
-    @user.is_admin = params[:user][:is_admin] if current_user.is_admin? && params[:user][:is_admin]
+    if current_user.is_admin? && params[:user][:is_admin]
+      @user.is_admin = params[:user][:is_admin]
+    end
     @user.enabled = params[:user][:enabled] if (current_user.is_account_admin? || current_user.is_admin?) &&
-      !params[:user][:enabled].nil?
+                                               !params[:user][:enabled].nil?
 
     if @user.update_attributes(params[:user])
       redirect_to users_url
@@ -168,7 +170,7 @@ class UsersController < ApplicationController
         joins: 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id'
       )
 
-    values = [game_participation.ranking_at(from)] + memberships.collect { |m| m.current_ranking }
+    values = [game_participation.ranking_at(from)] + memberships.collect(&:current_ranking)
     x_labels = ['Start'] + memberships.collect { |m| m.played_at.to_time.to_s :db }
 
     steps = (memberships.size / 20).to_i
@@ -206,10 +208,12 @@ class UsersController < ApplicationController
 
   def must_be_account_admin_or_self
     redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_account_admin? ||
-      current_user.is_admin?
+                                current_user.is_admin?
   end
 
   def must_be_admin_or_self
-    redirect_to root_url unless current_user.id.to_s == params[:id] || current_user.is_admin?
+    unless current_user.id.to_s == params[:id] || current_user.is_admin?
+      redirect_to root_url
+    end
   end
 end

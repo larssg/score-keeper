@@ -21,12 +21,13 @@ class GameParticipation < ActiveRecord::Base
 
   def difference_average
     return 0.0 if matches_played == 0
+
     ((10 * difference) / matches_played) / 10.0
   end
 
   def ranking_at(time)
     membership =
-      self.memberships.find(
+      memberships.find(
         :first,
         conditions: ['matches.played_at <= ?', time],
         joins: 'LEFT JOIN teams ON memberships.team_id = teams.id LEFT JOIN matches ON teams.match_id = matches.id',

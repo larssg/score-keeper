@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MatchesController < ApplicationController
   around_filter :login_from_feed_token, only: [:index]
   before_filter :domain_required

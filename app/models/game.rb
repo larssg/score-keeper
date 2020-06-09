@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Game < ActiveRecord::Base
   belongs_to :account, counter_cache: true
   has_many :matches, dependent: :destroy
@@ -17,41 +19,42 @@ class Game < ActiveRecord::Base
 
   def ranked_game_participators
     @ranked_users ||=
-      self.game_participations.find(
+      game_participations.find(
         :all,
         order: 'game_participations.ranking DESC, game_participations.matches_won DESC',
-        conditions: ['users.enabled = ? AND game_participations.matches_played >= ?', true, self.newbie_limit],
+        conditions: ['users.enabled = ? AND game_participations.matches_played >= ?', true, newbie_limit],
         include: :user
       )
   end
 
   def newbie_game_participators
     @newbie_users ||=
-      self.game_participations.find(
+      game_participations.find(
         :all,
         order:
           'game_participations.matches_played DESC, game_participations.ranking DESC, game_participations.matches_won DESC',
-        conditions: ['users.enabled = ? AND game_participations.matches_played < ?', true, self.newbie_limit],
+        conditions: ['users.enabled = ? AND game_participations.matches_played < ?', true, newbie_limit],
         include: :user
       )
   end
 
   def user_positions
-    @user_positions ||= self.ranked_game_participators + self.newbie_game_participators
+    @user_positions ||= ranked_game_participators + newbie_game_participators
   end
 
   def role(position)
     return roles[position].strip if roles.size > position
+
     ''
   end
 
   def roles
     if @roles.nil?
-      if player_roles.blank?
-        @roles = ['']
-      else
-        @roles = player_roles.split("\n").collect { |pr| pr.strip }
-      end
+      @roles = if player_roles.blank?
+                 ['']
+               else
+                 player_roles.split("\n").collect(&:strip)
+               end
     end
     @roles
   end

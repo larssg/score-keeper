@@ -41,11 +41,13 @@ class DashboardController < ApplicationController
 
   def logs
     return nil if game.nil?
+
     @logs ||= game.logs.find(:all, order: 'published_at DESC', limit: 5)
   end
 
   def last_update
     return nil if logs.nil? || logs.first.nil?
+
     logs.first.published_at.to_s(:db)
   end
 

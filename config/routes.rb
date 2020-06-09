@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ScoreKeeper::Application.routes.draw do
   root to: 'dashboard#index'
   match 'signup' => 'users#new', as: :signup
