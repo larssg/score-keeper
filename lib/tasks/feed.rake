@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :scorekeeper do
   namespace :feed do
     desc "Fetch and parse news feed"

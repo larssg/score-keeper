@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Given /^the following signups:$/ do |signups|
   Signup.create!(signups.hashes)
 end

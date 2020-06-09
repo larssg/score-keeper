@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def title(page_title, options = {})
     @page_title = page_title
