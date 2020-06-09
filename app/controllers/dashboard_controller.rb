@@ -30,6 +30,7 @@ class DashboardController < ApplicationController
   helper_method :news
 
   protected
+
   def game
     return @game unless @game.nil?
 
