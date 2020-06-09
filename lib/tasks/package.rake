@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :package do
   task :build => :environment do
     files = {

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../vendor/plugins/rspec/lib' # For rspec installed as plugin
 require 'rubygems'
 require 'drb/drb'
