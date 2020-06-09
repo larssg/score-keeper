@@ -862,7 +862,7 @@
                 if ($.browser.msie) {
                     function empty() {
                         while (this.firstChild)
-                        this.removeChild(this.firstChild);
+                        this.firstChild.remove();
                     }
                     empty.apply(table.tBodies[0]);
                 } else {
