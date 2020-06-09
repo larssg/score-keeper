@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Membership < ActiveRecord::Base
   belongs_to :game
   belongs_to :team
@@ -17,7 +19,7 @@ class Membership < ActiveRecord::Base
     @memberships =
       Membership.find(
         :all,
-        conditions: ['memberships.user_id IN (?) AND matches.played_at >= ?', @users.collect { |u| u.id }, from],
+        conditions: ['memberships.user_id IN (?) AND matches.played_at >= ?', @users.collect(&:id), from],
         order: 'memberships.created_at',
         select:
           'memberships.user_id, memberships.current_ranking, teams.match_id AS match_id, memberships.created_at, matches.played_at AS played_at',

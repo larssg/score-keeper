@@ -46,31 +46,32 @@ class User < ActiveRecord::Base
   attr_accessible :login, :email, :password, :password_confirmation, :name, :display_name, :time_zone, :avatar
 
   def set_display_name
-    return if self.name.blank?
-    self.display_name = self.name.split[0] if self.display_name.blank?
+    return if name.blank?
+
+    self.display_name = name.split[0] if display_name.blank?
   end
 
   def all_time_high(game)
     Membership.find(
       :first,
-      conditions: { user_id: self.id, game_id: game.id }, order: 'memberships.current_ranking DESC'
+      conditions: { user_id: id, game_id: game.id }, order: 'memberships.current_ranking DESC'
     )
   end
 
   def all_time_low(game)
-    Membership.find(:first, conditions: { user_id: self.id, game_id: game.id }, order: 'memberships.current_ranking')
+    Membership.find(:first, conditions: { user_id: id, game_id: game.id }, order: 'memberships.current_ranking')
   end
 
   def position(game)
     game.user_positions.each_with_index do |game_participation, index|
-      return index + 1 if game_participation.user_id == self.id
+      return index + 1 if game_participation.user_id == id
     end
   end
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     u = find_by_login(login) # need to get the salt
-    u && u.authenticated?(password) ? u : nil
+    u&.authenticated?(password) ? u : nil
   end
 
   # Encrypts some data with the salt.
