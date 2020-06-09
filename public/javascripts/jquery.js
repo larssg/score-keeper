@@ -847,9 +847,9 @@
     }
 
     // IE doesn't match non-breaking spaces with \s
-    if (rnotwhite.test("\xA0")) {
-      trimLeft = /^[\s\xA0]+/;
-      trimRight = /[\s\xA0]+$/;
+    if (rnotwhite.test("\u00A0")) {
+      trimLeft = /^[\s\u00A0]+/;
+      trimRight = /[\s\u00A0]+$/;
     }
 
     // All jQuery objects should point back to these
