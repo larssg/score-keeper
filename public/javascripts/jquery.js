@@ -794,7 +794,7 @@
           rwebkit.exec(ua) ||
           ropera.exec(ua) ||
           rmsie.exec(ua) ||
-          (ua.indexOf("compatible") < 0 && rmozilla.exec(ua)) ||
+          (!ua.includes("compatible") && rmozilla.exec(ua)) ||
           [];
 
         return { browser: match[1] || "", version: match[2] || "0" };
@@ -1761,7 +1761,7 @@
                 setClass = element.className;
 
               for (var c = 0, cl = classNames.length; c < cl; c++) {
-                if (className.indexOf(" " + classNames[c] + " ") < 0) {
+                if (!className.includes(" " + classNames[c] + " ")) {
                   setClass += " " + classNames[c];
                 }
               }
@@ -1845,7 +1845,7 @@
     hasClass: function (selector) {
       var className = " " + selector + " ";
       for (var i = 0, l = this.length; i < l; i++) {
-        if ((" " + this[i].className + " ").replace(rclass, " ").indexOf(className) > -1) {
+        if ((" " + this[i].className + " ").replace(rclass, " ").includes(className)) {
           return true;
         }
       }
@@ -2179,7 +2179,7 @@
         handleObject = handleObjectIn ? jQuery.extend({}, handleObjectIn) : { handler: handler, data: data };
 
         // Namespaced event handlers
-        if (type.indexOf(".") > -1) {
+        if (type.includes(".")) {
           namespaces = type.split(".");
           type = namespaces.shift();
           handleObject.namespace = namespaces.slice(0).sort().join(".");
@@ -2289,7 +2289,7 @@
       while ((type = types[i++])) {
         origType = type;
         handleObject = null;
-        all = type.indexOf(".") < 0;
+        all = !type.includes(".");
         namespaces = [];
 
         if (!all) {
@@ -2388,7 +2388,7 @@
             : // Just the event type (string)
               jQuery.Event(type);
 
-        if (type.indexOf("!") >= 0) {
+        if (type.includes("!")) {
           event.type = type = type.slice(0, -1);
           event.exclusive = true;
         }
@@ -2506,7 +2506,7 @@
       event.currentTarget = this;
 
       // Namespaced event handlers
-      all = event.type.indexOf(".") < 0 && !event.exclusive;
+      all = !event.type.includes(".") && !event.exclusive;
 
       if (!all) {
         namespaces = event.type.split(".");
@@ -3818,7 +3818,7 @@
           for (var i = 0, element; (element = currentLoop[i]) != null; i++) {
             if (element) {
               if (
-                not ^ (element.className && (" " + element.className + " ").replace(/[\t\n\r]/g, " ").indexOf(match) >= 0)
+                not ^ (element.className && (" " + element.className + " ").replace(/[\t\n\r]/g, " ").includes(match))
               ) {
                 if (!inplace) {
                   result.push(element);
@@ -4037,7 +4037,7 @@
           if (filter) {
             return filter(element, i, match, array);
           } else if (name === "contains") {
-            return (element.textContent || element.innerText || Sizzle.getText([element]) || "").indexOf(match[3]) >= 0;
+            return (element.textContent || element.innerText || Sizzle.getText([element]) || "").includes(match[3]);
           } else if (name === "not") {
             var not = match[3];
 
@@ -4123,7 +4123,7 @@
         },
 
         CLASS: function (element, match) {
-          return (" " + (element.className || element.getAttribute("class")) + " ").indexOf(match) > -1;
+          return (" " + (element.className || element.getAttribute("class")) + " ").includes(match);
         },
 
         ATTR: function (element, match) {
@@ -4142,9 +4142,9 @@
             : type === "="
             ? value === check
             : type === "*="
-            ? value.indexOf(check) >= 0
+            ? value.includes(check)
             : type === "~="
-            ? (" " + value + " ").indexOf(check) >= 0
+            ? (" " + value + " ").includes(check)
             : !check
             ? value && result !== false
             : type === "!="
