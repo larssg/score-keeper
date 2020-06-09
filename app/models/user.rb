@@ -114,11 +114,11 @@ class User < ActiveRecord::Base
   end
 
   def set_feed_token
-    self.update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    self.update_attribute :feed_token, encrypt("#{email}--#{5.minutes.ago}")
   end
 
   def set_login_token
-    self.update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago.to_s}")
+    self.update_attribute :login_token, encrypt("#{email}--#{5.minutes.ago}")
   end
 
   protected
@@ -142,7 +142,7 @@ class User < ActiveRecord::Base
   # before filter
   def encrypt_password
     return if password.blank?
-    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
+    self.salt = Digest::SHA1.hexdigest("--#{Time.now}--#{login}--") if new_record?
     self.crypted_password = encrypt(password)
   end
 
