@@ -905,7 +905,7 @@
       this.clearTableBody = function (table) {
         if ($.browser.msie) {
           function empty() {
-            while (this.firstChild) this.removeChild(this.firstChild);
+            while (this.firstChild) this.firstChild.remove();
           }
           empty.apply(table.tBodies[0]);
         } else {
