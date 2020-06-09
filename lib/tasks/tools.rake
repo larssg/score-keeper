@@ -28,7 +28,7 @@ namespace :tools do
       
       500.times do |index|
         players = people.sort_by{ rand }.slice(0...4)
-        score = [10, rand(12) + 1]
+        score = [10, rand(1..12)]
         score[0] = score[1] + 2 if score[1] >= 9
         score = score.sort_by{ rand }
 
