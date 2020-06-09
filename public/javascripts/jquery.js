@@ -457,7 +457,7 @@ jQuery.extend({
 
 			try {
 				toplevel = window.frameElement == null;
-			} catch(e) {}
+			} catch {}
 
 			if ( document.documentElement.doScroll && toplevel ) {
 				doScrollCheck();
@@ -901,7 +901,7 @@ function doScrollCheck() {
 		// If IE is used, use the trick by Diego Perini
 		// http://javascript.nwbox.com/IEContentLoaded/
 		document.documentElement.doScroll("left");
-	} catch(e) {
+	} catch {
 		setTimeout( doScrollCheck, 1 );
 		return;
 	}
@@ -1179,7 +1179,7 @@ jQuery.extend({
 			// (IE doesn't support this, fails, and uses .text instead)
 			try {
 				script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
-			} catch(e) {}
+			} catch {}
 
 			root.insertBefore( script, root.firstChild );
 
@@ -1201,7 +1201,7 @@ jQuery.extend({
 	try {
 		delete div.test;
 
-	} catch(e) {
+	} catch {
 		jQuery.support.deleteExpando = false;
 	}
 
@@ -1613,7 +1613,7 @@ function dataAttr( elem, key, data ) {
 				!jQuery.isNaN( data ) ? parseFloat( data ) :
 					rbrace.test( data ) ? jQuery.parseJSON( data ) :
 					data;
-			} catch( e ) {}
+			} catch   {}
 
 			// Make sure we set the data so it isn't changed later
 			jQuery.data( elem, key, data );
@@ -2162,7 +2162,7 @@ jQuery.event = {
 				elem = window;
 			}
 		}
-		catch ( e ) {}
+		catch    {}
 
 		if ( handler === false ) {
 			handler = returnFalse;
@@ -2486,7 +2486,7 @@ jQuery.event = {
 			}
 
 		// prevent IE from throwing an error for some elements with some event types, see #3533
-		} catch (inlineError) {}
+		} catch  {}
 
 		if ( !event.isPropagationStopped() && parent ) {
 			jQuery.event.trigger( event, data, parent, true );
@@ -2515,7 +2515,7 @@ jQuery.event = {
 					}
 
 				// prevent IE from throwing an error for some elements with some event types, see #3533
-				} catch (triggerError) {}
+				} catch  {}
 
 				if ( old ) {
 					target[ "on" + targetType ] = old;
@@ -2808,7 +2808,7 @@ var withinElement = function( event ) {
 		}
 
 	// assuming we've left the element since we most likely mousedover a xul element
-	} catch(e) { }
+	} catch { }
 },
 
 // In case of event delegation, we only need to rename the event.type,
@@ -4186,7 +4186,7 @@ try {
 	Array.prototype.slice.call( document.documentElement.childNodes, 0 )[0].nodeType;
 
 // Provide a fallback method if it does not work
-} catch( e ) {
+} catch   {
 	makeArray = function( array, results ) {
 		var i = 0,
 			ret = results || [];
@@ -4468,7 +4468,7 @@ if ( document.querySelectorAll ) {
 					
 					try {
 						return makeArray( context.querySelectorAll(query), extra );
-					} catch(qsaError) {}
+					} catch {}
 
 				// qSA works strangely on Element-rooted queries
 				// We can work around this by specifying an extra ID on the root
@@ -4495,7 +4495,7 @@ if ( document.querySelectorAll ) {
 							return makeArray( context.querySelectorAll( "[id='" + nid + "'] " + query ), extra );
 						}
 
-					} catch(pseudoError) {
+					} catch {
 					} finally {
 						if ( !old ) {
 							oldContext.removeAttribute( "id" );
@@ -4531,7 +4531,7 @@ if ( document.querySelectorAll ) {
 			// Gecko does not error, returns false instead
 			matches.call( document.documentElement, "[test!='']:sizzle" );
 	
-		} catch( pseudoError ) {
+		} catch   {
 			pseudoWorks = true;
 		}
 
@@ -4552,7 +4552,7 @@ if ( document.querySelectorAll ) {
 							return ret;
 						}
 					}
-				} catch(e) {}
+				} catch {}
 			}
 
 			return Sizzle(expr, null, null, [node]).length > 0;
@@ -5248,7 +5248,7 @@ jQuery.fn.extend({
 				}
 
 			// If using innerHTML throws an exception, use the fallback method
-			} catch(e) {
+			} catch {
 				this.empty().append( value );
 			}
 
@@ -5838,7 +5838,7 @@ jQuery.extend({
 				// Fixes bug #5509
 				try {
 					style[ name ] = value;
-				} catch(e) {}
+				} catch {}
 			}
 
 		} else {
@@ -6152,7 +6152,7 @@ var r20 = /%20/g,
 // a field from document.location if document.domain has been set
 try {
 	ajaxLocation = document.location.href;
-} catch( e ) {
+} catch   {
 	// Use the href attribute of an A element
 	// since IE will modify it given document.location
 	ajaxLocation = document.createElement( "a" );
@@ -7272,13 +7272,13 @@ function xhrOnUnloadAbort() {
 function createStandardXHR() {
 	try {
 		return new window.XMLHttpRequest();
-	} catch( e ) {}
+	} catch   {}
 }
 
 function createActiveXHR() {
 	try {
 		return new window.ActiveXObject( "Microsoft.XMLHTTP" );
-	} catch( e ) {}
+	} catch   {}
 }
 
 // Create the request object
@@ -7357,7 +7357,7 @@ if ( jQuery.support.ajax ) {
 						for ( i in headers ) {
 							xhr.setRequestHeader( i, headers[ i ] );
 						}
-					} catch( _ ) {}
+					} catch   {}
 
 					// Do send the request
 					// This may raise an exception which is actually
@@ -7412,7 +7412,7 @@ if ( jQuery.support.ajax ) {
 									// statusText for faulty cross-domain requests
 									try {
 										statusText = xhr.statusText;
-									} catch( e ) {
+									} catch   {
 										// We normalize with Webkit giving an empty statusText
 										statusText = "";
 									}
@@ -8024,7 +8024,7 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 
 		try {
 			box = elem.getBoundingClientRect();
-		} catch(e) {}
+		} catch {}
 
 		var doc = elem.ownerDocument,
 			docElem = doc.documentElement;
