@@ -1,10 +1,10 @@
 module LogsHelper
   def log_link(log)
     icon = icons[log.linked_model]
-    unless icon.blank?
-      icon_link log.game_id, icon, h(log.message), log_uri(log)
-    else
+    if icon.blank?
       h(log.message)
+    else
+      icon_link log.game_id, icon, h(log.message), log_uri(log)
     end
   end
 

@@ -122,14 +122,14 @@ class UsersController < ApplicationController
       user = current_account.users.find_by_login(params[:username]) if params[:username]
       user ||= current_account.users.find_by_email(params[:email]) if params[:email]
 
-      unless user.blank?
+      if user.blank?
+        flash.now[:error] = 'No user was found with the specified username or e-mail.'
+      else
         flash[:notice] = 'You should receive an email containing a one-time login link shortly.'
         user.set_login_token
         UserMailer.forgot_password_info(user).deliver
         redirect_to login_url
         return
-      else
-        flash.now[:error] = 'No user was found with the specified username or e-mail.'
       end
     end
     render :layout => 'login'
