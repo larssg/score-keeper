@@ -562,7 +562,7 @@
             script = document.createElement("script");
 
           if (jQuery.support.scriptEval()) {
-            script.appendChild(document.createTextNode(data));
+            script.append(document.createTextNode(data));
           } else {
             script.text = data;
           }
@@ -1149,7 +1149,7 @@
         // tag with appendChild/createTextNode
         // (IE doesn't support this, fails, and uses .text instead)
         try {
-          script.appendChild(document.createTextNode("window." + id + "=1;"));
+          script.append(document.createTextNode("window." + id + "=1;"));
         } catch (e) {}
 
         root.insertBefore(script, root.firstChild);
@@ -1189,7 +1189,7 @@
     div.innerHTML = "<input type='radio' name='radiotest' checked='checked'/>";
 
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(div.firstChild);
+    fragment.append(div.firstChild);
 
     // WebKit doesn't clone checked state correctly in fragments
     jQuery.support.checkClone = fragment.cloneNode(true).cloneNode(true).lastChild.checked;
@@ -1206,7 +1206,7 @@
       }
 
       div.style.width = div.style.paddingLeft = "1px";
-      body.appendChild(div);
+      body.append(div);
       jQuery.boxModel = jQuery.support.boxModel = div.offsetWidth === 2;
 
       if ("zoom" in div.style) {
@@ -4380,7 +4380,7 @@
 
       // Create a fake element
       var div = document.createElement("div");
-      div.appendChild(document.createComment(""));
+      div.append(document.createComment(""));
 
       // Make sure no comments are found
       if (div.getElementsByTagName("*").length > 0) {
@@ -5158,7 +5158,7 @@
     append: function () {
       return this.domManip(arguments, true, function (element) {
         if (this.nodeType === 1) {
-          this.appendChild(element);
+          this.append(element);
         }
       });
     },
@@ -5692,7 +5692,7 @@
             if (returnValue[i].nodeType === 1) {
               returnValue.splice.apply(returnValue, [i + 1, 0].concat(jQuery.makeArray(returnValue[i].getElementsByTagName("script"))));
             }
-            fragment.appendChild(returnValue[i]);
+            fragment.append(returnValue[i]);
           }
         }
       }
