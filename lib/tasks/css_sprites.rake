@@ -24,7 +24,7 @@ class CssSprites
     @files = []
     Dir.foreach(self.directory) do |entry|
       extension = File.extname(entry)
-      if %w(.jpg .png .gif).include?(extension)
+      if %w[.jpg .png .gif].include?(extension)
         @files << {
           :key => File.basename(entry, extension),
           :filename => entry,
