@@ -15,23 +15,23 @@ class Account < ActiveRecord::Base
   attr_accessible :name, :domain, :time_zone
 
   def all_users
-    @all_users ||= self.users.all
+    @all_users ||= users.all
   end
 
   def all_games
-    @all_games ||= self.games.all
+    @all_games ||= games.all
   end
 
   def enabled_users
-    @enabled_users ||= all_users.select { |u| u.enabled? }
+    @enabled_users ||= all_users.select(&:enabled?)
   end
 
   def user_ids
-    @users_ids ||= self.all_users.collect { |u| u.id }
+    @users_ids ||= all_users.collect(&:id)
   end
 
   def enabled_user_ids
-    @enabled_user_ids ||= self.enabled_users.collect { |u| u.id }
+    @enabled_user_ids ||= enabled_users.collect(&:id)
   end
 
   def reset_positions!
@@ -41,6 +41,6 @@ class Account < ActiveRecord::Base
 
   protected
   def set_name_from_domain
-    self.name ||= self.domain.humanize
+    self.name ||= domain.humanize
   end
 end

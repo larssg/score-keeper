@@ -102,7 +102,7 @@ class UsersController < ApplicationController
     @user = current_account.users.find(params[:id])
     if @user.destroy
       if @user.id == current_user
-        self.current_user.forget_me if logged_in?
+        current_user.forget_me if logged_in?
         cookies.delete :auth_token
         reset_session
         flash[:notice] = "You have removed your account."
