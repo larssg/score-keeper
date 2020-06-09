@@ -332,7 +332,7 @@
             //var o = ;
             var l = r[pos].length;
             for (var j = 0; j < l; j++) {
-              tableBody[0].appendChild(r[pos][j]);
+              tableBody[0].append(r[pos][j]);
             }
 
             //
