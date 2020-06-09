@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
   def update
     unless params[:current_game].blank? || params[:current_game][:id].blank?
       redirect_to new_game_url and return if params[:current_game][:id] == 'new'
+
       self.current_game = current_account.games.find(params[:current_game][:id])
       self.current_user.update_attribute :last_game, self.current_game unless impersonating?
     end

@@ -75,6 +75,7 @@ class ApplicationController < ActionController::Base
   def current_game
     if @current_game.nil?
       return unless current_account
+
       @current_game ||= current_account.games.first(:conditions => { :id => session[:current_game_id] }) if session[:current_game_id]
       @current_game ||= current_account.games.first
       unless @current_game.nil?

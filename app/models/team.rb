@@ -15,6 +15,7 @@ class Team < ActiveRecord::Base
 
   def team_mate_for(user)
     return nil if self.memberships.size < 2
+
     team_mate = self.memberships.select { |m| m.user_id != user.id }.first.user
   end
 
