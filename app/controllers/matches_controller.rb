@@ -62,7 +62,7 @@ class MatchesController < ApplicationController
   end
 
   def destroy
-    @match = current_account.matches.find_by_id(params[:id])
+    @match = current_account.matches.find_by(id: params[:id])
     if !@match.nil? && @match.destroy
       flash[:notice] = 'Match deleted.'
       redirect_back_or_default game_matches_url(@match.game_id)

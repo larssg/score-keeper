@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
   end
 
   def token_login
-    user = User.find_by_login_token(params[:token])
+    user = User.find_by(login_token: params[:token])
     unless user.blank?
       self.current_user = user
       user.update_attribute :login_token, nil

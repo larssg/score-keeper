@@ -242,7 +242,7 @@ class Match < ActiveRecord::Base
   end
 
   def game_participation_for_user(user_id)
-    game_participation = self.game.game_participations.find_by_user_id(user_id)
+    game_participation = self.game.game_participations.find_by(user_id: user_id)
     game_participation = self.game.game_participations.create(:user_id => user_id) if game_participation.nil?
     game_participation
   end
