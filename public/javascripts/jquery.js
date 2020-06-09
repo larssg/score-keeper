@@ -4037,7 +4037,7 @@
           if (filter) {
             return filter(element, i, match, array);
           } else if (name === "contains") {
-            return (element.textContent || element.innerText || Sizzle.getText([element]) || "").indexOf(match[3]) >= 0;
+            return (element.textContent || element.textContent || Sizzle.getText([element]) || "").indexOf(match[3]) >= 0;
           } else if (name === "not") {
             var not = match[3];
 
