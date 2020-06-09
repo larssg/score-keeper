@@ -457,7 +457,7 @@ jQuery.extend({
 
 			try {
 				toplevel = window.frameElement == null;
-			} catch(e) {}
+			} catch(error) {}
 
 			if ( document.documentElement.doScroll && toplevel ) {
 				doScrollCheck();
@@ -901,7 +901,7 @@ function doScrollCheck() {
 		// If IE is used, use the trick by Diego Perini
 		// http://javascript.nwbox.com/IEContentLoaded/
 		document.documentElement.doScroll("left");
-	} catch(e) {
+	} catch(error) {
 		setTimeout( doScrollCheck, 1 );
 		return;
 	}
@@ -1179,7 +1179,7 @@ jQuery.extend({
 			// (IE doesn't support this, fails, and uses .text instead)
 			try {
 				script.appendChild( document.createTextNode( "window." + id + "=1;" ) );
-			} catch(e) {}
+			} catch(error) {}
 
 			root.insertBefore( script, root.firstChild );
 
@@ -1201,7 +1201,7 @@ jQuery.extend({
 	try {
 		delete div.test;
 
-	} catch(e) {
+	} catch(error) {
 		jQuery.support.deleteExpando = false;
 	}
 
@@ -1613,7 +1613,7 @@ function dataAttr( elem, key, data ) {
 				!jQuery.isNaN( data ) ? parseFloat( data ) :
 					rbrace.test( data ) ? jQuery.parseJSON( data ) :
 					data;
-			} catch( e ) {}
+			} catch( error ) {}
 
 			// Make sure we set the data so it isn't changed later
 			jQuery.data( elem, key, data );
@@ -2162,7 +2162,7 @@ jQuery.event = {
 				elem = window;
 			}
 		}
-		catch ( e ) {}
+		catch ( error ) {}
 
 		if ( handler === false ) {
 			handler = returnFalse;
@@ -2808,7 +2808,7 @@ var withinElement = function( event ) {
 		}
 
 	// assuming we've left the element since we most likely mousedover a xul element
-	} catch(e) { }
+	} catch(error) { }
 },
 
 // In case of event delegation, we only need to rename the event.type,
@@ -4186,7 +4186,7 @@ try {
 	Array.prototype.slice.call( document.documentElement.childNodes, 0 )[0].nodeType;
 
 // Provide a fallback method if it does not work
-} catch( e ) {
+} catch( error ) {
 	makeArray = function( array, results ) {
 		var i = 0,
 			ret = results || [];
@@ -4552,7 +4552,7 @@ if ( document.querySelectorAll ) {
 							return ret;
 						}
 					}
-				} catch(e) {}
+				} catch(error) {}
 			}
 
 			return Sizzle(expr, null, null, [node]).length > 0;
@@ -5248,7 +5248,7 @@ jQuery.fn.extend({
 				}
 
 			// If using innerHTML throws an exception, use the fallback method
-			} catch(e) {
+			} catch(error) {
 				this.empty().append( value );
 			}
 
@@ -5838,7 +5838,7 @@ jQuery.extend({
 				// Fixes bug #5509
 				try {
 					style[ name ] = value;
-				} catch(e) {}
+				} catch(error) {}
 			}
 
 		} else {
@@ -6152,7 +6152,7 @@ var r20 = /%20/g,
 // a field from document.location if document.domain has been set
 try {
 	ajaxLocation = document.location.href;
-} catch( e ) {
+} catch( error ) {
 	// Use the href attribute of an A element
 	// since IE will modify it given document.location
 	ajaxLocation = document.createElement( "a" );
@@ -6622,10 +6622,10 @@ jQuery.extend({
 						success = ajaxConvert( s, response );
 						statusText = "success";
 						isSuccess = true;
-					} catch(e) {
+					} catch(error_) {
 						// We have a parsererror
 						statusText = "parsererror";
-						error = e;
+						error = error_;
 					}
 				}
 			} else {
@@ -6823,13 +6823,13 @@ jQuery.extend({
 			try {
 				state = 1;
 				transport.send( requestHeaders, done );
-			} catch (e) {
+			} catch (error) {
 				// Propagate exception as error if not done
 				if ( status < 2 ) {
-					done( -1, e );
+					done( -1, error );
 				// Simply rethrow otherwise
 				} else {
-					jQuery.error( e );
+					jQuery.error( error );
 				}
 			}
 		}
@@ -7272,13 +7272,13 @@ function xhrOnUnloadAbort() {
 function createStandardXHR() {
 	try {
 		return new window.XMLHttpRequest();
-	} catch( e ) {}
+	} catch( error ) {}
 }
 
 function createActiveXHR() {
 	try {
 		return new window.ActiveXObject( "Microsoft.XMLHTTP" );
-	} catch( e ) {}
+	} catch( error ) {}
 }
 
 // Create the request object
@@ -7412,7 +7412,7 @@ if ( jQuery.support.ajax ) {
 									// statusText for faulty cross-domain requests
 									try {
 										statusText = xhr.statusText;
-									} catch( e ) {
+									} catch( error ) {
 										// We normalize with Webkit giving an empty statusText
 										statusText = "";
 									}
@@ -7430,9 +7430,9 @@ if ( jQuery.support.ajax ) {
 									}
 								}
 							}
-						} catch( firefoxAccessException ) {
+						} catch( error ) {
 							if ( !isAbort ) {
-								complete( -1, firefoxAccessException );
+								complete( -1, error );
 							}
 						}
 
@@ -8024,7 +8024,7 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 
 		try {
 			box = elem.getBoundingClientRect();
-		} catch(e) {}
+		} catch(error) {}
 
 		var doc = elem.ownerDocument,
 			docElem = doc.documentElement;
