@@ -41,7 +41,7 @@ class UsersController < ApplicationController
           team[:team_mate_game_participation] = @game.game_participation_for(team_mate)
           team[:played] = team[:played].blank? ? 0 : team[:played][1].blank? ? 0 : team[:played][1].to_i
           team[:wins] = team[:wins].blank? ? 0 : team[:wins]
-          team[:win_percentage] = "%01.1f" % (team[:wins].to_f * 100.0 / team[:played].to_f)
+          team[:win_percentage] = format("%01.1f", (team[:wins].to_f * 100.0 / team[:played].to_f))
         end
       end
 
